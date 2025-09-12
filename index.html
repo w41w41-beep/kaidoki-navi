@@ -29,12 +29,16 @@
         .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
         .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
         
-        /* ジャンルリンクのスタイルを追加 */
-        .genre-links {
-            text-align: center;
-            padding: 10px 0;
+        /* ジャンルリンクのコンテナスタイル */
+        .genre-links-container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 10px;
             background-color: #fff;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         .genre-links a {
             color: #007bff;
@@ -60,9 +64,11 @@
         <input type="text" placeholder="商品名、キーワードで検索...">
     </div>
 
-    <div class="genre-links">
-        <a href="#">パソコン</a>
-        <a href="#">家電</a>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="#">パソコン</a>
+            <a href="#">家電</a>
+        </div>
     </div>
 
     <div class="container content">
