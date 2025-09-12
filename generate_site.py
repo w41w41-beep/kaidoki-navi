@@ -83,6 +83,23 @@ html_content = f"""
 
         </div>
     </div>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <p>
+            <a href="privacy.html">プライバシーポリシー</a> |
+            <a href="disclaimer.html">免責事項</a> |
+            <a href="contact.html">お問い合わせ</a>
+        </p>
+    </footer>
+</body>
+</html>
+"""
+
+# index.htmlファイルを生成
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("index.htmlファイルが正常に生成されました。")
 </body>
 </html>
 """
