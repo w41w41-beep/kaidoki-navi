@@ -300,17 +300,6 @@ html_content = f"""
                     </div>
                 </a>
             </div>
-            
-            <div class="product-card">
-                <a href="https://amzn.to/4lqN9a7" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71uL5I4k1WL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Apple AirTag (エアタグ)</div>
-                        <div class="product-price">¥4,980</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
     <footer>
