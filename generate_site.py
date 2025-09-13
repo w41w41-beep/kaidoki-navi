@@ -13,148 +13,148 @@ html_content = f"""
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カイドキ-ナビ - 賢い買い時を見つけよう！</title>
 <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
-    .container { max-width: 960px; margin: auto; padding: 20px; }
-    header { background-color: #fff; border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }
-    /* 修正: ヘッダー内の h1 と p タグの上下マージンをなくす */
-    header h1, header p { margin: 0; }
-    .search-bar { padding: 20px; text-align: center; background-color: #e9ecef; }
-    .search-bar input { width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-    .content { padding: 20px 0; }
-    .section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-    
-    /* 商品のレイアウトをFlexboxで修正 */
-    .product-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center; /* アイテムを中央に配置 */
-        align-items: stretch; /* アイテムの高さを統一 */
-        gap: 20px;
-    }
+    body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }}
+        .container {{ max-width: 960px; margin: auto; padding: 20px; }}
+        header {{ background-color: #fff; border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }}
+        /* 修正: ヘッダー内の h1 と p タグの上下マージンをなくす */
+        header h1, header p {{ margin: 0; }}
+        .search-bar {{ padding: 20px; text-align: center; background-color: #e9ecef; }}
+        .search-bar input {{ width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }}
+        .content {{ padding: 20px 0; }}
+        .section-title {{ font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }}
+        
+        /* 商品のレイアウトをFlexboxで修正 */
+        .product-grid {{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* アイテムを中央に配置 */
+            align-items: stretch; /* アイテムの高さを統一 */
+            gap: 20px;
+        }}
 
-    .product-card { 
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s; 
-        flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
-        display: flex;
-        flex-direction: column;
-    }
-    .product-card:hover { transform: translateY(-5px); }
-    
-    .product-card img { 
-        width: 100%;
-        height: 180px; /* 画像の高さを統一 */
-        object-fit: contain; /* 画像をアスペクト比を維持して収める */
-        display: block;
-    }
+        .product-card {{ 
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s; 
+            flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
+            display: flex;
+            flex-direction: column;
+        }}
+        .product-card:hover {{ transform: translateY(-5px); }}
+        
+        .product-card img {{ 
+            width: 100%;
+            height: 180px; /* 画像の高さを統一 */
+            object-fit: contain; /* 画像をアスペクト比を維持して収める */
+            display: block;
+        }}
 
-    .product-info { 
-        padding: 15px;
-        flex-grow: 1; /* 余ったスペースを埋める */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 120px; /* コンテンツが少ない場合の最低限の高さ */
-    }
+        .product-info {{ 
+            padding: 15px;
+            flex-grow: 1; /* 余ったスペースを埋める */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px; /* コンテンツが少ない場合の最低限の高さ */
+        }}
 
-    .product-name { 
-        font-size: 18px; 
-        font-weight: bold; 
-        margin-bottom: 5px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* 2行に制限 */
-        -webkit-box-orient: vertical;
-    }
-    .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
-    .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
-    
-    /* スマートフォン向けレスポンシブデザイン（2列表示） */
-    @media (max-width: 768px) {
-        .product-grid {
-            padding: 0 10px; /* 左右に余白を追加 */
-        }
-        .product-card {
-            flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
-        }
-        .product-name { 
+        .product-name {{ 
+            font-size: 18px; 
+            font-weight: bold; 
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 2行に制限 */
+            -webkit-box-orient: vertical;
+        }}
+        .product-price {{ color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }}
+        .product-status {{ font-size: 14px; color: #28a745; font-weight: bold; }}
+        
+        /* スマートフォン向けレスポンシブデザイン（2列表示） */
+        @media (max-width: 768px) {{
+            .product-grid {{
+                padding: 0 10px; /* 左右に余白を追加 */
+            }}
+            .product-card {{
+                flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
+            }}
+            .product-name {{ 
+                font-size: 16px;
+            }}
+            .product-price {{
+                font-size: 18px;
+            }}
+            .product-status {{
+                font-size: 12px;
+            }}
+        }}
+
+        /* ジャンルリンクのコンテナスタイル */
+        .genre-links-container {{
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        .genre-links a {{
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
             font-size: 16px;
-        }
-        .product-price {
-            font-size: 18px;
-        }
-        .product-status {
-            font-size: 12px;
-        }
-    }
+        }}
 
-    /* ジャンルリンクのコンテナスタイル */
-    .genre-links-container {
-        max-width: 960px;
-        margin: 20px auto;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-    .genre-links a {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: bold;
-        margin: 0 15px;
-        font-size: 16px;
-    }
+        /* ページネーションのスタイル */
+        .pagination-container {{
+            text-align: center;
+            margin-top: 20px;
+        }}
 
-    /* ページネーションのスタイル */
-    .pagination-container {
-        text-align: center;
-        margin-top: 20px;
-    }
+        .pagination-link {{
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 12px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }}
+        .pagination-link.disabled {{
+            color: #ccc;
+            border: 1px solid #ccc;
+            cursor: not-allowed;
+            pointer-events: none; /* クリックイベントを無効化 */
+        }}
 
-    .pagination-link {
-        display: inline-block;
-        margin: 0 5px;
-        padding: 8px 12px;
-        color: #007bff;
-        text-decoration: none;
-        border: 1px solid #007bff;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-    .pagination-link.disabled {
-        color: #ccc;
-        border: 1px solid #ccc;
-        cursor: not-allowed;
-        pointer-events: none; /* クリックイベントを無効化 */
-    }
+        .pagination-link:not(.disabled):hover {{
+            background-color: #007bff;
+            color: #fff;
+        }}
 
-    .pagination-link:not(.disabled):hover {
-        background-color: #007bff;
-        color: #fff;
-    }
+        .pagination-link.active {{
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }}
 
-    .pagination-link.active {
-        background-color: #007bff;
-        color: #fff;
-        font-weight: bold;
-    }
+        .pagination-ellipsis {{
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 0;
+        }}
 
-    .pagination-ellipsis {
-        display: inline-block;
-        margin: 0 5px;
-        padding: 8px 0;
-    }
-
-    footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }
-    .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
-    .footer-links a { color: #007bff; text-decoration: none; }
+        footer {{ text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }}
+        .footer-links {{ display: flex; justify-content: center; gap: 20px; margin-top: 10px; }}
+        .footer-links a {{ color: #007bff; text-decoration: none; }}
 </style>
 </head>
 <body>
