@@ -102,20 +102,16 @@
             color: #007bff;
             text-decoration: none;
             font-weight: bold;
-            margin: 0 15px;
             font-size: 16px;
+            /* 修正: リンクの左右マージンをなくす */
+            margin: 0;
         }
 
         /* --- ジャンルリンクの自動仕切り線 --- */
-        .genre-links a::after {
+        .genre-links a:not(:last-child)::after {
             content: "|";
             color: #666;
-            margin: 0 10px;
-        }
-        /* 最後のリンクの後ろには仕切りを表示しない */
-        .genre-links a:last-child::after {
-            content: "";
-            margin: 0;
+            padding: 0 10px; /* 縦線の左右に余白を設定 */
         }
         /* ---------------------------------- */
 
