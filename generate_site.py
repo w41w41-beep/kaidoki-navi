@@ -420,7 +420,7 @@ html_content = f"""
                         card.style.display = 'none';
                     }}
                 }});
-            }};
+            };
 
             const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
@@ -440,8 +440,6 @@ html_content = f"""
                         displayPage(currentPage);
                         document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
                         pageLink.classList.add('active');
-                        // ページネーションリンクをクリックしたら指定のセクションへスクロール
-                        document.getElementById('todayItemsSection').scrollIntoView({{ behavior: 'smooth' }});
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
@@ -450,7 +448,7 @@ html_content = f"""
             // ページロード時に初期化
             displayPage(currentPage);
             setupPagination();
-        }});
+        }};
     </script>
 </body>
 </html>
