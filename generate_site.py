@@ -63,7 +63,7 @@ html_content = f"""
             font-size: 18px; 
             font-weight: bold; 
             margin-bottom: 5px;
-            height: 60px; /* タイトルを3行に制限 */
+            max-height: 60px; /* タイトルを3行に制限 */
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
