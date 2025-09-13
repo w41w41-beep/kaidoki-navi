@@ -345,38 +345,158 @@ html_content = f"""
             </div>
             
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/42vw6tr" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71EGPpNyslL._AC_SX522_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Apple 2023 MacBook Pro</div>
-                        <div class="product-price">¥248,800</div>
-                        <div class="product-status">🔥 人気ランキング1位！</div>
+                        <div class="product-name">Lifeinnotech アンチグレア MacBook Air 13.6インチ 2025 M4 /M3/M2チップ 用 フィルム ブルーライトカット 保護フィルム マックブックエアー 13インチ 2024 2022 反射低減 指紋防止 抗菌 (2点セット)</div>
+                        <div class="product-price">¥1,683</div>
+                        <div class="product-status">🔥 注目アイテム！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
+                <a href="https://amzn.to/4gxpEYP" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71G3KUCqAoL._AC_SX569_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Dell Inspiron 14</div>
-                        <div class="product-price">¥89,800</div>
+                        <div class="product-name">Dell ノートパソコン Inspiron 14 5440 14インチ Core 5 120U メモリ 16GB SSD 512GB Microsoft Office Home & Business 2024 Windows 11 アイスブルー 2025春モデル</div>
+                        <div class="product-price">¥183,303</div>
                         <div class="product-status">💡 賢い買い時を見つけよう！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/47IB4GO" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61mDR99eeUL._AC_SY355_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
-                        <div class="product-price">¥29,800</div>
+                        <div class="product-name">ASUS ノートパソコン Vivobook 17 X1704VA 17.3型 インテル Core i5 1334U メモリ16GB SSD 512GB WPS Office搭載 Windows 11 バッテリー駆動 7.9時間 重量 2.1kg Wi-Fi 6E クワイエットブルー X1704VA-I5165W</div>
+                        <div class="product-price">¥89,800</div>
                         <div class="product-status">💰 お得な価格をチェック！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/4nzjZ74" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71argqnNnIL._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">DOSS SoundBox Pro+ Bluetoothスピーカー 24W 重低音 ワイヤレス ポータブル 小型 ブルートゥース スピーカー【15時間再生/ワイヤレスステレオ対応/ライティング機能/IPX6 防水/マイク内蔵/Aux-in/TFカード対応/お風呂 アオトドア適用】(ブラック)</div>
+                        <div class="product-price">¥9,599</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/3Ib1aYI" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61uDYXfqtxL._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">【Amazon.co.jp限定】 ロジクール MX MASTER3s アドバンスド ワイヤレス マウス 静音 MX2300GRd Logi Bolt Bluetooth Unifying非対応 8000dpi 高速スクロールホイール USB-C 充電式 無線 MX2300 グラファイト 国内正規品 ※Amazon限定の壁紙ダウンロードと特典ロゴステッカー付き</div>
+                        <div class="product-price">¥15,210</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/46zVCAd" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61OK3dX6Z2L._AC_SY355_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">AVISTA ゲーミングモニター 27インチ 液晶 QHD Fast IPS 180Hz 1ms ゲームモード(FPS/RTS/MOBA) ブラック DGQ270SCB ドウシシャ</div>
+                        <div class="product-price">¥24,980</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/3K2vNQD" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71h9OhYdCdL._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">イヤホン bluetooth 耳掛け ワイヤレスイヤホン 最大75時間再生 Hi-Fi音質 Bluetooth5.4 瞬時接続 AAC対応【2025年新モデル、完全ワイヤレス、ENCノイズキャンセリングマイク搭載】 ヘッドホン IP7防水 LEDディスプレイ Type-C 急速充電 適用 iPhone/Android ビジネス/WEB会議/通勤/通学/スポーツ</div>
+                        <div class="product-price">¥3,149</div>
+                        <div class="product-status">🔥 注目アイテム！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/4mjStcC" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71qQlVaxLqL._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">【整備済み品】Microsoft サーフェス Surface laptop3 1872 / 第10世代CPU:Core i7 1065G7 / Win11 / MS Office 2019 / 15インチ ノートパソコン/メモリ:32GB / SSD:1000GB / 解像度:2256x1504 / Webカメラ、タッチパネル、顔認証、TypeC/ブラック</div>
+                        <div class="product-price">¥98,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/3KmxYOU" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61kvB-M7S9L._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">ASUS Chromebook クロームブック CM14 14インチ 日本語キーボード 8GBメモリ 重量1.45kg ゼロタッチ登録対応 カードリーダー搭載 グラヴィティグレー CM1402CM2A-NK0107</div>
+                        <div class="product-price">¥45,455</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/4me59By" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71LBrMaYuwL._AC_SX569_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">【Amazon.co.jp限定】Lenovo ノートパソコン パソコン IdeaPad Slim 3 15.6インチ インテル® プロセッサー N100搭載 メモリ8GB SSD512GB MS Office 2024搭載 Windows11 バッテリー駆動12.8時間 重量1.55kg アークティックグレー 82XB00EKJP ノートPC</div>
+                        <div class="product-price">¥79,800</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/463esQ5" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-Z6UZ1UzL._AC_SY355_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">HP ノートパソコン Pavilion Aero 13-bg 13.3インチ 軽量990g AMD Ryzen7 8840U 16GBメモリ 1TB SSD Windows 11 Home スカイブルー Copilotキー搭載 AIPC (型番：A17XCPA-AAAA)ン</div>
+                        <div class="product-price">¥121,600</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/3JYCVxv" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/51t35+ah6yL._AC_SY355_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">ソニー(SONY) ワイヤレスノイズキャンセリングヘッドホン WH-CH720N: ノイズキャンセリング搭載/Bluetooth対応/軽量設計/マイク搭載/外音取り込み搭載/360Reality Audio対応/ブラック WH-CH720N B</div>
+                        <div class="product-price">¥17,482</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/46i6yRJ" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61XCzP79dAL._AC_SX522_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">NISSYO【日本正規品・ドライヤー 静音】ヘアドライヤー 大風量 2億マイナスイオン 8モード 温冷リズム 冷風調節 42℃ チャイルドモード 軽量 ヘアードライヤー 静電気防止 ドライヤー強風 ヘアケア 美髪 1200W ノズル付き コンパクト ギフト プレゼント グレー</div>
+                        <div class="product-price">¥8,980</div>
+                        <div class="product-status">🔥 注目アイテム！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/3VAmqdD" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/41IDQPBtDeL._AC_SX385_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">【整備済み品】 任天堂 Nintendo Switch(有機ELモデル) ホワイト HEG-S-KAAAA ニンテンドー スイッチ 180日保証</div>
+                        <div class="product-price">¥32,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/48gdiCd" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61D+DW2eR-L._AC_SY500_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker Zolo Power Bank (10000mAh, 35W, Built-In Dual USB-Cケーブル) (モバイルバッテリー 10000mAh 最大35W出力 ケーブル一体型 ディスプレイ搭載) 【PD/PowerIQ搭載/PSE技術基準適合】iPhone 16 / 15 Android iPad その他各種機器 (ブラック)</div>
+                        <div class="product-price">¥5,990</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/4mgGA74" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71M1sL0sUeL._AC_SY355_.jpg" alt="商品画像">
                     <div class="product-info">
                         <div class="product-name">Anker PowerCore Fusion 10000</div>
                         <div class="product-price">¥6,990</div>
@@ -385,141 +505,21 @@ html_content = f"""
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
+                <a href="https://amzn.to/3VioCWV" target="_blank">
                     <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">HP ノートパソコン</div>
-                        <div class="product-price">¥75,000</div>
+                        <div class="product-name">Pixio PX278 WAVE Beige ゲーミングモニター 27インチ 180Hz WQHD ベージュ 2年保証 かわいい</div>
+                        <div class="product-price">¥39,980</div>
                         <div class="product-status">💡 賢い買い時を見つけよう！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/4mqcb6E" target="_blank">
+                    <img src="hhttps://m.media-amazon.com/images/I/81Dfa+BTqQL._AC_SX522_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Sony Bluetoothヘッドホン</div>
-                        <div class="product-price">¥22,500</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Apple 2023 MacBook Pro</div>
-                        <div class="product-price">¥248,800</div>
-                        <div class="product-status">🔥 人気ランキング1位！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Dell Inspiron 14</div>
-                        <div class="product-price">¥89,800</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
-                        <div class="product-price">¥29,800</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Anker PowerCore Fusion 10000</div>
-                        <div class="product-price">¥6,990</div>
-                        <div class="product-status">🎁 今が最もお得です！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">HP ノートパソコン</div>
-                        <div class="product-price">¥75,000</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Sony Bluetoothヘッドホン</div>
-                        <div class="product-price">¥22,500</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Apple 2023 MacBook Pro</div>
-                        <div class="product-price">¥248,800</div>
-                        <div class="product-status">🔥 人気ランキング1位！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Dell Inspiron 14</div>
-                        <div class="product-price">¥89,800</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
-                        <div class="product-price">¥29,800</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Anker PowerCore Fusion 10000</div>
-                        <div class="product-price">¥6,990</div>
-                        <div class="product-status">🎁 今が最もお得です！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">HP ノートパソコン</div>
-                        <div class="product-price">¥75,000</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Sony Bluetoothヘッドホン</div>
-                        <div class="product-price">¥22,500</div>
+                        <div class="product-name">SwitchBot スマートロック Ultra 顔認証パッド 指紋認証 - スイッチボット 暗証番号 鍵 スマートキー ドアロック オートロック スマホで操作 交通系ICカード Suica PASMO Alexa/Google Home/Siri対応 遠隔対応 工事不要 取付カンタン 防犯対策 後付け</div>
+                        <div class="product-price">¥34,980</div>
                         <div class="product-status">💰 お得な価格をチェック！</div>
                     </div>
                 </a>
