@@ -402,53 +402,53 @@ html_content = f"""
         </div>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {{
             const productGrid = document.getElementById('productGrid');
             const productCards = Array.from(productGrid.getElementsByClassName('product-card'));
             const paginationContainer = document.getElementById('pagination-container');
             const productsPerPage = 12;
             let currentPage = 1;
 
-            const displayPage = (pageNumber) => {
+            const displayPage = (pageNumber) => {{
                 const startIndex = (pageNumber - 1) * productsPerPage;
                 const endIndex = startIndex + productsPerPage;
 
-                productCards.forEach((card, index) => {
-                    if (index >= startIndex && index < endIndex) {
+                productCards.forEach((card, index) => {{
+                    if (index >= startIndex && index < endIndex) {{
                         card.style.display = 'flex';
-                    } else {
+                    }} else {{
                         card.style.display = 'none';
-                    }
-                });
-            };
+                    }}
+                }});
+            }};
 
-            const setupPagination = () => {
+            const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
                 paginationContainer.innerHTML = '';
 
-                for (let i = 1; i <= pageCount; i++) {
+                for (let i = 1; i <= pageCount; i++) {{
                     const pageLink = document.createElement('a');
                     pageLink.href = '#';
                     pageLink.textContent = i;
                     pageLink.classList.add('pagination-link');
-                    if (i === currentPage) {
+                    if (i === currentPage) {{
                         pageLink.classList.add('active');
-                    }
-                    pageLink.addEventListener('click', (e) => {
+                    }}
+                    pageLink.addEventListener('click', (e) => {{
                         e.preventDefault();
                         currentPage = i;
                         displayPage(currentPage);
                         document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
                         pageLink.classList.add('active');
-                    });
+                    }});
                     paginationContainer.appendChild(pageLink);
-                }
-            };
+                }}
+            }};
             
             // ページロード時に初期化
             displayPage(currentPage);
             setupPagination();
-        });
+        }});
     </script>
 </body>
 </html>
