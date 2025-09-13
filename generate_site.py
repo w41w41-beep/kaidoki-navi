@@ -91,6 +91,12 @@ html_content = f"""
             .product-status {{
                 font-size: 12px;
             }}
+            .ai-recommendation-section {{ /* このブロックを新しく追加します */
+                padding: 20px 10px;
+            }}
+            .ai-section-title {{
+                font-size: 24px;
+            }}
         }}
 
         /* ジャンルリンクのコンテナスタイル */
