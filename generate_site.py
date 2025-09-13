@@ -113,6 +113,19 @@ html_content = f"""
             font-size: 16px;
         }}
 
+        /* --- ジャンルリンクの自動仕切り線 --- */
+        .genre-links a::after {{
+            content: "|";
+            color: #666;
+            margin: 0 10px;
+        }}
+        /* 最後のリンクの後ろには仕切りを表示しない */
+        .genre-links a:last-child::after {{
+            content: "";
+            margin: 0;
+        }}
+        /* ---------------------------------- */
+
         /* ページネーションのスタイル */
         .pagination-container {{
             text-align: center;
@@ -173,7 +186,6 @@ html_content = f"""
     <div class="genre-links-container">
         <div class="genre-links">
             <a href="#">パソコン</a>
-            <span style="color: #666; margin: 0 10px;">|</span>
             <a href="#">家電</a>
         </div>
     </div>
