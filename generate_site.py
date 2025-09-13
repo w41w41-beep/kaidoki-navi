@@ -116,6 +116,72 @@ html_content = f"""
                     </div>
                 </a>
             </div>
+            
+            <div class="product-card">
+                <a href="https://amzn.to/3I6rIdF" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple AirPods Pro (第2世代)</div>
+                        <div class="product-price">¥38,192</div>
+                        <div class="product-status">🎁 注目のおすすめ商品！</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="product-card">
+                <a href="https://amzn.to/4nbSLTS" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/51Pn+NasrBL._AC_SY300_SX300_QL70_ML2_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker Soundcore Liberty 4</div>
+                        <div class="product-price">¥12,980</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <a href="https://amzn.to/4gopMtN" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/710GmYYsbTL._AC_SX522_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Echo Dot (エコードット) 第5世代</div>
+                        <div class="product-price">¥7,480</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <a href="https://amzn.to/3I6rIdF" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple AirPods Pro (第2世代)</div>
+                        <div class="product-price">¥38,192</div>
+                        <div class="product-status">🎁 注目のおすすめ商品！</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="product-card">
+                <a href="https://amzn.to/4nbSLTS" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/51Pn+NasrBL._AC_SY300_SX300_QL70_ML2_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker Soundcore Liberty 4</div>
+                        <div class="product-price">¥12,980</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <a href="https://amzn.to/4gopMtN" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/710GmYYsbTL._AC_SX522_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Echo Dot (エコードット) 第5世代</div>
+                        <div class="product-price">¥7,480</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
     <footer>
