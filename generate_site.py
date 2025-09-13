@@ -127,8 +127,13 @@ html_content = f"""
             border-radius: 5px;
             transition: background-color 0.3s;
         }}
+        .pagination-link.disabled {{
+            color: #ccc;
+            border: 1px solid #ccc;
+            cursor: not-allowed;
+        }}
 
-        .pagination-link:hover {{
+        .pagination-link:not(.disabled):hover {{
             background-color: #007bff;
             color: #fff;
         }}
@@ -137,6 +142,12 @@ html_content = f"""
             background-color: #007bff;
             color: #fff;
             font-weight: bold;
+        }}
+
+        .pagination-ellipsis {{
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 0;
         }}
 
         footer {{ text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }}
@@ -331,7 +342,187 @@ html_content = f"""
                 </a>
             </div>
             
-            <!-- ページネーションで表示される商品 (全24個) -->
+            <!-- ページネーションで表示される商品 (全100個) -->
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple 2023 MacBook Pro</div>
+                        <div class="product-price">¥248,800</div>
+                        <div class="product-status">🔥 人気ランキング1位！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Dell Inspiron 14</div>
+                        <div class="product-price">¥89,800</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
+                        <div class="product-price">¥29,800</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker PowerCore Fusion 10000</div>
+                        <div class="product-price">¥6,990</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">HP ノートパソコン</div>
+                        <div class="product-price">¥75,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Sony Bluetoothヘッドホン</div>
+                        <div class="product-price">¥22,500</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple 2023 MacBook Pro</div>
+                        <div class="product-price">¥248,800</div>
+                        <div class="product-status">🔥 人気ランキング1位！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Dell Inspiron 14</div>
+                        <div class="product-price">¥89,800</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
+                        <div class="product-price">¥29,800</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker PowerCore Fusion 10000</div>
+                        <div class="product-price">¥6,990</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">HP ノートパソコン</div>
+                        <div class="product-price">¥75,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Sony Bluetoothヘッドホン</div>
+                        <div class="product-price">¥22,500</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple 2023 MacBook Pro</div>
+                        <div class="product-price">¥248,800</div>
+                        <div class="product-status">🔥 人気ランキング1位！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Dell Inspiron 14</div>
+                        <div class="product-price">¥89,800</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
+                        <div class="product-price">¥29,800</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker PowerCore Fusion 10000</div>
+                        <div class="product-price">¥6,990</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">HP ノートパソコン</div>
+                        <div class="product-price">¥75,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Sony Bluetoothヘッドホン</div>
+                        <div class="product-price">¥22,500</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
             <div class="product-card">
                 <a href="#" target="_blank">
                     <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
@@ -411,7 +602,7 @@ html_content = f"""
             const paginationContainer = document.getElementById('pagination-container');
             const todayItemsSection = document.getElementById('todayItemsSection');
 
-            const productsPerPage = 12;
+            const productsPerPage = 24;
             let currentPage = 1;
             
             console.log('Found ' + productCards.length + ' products.');
@@ -433,12 +624,57 @@ html_content = f"""
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
                 console.log('Calculated ' + pageCount + ' pages.');
                 paginationContainer.innerHTML = '';
+                
+                const maxPageLinks = 7; // 表示するページリンクの最大数
+                const ellipsis = '<span class="pagination-ellipsis">...</span>';
 
                 if (pageCount <= 1) {{
                     return;
                 }}
 
-                for (let i = 1; i <= pageCount; i++) {{
+                // 前へボタン
+                const prevLink = document.createElement('a');
+                prevLink.href = '#';
+                prevLink.innerHTML = '&laquo; 前へ';
+                prevLink.classList.add('pagination-link');
+                if (currentPage === 1) {{
+                    prevLink.classList.add('disabled');
+                }} else {{
+                    prevLink.addEventListener('click', (e) => {{
+                        e.preventDefault();
+                        currentPage--;
+                        displayPage(currentPage);
+                        updatePaginationLinks();
+                    }});
+                }}
+                paginationContainer.appendChild(prevLink);
+
+                // ページリンクの表示ロジック
+                let startPage = Math.max(1, currentPage - Math.floor(maxPageLinks / 2));
+                let endPage = Math.min(pageCount, startPage + maxPageLinks - 1);
+                
+                if (endPage - startPage < maxPageLinks - 1) {{
+                    startPage = Math.max(1, endPage - maxPageLinks + 1);
+                }}
+
+                if (startPage > 1) {{
+                    const firstPageLink = document.createElement('a');
+                    firstPageLink.href = '#';
+                    firstPageLink.textContent = '1';
+                    firstPageLink.classList.add('pagination-link');
+                    firstPageLink.addEventListener('click', (e) => {{
+                        e.preventDefault();
+                        currentPage = 1;
+                        displayPage(currentPage);
+                        updatePaginationLinks();
+                    }});
+                    paginationContainer.appendChild(firstPageLink);
+                    if (startPage > 2) {{
+                        paginationContainer.innerHTML += ellipsis;
+                    }}
+                }}
+
+                for (let i = startPage; i <= endPage; i++) {{
                     const pageLink = document.createElement('a');
                     pageLink.href = '#';
                     pageLink.textContent = i;
@@ -450,16 +686,62 @@ html_content = f"""
                         e.preventDefault();
                         currentPage = i;
                         displayPage(currentPage);
-                        document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
-                        pageLink.classList.add('active');
-                        
-                        // スムーズスクロールを削除し、瞬時に移動するように変更
+                        updatePaginationLinks();
                         if (todayItemsSection) {{
                             todayItemsSection.scrollIntoView();
                         }}
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
+                
+                if (endPage < pageCount) {{
+                    if (endPage < pageCount - 1) {{
+                        paginationContainer.innerHTML += ellipsis;
+                    }}
+                    const lastPageLink = document.createElement('a');
+                    lastPageLink.href = '#';
+                    lastPageLink.textContent = pageCount;
+                    lastPageLink.classList.add('pagination-link');
+                    lastPageLink.addEventListener('click', (e) => {{
+                        e.preventDefault();
+                        currentPage = pageCount;
+                        displayPage(currentPage);
+                        updatePaginationLinks();
+                    }});
+                    paginationContainer.appendChild(lastPageLink);
+                }}
+
+                // 次へボタン
+                const nextLink = document.createElement('a');
+                nextLink.href = '#';
+                nextLink.innerHTML = '次へ &raquo;';
+                nextLink.classList.add('pagination-link');
+                if (currentPage === pageCount) {{
+                    nextLink.classList.add('disabled');
+                }} else {{
+                    nextLink.addEventListener('click', (e) => {{
+                        e.preventDefault();
+                        currentPage++;
+                        displayPage(currentPage);
+                        updatePaginationLinks();
+                    }});
+                }}
+                paginationContainer.appendChild(nextLink);
+
+                const updatePaginationLinks = () => {{
+                    const currentLinks = document.querySelectorAll('.pagination-link');
+                    currentLinks.forEach(link => link.classList.remove('active'));
+                    const newLinks = paginationContainer.querySelectorAll('.pagination-link');
+                    newLinks.forEach(link => {{
+                        if (parseInt(link.textContent) === currentPage) {{
+                            link.classList.add('active');
+                        }}
+                    }});
+                    setupPagination();
+                    if (todayItemsSection) {{
+                        todayItemsSection.scrollIntoView();
+                    }}
+                }};
             }};
             
             // ページロード時に初期化
