@@ -105,7 +105,6 @@ html_content = f"""
             text-align: center;
         }}
         
-        /* --- ここを修正しました --- */
         .genre-links {{
             display: flex;
             justify-content: center;
@@ -121,7 +120,6 @@ html_content = f"""
         .genre-links .separator {{
             color: #000;
         }}
-        /* ----------------------- */
         
         /* ページネーションのスタイル */
         .pagination-container {{
