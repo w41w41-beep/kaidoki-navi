@@ -212,6 +212,46 @@ html_content = f"""
                     </div>
                 </a>
             </div>
+            <div class="product-card">
+                <a href="https://amzn.to/4gopMtN" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/710GmYYsbTL._AC_SX522_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Echo Dot (エコードット) 第5世代</div>
+                        <div class="product-price">¥7,480</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-yIe-H9PL._AC_SX466_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker PowerCore 10000</div>
+                        <div class="product-price">¥3,499</div>
+                        <div class="product-status">✅ 在庫あり</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b7g-6V-BL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Canon デジタルカメラ IXY 650</div>
+                        <div class="product-price">¥24,800</div>
+                        <div class="product-status">✨ Amazon限定モデル</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b72zVf7KL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple Watch SE(第2世代)</div>
+                        <div class="product-price">¥37,800</div>
+                        <div class="product-status">🔥 タイムセール祭り</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
     
