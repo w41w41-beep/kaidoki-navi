@@ -23,7 +23,12 @@ html_content = f"""
         .section-title {{ font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }}
         
         /* 商品のレイアウトをFlexboxで修正 */
-        .product-grid {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }}
+        .product-grid {{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }}
 
         .product-card {{ 
             flex: 1 1 280px; /* カードが横に並ぶように設定 */
@@ -78,6 +83,39 @@ html_content = f"""
         </div>
     </div>
 
+    <!-- AIとAPIが連携した際の「注目の買い時アイテム！」セクション -->
+    <div class="container content">
+        <h2 class="section-title">注目の買い時アイテム！</h2>
+        <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
+            AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
+        </div>
+        <div class="product-grid">
+            <!-- この部分にAIが選んだ目玉商品が並びます。 -->
+            <!-- 今は手動でサンプルを配置 -->
+            <div class="product-card">
+                <a href="https://amzn.to/3I6rIdF" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple AirPods Pro (第2世代)</div>
+                        <div class="product-price">¥38,192</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="https://amzn.to/4nvuSXs" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/51a00Not+LL._AC_SY679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Amazon Fire TV Stick 4K Max</div>
+                        <div class="product-price">¥12,980</div>
+                        <div class="product-status">🔥 人気ランキング1位！</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 手動で掲載する商品のセクション -->
     <div class="container content">
         <h2 class="section-title">今日の注目買い時アイテム</h2>
         <div style="text-align: center; font-size: 18px; color: #666; margin-bottom: 20px;">
@@ -211,6 +249,17 @@ html_content = f"""
                     <div class="product-info">
                         <div class="product-name">MagSafe充電器 ワイヤレス 最大15W</div>
                         <div class="product-price">¥5,192</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <a href="https://amzn.to/4lqN9a7" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71uL5I4k1WL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple AirTag (エアタグ)</div>
+                        <div class="product-price">¥4,980</div>
                         <div class="product-status">💰 お得な価格をチェック！</div>
                     </div>
                 </a>
