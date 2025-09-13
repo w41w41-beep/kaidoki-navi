@@ -423,7 +423,7 @@ html_content = f"""
                 productCards.forEach((card, index) => {{
                     if (index >= startIndex && index < endIndex) {{
                         card.style.display = 'flex';
-                    } else {{
+                    }} else {{
                         card.style.display = 'none';
                     }}
                 }});
