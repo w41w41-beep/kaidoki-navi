@@ -27,8 +27,8 @@ html_content = f"""
         .product-grid {{
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* アイテムを中央に配置 */
-            align-items: stretch; /* アイテムの高さを統一 */
+            justify-content: center;
+            align-items: stretch;
             gap: 20px;
         }}
 
@@ -39,7 +39,7 @@ html_content = f"""
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s; 
-            flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
+            flex: 1 1 calc(33.333% - 20px);
             display: flex;
             flex-direction: column;
         }}
@@ -47,18 +47,18 @@ html_content = f"""
         
         .product-card img {{ 
             width: 100%;
-            height: 180px; /* 画像の高さを統一 */
-            object-fit: contain; /* 画像をアスペクト比を維持して収める */
+            height: 180px;
+            object-fit: contain;
             display: block;
         }}
 
         .product-info {{ 
             padding: 15px;
-            flex-grow: 1; /* 余ったスペースを埋める */
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 120px; /* コンテンツが少ない場合の最低限の高さ */
+            min-height: 120px;
         }}
 
         .product-name {{ 
@@ -68,7 +68,7 @@ html_content = f"""
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 2; /* 2行に制限 */
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }}
         .product-price {{ color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }}
@@ -77,10 +77,10 @@ html_content = f"""
         /* スマートフォン向けレスポンシブデザイン（2列表示） */
         @media (max-width: 768px) {{
             .product-grid {{
-                padding: 0 10px; /* 左右に余白を追加 */
+                padding: 0 10px;
             }}
             .product-card {{
-                flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
+                flex: 1 1 calc(50% - 15px);
             }}
             .product-name {{ 
                 font-size: 16px;
@@ -104,21 +104,25 @@ html_content = f"""
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }}
+        
+        /* --- ここを修正しました --- */
+        .genre-links {{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* ここで余白を均等に作ります */
+        }}
         .genre-links a {{
             color: #007bff;
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
         }}
-        
-        /* --- ジャンルリンクの自動仕切り線 --- */
-        .genre-links a + a::before {{
-            content: "|";
+        .genre-links .separator {{
             color: #000;
-            margin: 0 20px; /* 余白を10pxから20pxに増やしました */
         }}
-        /* ---------------------------------- */
-
+        /* ----------------------- */
+        
         /* ページネーションのスタイル */
         .pagination-container {{
             text-align: center;
@@ -139,7 +143,7 @@ html_content = f"""
             color: #ccc;
             border: 1px solid #ccc;
             cursor: not-allowed;
-            pointer-events: none; /* クリックイベントを無効化 */
+            pointer-events: none;
         }}
 
         .pagination-link:not(.disabled):hover {{
