@@ -105,28 +105,21 @@ html_content = f"""
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }}
-        .genre-links span {{
-            color: #007bff;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 0 15px; /* リンクの左右に余白を設定 */
-            position: relative;
-        }}
-        .genre-links span a {{
+        .genre-links a {{
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
         }}
-
+        
         /* --- ジャンルリンクの自動仕切り線 --- */
-        .genre-links span:not(:last-child)::after {{
+        .genre-links a + a::before {{
             content: "|";
-            position: absolute;
-            top: 0;
-            right: -1px; /* 縦線の位置を調整 */
-            color: #666;
+            color: #ccc;
+            padding: 0 10px;
         }}
         /* ---------------------------------- */
-
+        
         /* ページネーションのスタイル */
         .pagination-container {{
             text-align: center;
@@ -186,8 +179,8 @@ html_content = f"""
 
     <div class="genre-links-container">
         <div class="genre-links">
-            <span><a href="#">パソコン</a></span>
-            <span><a href="#">家電</a></span>
+            <a href="#">パソコン</a>
+            <a href="#">家電</a>
         </div>
     </div>
 
