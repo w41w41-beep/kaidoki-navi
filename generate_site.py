@@ -160,6 +160,7 @@ html_content = f"""
     <header>
         <div class="container">
             <h1>カイドキ-ナビ</h1>
+            <p>賢い買い時を見つけよう！</p>
         </div>
     </header>
 
