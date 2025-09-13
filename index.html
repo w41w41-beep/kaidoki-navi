@@ -98,20 +98,25 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .genre-links a {
+        .genre-links span {
             color: #007bff;
-            text-decoration: none;
             font-weight: bold;
             font-size: 16px;
-            /* 修正: リンクの左右マージンをなくす */
-            margin: 0;
+            padding: 0 15px; /* リンクの左右に余白を設定 */
+            position: relative;
+        }
+        .genre-links span a {
+            color: #007bff;
+            text-decoration: none;
         }
 
         /* --- ジャンルリンクの自動仕切り線 --- */
-        .genre-links a:not(:last-child)::after {
+        .genre-links span:not(:last-child)::after {
             content: "|";
+            position: absolute;
+            top: 0;
+            right: -1px; /* 縦線の位置を調整 */
             color: #666;
-            padding: 0 10px; /* 縦線の左右に余白を設定 */
         }
         /* ---------------------------------- */
 
@@ -174,8 +179,8 @@
 
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="#">パソコン</a>
-            <a href="#">家電</a>
+            <span><a href="#">パソコン</a></span>
+            <span><a href="#">家電</a></span>
         </div>
     </div>
 
