@@ -111,6 +111,34 @@ html_content = f"""
             font-size: 16px;
         }}
 
+        /* ページネーションのスタイル */
+        .pagination-container {{
+            text-align: center;
+            margin-top: 20px;
+        }}
+
+        .pagination-link {{
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 12px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }}
+
+        .pagination-link:hover {{
+            background-color: #007bff;
+            color: #fff;
+        }}
+
+        .pagination-link.active {{
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }}
+
         footer {{ text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }}
         .footer-links {{ display: flex; justify-content: center; gap: 20px; margin-top: 10px; }}
         .footer-links a {{ color: #007bff; text-decoration: none; }}
@@ -170,7 +198,7 @@ html_content = f"""
         <div style="text-align: center; font-size: 18px; color: #666; margin-bottom: 20px;">
             更新日: {today.strftime('%Y年%m月%d日')}
         </div>
-        <div class="product-grid">
+        <div class="product-grid" id="productGrid">
             <div class="product-card">
                 <a href="https://amzn.to/3I6rIdF" target="_blank">
                     <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
@@ -286,8 +314,6 @@ html_content = f"""
                     <img src="https://m.media-amazon.com/images/I/71nSaPyH6iL._AC_SY355_.jpg" alt="商品画像">
                     <div class="product-info">
                         <div class="product-name">ソニー(SONY) ULT FIELD 5 Bluetoothスピーカー 迫力の重低音 クリアなサウンド ロングバッテリー25時間 ショルダーストラップ ライティング搭載 防水 防塵 SRS-ULT50 WZ オフホワイト</div>
-                        <div class="product-price">¥32,645</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
                     </div>
                 </a>
             </div>
@@ -302,8 +328,71 @@ html_content = f"""
                     </div>
                 </a>
             </div>
+            
+            <!-- ページネーションで表示される商品 (全24個) -->
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Apple 2023 MacBook Pro</div>
+                        <div class="product-price">¥248,800</div>
+                        <div class="product-status">🔥 人気ランキング1位！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Dell Inspiron 14</div>
+                        <div class="product-price">¥89,800</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
+                        <div class="product-price">¥29,800</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Anker PowerCore Fusion 10000</div>
+                        <div class="product-price">¥6,990</div>
+                        <div class="product-status">🎁 今が最もお得です！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">HP ノートパソコン</div>
+                        <div class="product-price">¥75,000</div>
+                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
+                    </div>
+                </a>
+            </div>
+            <div class="product-card">
+                <a href="#" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
+                    <div class="product-info">
+                        <div class="product-name">Sony Bluetoothヘッドホン</div>
+                        <div class="product-price">¥22,500</div>
+                        <div class="product-status">💰 お得な価格をチェック！</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
+    <div class="pagination-container" id="pagination-container"></div>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
         <div class="footer-links">
@@ -312,6 +401,55 @@ html_content = f"""
             <a href="contact.html">お問い合わせ</a>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productGrid = document.getElementById('productGrid');
+            const productCards = Array.from(productGrid.getElementsByClassName('product-card'));
+            const paginationContainer = document.getElementById('pagination-container');
+            const productsPerPage = 12;
+            let currentPage = 1;
+
+            const displayPage = (pageNumber) => {
+                const startIndex = (pageNumber - 1) * productsPerPage;
+                const endIndex = startIndex + productsPerPage;
+
+                productCards.forEach((card, index) => {
+                    if (index >= startIndex && index < endIndex) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            };
+
+            const setupPagination = () => {
+                const pageCount = Math.ceil(productCards.length / productsPerPage);
+                paginationContainer.innerHTML = '';
+
+                for (let i = 1; i <= pageCount; i++) {
+                    const pageLink = document.createElement('a');
+                    pageLink.href = '#';
+                    pageLink.textContent = i;
+                    pageLink.classList.add('pagination-link');
+                    if (i === currentPage) {
+                        pageLink.classList.add('active');
+                    }
+                    pageLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentPage = i;
+                        displayPage(currentPage);
+                        document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
+                        pageLink.classList.add('active');
+                    });
+                    paginationContainer.appendChild(pageLink);
+                }
+            };
+            
+            // ページロード時に初期化
+            displayPage(currentPage);
+            setupPagination();
+        });
+    </script>
 </body>
 </html>
 """
