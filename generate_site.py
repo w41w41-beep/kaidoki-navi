@@ -173,6 +173,7 @@ html_content = f"""
     <div class="genre-links-container">
         <div class="genre-links">
             <a href="#">パソコン</a>
+            <span style="color: #666; margin: 0 10px;">|</span>
             <a href="#">家電</a>
         </div>
     </div>
