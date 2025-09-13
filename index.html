@@ -98,23 +98,21 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .genre-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
         .genre-links a {
             color: #007bff;
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
         }
-        .genre-links .separator {
-            color: #ccc;
-            font-size: 16px;
-        }
         
+        /* --- ジャンルリンクの自動仕切り線 --- */
+        .genre-links a + a::before {
+            content: "|";
+            color: #000; /* ここを黒に変更しました */
+            margin: 0 10px;
+        }
+        /* ---------------------------------- */
+
         /* ページネーションのスタイル */
         .pagination-container {
             text-align: center;
