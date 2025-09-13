@@ -75,6 +75,9 @@ html_content = f"""
         
         /* スマートフォン向けレスポンシブデザイン（2列表示） */
         @media (max-width: 768px) {{
+            .product-grid {{
+                padding: 0 10px; /* 左右に余白を追加 */
+            }}
             .product-card {{
                 flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
             }}
