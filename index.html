@@ -24,8 +24,13 @@
         }
 
         .product-card { 
-            flex: 1 1 280px; /* カードが横に並ぶように設定 */
-            background-color: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: transform 0.2s; 
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s; 
+            flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
         }
         .product-card:hover { transform: translateY(-5px); }
         .product-card img { width: 100%; height: auto; display: block; }
@@ -34,6 +39,13 @@
         .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
         .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
         
+        /* スマートフォン向けレスポンシブデザイン（2列表示） */
+        @media (max-width: 768px) {
+            .product-card {
+                flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
+            }
+        }
+
         /* ジャンルリンクのコンテナスタイル */
         .genre-links-container {
             max-width: 960px;
@@ -76,9 +88,9 @@
         </div>
     </div>
 
-    <!-- AIとAPIが連携した際の「注目の買い時アイテム！」セクション -->
+    <!-- AIとAPIが連携した際の「注目のおすすめ」セクション -->
     <div class="container content">
-        <h2 class="section-title">注目の買い時アイテム！</h2>
+        <h2 class="section-title">AIが選んだ注目のおすすめ</h2>
         <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
             AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
         </div>
@@ -108,7 +120,7 @@
         </div>
     </div>
     
-    <!-- 手動で掲載する商品のセクション -->
+    <!-- 全商品のセクション -->
     <div class="container content">
         <h2 class="section-title">今日の注目買い時アイテム</h2>
         <div style="text-align: center; font-size: 18px; color: #666; margin-bottom: 20px;">
