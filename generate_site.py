@@ -16,8 +16,9 @@ html_content = f"""
     body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }}
         .container {{ max-width: 960px; margin: auto; padding: 20px; }}
         header {{ background-color: #fff; border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }}
-        /* 修正: ヘッダー内の h1 と p タグの上下マージンをなくす */
+        /* タイトルとサブタイトルの上下マージンをなくし、タイトルを青色に戻す */
         header h1, header p {{ margin: 0; }}
+        header h1 {{ color: #007bff; }}
         .search-bar {{ padding: 20px; text-align: center; background-color: #e9ecef; }}
         .search-bar input {{ width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }}
         .content {{ padding: 20px 0; }}
