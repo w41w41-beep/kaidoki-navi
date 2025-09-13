@@ -19,7 +19,8 @@
         .product-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: center; /* アイテムを中央に配置 */
+            align-items: stretch; /* アイテムの高さを統一 */
             gap: 20px;
         }
 
@@ -31,11 +32,37 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s; 
             flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
+            display: flex;
+            flex-direction: column;
         }
         .product-card:hover { transform: translateY(-5px); }
-        .product-card img { width: 100%; height: auto; display: block; }
-        .product-info { padding: 15px; }
-        .product-name { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        
+        .product-card img { 
+            width: 100%;
+            height: 180px; /* 画像の高さを統一 */
+            object-fit: contain; /* 画像をアスペクト比を維持して収める */
+            display: block;
+        }
+
+        .product-info { 
+            padding: 15px;
+            flex-grow: 1; /* 余ったスペースを埋める */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name { 
+            font-size: 18px; 
+            font-weight: bold; 
+            margin-bottom: 5px;
+            height: 40px; /* タイトルを2行に制限 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 2行に制限 */
+            -webkit-box-orient: vertical;
+        }
         .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
         .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
         
@@ -95,8 +122,6 @@
             AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
         </div>
         <div class="product-grid">
-            <!-- この部分にAIが選んだ目玉商品が並びます。 -->
-            <!-- 今は手動でサンプルを配置 -->
             <div class="product-card">
                 <a href="https://amzn.to/3I6rIdF" target="_blank">
                     <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
@@ -260,11 +285,11 @@
             </div>
             
             <div class="product-card">
-                <a href="https://amzn.to/4nv27Kr" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/51AccyP34JL._AC_SY355_.jpg" alt="商品画像">
+                <a href="https://amzn.to/4lqN9a7" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71uL5I4k1WL._AC_SX679_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Powerun「2025業界新登場！」 エアタグ（2個セット）airtag MFI認証済み 紛失防止タグ Appleの「探す」に対応(iOS端末のみ) スマートトラッカー 全地球測位 gpsタグ 小型 超薄 超軽量 スマートタグ 子供/高齢者/ペット見守り 鍵/車/自転車/荷物/財布/バッグ 忘れ物防止 母の日 父の日 敬老の日 お誕生日プレゼント (F2)</div>
-                        <div class="product-price">¥1,999</div>
+                        <div class="product-name">Apple AirTag (エアタグ)</div>
+                        <div class="product-price">¥4,980</div>
                         <div class="product-status">💰 お得な価格をチェック！</div>
                     </div>
                 </a>
