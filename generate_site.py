@@ -41,6 +41,7 @@ html_content = f"""
             flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
             display: flex;
             flex-direction: column;
+            aspect-ratio: 3 / 4; /* カードの縦横比を3:4に固定 */
         }}
         .product-card:hover {{ transform: translateY(-5px); }}
         
@@ -63,7 +64,6 @@ html_content = f"""
             font-size: 18px; 
             font-weight: bold; 
             margin-bottom: 5px;
-            height: 60px; /* タイトルを3行に制限 (font-size: 18px * 3行 = 54px + α) */
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
