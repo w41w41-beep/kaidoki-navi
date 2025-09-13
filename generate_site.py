@@ -194,7 +194,7 @@ html_content = f"""
     
     <!-- 全商品のセクション -->
     <div class="container content">
-        <h2 class="section-title">今日の注目買い時アイテム</h2>
+        <h2 class="section-title" id="todayItemsSection">今日の注目買い時アイテム</h2>
         <div style="text-align: center; font-size: 18px; color: #666; margin-bottom: 20px;">
             更新日: {today.strftime('%Y年%m月%d日')}
         </div>
@@ -440,6 +440,8 @@ html_content = f"""
                         displayPage(currentPage);
                         document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
                         pageLink.classList.add('active');
+                        // ページネーションリンクをクリックしたら指定のセクションへスクロール
+                        document.getElementById('todayItemsSection').scrollIntoView({{ behavior: 'smooth' }});
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
