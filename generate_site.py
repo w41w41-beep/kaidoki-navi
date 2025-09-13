@@ -160,6 +160,35 @@ html_content = f"""
             padding: 8px 0;
         }}
 
+/* AIおすすめセクションのスタイル */
+        .ai-recommendation-section {{
+            background-color: #e9f0f1;
+            padding: 30px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }}
+
+        .ai-section-title {{
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #007bff;
+            padding-bottom: 10px;
+            position: relative;
+        }}
+        .ai-section-title::after {{
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #007bff;
+            border-radius: 2px;
+        }}
         footer {{ text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }}
         .footer-links {{ display: flex; justify-content: center; gap: 20px; margin-top: 10px; }}
         .footer-links a {{ color: #007bff; text-decoration: none; }}
@@ -186,8 +215,8 @@ html_content = f"""
     </div>
 
     <!-- AIとAPIが連携した際の「注目のおすすめ」セクション -->
-    <div class="container content">
-        <h2 class="section-title">AIが選んだ注目のおすすめ</h2>
+    <div class="container content ai-recommendation-section">
+        <h2 class="ai-section-title">AIが選んだ注目のおすすめ</h2>
         <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
             AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
         </div>
