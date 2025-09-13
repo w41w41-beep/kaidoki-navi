@@ -11,7 +11,7 @@ html_content = f"""
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カイドキ-ナビ - 賢い買い時を見つけよう！</title>
+    <title>カイドキ-ナビ - お得な買い時を見つけよう！</title>
 <style>
     body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }}
         .container {{ max-width: 960px; margin: auto; padding: 20px; }}
@@ -162,7 +162,7 @@ html_content = f"""
     <header>
         <div class="container">
             <h1>カイドキ-ナビ</h1>
-            <p>賢い買い時を見つけよう！</p>
+            <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
 
