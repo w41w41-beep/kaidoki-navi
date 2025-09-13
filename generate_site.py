@@ -405,11 +405,14 @@ html_content = f"""
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {{
+            console.log('DOM Content Loaded. Initializing pagination.');
             const productGrid = document.getElementById('productGrid');
-            const productCards = Array.from(productGrid.getElementsByClassName('product-card'));
+            const productCards = Array.from(document.querySelectorAll('#productGrid .product-card'));
             const paginationContainer = document.getElementById('pagination-container');
             const productsPerPage = 12;
             let currentPage = 1;
+            
+            console.log('Found ' + productCards.length + ' products.');
 
             const displayPage = (pageNumber) => {{
                 const startIndex = (pageNumber - 1) * productsPerPage;
@@ -426,7 +429,12 @@ html_content = f"""
 
             const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
+                console.log('Calculated ' + pageCount + ' pages.');
                 paginationContainer.innerHTML = '';
+
+                if (pageCount <= 1) {{
+                    return; // ページが1つしかない場合はページネーションを非表示にする
+                }}
 
                 for (let i = 1; i <= pageCount; i++) {{
                     const pageLink = document.createElement('a');
@@ -450,7 +458,7 @@ html_content = f"""
             // ページロード時に初期化
             displayPage(currentPage);
             setupPagination();
-        }};
+        }});
     </script>
 </body>
 </html>
