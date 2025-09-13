@@ -216,7 +216,7 @@ html_content = f"""
 
     <!-- AIとAPIが連携した際の「注目のおすすめ」セクション -->
     <div class="container content ai-recommendation-section">
-        <h2 class="ai-section-title">AIが選んだ注目のおすすめ</h2>
+        <h2 class="ai-section-title">AIが選んだおすすめアイテム</h2>
         <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
             AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
         </div>
