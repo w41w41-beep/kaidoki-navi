@@ -409,6 +409,8 @@ html_content = f"""
             const productGrid = document.getElementById('productGrid');
             const productCards = Array.from(document.querySelectorAll('#productGrid .product-card'));
             const paginationContainer = document.getElementById('pagination-container');
+            const todayItemsSection = document.getElementById('todayItemsSection');
+
             const productsPerPage = 12;
             let currentPage = 1;
             
@@ -421,7 +423,7 @@ html_content = f"""
                 productCards.forEach((card, index) => {{
                     if (index >= startIndex && index < endIndex) {{
                         card.style.display = 'flex';
-                    }} else {{
+                    } else {{
                         card.style.display = 'none';
                     }}
                 }});
@@ -433,7 +435,7 @@ html_content = f"""
                 paginationContainer.innerHTML = '';
 
                 if (pageCount <= 1) {{
-                    return; // ページが1つしかない場合はページネーションを非表示にする
+                    return;
                 }}
 
                 for (let i = 1; i <= pageCount; i++) {{
@@ -450,6 +452,11 @@ html_content = f"""
                         displayPage(currentPage);
                         document.querySelectorAll('.pagination-link').forEach(link => link.classList.remove('active'));
                         pageLink.classList.add('active');
+                        
+                        // スムーズスクロールを削除し、瞬時に移動するように変更
+                        if (todayItemsSection) {{
+                            todayItemsSection.scrollIntoView();
+                        }}
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
