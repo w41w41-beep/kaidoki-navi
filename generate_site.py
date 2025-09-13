@@ -314,6 +314,8 @@ html_content = f"""
                     <img src="https://m.media-amazon.com/images/I/71nSaPyH6iL._AC_SY355_.jpg" alt="商品画像">
                     <div class="product-info">
                         <div class="product-name">ソニー(SONY) ULT FIELD 5 Bluetoothスピーカー 迫力の重低音 クリアなサウンド ロングバッテリー25時間 ショルダーストラップ ライティング搭載 防水 防塵 SRS-ULT50 WZ オフホワイト</div>
+                        <div class="product-price">¥24,800</div>
+                        <div class="product-status">🎁 注目のおすすめ商品！</div>
                     </div>
                 </a>
             </div>
@@ -420,7 +422,7 @@ html_content = f"""
                         card.style.display = 'none';
                     }}
                 }});
-            };
+            }};
 
             const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
