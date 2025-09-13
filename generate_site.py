@@ -184,7 +184,8 @@ html_content = f"""
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
-            width: 80px;
+            width: 100%; /* ここを100%に変更します */
+            max-width: 280px; /* 最大幅を設定します */
             height: 4px;
             background-color: #007bff;
             border-radius: 2px;
