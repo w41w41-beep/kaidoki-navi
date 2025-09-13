@@ -131,6 +131,7 @@ html_content = f"""
             color: #ccc;
             border: 1px solid #ccc;
             cursor: not-allowed;
+            pointer-events: none; /* クリックイベントを無効化 */
         }}
 
         .pagination-link:not(.disabled):hover {{
@@ -463,126 +464,6 @@ html_content = f"""
                     </div>
                 </a>
             </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Apple 2023 MacBook Pro</div>
-                        <div class="product-price">¥248,800</div>
-                        <div class="product-status">🔥 人気ランキング1位！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Dell Inspiron 14</div>
-                        <div class="product-price">¥89,800</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
-                        <div class="product-price">¥29,800</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Anker PowerCore Fusion 10000</div>
-                        <div class="product-price">¥6,990</div>
-                        <div class="product-status">🎁 今が最もお得です！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">HP ノートパソコン</div>
-                        <div class="product-price">¥75,000</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Sony Bluetoothヘッドホン</div>
-                        <div class="product-price">¥22,500</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b-9F68oFL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Apple 2023 MacBook Pro</div>
-                        <div class="product-price">¥248,800</div>
-                        <div class="product-status">🔥 人気ランキング1位！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61D1I-mE-xL._AC_SY879_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Dell Inspiron 14</div>
-                        <div class="product-price">¥89,800</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61H6oN3NILL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">LG ゲーミングモニター 27インチ</div>
-                        <div class="product-price">¥29,800</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61L-P2P3iGL._AC_SY679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Anker PowerCore Fusion 10000</div>
-                        <div class="product-price">¥6,990</div>
-                        <div class="product-status">🎁 今が最もお得です！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61NlJ0qY4XL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">HP ノートパソコン</div>
-                        <div class="product-price">¥75,000</div>
-                        <div class="product-status">💡 賢い買い時を見つけよう！</div>
-                    </div>
-                </a>
-            </div>
-            <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-n-eB6LpL._AC_SX679_.jpg" alt="商品画像">
-                    <div class="product-info">
-                        <div class="product-name">Sony Bluetoothヘッドホン</div>
-                        <div class="product-price">¥22,500</div>
-                        <div class="product-status">💰 お得な価格をチェック！</div>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
     <div class="pagination-container" id="pagination-container"></div>
@@ -596,7 +477,6 @@ html_content = f"""
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {{
-            console.log('DOM Content Loaded. Initializing pagination.');
             const productGrid = document.getElementById('productGrid');
             const productCards = Array.from(document.querySelectorAll('#productGrid .product-card'));
             const paginationContainer = document.getElementById('pagination-container');
@@ -605,8 +485,6 @@ html_content = f"""
             const productsPerPage = 24;
             let currentPage = 1;
             
-            console.log('Found ' + productCards.length + ' products.');
-
             const displayPage = (pageNumber) => {{
                 const startIndex = (pageNumber - 1) * productsPerPage;
                 const endIndex = startIndex + productsPerPage;
@@ -622,10 +500,9 @@ html_content = f"""
 
             const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
-                console.log('Calculated ' + pageCount + ' pages.');
                 paginationContainer.innerHTML = '';
                 
-                const maxPageLinks = 7; // 表示するページリンクの最大数
+                const maxPageLinks = 7;
                 const ellipsis = '<span class="pagination-ellipsis">...</span>';
 
                 if (pageCount <= 1) {{
