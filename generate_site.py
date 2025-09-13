@@ -41,7 +41,7 @@ html_content = f"""
             flex: 1 1 calc(33.333% - 20px); /* デスクトップで3列表示 */
             display: flex;
             flex-direction: column;
-            aspect-ratio: 3 / 4; /* カードの縦横比を3:4に固定 */
+            aspect-ratio: 3 / 6; /* カードの縦横比を3:6に固定 */
         }}
         .product-card:hover {{ transform: translateY(-5px); }}
         
@@ -77,6 +77,16 @@ html_content = f"""
         @media (max-width: 768px) {{
             .product-card {{
                 flex: 1 1 calc(50% - 15px); /* スマホで2列表示 */
+                aspect-ratio: 3 / 6;
+            }}
+            .product-name {{ 
+                font-size: 16px;
+            }}
+            .product-price {{
+                font-size: 18px;
+            }}
+            .product-status {{
+                font-size: 12px;
             }}
         }}
 
