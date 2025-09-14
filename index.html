@@ -44,8 +44,38 @@ header h1 a {
     cursor: pointer;
 }
 
-.search-bar { padding: 20px; text-align: center; background-color: #e9ecef; }
-.search-bar input { width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+/* 検索バーのスタイルをFlexboxで修正 */
+.search-bar {
+    padding: 20px;
+    background-color: #e9ecef;
+    display: flex; /* Flexboxを追加 */
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar input {
+    flex-grow: 1; /* 入力欄が幅いっぱいに広がる */
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px; /* ボタンとの間に余白 */
+}
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
 .content { padding: 20px 0; }
 .section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
     
@@ -236,6 +266,7 @@ footer {
 
     <div class="search-bar">
         <input type="text" placeholder="商品名、キーワードで検索...">
+        <button class="search-button">🔍</button>
     </div>
 
     <div class="genre-links-container">
