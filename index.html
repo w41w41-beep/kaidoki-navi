@@ -14,6 +14,7 @@
     header h1 a {
         text-decoration: none;
         color: inherit;
+        cursor: pointer;
     }
     .search-bar { padding: 20px; text-align: center; background-color: #e9ecef; }
     .search-bar input { width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
@@ -777,6 +778,23 @@
                         behavior: 'auto' // 一瞬でジャンプ
                     });
                 });
+            });
+
+            // ホームページに戻る関数
+            function goToHomePage() {
+                currentPage = 1; // ページを1にリセット
+                displayPage(currentPage); // 1ページ目のコンテンツを表示
+                setupPagination(); // ページネーションを更新
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'auto' // 一瞬でジャンプ
+                });
+            }
+
+            // タイトルリンクのクリックイベント
+            document.querySelector('header h1 a').addEventListener('click', (e) => {
+                e.preventDefault();
+                goToHomePage();
             });
 
             const updatePaginationLinks = () => {
