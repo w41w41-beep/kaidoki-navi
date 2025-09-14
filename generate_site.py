@@ -241,6 +241,14 @@ footer {{
         <input type="text" placeholder="商品名、キーワードで検索...">
     </div>
 
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="#">PC</a>
+            <span class="separator">|</span>
+            <a href="#">家電</a>
+        </div>
+    </div>
+
     <div class="ai-recommendation-section">
         <div class="container">
             <h2 class="ai-section-title">AIが選んだおすすめアイテム</h2>
