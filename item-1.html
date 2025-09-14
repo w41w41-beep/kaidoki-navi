@@ -3,96 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【レビュー】商品名：今が買い時！</title>
+    <title>【商品名】の買い時情報 | カイドキ-ナビ</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
     <header>
         <div class="container">
-            <div class="header-content">
-                <div class="header-left">
-                    <h1><a href="index.html">カイドキ-ナビ</a></h1>
-                    <p class="subtitle">お得な買い時を見つけよう！</p>
-                </div>
-                <div class="header-right">
-                    <div class="search-bar">
-                        <input type="text" placeholder="商品名やキーワードで検索">
-                        <button><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
-            <nav class="genre-nav">
-                <ul>
-                    <li><a href="#">PC</a></li>
-                    <li><a href="#">家電</a></li>
-                    <li><a href="#">カメラ</a></li>
-                    <li><a href="#">オーディオ</a></li>
-                </ul>
-            </nav>
+            <h1><a href="#" onclick="goToHomePage(); return false;">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
 
-    <main class="container product-page">
-        <section class="product-header">
-            <h2 class="product-title">商品名</h2>
-            <p class="product-description">AIが生成する商品説明文</p>
-            <div class="product-image-container">
-                <img src="商品の画像URL" alt="商品名">
-            </div>
-        </section>
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
 
-        <section class="ai-analysis-section">
-            <h3 class="section-title">AIによる買い時分析</h3>
-            <div class="ai-comment">
-                <p>AIの分析によると、この商品の現在の価格は過去90日間の平均価格から**15%**下落しています。特に、先週行われたタイムセール後の安値圏にあり、今が**最もお得な買い時**と判断しました。</p>
-            </div>
-            <div class="price-chart">
-                <h4 class="chart-title">価格推移グラフ</h4>
-                <img src="https://via.placeholder.com/600x400.png?text=価格推移グラフ(作成予定)" alt="価格推移グラフ" class="chart-image">
-                <p class="chart-caption">グラフはAmazon、楽天市場、Yahoo!ショッピングの価格を比較しています。</p>
-            </div>
-        </section>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="#">パソコン</a>
+            <span class="separator">|</span>
+            <a href="#">家電</a>
+        </div>
+    </div>
 
-        <section class="store-links-section">
-            <h3 class="section-title">最安値はこちら！</h3>
-            <div class="store-links-grid">
-                <div class="store-card">
-                    <img src="https://via.placeholder.com/100x50.png?text=Amazon" alt="Amazon">
-                    <div class="store-price">
-                        <span class="current-price">¥15,000</span>
-                    </div>
-                    <a href="Amazonのアフィリエイトリンク" class="buy-button" target="_blank">Amazonで購入</a>
+    <main class="container">
+        <div class="item-detail">
+            <div class="item-image">
+                <img src="https://via.placeholder.com/600x400?text=Product+Image" alt="商品画像">
+            </div>
+
+            <div class="item-info">
+                <h1 class="item-name">商品名（例：SONY BRAVIA 4K有機ELテレビ）</h1>
+                <p class="item-category">カテゴリ：家電 > テレビ</p>
+                <div class="price-section">
+                    <p class="current-price">現在の価格：<span>¥125,000</span></p>
+                    <p class="price-status">AI分析：**買い時です！**</p>
                 </div>
-                <div class="store-card">
-                    <img src="https://via.placeholder.com/100x50.png?text=楽天市場" alt="楽天市場">
-                    <div class="store-price">
-                        <span class="current-price">¥16,000</span>
-                    </div>
-                    <a href="楽天のアフィリエイトリンク" class="buy-button" target="_blank">楽天市場で購入</a>
+
+                <div class="affiliate-links">
+                    <p class="links-title">最安値ショップをチェック！</p>
+                    <a href="#" class="shop-link">Amazonで見る</a>
+                    <a href="#" class="shop-link">楽天市場で見る</a>
                 </div>
-                <div class="store-card">
-                    <img src="https://via.placeholder.com/100x50.png?text=Yahoo!ショッピング" alt="Yahoo!ショッピング">
-                    <div class="store-price">
-                        <span class="current-price">¥15,500</span>
-                    </div>
-                    <a href="ヤフーショッピングのアフィリエイトリンク" class="buy-button" target="_blank">Yahoo!ショッピングで購入</a>
+
+                <div class="item-description">
+                    <h2>商品説明</h2>
+                    <p>このテレビは、最新のAI技術を駆使した高画質プロセッサーを搭載し、あらゆる映像を驚くほど美しく表現します。また、有機ELならではの引き締まった黒と、豊富な色彩が特徴です。ゲームモードも搭載しており、遅延を気にすることなく快適にプレイできます。</p>
                 </div>
             </div>
-        </section>
-        
-        <a href="index.html" class="back-link">&laquo; トップページに戻る</a>
+        </div>
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 カイドキ-ナビ</p>
-            <ul class="footer-links">
-                <li><a href="contact.html">お問い合わせ</a></li>
-                <li><a href="privacy.html">プライバシーポリシー</a></li>
-            </ul>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="privacy.html">プライバシーポリシー</a>
+            <a href="disclaimer.html">免責事項</a>
+            <a href="contact.html">お問い合わせ</a>
         </div>
     </footer>
+    
 </body>
 </html>
