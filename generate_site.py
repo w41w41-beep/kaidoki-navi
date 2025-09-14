@@ -231,15 +231,16 @@ html_content = f"""
                     </div>
                 </a>
             </div>
-            <div class="product-card">
-                <a href="https://amzn.to/4nvuSXs" target="_blank">
+            <a href="item-1.html">
+                <div class="product-card">
                     <img src="https://m.media-amazon.com/images/I/51a00Not+LL._AC_SY679_.jpg" alt="商品画像">
                     <div class="product-info">
                         <div class="product-name">Amazon Fire TV Stick 4K Max</div>
                         <div class="product-price">¥12,980</div>
                         <div class="product-status">🔥 人気ランキング1位！</div>
                     </div>
-                </a>
+                </div>
+            </a>
             </div>
             <div class="product-card">
                 <a href="https://amzn.to/4gopMtN" target="_blank">
