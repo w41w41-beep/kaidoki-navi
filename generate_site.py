@@ -42,6 +42,7 @@ html_content = f"""
         flex: 1 1 calc(33.333% - 20px);
         display: flex;
         flex-direction: column;
+        box-sizing: border-box; /* レイアウトを修正する重要な変更点 */
     }}
     .product-card:hover {{ transform: translateY(-5px); }}
     
@@ -170,11 +171,11 @@ html_content = f"""
         .container, .ai-recommendation-section {{
             padding: 20px 10px;
         }}
-        .product-grid {{
-            gap: 10px;
-        }}
         .product-card {{
-            flex: 1 1 calc(50% - 5px);
+            flex: 1 1 calc(50% - 10px); /* flexの計算式を修正 */
+        }}
+        .product-grid {{
+            gap: 20px; /* gapを修正 */
         }}
         .product-name {{ 
             font-size: 16px;
@@ -184,9 +185,6 @@ html_content = f"""
         }}
         .product-status {{
             font-size: 12px;
-        }}
-        .ai-section-title {{
-            font-size: 24px;
         }}
     }}
 </style>
