@@ -50,13 +50,14 @@ header h1 a {{
     color: inherit;
     cursor: pointer;
 }}
-    .search-bar {{ padding: 20px; text-align: center; background-color: #e9ecef; }}
-    .search-bar input {{ width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }}
-    .content {{ padding: 20px 0; }}
-    .section-title {{ font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }}
+
+.search-bar {{ padding: 20px; text-align: center; background-color: #e9ecef; }}
+.search-bar input {{ width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }}
+.content {{ padding: 20px 0; }}
+.section-title {{ font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }}
     
-    /* 商品のレイアウトをFlexboxで修正 */
-    .product-grid {{
+/* 商品のレイアウトをFlexboxで修正 */
+.product-grid {{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -64,7 +65,7 @@ header h1 a {{
         gap: 20px;
     }}
 
-    .product-card {{ 
+.product-card {{ 
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -76,16 +77,16 @@ header h1 a {{
         flex-direction: column;
         box-sizing: border-box; 
     }}
-    .product-card:hover {{ transform: translateY(-5px); }}
+.product-card:hover {{ transform: translateY(-5px); }}
     
-    .product-card img {{ 
+.product-card img {{ 
         width: 100%;
         height: 180px;
         object-fit: contain;
         display: block;
     }}
 
-    .product-info {{ 
+.product-info {{ 
         padding: 15px;
         flex-grow: 1;
         display: flex;
@@ -94,7 +95,7 @@ header h1 a {{
         min-height: 120px;
     }}
 
-    .product-name {{ 
+.product-name {{ 
         font-size: 18px; 
         font-weight: bold; 
         margin-bottom: 5px;
@@ -104,11 +105,11 @@ header h1 a {{
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }}
-    .product-price {{ color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }}
-    .product-status {{ font-size: 14px; color: #28a745; font-weight: bold; }}
+.product-price {{ color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }}
+.product-status {{ font-size: 14px; color: #28a745; font-weight: bold; }}
     
-    /* AIおすすめセクションのスタイル */
-    .ai-recommendation-section {{
+/* AIおすすめセクションのスタイル */
+.ai-recommendation-section {{
         background-color: #e9f0f1;
         padding: 30px 20px;
         border-radius: 8px;
@@ -117,7 +118,7 @@ header h1 a {{
         text-align: center;
     }}
 
-    .ai-section-title {{
+.ai-section-title {{
         font-size: 24px;
         font-weight: bold;
         margin-bottom: 20px;
@@ -127,8 +128,8 @@ header h1 a {{
         border-bottom: 4px solid #007bff;
     }}
     
-    /* ジャンルリンクのコンテナスタイル */
-    .genre-links-container {{
+/* ジャンルリンクのコンテナスタイル */
+.genre-links-container {{
         max-width: 960px;
         margin: 20px auto;
         padding: 10px;
@@ -138,29 +139,29 @@ header h1 a {{
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }}
 
-    .genre-links {{
+.genre-links {{
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 20px;
     }}
-    .genre-links a {{
+.genre-links a {{
         color: #007bff;
         text-decoration: none;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 16px; /* ジャンルタブのサイズを明確に指定 */
     }}
-    .genre-links .separator {{
+.genre-links .separator {{
         color: #000;
     }}
     
-    /* ページネーションのスタイル */
-    .pagination-container {{
+/* ページネーションのスタイル */
+.pagination-container {{
         text-align: center;
         margin-top: 20px;
     }}
 
-    .pagination-link {{
+.pagination-link {{
         display: inline-block;
         margin: 0 5px;
         padding: 8px 12px;
@@ -170,36 +171,43 @@ header h1 a {{
         border-radius: 5px;
         transition: background-color 0.3s;
     }}
-    .pagination-link.disabled {{
+.pagination-link.disabled {{
         color: #ccc;
         border: 1px solid #ccc;
         cursor: not-allowed;
         pointer-events: none;
     }}
 
-    .pagination-link:not(.disabled):hover {{
+.pagination-link:not(.disabled):hover {{
         background-color: #007bff;
         color: #fff;
     }}
 
-    .pagination-link.active {{
+.pagination-link.active {{
         background-color: #007bff;
         color: #fff;
         font-weight: bold;
     }}
 
-    .pagination-ellipsis {{
+.pagination-ellipsis {{
         display: inline-block;
         margin: 0 5px;
         padding: 8px 0;
     }}
 
-    footer {{ text-align: center; padding: 20px; border-top: 1px solid #ddd; background-color: #fff; margin-top: 20px; }}
-    .footer-links {{ display: flex; justify-content: center; gap: 20px; margin-top: 10px; }}
-    .footer-links a {{ color: #007bff; text-decoration: none; }}
+/* フッターのスタイル */
+footer {{ 
+        text-align: center; 
+        padding: 20px; 
+        border-top: 1px solid #ddd; 
+        background-color: #fff; 
+        margin-top: 20px; 
+    }}
+.footer-links {{ display: flex; justify-content: center; gap: 20px; margin-top: 10px; }}
+.footer-links a {{ color: #007bff; text-decoration: none; }}
 
-    /* スマートフォン向けレスポンシブデザイン（2列表示） */
-    @media (max-width: 768px) {{
+/* スマートフォン向けレスポンシブデザイン（2列表示） */
+@media (max-width: 768px) {{
         .container, .ai-recommendation-section {{
             padding: 20px 10px;
         }}
@@ -233,83 +241,76 @@ header h1 a {{
         <input type="text" placeholder="商品名、キーワードで検索...">
     </div>
 
-    <div class="genre-links-container">
-        <div class="genre-links">
-            <a href="#">パソコン</a>
-            <span class="separator">|</span>
-            <a href="#">家電</a>
+    <div class="ai-recommendation-section">
+        <div class="container">
+            <h2 class="ai-section-title">AIが選んだおすすめアイテム</h2>
+            <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
+                AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <a href="item-1.html">
+                        <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">Apple AirPods Pro (第2世代)</div>
+                            <div class="product-price">¥38,192</div>
+                            <div class="product-status">🎁 今が最もお得です！</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="item-2.html">
+                        <img src="https://m.media-amazon.com/images/I/61z-Y8uUXcL._AC_SY355_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">Amazon Fire TV Stick 4K Max(マックス)</div>
+                            <div class="product-price">¥12,980</div>
+                            <div class="product-status">🎁 Amazonおすすめ！</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="item-3.html">
+                        <img src="https://m.media-amazon.com/images/I/710GmYYsbTL._AC_SX522_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">Echo Dot (エコードット) 第5世代</div>
+                            <div class="product-price">¥7,480</div>
+                            <div class="product-status">💰 お得な価格をチェック！</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="item-4.html">
+                        <img src="https://m.media-amazon.com/images/I/81idEWMnnQL._AC_SX522_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">Lefant M330 Pro ロボット掃除機</div>
+                            <div class="product-price">¥15,998</div>
+                            <div class="product-status">✅ 注目アイテム！</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="item-5.html">
+                        <img src="https://m.media-amazon.com/images/I/71hJX-0vdbL._AC_SX569_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">イヤホン bluetooth ワイヤレス</div>
+                            <div class="product-price">¥2,184</div>
+                            <div class="product-status">✨ 注目アイテム！</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="product-card">
+                    <a href="item-6.html">
+                        <img src="https://m.media-amazon.com/images/I/71njx3CNsTL._AC_SY741_.jpg" alt="商品画像">
+                        <div class="product-info">
+                            <div class="product-name">モバイルモニター モバイルディスプレイゲーム</div>
+                            <div class="product-price">¥11,980</div>
+                            <div class="product-status">🔥 お得な価格をチェック！</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- AIとAPIが連携した際の「注目のおすすめ」セクション -->
-    <div class="container content ai-recommendation-section">
-        <h2 class="ai-section-title">AIが選んだおすすめアイテム</h2>
-        <div style="text-align: center; font-size: 16px; margin-bottom: 20px;">
-            AIが価格データを解析し、<br>今最もお買い得な商品をここに自動でピックアップします！
-        </div>
-        <div class="product-grid">
-            <div class="product-grid" id="productGrid">
-    <div class="product-card">
-        <a href="item-1.html">
-            <img src="https://m.media-amazon.com/images/I/61o7EzoRpBL._AC_SX679_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">Apple AirPods Pro (第2世代)</div>
-                <div class="product-price">¥38,192</div>
-                <div class="product-status">🎁 今が最もお得です！</div>
-            </div>
-        </a>
-    </div>
-    <div class="product-card">
-        <a href="item-2.html">
-            <img src="https://m.media-amazon.com/images/I/61z-Y8uUXcL._AC_SY355_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">Amazon Fire TV Stick 4K Max(マックス) | Fire TV Stick史上最もパワフル | ストリーミングメディアプレイヤー</div>
-                <div class="product-price">¥12,980</div>
-                <div class="product-status">🎁 Amazonおすすめ！</div>
-            </div>
-        </a>
-    </div>
-    <div class="product-card">
-        <a href="item-3.html">
-            <img src="https://m.media-amazon.com/images/I/710GmYYsbTL._AC_SX522_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">Echo Dot (エコードット) 第5世代</div>
-                <div class="product-price">¥7,480</div>
-                <div class="product-status">💰 お得な価格をチェック！</div>
-            </div>
-        </a>
-    </div>
-    <div class="product-card">
-        <a href="item-4.html">
-            <img src="https://m.media-amazon.com/images/I/81idEWMnnQL._AC_SX522_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">Lefant M330 Pro ロボット掃除機【水拭き両用 3Dマッピング 6000Pa強力吸引 静音設計 150分间の連続掃除 取り外し可能モップ エリア指定可 自動充電 アプリ連動 可視化ダストボックス カーペット対応 Alexa対応】ブラック</div>
-                <div class="product-price">¥15,998</div>
-                <div class="product-status">✅ 注目アイテム！</div>
-            </div>
-        </a>
-    </div>
-    <div class="product-card">
-        <a href="item-5.html">
-            <img src="https://m.media-amazon.com/images/I/71hJX-0vdbL._AC_SX569_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">イヤホン bluetooth ワイヤレス 【2025 年新登場·多機能タッチスクリーン·ANC 対応 】Bluetooth5.4 ぶるーとぅーす ブルートゥース イヤホン探し IPX7防水 ノイズキャンセリング 最大48時間再生時間 自動ペアリング マイク付き ENC通話 HiFi音質 Type-C充電 小型/軽量 iPhone/Android/Pad適用 スポーツ/通勤 （白）</div>
-                <div class="product-price">¥2,184</div>
-                <div class="product-status">✨ 注目アイテム！</div>
-            </div>
-        </a>
-    </div>
-    <div class="product-card">
-        <a href="item-6.html">
-            <img src="https://m.media-amazon.com/images/I/71njx3CNsTL._AC_SY741_.jpg" alt="商品画像">
-            <div class="product-info">
-                <div class="product-name">モバイルモニター モバイルディスプレイゲーム cocopar15.6インチ スイッチ用モニター 非光沢IPS液晶パネル 薄い 軽量 1920x1080FHD HDRモード/FreeSync対応/ブルーカット機能 USB Type-C/HDMI/スピーカー内蔵/カバー付PS4/PS5/XBOX/Switch/PC/Macなど対応 在宅ワーク リモートワーク zs-156</div>
-                <div class="product-price">¥11,980</div>
-                <div class="product-status">🔥 お得な価格をチェック！</div>
-            </div>
-        </a>
-    </div>
-</div>
     
     <!-- 全商品のセクション -->
     <div class="container content">
