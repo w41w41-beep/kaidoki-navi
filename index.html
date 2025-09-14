@@ -189,7 +189,7 @@
 <body id="top">
     <header>
         <div class="container">
-        <h1><a id="site-title-link">カイドキ-ナビ</a></h1>
+        <h1><a id="site-title-link" onclick="goToHomePage()">カイドキ-ナビ</a></h1>
         <p>お得な買い時を見つけよう！</p>
     </div>
     </header>
@@ -757,13 +757,21 @@
             displayPage(currentPage);
             setupPagination();
 
-            // タイトルリンクのクリックイベントを追加
-            document.getElementById('site-title-link').addEventListener('click', (e) => {
-                e.preventDefault(); // デフォルトの動作を無効化
+            // ホームページに戻る関数
+            function goToHomePage() {
+                currentPage = 1; // ページを1にリセット
+                displayPage(currentPage);
+                setupPagination(); // ページネーションを更新
                 window.scrollTo({
                     top: 0,
                     behavior: 'auto' // 一瞬でジャンプ
                 });
+            }
+
+            // タイトルリンクのクリックイベントを追加
+            document.getElementById('site-title-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                goToHomePage();
             });
 
             // ページネーション後のトップへのジャンプを有効にする
