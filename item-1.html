@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
         .product-page-container {
             max-width: 900px;
             margin: 20px auto;
@@ -67,41 +82,6 @@
             border-radius: 5px;
             font-size: 1.2em;
         }
-        .price-compare-section {
-            margin-bottom: 20px;
-        }
-        .price-compare-section h2 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
-        .compare-grid {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .compare-item {
-            flex: 1 1 200px;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .compare-item a {
-            text-decoration: none;
-            color: #333;
-        }
-        .compare-item img {
-            max-width: 80px;
-            height: auto;
-        }
-        .compare-item .price {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #5cb85c;
-        }
         .ai-analysis-section {
             margin-top: 20px;
         }
@@ -117,13 +97,60 @@
             border-left: 5px solid #007bff;
             border-radius: 4px;
         }
-        .chart-container {
-            margin-top: 20px;
+
+        /* --------------------------------- */
+        /* 他のECサイトセクションのスタイル */
+        .other-sites-section {
+            margin-top: 40px;
             text-align: center;
         }
-        .chart-container img {
-            max-width: 100%;
+        .other-sites-section h2 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        .site-links-container {
+            display: flex;
+            justify-content: center; /* コンテナ内の要素を中央揃え */
+            flex-wrap: wrap; /* 要素が収まらない場合は折り返す */
+            gap: 20px; /* 要素間のスペース */
+        }
+        .site-link-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+            flex: 1 1 200px; /* 要素の幅を調整 */
+            max-width: 250px;
+        }
+        .site-link-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .site-link-box img {
+            max-width: 100px;
             height: auto;
+            margin-bottom: 10px;
+        }
+        .site-link-box p {
+            font-size: 0.9em;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* スマホ用スタイル（画面幅が600px以下の場合に適用） */
+        @media (max-width: 600px) {
+            .site-link-box {
+                flex-basis: 100%; /* 縦に並ぶように幅を100%に */
+                max-width: none;
+            }
         }
     </style>
 </head>
@@ -151,7 +178,7 @@
         </div>
     </div>
 
-    <main class="container">
+<main class="container">
         <div class="product-page-container">
             <div class="product-header-content">
                 <div class="product-image-container">
@@ -178,9 +205,20 @@
 
             <div class="other-sites-section">
                 <h2>他のECサイトでも探す</h2>
-                <a href="https://amzn.to/46m71SS" target="_blank">Amazonで探す</a>
-                <a href="https://www.rakuten.co.jp/" target="_blank">楽天市場で探す</a>
-                <a href="https://shopping.yahoo.co.jp/" target="_blank">Yahoo!ショッピングで探す</a>
+                <div class="site-links-container">
+                    <a href="https://www.amazon.co.jp/" target="_blank" class="site-link-box">
+                        <img src="https://via.placeholder.com/100x40.png?text=Amazon+Logo" alt="Amazonロゴ">
+                        <p>Amazonで探す</p>
+                    </a>
+                    <a href="https://www.rakuten.co.jp/" target="_blank" class="site-link-box">
+                        <img src="https://via.placeholder.com/100x40.png?text=Rakuten+Logo" alt="楽天市場ロゴ">
+                        <p>楽天市場で探す</p>
+                    </a>
+                    <a href="https://shopping.yahoo.co.jp/" target="_blank" class="site-link-box">
+                        <img src="https://via.placeholder.com/100x40.png?text=Yahoo!+Logo" alt="Yahoo!ショッピングロゴ">
+                        <p>Yahoo!ショッピングで探す</p>
+                    </a>
+                </div>
             </div>
         </div>
     </main>
