@@ -615,16 +615,24 @@ html_content = f"""
             <a href="contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {{
             const productGrid = document.getElementById('productGrid');
             const productCards = Array.from(document.querySelectorAll('#productGrid .product-card'));
             const paginationContainer = document.getElementById('pagination-container');
             const todayItemsSection = document.getElementById('todayItemsSection');
+            const aiSection = document.querySelector('.ai-recommendation-section');
 
             const productsPerPage = 24;
             let currentPage = 1;
             
+            // AIセクションの表示/非表示を切り替える関数
+            const updateAiSectionVisibility = () => {{
+                if (aiSection) {{
+                    aiSection.style.display = (currentPage === 1) ? 'block' : 'none';
+                }}
+            }};
+
             const displayPage = (pageNumber) => {{
                 const startIndex = (pageNumber - 1) * productsPerPage;
                 const endIndex = startIndex + productsPerPage;
@@ -636,6 +644,7 @@ html_content = f"""
                         card.style.display = 'none';
                     }}
                 }});
+                updateAiSectionVisibility();
             }};
 
             const setupPagination = () => {{
@@ -704,9 +713,7 @@ html_content = f"""
                         currentPage = i;
                         displayPage(currentPage);
                         updatePaginationLinks();
-                        if (todayItemsSection) {{
-                            todayItemsSection.scrollIntoView();
-                        }}
+                        window.scrollTo({{ top: 0, behavior: 'auto' }});
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
@@ -744,80 +751,42 @@ html_content = f"""
                     }});
                 }}
                 paginationContainer.appendChild(nextLink);
-
-                const updatePaginationLinks = () => {{
-                    const currentLinks = document.querySelectorAll('.pagination-link');
-                    currentLinks.forEach(link => link.classList.remove('active'));
-                    const newLinks = paginationContainer.querySelectorAll('.pagination-link');
-                    newLinks.forEach(link => {{
-                        if (parseInt(link.textContent) === currentPage) {{
-                            link.classList.add('active');
-                        }}
-                    }});
-                    setupPagination();
-                    if (todayItemsSection) {{
-                        todayItemsSection.scrollIntoView();
-                    }}
-                }};
             }};
             
-           // ページロード時に初期化
-            displayPage(currentPage);
-            setupPagination();
-
-            // ホームページに戻る関数
-            function goToHomePage() {{
-                currentPage = 1; // ページを1にリセット
-                displayPage(currentPage); // 1ページ目のコンテンツを表示
-                setupPagination(); // ページネーションを更新
-                window.scrollTo({{
-                    top: 0,
-                    behavior: 'auto' // 一瞬でジャンプ
-                }});
-            }}
-
-            // ページネーション後のトップへのジャンプを有効にする
-            document.querySelectorAll('.pagination-link').forEach(link => {{
-                link.addEventListener('click', (e) => {{
-                    // ページトップに戻る
-                    window.scrollTo({{
-                        top: 0,
-                        behavior: 'auto' // 一瞬でジャンプ
-                    }});
-                }});
-            }});
-
-            // ホームページに戻る関数
-            function goToHomePage() {{
-                currentPage = 1; // ページを1にリセット
-                displayPage(currentPage); // 1ページ目のコンテンツを表示
-                setupPagination(); // ページネーションを更新
-                window.scrollTo({{
-                    top: 0,
-                    behavior: 'auto' // 一瞬でジャンプ
-                }});
-            }}
-
-            // タイトルリンクのクリックイベント
-            document.querySelector('header h1 a').addEventListener('click', (e) => {{
-                e.preventDefault();
-                goToHomePage();
-            }});
-
             const updatePaginationLinks = () => {{
+                const pageCount = Math.ceil(productCards.length / productsPerPage);
+                setupPagination();
                 const currentLinks = document.querySelectorAll('.pagination-link');
                 currentLinks.forEach(link => link.classList.remove('active'));
+                
                 const newLinks = paginationContainer.querySelectorAll('.pagination-link');
                 newLinks.forEach(link => {{
                     if (parseInt(link.textContent) === currentPage) {{
                         link.classList.add('active');
                     }}
                 }});
-                setupPagination();
-                if (todayItemsSection) {{
-                    todayItemsSection.scrollIntoView();
-                }}
             }};
+            
+            // ホームページに戻る関数
+            function goToHomePage() {{
+                currentPage = 1; // ページを1にリセット
+                displayPage(currentPage); // 1ページ目のコンテンツを表示
+                setupPagination(); // ページネーションを更新
+                window.scrollTo({{
+                    top: 0,
+                    behavior: 'auto' // 一瞬でジャンプ
+                }});
+            }}
+
+            // ページロード時に初期化
+            displayPage(currentPage);
+            setupPagination();
+
+            // タイトルリンクのクリックイベント
+            document.querySelector('header h1 a').addEventListener('click', (e) => {{
+                e.preventDefault();
+                goToHomePage();
+            }});
         }});
     </script>
 </body>
