@@ -51,17 +51,18 @@ header h1 a {{
     cursor: pointer;
 }}
 
-/* 検索バーのスタイルをインプット欄にアイコンを配置する形で修正 */
+/* 検索バーのスタイルをFlexboxで修正 */
 .search-bar {{
     padding: 20px;
     background-color: #e9ecef;
-    display: flex;
+    display: flex; /* Flexboxを追加 */
     justify-content: center;
+    align-items: center;
 }}
 
 .search-container {{
-    position: relative;
-    width: 80%; /* 既存の幅を維持 */
+    position: relative; /* 子要素（アイコン）の位置基準となるように設定 */
+    width: 80%;
     max-width: 500px;
 }}
 
@@ -75,10 +76,10 @@ header h1 a {{
 }}
 
 .search-button {{
-    position: absolute;
-    right: 5px;
+    position: absolute; /* 親要素（.search-container）を基準に配置 */
+    right: 5px; /* 右端から5px */
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); /* 垂直方向の中央に配置 */
     background: none;
     border: none;
     cursor: pointer;
@@ -280,8 +281,10 @@ footer {{
     </header>
 
     <div class="search-bar">
-        <input type="text" placeholder="商品名、キーワードで検索...">
-        <button class="search-button">🔍</button>
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
     </div>
 
     <div class="genre-links-container">
