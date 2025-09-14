@@ -44,36 +44,44 @@ header h1 a {
     cursor: pointer;
 }
 
-/* 検索バーのスタイルをFlexboxで修正 */
+/* 検索バーのスタイルをインプット欄にアイコンを配置する形で修正 */
 .search-bar {
     padding: 20px;
     background-color: #e9ecef;
-    display: flex; /* Flexboxを追加 */
+    display: flex;
     justify-content: center;
-    align-items: center;
+}
+
+.search-container {
+    position: relative;
+    width: 80%; /* 既存の幅を維持 */
+    max-width: 500px;
 }
 
 .search-bar input {
-    flex-grow: 1; /* 入力欄が幅いっぱいに広がる */
-    max-width: 400px;
-    padding: 10px;
+    width: 100%;
+    padding: 10px 15px;
+    padding-right: 40px; /* アイコン分のスペースを確保 */
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px; /* ボタンとの間に余白 */
+    box-sizing: border-box; /* パディングを含めて幅を計算 */
 }
 
 .search-button {
-    background-color: #007bff;
-    color: #fff;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
+    color: #555;
+    padding: 5px;
 }
 
 .search-button:hover {
-    background-color: #0056b3;
+    color: #007bff;
 }
 
 .content { padding: 20px 0; }
