@@ -625,7 +625,7 @@ html_content = f"""
 
             const productsPerPage = 24;
             let currentPage = 1;
-            
+
             // AIセクションの表示/非表示を切り替える関数
             const updateAiSectionVisibility = () => {{
                 if (aiSection) {{
@@ -650,7 +650,7 @@ html_content = f"""
             const setupPagination = () => {{
                 const pageCount = Math.ceil(productCards.length / productsPerPage);
                 paginationContainer.innerHTML = '';
-                
+
                 const maxPageLinks = 7;
                 const ellipsis = '<span class="pagination-ellipsis">...</span>';
 
@@ -671,6 +671,7 @@ html_content = f"""
                         currentPage--;
                         displayPage(currentPage);
                         updatePaginationLinks();
+                        window.scrollTo({{ top: 0, behavior: 'auto' }});
                     }});
                 }}
                 paginationContainer.appendChild(prevLink);
@@ -678,7 +679,7 @@ html_content = f"""
                 // ページリンクの表示ロジック
                 let startPage = Math.max(1, currentPage - Math.floor(maxPageLinks / 2));
                 let endPage = Math.min(pageCount, startPage + maxPageLinks - 1);
-                
+
                 if (endPage - startPage < maxPageLinks - 1) {{
                     startPage = Math.max(1, endPage - maxPageLinks + 1);
                 }}
@@ -693,6 +694,7 @@ html_content = f"""
                         currentPage = 1;
                         displayPage(currentPage);
                         updatePaginationLinks();
+                        window.scrollTo({{ top: 0, behavior: 'auto' }});
                     }});
                     paginationContainer.appendChild(firstPageLink);
                     if (startPage > 2) {{
@@ -717,7 +719,7 @@ html_content = f"""
                     }});
                     paginationContainer.appendChild(pageLink);
                 }}
-                
+
                 if (endPage < pageCount) {{
                     if (endPage < pageCount - 1) {{
                         paginationContainer.innerHTML += ellipsis;
@@ -731,6 +733,7 @@ html_content = f"""
                         currentPage = pageCount;
                         displayPage(currentPage);
                         updatePaginationLinks();
+                        window.scrollTo({{ top: 0, behavior: 'auto' }});
                     }});
                     paginationContainer.appendChild(lastPageLink);
                 }}
@@ -748,17 +751,17 @@ html_content = f"""
                         currentPage++;
                         displayPage(currentPage);
                         updatePaginationLinks();
+                        window.scrollTo({{ top: 0, behavior: 'auto' }});
                     }});
                 }}
                 paginationContainer.appendChild(nextLink);
             }};
-            
+
             const updatePaginationLinks = () => {{
-                const pageCount = Math.ceil(productCards.length / productsPerPage);
                 setupPagination();
                 const currentLinks = document.querySelectorAll('.pagination-link');
                 currentLinks.forEach(link => link.classList.remove('active'));
-                
+
                 const newLinks = paginationContainer.querySelectorAll('.pagination-link');
                 newLinks.forEach(link => {{
                     if (parseInt(link.textContent) === currentPage) {{
@@ -766,7 +769,7 @@ html_content = f"""
                     }}
                 }});
             }};
-            
+
             // ホームページに戻る関数
             function goToHomePage() {{
                 currentPage = 1; // ページを1にリセット
