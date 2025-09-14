@@ -51,45 +51,44 @@ header h1 a {{
     cursor: pointer;
 }}
 
-/* 検索バーのスタイルをFlexboxで修正 */
+/* 検索バーのスタイルをインプット欄にアイコンを配置する形で修正 */
 .search-bar {{
     padding: 20px;
     background-color: #e9ecef;
-    display: flex; /* Flexboxを追加 */
+    display: flex;
     justify-content: center;
-    align-items: center;
 }}
 
 .search-container {{
-    position: relative; /* 子要素（アイコン）の位置基準となるように設定 */
+    position: relative;
     width: 80%;
     max-width: 500px;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
 }}
 
 .search-bar input {{
-    width: 100%;
+    flex-grow: 1;
     padding: 10px 15px;
-    padding-right: 40px; /* アイコン分のスペースを確保 */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* パディングを含めて幅を計算 */
+    border: none;
+    outline: none;
 }}
 
 .search-button {{
-    position: absolute; /* 親要素（.search-container）を基準に配置 */
-    right: 5px; /* 右端から5px */
-    top: 50%;
-    transform: translateY(-50%); /* 垂直方向の中央に配置 */
-    background: none;
+    background-color: #007bff;
+    color: #fff;
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: #555;
-    padding: 5px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
 }}
 
 .search-button:hover {{
-    color: #007bff;
+    background-color: #0056b3;
 }}
 
 .content {{ padding: 20px 0; }}
