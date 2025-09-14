@@ -252,32 +252,32 @@ html_content = f"""
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/71-yIe-H9PL._AC_SX466_.jpg" alt="商品画像">
+                <a href="https://amzn.to/3JUGwwy" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/81idEWMnnQL._AC_SX522_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Anker PowerCore 10000</div>
-                        <div class="product-price">¥3,499</div>
-                        <div class="product-status">✅ 在庫あり</div>
+                        <div class="product-name">Lefant M330 Pro ロボット掃除機【水拭き両用 3Dマッピング 6000Pa強力吸引 静音設計 150分间の連続掃除 取り外し可能モップ エリア指定可 自動充電 アプリ連動 可視化ダストボックス カーペット対応 Alexa対応】ブラック</div>
+                        <div class="product-price">¥15,998</div>
+                        <div class="product-status">✅ 注目アイテム！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b7g-6V-BL._AC_SX679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/46CZO2c" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71hJX-0vdbL._AC_SX569_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Canon デジタルカメラ IXY 650</div>
-                        <div class="product-price">¥24,800</div>
-                        <div class="product-status">✨ Amazon限定モデル</div>
+                        <div class="product-name">イヤホン bluetooth ワイヤレス 【2025 年新登場·多機能タッチスクリーン·ANC 対応 】Bluetooth5.4 ぶるーとぅーす ブルートゥース イヤホン探し IPX7防水 ノイズキャンセリング 最大48時間再生時間 自動ペアリング マイク付き ENC通話 HiFi音質 Type-C充電 小型/軽量 iPhone/Android/Pad適用 スポーツ/通勤 （白）</div>
+                        <div class="product-price">¥2,184</div>
+                        <div class="product-status">✨ 注目アイテム！</div>
                     </div>
                 </a>
             </div>
             <div class="product-card">
-                <a href="#" target="_blank">
-                    <img src="https://m.media-amazon.com/images/I/61b72zVf7KL._AC_SX679_.jpg" alt="商品画像">
+                <a href="https://amzn.to/4gmhUc1" target="_blank">
+                    <img src="https://m.media-amazon.com/images/I/71njx3CNsTL._AC_SY741_.jpg" alt="商品画像">
                     <div class="product-info">
-                        <div class="product-name">Apple Watch SE(第2世代)</div>
-                        <div class="product-price">¥37,800</div>
-                        <div class="product-status">🔥 タイムセール祭り</div>
+                        <div class="product-name">モバイルモニター モバイルディスプレイゲーム cocopar15.6インチ スイッチ用モニター 非光沢IPS液晶パネル 薄い 軽量 1920x1080FHD HDRモード/FreeSync対応/ブルーカット機能 USB Type-C/HDMI/スピーカー内蔵/カバー付PS4/PS5/XBOX/Switch/PC/Macなど対応 在宅ワーク リモートワーク zs-156</div>
+                        <div class="product-price">¥11,980</div>
+                        <div class="product-status">🔥 お得な価格をチェック！</div>
                     </div>
                 </a>
             </div>
