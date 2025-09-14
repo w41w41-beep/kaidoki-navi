@@ -189,12 +189,12 @@ html_content = f"""
     }}
 </style>
 </head>
-<body>
+<body id="top">
     <header>
         <div class="container">
-            <h1>カイドキ-ナビ</h1>
-            <p>お得な買い時を見つけよう！</p>
-        </div>
+        <h1><a href="#top">カイドキ-ナビ</a></h1>
+        <p>お得な買い時を見つけよう！</p>
+    </div>
     </header>
 
     <div class="search-bar">
