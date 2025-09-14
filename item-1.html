@@ -6,6 +6,126 @@
     <title>【商品名】の買い時情報 | カイドキ-ナビ</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .product-page-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .product-header-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .product-image-container {
+            flex: 1 1 300px;
+            text-align: center;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product-info {
+            flex: 2 1 400px;
+        }
+        .product-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 0 10px;
+        }
+        .product-price {
+            font-size: 1.8em;
+            color: #d9534f;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .best-deal-section {
+            background-color: #eaf6ff;
+            border: 2px solid #007bff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .best-deal-section p {
+            margin: 0;
+            font-weight: bold;
+        }
+        .best-deal-section a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+        .price-compare-section {
+            margin-bottom: 20px;
+        }
+        .price-compare-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        .compare-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .compare-item {
+            flex: 1 1 200px;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .compare-item a {
+            text-decoration: none;
+            color: #333;
+        }
+        .compare-item img {
+            max-width: 80px;
+            height: auto;
+        }
+        .compare-item .price {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #5cb85c;
+        }
+        .ai-analysis-section {
+            margin-top: 20px;
+        }
+        .ai-analysis-section h2 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .ai-analysis-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            border-radius: 4px;
+        }
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 
@@ -32,28 +152,54 @@
     </div>
 
     <main class="container">
-        <div class="item-detail">
-            <div class="item-image">
-                <img src="https://via.placeholder.com/600x400?text=Product+Image" alt="商品画像">
+        <div class="product-page-container">
+            <div class="product-header-content">
+                <div class="product-image-container">
+                    <img class="product-image" src="{{ 商品画像URL }}" alt="{{ 商品名 }}">
+                </div>
+                <div class="product-info">
+                    <h1 class="product-title">{{ 商品名 }}</h1>
+                    <p>{{ 商品概要（AIが生成するレビュー抜粋など） }}</p>
+                    
+                    <div class="best-deal-section">
+                        <p>現在最もお得なのは **{{ 最安値ECサイト名 }}** です！</p>
+                        <p class="product-price">{{ 最安値価格 }}</p>
+                        <a href="{{ 最安値アフィリエイトリンク }}" target="_blank">今すぐ購入する</a>
+                    </div>
+                </div>
             </div>
-
-            <div class="item-info">
-                <h1 class="item-name">商品名（例：SONY BRAVIA 4K有機ELテレビ）</h1>
-                <p class="item-category">カテゴリ：家電 > テレビ</p>
-                <div class="price-section">
-                    <p class="current-price">現在の価格：<span>¥125,000</span></p>
-                    <p class="price-status">AI分析：**買い時です！**</p>
+            
+            <div class="price-compare-section">
+                <h2>価格比較</h2>
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <a href="{{ Amazonアフィリエイトリンク }}" target="_blank">
+                            <img src="https://via.placeholder.com/80x40.png?text=Amazon" alt="Amazonロゴ">
+                            <p class="price">{{ Amazon価格 }}</p>
+                        </a>
+                    </div>
+                    <div class="compare-item">
+                        <a href="{{ 楽天アフィリエイトリンク }}" target="_blank">
+                            <img src="https://via.placeholder.com/80x40.png?text=楽天市場" alt="楽天市場ロゴ">
+                            <p class="price">{{ 楽天価格 }}</p>
+                        </a>
+                    </div>
+                    <div class="compare-item">
+                        <a href="{{ Yahooアフィリエイトリンク }}" target="_blank">
+                            <img src="https://via.placeholder.com/80x40.png?text=Yahoo!" alt="Yahoo!ショッピングロゴ">
+                            <p class="price">{{ Yahoo価格 }}</p>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="affiliate-links">
-                    <p class="links-title">最安値ショップをチェック！</p>
-                    <a href="#" class="shop-link">Amazonで見る</a>
-                    <a href="#" class="shop-link">楽天市場で見る</a>
+            </div>
+            
+            <div class="ai-analysis-section">
+                <h2>AIによる買い時分析</h2>
+                <div class="ai-analysis-box">
+                    <p>{{ AI分析テキスト }}</p>
                 </div>
-
-                <div class="item-description">
-                    <h2>商品説明</h2>
-                    <p>このテレビは、最新のAI技術を駆使した高画質プロセッサーを搭載し、あらゆる映像を驚くほど美しく表現します。また、有機ELならではの引き締まった黒と、豊富な色彩が特徴です。ゲームモードも搭載しており、遅延を気にすることなく快適にプレイできます。</p>
+                <div class="chart-container">
+                    <img src="{{ グラフ画像URL }}" alt="価格推移グラフ">
                 </div>
             </div>
         </div>
