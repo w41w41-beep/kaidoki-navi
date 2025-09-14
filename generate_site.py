@@ -196,7 +196,7 @@ html_content = f"""
 <body id="top">
     <header>
         <div class="container">
-        <h1><a id="site-title-link" onclick="goToHomePage()">カイドキ-ナビ</a></h1>
+        <h1><a href="#" onclick="goToHomePage(); return false;">カイドキ-ナビ</a></h1>
         <p>お得な買い時を見つけよう！</p>
     </div>
     </header>
@@ -767,19 +767,13 @@ html_content = f"""
             // ホームページに戻る関数
             function goToHomePage() {{
                 currentPage = 1; // ページを1にリセット
-                displayPage(currentPage);
+                displayPage(currentPage); // 1ページ目のコンテンツを表示
                 setupPagination(); // ページネーションを更新
                 window.scrollTo({{
                     top: 0,
                     behavior: 'auto' // 一瞬でジャンプ
                 }});
             }}
-
-            // タイトルリンクのクリックイベントを追加
-            document.getElementById('site-title-link').addEventListener('click', (e) => {{
-                e.preventDefault();
-                goToHomePage();
-            }});
 
             // ページネーション後のトップへのジャンプを有効にする
             document.querySelectorAll('.pagination-link').forEach(link => {{
