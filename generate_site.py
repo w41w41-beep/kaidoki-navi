@@ -130,16 +130,20 @@ header h1 a {{
     
 /* ジャンルリンクのコンテナスタイル */
 .genre-links-container {{
-        max-width: 960px;
-        margin: 20px auto;
-        padding: 10px;
+        /* 横幅を画面いっぱいに広げる */
+        margin: 20px 0;
+        padding: 10px 0;
         background-color: #fff;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-left: none;
+        border-right: none;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }}
 
 .genre-links {{
+        /* コンテンツを中央に配置 */
+        max-width: 960px;
+        margin: 0 auto;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -149,7 +153,7 @@ header h1 a {{
         color: #007bff;
         text-decoration: none;
         font-weight: bold;
-        font-size: 16px; /* ジャンルタブのサイズを明確に指定 */
+        font-size: 16px;
     }}
 .genre-links .separator {{
         color: #000;
