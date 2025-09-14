@@ -247,7 +247,7 @@ footer {{
 
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="#">PC</a>
+            <a href="#">パソコン</a>
             <span class="separator">|</span>
             <a href="#">家電</a>
         </div>
