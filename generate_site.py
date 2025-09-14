@@ -42,7 +42,7 @@ html_content = f"""
         flex: 1 1 calc(33.333% - 20px);
         display: flex;
         flex-direction: column;
-        box-sizing: border-box; /* レイアウトを修正する重要な変更点 */
+        box-sizing: border-box; 
     }}
     .product-card:hover {{ transform: translateY(-5px); }}
     
@@ -86,7 +86,7 @@ html_content = f"""
     }}
 
     .ai-section-title {{
-        font-size: 28px;
+        font-size: 24px; /* ここを24pxに修正しました */
         font-weight: bold;
         margin-bottom: 20px;
         color: #007bff;
@@ -172,10 +172,10 @@ html_content = f"""
             padding: 20px 10px;
         }}
         .product-card {{
-            flex: 1 1 calc(50% - 10px); /* flexの計算式を修正 */
+            flex: 1 1 calc(50% - 10px);
         }}
         .product-grid {{
-            gap: 20px; /* gapを修正 */
+            gap: 20px;
         }}
         .product-name {{ 
             font-size: 16px;
