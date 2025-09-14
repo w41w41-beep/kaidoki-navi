@@ -81,12 +81,12 @@ html_content = f"""
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         margin-bottom: 20px;
+        text-align: center;
     }}
 
     .ai-section-title {{
         font-size: 28px;
         font-weight: bold;
-        text-align: center;
         margin-bottom: 20px;
         color: #007bff;
         display: inline-block;
@@ -167,8 +167,14 @@ html_content = f"""
 
     /* スマートフォン向けレスポンシブデザイン（2列表示） */
     @media (max-width: 768px) {{
+        .container, .ai-recommendation-section {{
+            padding: 20px 10px;
+        }}
+        .product-grid {{
+            gap: 10px;
+        }}
         .product-card {{
-            flex: 1 1 calc(50% - 15px);
+            flex: 1 1 calc(50% - 5px);
         }}
         .product-name {{ 
             font-size: 16px;
@@ -178,9 +184,6 @@ html_content = f"""
         }}
         .product-status {{
             font-size: 12px;
-        }}
-        .ai-recommendation-section {{
-            padding: 20px 10px;
         }}
         .ai-section-title {{
             font-size: 24px;
