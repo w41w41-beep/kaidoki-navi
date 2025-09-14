@@ -13,16 +13,43 @@ html_content = f"""
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カイドキ-ナビ - お得な買い時を見つけよう！</title>
 <style>
-    body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }}
-    .container {{ max-width: 960px; margin: auto; padding: 20px; }}
-    header {{ background-color: #fff; border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }}
-    header h1, header p {{ margin: 0; }}
-    header h1 {{ color: #007bff; }}
-    header h1 a {{
-        text-decoration: none;
-        color: inherit;
-        cursor: pointer;
-    }}
+    body {{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}}
+
+.container {{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}}
+
+header {{
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}}
+
+header h1, header p {{
+    margin: 0;
+}}
+
+header h1 {{
+    color: #007bff;
+}}
+
+header h1 a {{
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}}
     .search-bar {{ padding: 20px; text-align: center; background-color: #e9ecef; }}
     .search-bar input {{ width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }}
     .content {{ padding: 20px 0; }}
