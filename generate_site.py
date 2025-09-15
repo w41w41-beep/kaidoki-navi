@@ -103,6 +103,16 @@ def generate_site():
         """
         return header_html, footer_html
 
+    # 静的ページを生成する関数
+    def generate_static_page(file_name, title, content_html):
+        page_path = file_name
+        header, footer = generate_header_footer(page_path, page_title=title)
+        
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + content_html + footer)
+        print(f"{page_path} が生成されました。")
+
+
     # メインカテゴリーごとのページを生成
     for main_cat, sub_cats in categories.items():
         main_cat_dir = f"category/{main_cat}"
@@ -111,7 +121,7 @@ def generate_site():
         # メインカテゴリーのindexページを生成 (サブカテゴリーリンクあり)
         main_cat_products = [p for p in products if p['category']['main'] == main_cat]
         page_path = os.path.join(main_cat_dir, "index.html")
-        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats)
+        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{main_cat}の商品一覧")
         
         main_content_html = f"""
     <main class="container">
@@ -225,6 +235,44 @@ def generate_site():
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
+    
+    # 静的ページを生成
+    # ----------------------------------------------------
+    # お問い合わせページ
+    contact_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>お問い合わせ</h1>
+            <p>ご質問やご要望がございましたら、以下のメールアドレスまでご連絡ください。</p>
+            <p>メールアドレス: your-email@example.com</p>
+        </div>
+    </main>
+    """
+    generate_static_page("contact.html", "お問い合わせ", contact_content)
+
+    # プライバシーポリシーページ
+    privacy_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>プライバシーポリシー</h1>
+            <p>このサイトはGoogleアナリティクスを使用しています。</p>
+            <p>収集される情報やその利用目的については、Googleのプライバシーポリシーをご確認ください。</p>
+        </div>
+    </main>
+    """
+    generate_static_page("privacy.html", "プライバシーポリシー", privacy_content)
+
+    # 免責事項ページ
+    disclaimer_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>免責事項</h1>
+            <p>本サイトに掲載されている情報は、正確性や完全性を保証するものではありません。</p>
+            <p>アフィリエイトリンクを通じて購入された商品に関するトラブルについては、当サイトは一切の責任を負いません。</p>
+        </div>
+    </main>
+    """
+    generate_static_page("disclaimer.html", "免責事項", disclaimer_content)
 
     print("サイトのファイル生成が完了しました！")
 
