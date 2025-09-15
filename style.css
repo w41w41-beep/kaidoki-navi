@@ -536,14 +536,16 @@ footer {
     }
 
     .lowest-price-buttons {
-        /* この2行を修正・追加 */
+        /* この部分は変更なし */
         flex-direction: column;
         width: 100%;
     }
 
-    /* ボタン自体を中央寄せにする */
+    /* この部分を修正/追加 */
     .lowest-price-buttons .btn {
-        width: 100%; /* ボタンの幅をコンテナいっぱいに広げる */
-        text-align: center; /* ボタン内のテキストを中央に寄せる */
+        width: 90%; /* 親要素の幅の90%に設定 */
+        margin: 0 auto; /* 中央寄せ */
+        text-align: center;
+        border-radius: 8px; /* 角を丸くする */
     }
 }
