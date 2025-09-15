@@ -47,7 +47,7 @@ def generate_site():
         if is_root:
             base_path = "."
         elif is_category:
-            base_path = ".."
+            base_path = "../.."
         else: # pages
             base_path = ".."
 
