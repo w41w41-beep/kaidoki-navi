@@ -235,15 +235,13 @@ def generate_site():
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
         elif main_ec_site == "Yahoo" and "yahoo_url" in product:
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-
+        
         affiliate_links_html = f"""
             <div class="affiliate-links">
-                <p class="links-title">最安値ショップをチェック！</p>
-                <div class="shop-buttons">
-                    {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                    {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                    {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
-                </div>
+                <span class="links-title">最安値ショップをチェック！</span>
+                {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
             </div>
         """
         
