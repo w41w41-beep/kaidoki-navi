@@ -1,86 +1,121 @@
 [
   {
     "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
+    "name": "ソニー WH-1000XM5",
+    "description": "業界最高クラスのノイズキャンセリング性能を持つワイヤレスヘッドホン。",
+    "image_url": "images/products/headphone.jpg",
+    "price": "45,000円",
+    "ai_analysis": "買い時です！",
     "category": {
-        "main": "パソコン",
-        "sub": "PC周辺機器"
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
     },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
+    "page_url": "pages/sony-wh-1000xm5.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=ソニー+WH-1000XM5",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/ソニー+WH-1000XM5/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=ソニー+WH-1000XM5",
+    "specs": "重さ: 約250g, 連続再生時間: 最大30時間"
   },
   {
-    "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
+    "id": "2",
+    "name": "BOSE QuietComfort 45",
+    "description": "定評あるノイズキャンセリングと快適な装着感のワイヤレスヘッドホン。",
+    "image_url": "images/products/bose.jpg",
+    "price": "39,800円",
+    "ai_analysis": "買い時です！",
     "category": {
-        "main": "家電",
-        "sub": "オーディオ機器"
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
     },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
-  },
-    {
-    "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
-    "category": {
-        "main": "オーディオ",
-        "sub": "イヤホン・ヘッドホン"
-    },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
-  },
-    {
-    "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
-    "category": {
-        "main": "オーディオ",
-        "sub": "イヤホン・ヘッドホン"
-    },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
-  },
-    {
-    "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
-    "category": {
-        "main": "オーディオ",
-        "sub": "イヤホン・ヘッドホン"
-    },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
+    "page_url": "pages/bose-qc45.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=BOSE+QuietComfort+45",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/BOSE+QuietComfort+45/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=BOSE+QuietComfort+45",
+    "specs": "重さ: 約240g, 連続再生時間: 最大24時間"
   },
   {
-    "id": "1",
-    "name": "Apple AirPods Pro（第2世代）",
-    "image_url": "https://via.placeholder.com/300x200?text=AirPods+Pro",
-    "price": "¥38,192",
-    "ai_analysis": "今が一番お得です！",
+    "id": "3",
+    "name": "Apple MacBook Air M2",
+    "description": "薄くて軽いデザイン、高速なM2チップを搭載したノートPC。",
+    "image_url": "images/products/macbook-air.jpg",
+    "price": "164,800円",
+    "ai_analysis": "様子見",
     "category": {
-        "main": "オーディオ",
-        "sub": "イヤホン・ヘッドホン"
+      "main": "パソコン",
+      "sub": "ノートPC"
     },
-    "description": "世界最高のインイヤーアクティブノイズキャンセリング...",
-    "page_url": "item-1.html",
-    "amazon_url": "【ここにあなたのAmazonアフィリエイトリンクを貼り付けます】"
+    "page_url": "pages/macbook-air-m2.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=MacBook+Air+M2",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/MacBook+Air+M2/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=MacBook+Air+M2",
+    "specs": "チップ: Apple M2, メモリ: 8GB, ストレージ: 256GB SSD"
+  },
+  {
+    "id": "4",
+    "name": "ロジクール MX Master 3S",
+    "description": "高精度なトラッキングと快適な操作性を誇るワイヤレスマウス。",
+    "image_url": "images/products/mx-master-3s.jpg",
+    "price": "14,900円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "パソコン",
+      "sub": "PC周辺機器"
+    },
+    "page_url": "pages/mx-master-3s.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=ロジクール+MX+Master+3S",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/ロジクール+MX+Master+3S/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=ロジクール+MX+Master+3S",
+    "specs": "センサーテクノロジー: Darkfield, ワイヤレス操作距離: 10m"
+  },
+  {
+    "id": "5",
+    "name": "Anker Soundcore Liberty 4",
+    "description": "空間オーディオ対応の完全ワイヤレスイヤホン。",
+    "image_url": "images/products/anker-liberty-4.jpg",
+    "price": "14,990円",
+    "ai_analysis": "様子見",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/anker-liberty-4.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=Anker+Soundcore+Liberty+4",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/Anker+Soundcore+Liberty+4/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Anker+Soundcore+Liberty+4",
+    "specs": "連続再生時間: 最大9時間(イヤホン単体), 接続: Bluetooth 5.3"
+  },
+  {
+    "id": "6",
+    "name": "Dell XPS 13",
+    "description": "美しいInfinityEdgeディスプレイを搭載したコンパクトなノートPC。",
+    "image_url": "images/products/dell-xps-13.jpg",
+    "price": "189,800円",
+    "ai_analysis": "様子見",
+    "category": {
+      "main": "パソコン",
+      "sub": "ノートPC"
+    },
+    "page_url": "pages/dell-xps-13.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=Dell+XPS+13",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/Dell+XPS+13/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Dell+XPS+13",
+    "specs": "ディスプレイ: 13.4インチ, CPU: Intel Core i7, メモリ: 16GB"
+  },
+  {
+    "id": "7",
+    "name": "Apple Watch Series 8",
+    "description": "健康管理機能が充実したスマートウォッチ。",
+    "image_url": "images/products/apple-watch.jpg",
+    "price": "59,800円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "家電",
+      "sub": "スマートウォッチ"
+    },
+    "page_url": "pages/apple-watch-8.html",
+    "amazon_url": "https://www.amazon.co.jp/s?k=Apple+Watch+Series+8",
+    "rakuten_url": "https://search.rakuten.co.jp/search/mall/Apple+Watch+Series+8/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Apple+Watch+Series+8",
+    "specs": "ディスプレイ: 常時表示Retinaディスプレイ, 機能: 心電図センサー、血中酸素ウェルネス"
   }
 ]
