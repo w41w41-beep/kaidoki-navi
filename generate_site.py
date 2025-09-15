@@ -1,4 +1,8 @@
 import json
+import math
+
+# 1ページあたりの商品数を定義
+PRODUCTS_PER_PAGE = 24
 
 def generate_site():
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
@@ -7,7 +11,20 @@ def generate_site():
         products = json.load(f)
 
     # トップページのHTMLを生成
-    index_html_content = """
+    # ----------------------------------------------------
+    total_products = len(products)
+    total_pages = math.ceil(total_products / PRODUCTS_PER_PAGE)
+    
+    # ページネーションのHTMLを生成
+    pagination_html = ""
+    if total_pages > 1:
+        pagination_html += '<div class="pagination-container">\n'
+        for i in range(1, total_pages + 1):
+            is_active = " active" if i == 1 else ""
+            pagination_html += f'    <a href="page-{i}.html" class="pagination-link{is_active}">{i}</a>\n'
+        pagination_html += '</div>\n'
+
+    index_html_content = f"""
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -45,7 +62,10 @@ def generate_site():
             <div class="product-grid">
     """
     
-    for product in products:
+    # トップページに表示する最初の24件の商品を抽出
+    top_page_products = products[:PRODUCTS_PER_PAGE]
+    
+    for product in top_page_products:
         index_html_content += f"""
                 <a href="{product['page_url']}" class="product-card">
                     <img src="{product['image_url']}" alt="{product['name']}">
@@ -57,9 +77,10 @@ def generate_site():
                 </a>
         """
 
-    index_html_content += """
+    index_html_content += f"""
             </div>
         </div>
+        {pagination_html}
     </main>
 
     <footer>
@@ -79,6 +100,7 @@ def generate_site():
     print("index.html が生成されました。")
 
     # 個別ページを商品ごとに生成
+    # ----------------------------------------------------
     for product in products:
         item_html_content = f"""
 <!DOCTYPE html>
@@ -91,7 +113,6 @@ def generate_site():
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
     <header>
         <div class="container">
             <h1><a href="index.html">カイドキ-ナビ</a></h1>
@@ -130,7 +151,7 @@ def generate_site():
 
                 <div class="affiliate-links">
                     <p class="links-title">最安値ショップをチェック！</p>
-                    <a href="{product['amazon_url']}" class="shop-link" target="_blank">Amazonで見る</a>
+                    <a href="{product.get('amazon_url', '#')}" class="shop-link" target="_blank">Amazonで見る</a>
                 </div>
 
                 <div class="item-description">
@@ -157,6 +178,7 @@ def generate_site():
             f.write(item_html_content)
         print(f"{product['page_url']} が生成されました。")
 
+    print("サイトのファイル生成が完了しました！")
+
 if __name__ == "__main__":
     generate_site()
-    print("サイトのファイル生成が完了しました！")
