@@ -222,19 +222,20 @@ def generate_site():
                     <p>{product['specs']}</p>
                 </div>
             """
-            
-        # AI分析と購入ボタンをまとめたブロックを生成
-        ai_purchase_block_html = ""
-        purchase_button_html = ""
         
-        # 1つのECサイトURLだけを抽出してボタンを生成するロジック
-        if "amazon_url" in product and product["amazon_url"]:
+        # 購入ボタンをECサイトの指定に基づいて生成するロジック
+        purchase_button_html = ""
+        main_ec_site = product.get("main_ec_site")
+        
+        if main_ec_site == "Amazon" and "amazon_url" in product:
             purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
-        elif "rakuten_url" in product and product["rakuten_url"]:
+        elif main_ec_site == "楽天" and "rakuten_url" in product:
             purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
-        elif "yahoo_url" in product and product["yahoo_url"]:
+        elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-
+        elif main_ec_site == "Yahoo" and "yahoo_url" in product:
+            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+        
         ai_purchase_block_html = f"""
         <div class="ai-recommendation-section">
             <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
