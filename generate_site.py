@@ -266,7 +266,7 @@ def generate_site():
 <main class="container">
     <div class="product-detail"> <div class="item-detail">
             <div class="item-image">
-                <img src="{product['image_url']}" alt="{product['name']}">
+                <img src="../{product['image_url']}" alt="{product['name']}">
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
