@@ -571,31 +571,31 @@ footer {
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0; /* 余白をゼロに */
 }
 
 .product-card .price-status-content {
     font-size: 14px;
     color: #333;
     text-align: center;
-    margin-top: 0px;
+    margin-top: 0; /* 余白をゼロに */
     margin-bottom: 5px;
 }
 
 /* 個別ページの「買い時」テキストのスタイル */
 .product-detail .price-status-title {
     font-size: 20px;
-    color: #28a745; /* 色を再度指定 */
+    color: #28a745;
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .product-detail .price-status-content {
     font-size: 20px;
     color: #333;
     text-align: center;
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 5px;
 }
