@@ -24,7 +24,6 @@ def generate_site():
 
     # メインカテゴリーごとのページを生成
     for main_cat, sub_cats in categories.items():
-        # メインカテゴリーのページ（例：パソコン）
         main_cat_dir = f"category/{main_cat}"
         os.makedirs(main_cat_dir, exist_ok=True)
         
@@ -52,12 +51,21 @@ def generate_site():
         </div>
     </header>
 
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+
     <div class="genre-links-container">
         <div class="genre-links">
     """
+    
         main_links_html = ""
         for mc_link in categories:
-            main_links_html += f'<a href="../category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
+            link_path = f"../category/{mc_link}/index.html"
+            main_links_html += f'<a href="{link_path}">{mc_link}</a><span class="separator">|</span>'
         
         main_cat_html_content += f"""
             {main_links_html}
@@ -89,6 +97,11 @@ def generate_site():
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../privacy.html">プライバシーポリシー</a>
+            <a href="../disclaimer.html">免責事項</a>
+            <a href="../contact.html">お問い合わせ</a>
+        </div>
     </footer>
 </body>
 </html>
@@ -117,6 +130,13 @@ def generate_site():
             <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
+
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
 
     <div class="genre-links-container">
         <div class="genre-links">
@@ -150,6 +170,11 @@ def generate_site():
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../../privacy.html">プライバシーポリシー</a>
+            <a href="../../disclaimer.html">免責事項</a>
+            <a href="../../contact.html">お問い合わせ</a>
+        </div>
     </footer>
 </body>
 </html>
