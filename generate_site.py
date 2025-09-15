@@ -266,7 +266,8 @@ def generate_site():
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
                 <div class="ai-recommendation-section">
-                    <p class="price-status">カイドキ-ナビが選ぶ「買い時」：{product['ai_analysis']}</p>
+                    <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                    <p class="price-status-content">{product['ai_analysis']}</p>
                     {purchase_button_html}
                 </div>
                 {affiliate_links_html}
