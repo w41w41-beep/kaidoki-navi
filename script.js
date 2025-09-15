@@ -3,16 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.querySelector('.search-button');
     const productGrid = document.querySelector('.product-grid');
 
-    if (!searchInput || !productGrid) {
-        // トップページ以外では処理をスキップ
+    if (!searchInput || !searchButton || !productGrid) {
         return;
     }
 
     const productCards = Array.from(productGrid.querySelectorAll('.product-card'));
 
-    // 検索関数を定義
     const filterProducts = () => {
-        const query = searchInput.value.toLowerCase();
+        const query = searchInput.value.toLowerCase().trim();
         productCards.forEach(card => {
             const productName = card.querySelector('.product-name').textContent.toLowerCase();
             if (productName.includes(query)) {
@@ -22,20 +20,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
+    
+    // 検索を実行し、キーボードを閉じる関数
+    const performSearchAndHideKeyboard = () => {
+        filterProducts();
+        searchInput.blur(); // キーボードを閉じる
+    };
 
     // 検索ボタンがクリックされた時の処理
-    if (searchButton) {
-        searchButton.addEventListener('click', filterProducts);
-    }
-    
+    searchButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        performSearchAndHideKeyboard();
+    });
+
     // 入力欄でEnterキーが押された時の処理
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // フォームの送信を防ぐ
-            filterProducts();
+            e.preventDefault();
+            performSearchAndHideKeyboard();
         }
     });
 
-    // リアルタイム検索（入力するたびに実行）
-    searchInput.addEventListener('input', filterProducts);
+    // リアルタイム検索（入力するたびに検索）の機能
+    searchInput.addEventListener('input', () => {
+        filterProducts();
+    });
 });
