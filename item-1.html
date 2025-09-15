@@ -14,6 +14,65 @@
             background-color: #f4f4f4;
             color: #333;
         }
+        .header-container {
+            background-color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .header-container h1 a {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .header-container p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 5px 0 0;
+        }
+        .search-bar {
+            background-color: #f0f0f0;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .search-container {
+            display: inline-block;
+            width: 80%;
+            max-width: 600px;
+        }
+        .search-container input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .search-container button {
+            width: 20%;
+            padding: 10px;
+            border: 1px solid #007bff;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .genre-links-container {
+            background-color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .genre-links a {
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .genre-links .separator {
+            color: #ddd;
+        }
+
+        /* 既存の個別ページスタイル */
         .container {
             max-width: 900px;
             margin: 20px auto;
@@ -97,9 +156,6 @@
             border-left: 5px solid #007bff;
             border-radius: 4px;
         }
-
-        /* --------------------------------- */
-        /* 他のECサイトセクションのスタイル */
         .other-sites-section {
             margin-top: 40px;
             text-align: center;
@@ -129,25 +185,18 @@
             text-align: center;
             flex: 1 1 200px;
             max-width: 250px;
-            background-color: #f7f9fc; /* 薄いブルーの背景色 */
-            border-color: #c9d6ea; /* 少し濃いめの枠線 */
+            background-color: #f7f9fc;
+            border-color: #c9d6ea;
         }
         .site-link-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .site-link-box img {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 10px;
         }
         .site-link-box p {
             font-size: 0.9em;
             margin: 0;
             font-weight: bold;
         }
-
-        /* スマホ用スタイル（画面幅が600px以下の場合に適用） */
         @media (max-width: 600px) {
             .site-link-box {
                 flex-basis: 100%;
@@ -158,11 +207,9 @@
 </head>
 <body>
 
-    <header>
-        <div class="container">
-            <h1><a href="index.html">カイドキ-ナビ</a></h1>
-            <p>お得な買い時を見つけよう！</p>
-        </div>
+    <header class="header-container">
+        <h1><a href="index.html">カイドキ-ナビ</a></h1>
+        <p>お得な買い時を見つけよう！</p>
     </header>
 
     <div class="search-bar">
@@ -180,7 +227,7 @@
         </div>
     </div>
 
-<main class="container">
+    <main class="container">
         <div class="product-page-container">
             <div class="product-header-content">
                 <div class="product-image-container">
