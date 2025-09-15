@@ -142,7 +142,7 @@ def generate_site():
                         <div class="product-info">
                             <h3 class="product-name">{product['name']}</h3>
                             <p class="product-price">{product['price']}</p>
-                            <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                            <p class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</p>
                             <p class="price-status-content">{product['ai_analysis']}</p>
                         </div>
                     </a>
@@ -173,7 +173,7 @@ def generate_site():
                         <div class="product-info">
                             <h3 class="product-name">{product['name']}</h3>
                             <p class="product-price">{product['price']}</p>
-                            <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                            <p class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</p>
                             <p class="price-status-content">{product['ai_analysis']}</p>
                         </div>
                     </a>
@@ -198,7 +198,7 @@ def generate_site():
                     <div class="product-info">
                         <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
                         <p class="product-price">{product['price']}</p>
-                        <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                        <p class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</p>
                         <p class="price-status-content">{product['ai_analysis']}</p>
                     </div>
                 </div>
@@ -266,7 +266,7 @@ def generate_site():
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
                 <div class="ai-recommendation-section">
-                    <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                    <p class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</p>
                     <p class="price-status-content">{product['ai_analysis']}</p>
                     {purchase_button_html}
                 </div>
