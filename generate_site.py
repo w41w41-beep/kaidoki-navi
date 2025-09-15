@@ -138,11 +138,11 @@ def generate_site():
         for product in main_cat_products:
             products_html += f"""
 <div class="product-card">
-    <a href="../../{product['page_url']}">
-        <img src="../../{product['image_url']}" alt="{product['name']}">
+    <a href="{product['page_url']}">
+        <img src="{product['image_url']}" alt="{product['name']}">
     </a>
     <div class="product-info">
-        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
@@ -172,11 +172,11 @@ def generate_site():
             for product in sub_cat_products:
                 products_html += f"""
 <div class="product-card">
-    <a href="../../{product['page_url']}">
-        <img src="../../{product['image_url']}" alt="{product['name']}">
+    <a href="{product['page_url']}">
+        <img src="{product['image_url']}" alt="{product['name']}">
     </a>
     <div class="product-info">
-        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
@@ -197,11 +197,11 @@ def generate_site():
     for product in top_page_products:
         products_html += f"""
 <div class="product-card">
-    <a href="../../{product['page_url']}">
-        <img src="../../{product['image_url']}" alt="{product['name']}">
+    <a href="{product['page_url']}">
+        <img src="{product['image_url']}" alt="{product['name']}">
     </a>
     <div class="product-info">
-        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
