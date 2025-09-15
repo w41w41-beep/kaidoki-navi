@@ -190,15 +190,17 @@ def generate_site():
     products_html = ""
     for product in top_page_products:
         products_html += f"""
-                <a href="{product['page_url']}" class="product-card">
-                    <img src="{product['image_url']}" alt="{product['name']}">
+                <div class="product-card">
+                    <a href="{product['page_url']}">
+                        <img src="{product['image_url']}" alt="{product['name']}">
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">{product['name']}</h3>
+                        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
                         <p class="product-price">{product['price']}</p>
                         <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
                         <p class="price-status-content">{product['ai_analysis']}</p>
                     </div>
-                </a>
+                </div>
         """
     with open(top_page_path, 'w', encoding='utf-8') as f:
         f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div></div></main>' + footer)
