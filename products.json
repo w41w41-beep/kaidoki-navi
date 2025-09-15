@@ -107,22 +107,4 @@
     "main_ec_site": "楽天",
     "specs": "ディスプレイ: 13.4インチ, CPU: Intel Core i7, メモリ: 16GB"
   },
-  {
-    "id": "7",
-    "name": "Apple Watch Series 8",
-    "description": "健康管理機能が充実したスマートウォッチ。",
-    "image_url": "images/products/apple-watch.jpg",
-    "price": "59,800円",
-    "ai_analysis": "買い時です！",
-    "category": {
-      "main": "家電",
-      "sub": "スマートウォッチ"
-    },
-    "page_url": "pages/apple-watch-8.html",
-    "amazon_url": "https://www.amazon.co.jp/s?k=Apple+Watch+Series+8",
-    "rakuten_url": "https://search.rakuten.co.jp/search/mall/Apple+Watch+Series+8/",
-    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Apple+Watch+Series+8",
-    "main_ec_site": "Yahoo!",
-    "specs": "ディスプレイ: 常時表示Retinaディスプレイ, 機能: 心電図センサー、血中酸素ウェルネス"
-  }
 ]
