@@ -235,7 +235,7 @@ def generate_site():
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
         elif main_ec_site == "Yahoo" and "yahoo_url" in product:
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        
+
         affiliate_links_html = f"""
             <div class="affiliate-links">
                 <p class="links-title">最安値ショップをチェック！</p>
