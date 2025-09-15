@@ -141,7 +141,7 @@ def generate_site():
 <a href="../../{product['page_url']}" class="product-card">
     <img src="../../{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name">{product['name']}</h3>
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
@@ -172,7 +172,7 @@ def generate_site():
 <a href="../../{product['page_url']}" class="product-card">
     <img src="../../{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name">{product['name']}</h3>
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
@@ -195,7 +195,7 @@ def generate_site():
 <a href="{product['page_url']}" class="product-card">
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name">{product['name']}</h3>
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
