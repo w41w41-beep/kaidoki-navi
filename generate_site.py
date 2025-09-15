@@ -18,7 +18,6 @@ def generate_site():
     if os.path.exists('category'):
         shutil.rmtree('category')
     
-    # pagesディレクトリも削除
     if os.path.exists('pages'):
         shutil.rmtree('pages')
 
@@ -223,6 +222,25 @@ def generate_site():
                     <p>{product['specs']}</p>
                 </div>
             """
+            
+        # AI分析と購入ボタンをまとめたブロックを生成
+        ai_purchase_block_html = ""
+        purchase_button_html = ""
+        
+        # 1つのECサイトURLだけを抽出してボタンを生成するロジック
+        if "amazon_url" in product and product["amazon_url"]:
+            purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
+        elif "rakuten_url" in product and product["rakuten_url"]:
+            purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
+        elif "yahoo_url" in product and product["yahoo_url"]:
+            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+
+        ai_purchase_block_html = f"""
+        <div class="ai-recommendation-section">
+            <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
+            {purchase_button_html}
+        </div>
+        """
 
         affiliate_links_html = f"""
             <div class="affiliate-links">
@@ -230,12 +248,6 @@ def generate_site():
                 {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
                 {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
                 {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
-            </div>
-            <div class="affiliate-links">
-                <p class="links-title">今すぐ購入！</p>
-                {f'<a href="{product["amazon_url"]}" class="shop-link purchase-link" target="_blank">Amazonで購入する</a>' if "amazon_url" in product else ''}
-                {f'<a href="{product["rakuten_url"]}" class="shop-link purchase-link" target="_blank">楽天市場で購入する</a>' if "rakuten_url" in product else ''}
-                {f'<a href="{product["yahoo_url"]}" class="shop-link purchase-link" target="_blank">Yahoo!ショッピングで購入する</a>' if "yahoo_url" in product else ''}
             </div>
         """
 
@@ -251,9 +263,8 @@ def generate_site():
                 <p class="item-category">カテゴリ：<a href="category/{product['category']['main']}/index.html">{product['category']['main']}</a> &gt; <a href="category/{product['category']['main']}/{product['category']['sub'].replace(' ', '')}.html">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
-                    <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
                 </div>
-
+                {ai_purchase_block_html}
                 {affiliate_links_html}
 
                 <div class="item-description">
