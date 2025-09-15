@@ -231,13 +231,19 @@ def generate_site():
                 {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
                 {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
             </div>
+            <div class="affiliate-links">
+                <p class="links-title">今すぐ購入！</p>
+                {f'<a href="{product["amazon_url"]}" class="shop-link purchase-link" target="_blank">Amazonで購入する</a>' if "amazon_url" in product else ''}
+                {f'<a href="{product["rakuten_url"]}" class="shop-link purchase-link" target="_blank">楽天市場で購入する</a>' if "rakuten_url" in product else ''}
+                {f'<a href="{product["yahoo_url"]}" class="shop-link purchase-link" target="_blank">Yahoo!ショッピングで購入する</a>' if "yahoo_url" in product else ''}
+            </div>
         """
 
         item_html_content = f"""
     <main class="container">
         <div class="item-detail">
             <div class="item-image">
-                <img src="{product['image_url']}" alt="{product['name']}">
+                <img src="../../{product['image_url']}" alt="{product['name']}">
             </div>
 
             <div class="item-info">
