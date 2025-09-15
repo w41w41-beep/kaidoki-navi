@@ -1,75 +1,282 @@
+/* 共通の基本スタイル */
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f4f7f6;
     color: #333;
-}
-.header-container {
-    background-color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-.header-container h1 a {
-    font-size: 1em;
-    font-weight: bold;
-    color: #007bff;
-    text-decoration: none;
-}
-.header-container p {
-    font-size: 1em;
-    color: #555;
-    margin: 0px 0 0;
-}
-.search-bar {
-    background-color: #f0f0f0;
-    padding: 15px 0;
-    text-align: center;
-}
-.search-container {
-    display: inline-block;
-    width: 80%;
-    max-width: 600px;
-}
-.search-container input {
-    width: 80%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-    outline: none;
-}
-.search-container button {
-    width: 20%;
-    padding: 10px;
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-}
-.genre-links-container {
-    background-color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-.genre-links a {
-    margin: 0 15px;
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-.genre-links .separator {
-    color: #ddd;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 .container {
-    max-width: 900px;
-    margin: 20px auto;
+    max-width: 960px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* ヘッダーのスタイル */
+header {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}
+header h1, header p {
+    margin: 0;
+}
+header h1 {
+    color: #007bff;
+}
+header h1 a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* 検索バーのスタイル */
+.search-bar {
+    padding: 20px;
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+}
+.search-container {
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.search-bar input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+}
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* ジャンルリンクのコンテナスタイル */
+.genre-links-container {
+    margin: 20px 0;
+    padding: 10px 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.genre-links {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.genre-links a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+.genre-links .separator {
+    color: #000;
+}
+
+/* トップページ用のスタイル */
+.content { padding: 20px 0; }
+.section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+}
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    flex: 1 1 calc(33.333% - 20px);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.product-card:hover { transform: translateY(-5px); }
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    display: block;
+}
+.product-info {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+}
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+.product-status { font-size: 14px; color: #28a745; font-weight: bold; }
+.ai-recommendation-section {
+    background-color: #e9f0f1;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    text-align: center;
+}
+.ai-section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 4px solid #007bff;
+}
+.pagination-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.pagination-link {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 12px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.pagination-link.disabled {
+    color: #ccc;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.pagination-link:not(.disabled):hover {
+    background-color: #007bff;
+    color: #fff;
+}
+.pagination-link.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+.pagination-ellipsis {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 0;
+}
+
+/* 個別ページ用のスタイル */
+.item-detail {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+.item-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+.item-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.item-info {
+    flex: 2;
+}
+.item-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.item-category {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+.price-section {
+    background-color: #e9f0f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.current-price {
+    font-size: 24px;
+    color: #dc3545;
+    font-weight: bold;
+    margin: 0;
+}
+.current-price span {
+    font-size: 32px;
+}
+.price-status {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.affiliate-links {
+    margin-bottom: 20px;
+}
+.links-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.shop-link {
+    display: inline-block;
+    padding: 12px 20px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.shop-link:hover {
+    background-color: #0056b3;
+}
+.item-description {
+    line-height: 1.6;
+}
+
+/* 個別ページ（以前のコード） */
 .product-page-container {
     max-width: 900px;
     margin: 20px auto;
@@ -191,4 +398,47 @@ body {
         flex-basis: 100%;
         max-width: none;
     }
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container, .ai-recommendation-section {
+        padding: 20px 10px;
+    }
+    .product-card {
+        flex: 1 1 calc(50% - 10px);
+    }
+    .product-grid {
+        gap: 20px;
+    }
+    .product-name {
+        font-size: 16px;
+    }
+    .product-price {
+        font-size: 18px;
+    }
+    .product-status {
+        font-size: 12px;
+    }
+    .item-detail {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .item-image, .item-info {
+        min-width: auto;
+    }
+}
+
+/* フッターのスタイル */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+.footer-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff;
 }
