@@ -1,13 +1,14 @@
 import json
 import math
 import os
+import shutil
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
 
 def generate_site():
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
-    
+
     # 既存のHTMLファイルを削除
     for root, dirs, files in os.walk('.'):
         for file in files:
@@ -16,7 +17,6 @@ def generate_site():
     
     # カテゴリフォルダを削除
     if os.path.exists('category'):
-        import shutil
         shutil.rmtree('category')
 
     with open('products.json', 'r', encoding='utf-8') as f:
@@ -32,15 +32,18 @@ def generate_site():
             categories[main_cat] = []
         if sub_cat not in categories[main_cat]:
             categories[main_cat].append(sub_cat)
+    
+    # メインカテゴリーを五十音順にソート
+    sorted_main_cats = sorted(categories.keys())
 
     # ヘッダーとフッターを生成する関数
-    def generate_header_footer(current_path, breadcrumb=None, sub_cat_links=None):
+    def generate_header_footer(current_path, sub_cat_links=None):
         base_path = os.path.relpath('.', start=os.path.dirname(current_path))
         
         main_links_html = ""
-        for mc_link in sorted(categories.keys()):
+        for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
-            
+        
         header_html = f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -72,33 +75,20 @@ def generate_site():
         </div>
     </div>
 """
-        # パンくずリストとサブカテゴリーリンクのセクション
-        if breadcrumb or sub_cat_links:
-            breadcrumb_html = ""
-            if breadcrumb:
-                breadcrumb_html = '<div class="breadcrumb">'
-                for link_name, link_url in breadcrumb:
-                    breadcrumb_html += f'<a href="{base_path}/{link_url}">{link_name}</a> &gt; '
-                breadcrumb_html = breadcrumb_html[:-len(" &gt; ")] + '</div>'
+        
+        # サブカテゴリーリンクのセクション
+        sub_cat_links_html = ""
+        if sub_cat_links:
+            sub_cat_links_html += '<div class="genre-links sub-genre-links">'
+            for sub_cat_link in sorted(sub_cat_links):
+                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+            sub_cat_links_html += '</div>'
             
-            sub_cat_links_html = ""
-            if sub_cat_links:
-                sub_cat_links_html = '<div class="sub-category-links">'
-                for sub_cat_link in sub_cat_links:
-                    sub_cat_links_html += f'<a href="{base_path}/category/{breadcrumb[1][0]}/{sub_cat_link.replace(" ", "")}.html" class="sub-category-link">{sub_cat_link}</a>'
-                sub_cat_links_html += '</div>'
-            
-            header_html += f"""
-    <main class="container">
-        {breadcrumb_html}
-        {sub_cat_links_html}
-        <div class="product-grid">
-            """
-        else:
-            header_html += f"""
+        header_html += f"""
     <main class="container">
         <div class="ai-recommendation-section">
             <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
+            {sub_cat_links_html}
             <div class="product-grid">
             """
 
@@ -124,14 +114,11 @@ def generate_site():
         main_cat_dir = f"category/{main_cat}"
         os.makedirs(main_cat_dir, exist_ok=True)
         
-        # メインカテゴリーのindexページを生成 (パンくずリストあり, サブカテゴリーリンクあり)
+        # メインカテゴリーのindexページを生成 (サブカテゴリーリンクあり)
         main_cat_products = [p for p in products if p['category']['main'] == main_cat]
         page_path = os.path.join(main_cat_dir, "index.html")
-        header, footer = generate_header_footer(
-            page_path, 
-            breadcrumb=[("トップ", "index.html"), (main_cat, f"category/{main_cat}/index.html")],
-            sub_cat_links=sub_cats
-        )
+        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats)
+        
         products_html = ""
         for product in main_cat_products:
             products_html += f"""
@@ -148,15 +135,13 @@ def generate_site():
             f.write(header + products_html + footer)
         print(f"{page_path} が生成されました。")
         
-        # サブカテゴリーごとのページを生成 (パンくずリストあり, サブカテゴリーリンクなし)
+        # サブカテゴリーごとのページを生成 (サブカテゴリーリンクなし)
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = os.path.join(main_cat_dir, sub_cat_file_name)
-            header, footer = generate_header_footer(
-                page_path, 
-                breadcrumb=[("トップ", "index.html"), (main_cat, f"category/{main_cat}/index.html"), (sub_cat, f"category/{main_cat}/{sub_cat_file_name}")]
-            )
+            header, footer = generate_header_footer(page_path)
+            
             products_html = ""
             for product in sub_cat_products:
                 products_html += f"""
@@ -198,15 +183,8 @@ def generate_site():
     # ----------------------------------------------------
     for product in products:
         page_path = product['page_url']
-        header, footer = generate_header_footer(
-            page_path,
-            breadcrumb=[
-                ("トップ", "index.html"),
-                (product['category']['main'], f"category/{product['category']['main']}/index.html"),
-                (product['category']['sub'], f"category/{product['category']['main']}/{product['category']['sub'].replace(' ', '')}.html"),
-                (product['name'], product['page_url'])
-            ]
-        )
+        header, footer = generate_header_footer(page_path)
+        
         item_html_content = f"""
     <main class="container">
         <div class="item-detail">
