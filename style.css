@@ -445,3 +445,13 @@ footer {
 .product-detail .price-status-content {
     font-size: 20px;
 }
+/* トップページの商品カード内のリンクの下線と色をリセット */
+.product-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 訪問済みリンクの色もリセット */
+.product-card a:visited {
+    color: inherit;
+}
