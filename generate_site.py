@@ -45,7 +45,7 @@ def generate_site():
         main_links_html = ""
         for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
-        
+  
         header_html = f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -91,6 +91,7 @@ def generate_site():
         {sub_cat_links_html}
     </div>
 """
+ 
         footer_html = f"""
     </main>
     <footer>
@@ -138,17 +139,16 @@ def generate_site():
         for product in main_cat_products:
             products_html += f"""
 <div class="product-card">
-    <a href="{product['page_url']}">
-        <img src="{product['image_url']}" alt="{product['name']}">
+    <a href="../../{product['page_url']}">
+        <img src="../../{product['image_url']}" alt="{product['name']}">
     </a>
     <div class="product-info">
-        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
 </div>
-                    </a>
             """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + products_html + footer)
@@ -172,11 +172,11 @@ def generate_site():
             for product in sub_cat_products:
                 products_html += f"""
 <div class="product-card">
-    <a href="{product['page_url']}">
-        <img src="{product['image_url']}" alt="{product['name']}">
+    <a href="../../{product['page_url']}">
+        <img src="../../{product['image_url']}" alt="{product['name']}">
     </a>
     <div class="product-info">
-        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
@@ -207,7 +207,7 @@ def generate_site():
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
 </div>
-        """
+    """
     with open(top_page_path, 'w', encoding='utf-8') as f:
         f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div></div></main>' + footer)
     print("index.html が生成されました。")
@@ -259,14 +259,13 @@ def generate_site():
         
         item_html_content = f"""
 <main class="container">
-    <div class="product-detail">  <div class="item-detail">
+    <div class="product-detail"> <div class="item-detail">
             <div class="item-image">
                 <img src="../../{product['image_url']}" alt="{product['name']}">
             </div>
-
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="category/{product['category']['main']}/index.html">{product['category']['main']}</a> &gt; <a href="category/{product['category']['main']}/{product['category']['sub'].replace(' ', '')}.html">{product['category']['sub']}</a></p>
+                <p class="item-category">カテゴリ：<a href="../../category/{product['category']['main']}/index.html">{product['category']['main']}</a> &gt; <a href="../../category/{product['category']['main']}/{product['category']['sub'].replace(' ', '')}.html">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
@@ -276,7 +275,6 @@ def generate_site():
                     {purchase_button_html}
                 </div>
                 {affiliate_links_html}
-
                 <div class="item-description">
                     <h2>商品説明</h2>
                     <p>{product['description']}</p>
@@ -292,7 +290,6 @@ def generate_site():
     
     # 静的ページを生成
     # ----------------------------------------------------
-    # お問い合わせページ
     contact_content = """
     <main class="container">
         <div class="static-content">
@@ -304,7 +301,6 @@ def generate_site():
     """
     generate_static_page("contact.html", "お問い合わせ", contact_content)
 
-    # プライバシーポリシーページ
     privacy_content = """
     <main class="container">
         <div class="static-content">
@@ -316,7 +312,6 @@ def generate_site():
     """
     generate_static_page("privacy.html", "プライバシーポリシー", privacy_content)
 
-    # 免責事項ページ
     disclaimer_content = """
     <main class="container">
         <div class="static-content">
