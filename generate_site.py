@@ -1,5 +1,3 @@
-# generate_site.py
-
 def generate_index_html():
     """トップページを生成する関数"""
     html_content = """
