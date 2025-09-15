@@ -40,8 +40,17 @@ def generate_site():
 
     # ヘッダーとフッターを生成する関数
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
-        base_path = os.path.relpath('.', start=os.path.dirname(current_path))
         
+        is_root = True if "pages" not in current_path and "category" not in current_path else False
+        is_category = True if "category" in current_path else False
+
+        if is_root:
+            base_path = "."
+        elif is_category:
+            base_path = ".."
+        else: # pages
+            base_path = ".."
+
         main_links_html = ""
         for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
@@ -83,6 +92,7 @@ def generate_site():
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
+                # サブカテゴリーのリンクは、カテゴリフォルダ内なのでパスを変更する必要なし
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             
@@ -119,6 +129,7 @@ def generate_site():
 
 
     # メインカテゴリーごとのページを生成
+    # ----------------------------------------------------
     for main_cat, sub_cats in categories.items():
         main_cat_products = [p for p in products if p['category']['main'] == main_cat]
         page_path = f"category/{main_cat}/index.html"
@@ -244,9 +255,9 @@ def generate_site():
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
                 <div class="lowest-price-buttons">
-                    {f'<a href="../../{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                    {f'<a href="../../{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                    {f'<a href="../../{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
                 </div>
             </div>
         """
@@ -255,11 +266,12 @@ def generate_site():
 <main class="container">
     <div class="product-detail"> <div class="item-detail">
             <div class="item-image">
-                <img src="../../{product['image_url']}" alt="{product['name']}">
+                <img src="{product['image_url']}" alt="{product['name']}">
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt; <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
+                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
