@@ -507,3 +507,28 @@ footer {
 .affiliate-links .shop-link:hover {
     background-color: #0056b3; /* ホバー時の色を濃い青に変更 */
 }
+.lowest-price-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px; /* セクション内の要素間の隙間 */
+}
+
+.lowest-price-label {
+    font-weight: bold;
+    white-space: nowrap; /* テキストが折り返さないようにする */
+}
+
+.lowest-price-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* ボタン間の隙間 */
+}
+
+/* スマホ（画面幅が狭い場合）のレイアウト */
+@media (max-width: 768px) {
+    .lowest-price-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
