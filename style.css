@@ -224,8 +224,6 @@ main {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 10px;
-    /* この見出しは常に1行を占有 */
-    display: block;
 }
 
 /* ボタンを囲むコンテナにFlexboxを適用 */
@@ -254,7 +252,7 @@ main {
     background-color: #0056b3;
 }
 
-/* AI分析枠内の購入ボタンのスタイル */
+/* 購入ボタンのスタイル (AI分析枠内のボタン) */
 .purchase-button {
     display: block;
     width: auto;
