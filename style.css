@@ -507,22 +507,25 @@ footer {
 .affiliate-links .shop-link:hover {
     background-color: #0056b3; /* ホバー時の色を濃い青に変更 */
 }
+/* 最安値ショップセクションの全体設定 */
 .lowest-price-section {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 20px; /* セクション内の要素間の隙間 */
+    gap: 20px;
 }
 
+/* 最安値ショップのテキストラベル */
 .lowest-price-label {
     font-weight: bold;
-    white-space: nowrap; /* テキストが折り返さないようにする */
+    white-space: nowrap;
 }
 
+/* ボタンをまとめるコンテナ */
 .lowest-price-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* ボタン間の隙間 */
+    gap: 10px;
 }
 
 /* スマホ（画面幅が狭い場合）のレイアウト */
@@ -530,5 +533,17 @@ footer {
     .lowest-price-section {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .lowest-price-buttons {
+        /* この2行を修正・追加 */
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* ボタン自体を中央寄せにする */
+    .lowest-price-buttons .btn {
+        width: 100%; /* ボタンの幅をコンテナいっぱいに広げる */
+        text-align: center; /* ボタン内のテキストを中央に寄せる */
     }
 }
