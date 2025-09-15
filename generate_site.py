@@ -10,6 +10,16 @@ def generate_site():
     with open('products.json', 'r', encoding='utf-8') as f:
         products = json.load(f)
 
+    # カテゴリー情報を収集
+    categories = {}
+    for product in products:
+        main_cat = product['category']['main']
+        if main_cat not in categories:
+            categories[main_cat] = []
+        
+        if 'sub' in product['category'] and product['category']['sub'] not in categories[main_cat]:
+            categories[main_cat].append(product['category']['sub'])
+
     # トップページのHTMLを生成
     # ----------------------------------------------------
     total_products = len(products)
@@ -23,6 +33,14 @@ def generate_site():
             is_active = " active" if i == 1 else ""
             pagination_html += f'    <a href="page-{i}.html" class="pagination-link{is_active}">{i}</a>\n'
         pagination_html += '</div>\n'
+
+    # カテゴリーリンクのHTMLを生成
+    category_links_html = ""
+    for main_cat, sub_cats in categories.items():
+        category_links_html += f'<a href="#">{main_cat}</a>'
+        if sub_cats:
+            category_links_html += '<span class="separator">|</span>'
+        # ここはまだサブカテゴリーのリンクがありませんが、将来的には追加できます
 
     index_html_content = f"""
 <!DOCTYPE html>
@@ -50,9 +68,7 @@ def generate_site():
 
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="#">パソコン</a>
-            <span class="separator">|</span>
-            <a href="#">家電</a>
+            {category_links_html}
         </div>
     </div>
 
@@ -129,9 +145,7 @@ def generate_site():
 
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="#">パソコン</a>
-            <span class="separator">|</span>
-            <a href="#">家電</a>
+            {category_links_html}
         </div>
     </div>
 
@@ -143,7 +157,7 @@ def generate_site():
 
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：{product['category']}</p>
+                <p class="item-category">カテゴリ：{product['category']['main']} &gt; {product['category']['sub']}</p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                     <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
