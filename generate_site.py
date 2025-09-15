@@ -17,6 +17,10 @@ def generate_site():
     
     if os.path.exists('category'):
         shutil.rmtree('category')
+    
+    # pagesディレクトリも削除
+    if os.path.exists('pages'):
+        shutil.rmtree('pages')
 
     with open('products.json', 'r', encoding='utf-8') as f:
         products = json.load(f)
@@ -203,6 +207,12 @@ def generate_site():
     # ----------------------------------------------------
     for product in products:
         page_path = product['page_url']
+        
+        # 親ディレクトリが存在しない場合は作成
+        dir_name = os.path.dirname(page_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+            
         header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
         
         specs_html = ""
