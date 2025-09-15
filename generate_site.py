@@ -35,7 +35,7 @@ def generate_index_html():
 
     <main class="container">
         <div class="ai-recommendation-section">
-            <h2 class="ai-section-title">AIおすすめ商品</h2>
+            <h2 class="ai-section-title">AIが選んだおすすめアイテム</h2>
             <div class="product-grid">
                 <a href="item-1.html" class="product-card">
                     <img src="https://via.placeholder.com/300x200?text=Product+1" alt="商品1">
@@ -64,7 +64,7 @@ def generate_index_html():
             </div>
         </div>
 
-        <h2 class="section-title">新着商品</h2>
+        <h2 class="section-title">今が買い時！お得な注目アイテム</h2>
         <div class="product-grid">
             <a href="item-1.html" class="product-card">
                 <img src="https://via.placeholder.com/300x200?text=Product+A" alt="商品A">
