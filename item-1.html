@@ -112,9 +112,9 @@
         }
         .site-links-container {
             display: flex;
-            justify-content: center; /* コンテナ内の要素を中央揃え */
-            flex-wrap: wrap; /* 要素が収まらない場合は折り返す */
-            gap: 20px; /* 要素間のスペース */
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         .site-link-box {
             display: flex;
@@ -127,8 +127,10 @@
             color: #333;
             transition: transform 0.2s, box-shadow 0.2s;
             text-align: center;
-            flex: 1 1 200px; /* 要素の幅を調整 */
+            flex: 1 1 200px;
             max-width: 250px;
+            background-color: #f7f9fc; /* 薄いブルーの背景色 */
+            border-color: #c9d6ea; /* 少し濃いめの枠線 */
         }
         .site-link-box:hover {
             transform: translateY(-5px);
@@ -148,7 +150,7 @@
         /* スマホ用スタイル（画面幅が600px以下の場合に適用） */
         @media (max-width: 600px) {
             .site-link-box {
-                flex-basis: 100%; /* 縦に並ぶように幅を100%に */
+                flex-basis: 100%;
                 max-width: none;
             }
         }
