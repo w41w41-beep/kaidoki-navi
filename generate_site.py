@@ -172,7 +172,8 @@ def generate_site():
                         <div class="product-info">
                             <h3 class="product-name">{product['name']}</h3>
                             <p class="product-price">{product['price']}</p>
-                            <p class="product-status">AI分析: {product['ai_analysis']}</p>
+                            <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                            <p class="price-status-content">{product['ai_analysis']}</p>
                         </div>
                     </a>
                 """
@@ -194,7 +195,8 @@ def generate_site():
                     <div class="product-info">
                         <h3 class="product-name">{product['name']}</h3>
                         <p class="product-price">{product['price']}</p>
-                        <p class="product-status">AI分析: {product['ai_analysis']}</p>
+                        <p class="price-status-title">カイドキ-ナビが選ぶ「買い時」</p>
+                        <p class="price-status-content">{product['ai_analysis']}</p>
                     </div>
                 </a>
         """
