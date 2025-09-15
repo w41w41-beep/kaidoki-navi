@@ -148,7 +148,7 @@ def generate_site():
         
         products_html = ""
         for product in main_cat_products:
-            # カテゴリーページ内の画像パスを修正
+            # カテゴリーページ内の画像パスとリンクパスを修正
             image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
@@ -182,7 +182,7 @@ def generate_site():
             
             products_html = ""
             for product in sub_cat_products:
-                # サブカテゴリーページ内の画像パスを修正
+                # サブカテゴリーページ内の画像パスとリンクパスを修正
                 image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
                 link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
                 products_html += f"""
@@ -208,7 +208,7 @@ def generate_site():
     
     products_html = ""
     for product in top_page_products:
-        # トップページ内の画像パスを修正
+        # トップページ内の画像パスとリンクパスを修正
         image_path = os.path.relpath(product['image_url'], os.path.dirname(top_page_path))
         link_path = os.path.relpath(product['page_url'], os.path.dirname(top_page_path))
         products_html += f"""
