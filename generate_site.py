@@ -116,12 +116,12 @@ def generate_site():
 
     # メインカテゴリーごとのページを生成
     for main_cat, sub_cats in categories.items():
-        main_cat_dir = f"category/{main_cat}"
-        os.makedirs(main_cat_dir, exist_ok=True)
-        
-        # メインカテゴリーのindexページを生成 (サブカテゴリーリンクあり)
         main_cat_products = [p for p in products if p['category']['main'] == main_cat]
-        page_path = os.path.join(main_cat_dir, "index.html")
+        page_path = f"category/{main_cat}/index.html"
+        
+        # ディレクトリを作成
+        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        
         header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{main_cat}の商品一覧")
         
         main_content_html = f"""
@@ -151,7 +151,7 @@ def generate_site():
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = os.path.join(main_cat_dir, sub_cat_file_name)
+            page_path = f"category/{main_cat}/{sub_cat_file_name}"
             header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
             
             main_content_html = f"""
@@ -214,6 +214,15 @@ def generate_site():
                 </div>
             """
 
+        affiliate_links_html = f"""
+            <div class="affiliate-links">
+                <p class="links-title">最安値ショップをチェック！</p>
+                {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+            </div>
+        """
+
         item_html_content = f"""
     <main class="container">
         <div class="item-detail">
@@ -229,10 +238,7 @@ def generate_site():
                     <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
                 </div>
 
-                <div class="affiliate-links">
-                    <p class="links-title">最安値ショップをチェック！</p>
-                    <a href="{product.get('amazon_url', '#')}" class="shop-link" target="_blank">Amazonで見る</a>
-                </div>
+                {affiliate_links_html}
 
                 <div class="item-description">
                     <h2>商品説明</h2>
