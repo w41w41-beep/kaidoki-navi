@@ -9,13 +9,12 @@ PRODUCTS_PER_PAGE = 24
 def generate_site():
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
 
-    # 既存のHTMLファイルを削除
+    # 既存のHTMLファイルとディレクトリを削除
     for root, dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html']:
                 os.remove(os.path.join(root, file))
     
-    # カテゴリフォルダを削除
     if os.path.exists('category'):
         shutil.rmtree('category')
 
@@ -37,7 +36,7 @@ def generate_site():
     sorted_main_cats = sorted(categories.keys())
 
     # ヘッダーとフッターを生成する関数
-    def generate_header_footer(current_path, sub_cat_links=None):
+    def generate_header_footer(current_path):
         base_path = os.path.relpath('.', start=os.path.dirname(current_path))
         
         main_links_html = ""
@@ -75,26 +74,8 @@ def generate_site():
         </div>
     </div>
 """
-        
-        # サブカテゴリーリンクのセクション
-        sub_cat_links_html = ""
-        if sub_cat_links:
-            sub_cat_links_html += '<div class="genre-links sub-genre-links">'
-            for sub_cat_link in sorted(sub_cat_links):
-                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
-            sub_cat_links_html += '</div>'
-            
-        header_html += f"""
-    <main class="container">
-        <div class="ai-recommendation-section">
-            <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
-            {sub_cat_links_html}
-            <div class="product-grid">
-            """
 
         footer_html = f"""
-            </div>
-        </div>
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
@@ -117,7 +98,22 @@ def generate_site():
         # メインカテゴリーのindexページを生成 (サブカテゴリーリンクあり)
         main_cat_products = [p for p in products if p['category']['main'] == main_cat]
         page_path = os.path.join(main_cat_dir, "index.html")
-        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats)
+        header, footer = generate_header_footer(page_path)
+        
+        # サブカテゴリーリンクのHTMLを生成
+        sub_cat_links_html = ""
+        for sub_cat_link in sorted(sub_cats):
+            sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html" class="sub-category-link">{sub_cat_link}</a>'
+            
+        main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{main_cat}の商品一覧</h2>
+            <div class="genre-links sub-genre-links">
+                {sub_cat_links_html}
+            </div>
+            <div class="product-grid">
+            """
         
         products_html = ""
         for product in main_cat_products:
@@ -132,8 +128,8 @@ def generate_site():
                     </a>
             """
         with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + products_html + footer)
-        print(f"{page_path} が生成されました。")
+            f.write(header + main_content_html + products_html + footer)
+        print(f"category/{main_cat}/index.html が生成されました。")
         
         # サブカテゴリーごとのページを生成 (サブカテゴリーリンクなし)
         for sub_cat in sub_cats:
@@ -141,6 +137,13 @@ def generate_site():
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = os.path.join(main_cat_dir, sub_cat_file_name)
             header, footer = generate_header_footer(page_path)
+            
+            main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
+            <div class="product-grid">
+            """
             
             products_html = ""
             for product in sub_cat_products:
@@ -155,7 +158,7 @@ def generate_site():
                     </a>
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + products_html + footer)
+                f.write(header + main_content_html + products_html + footer)
             print(f"{page_path} が生成されました。")
 
     # トップページのHTMLを生成
@@ -163,6 +166,7 @@ def generate_site():
     top_page_path = 'index.html'
     header, footer = generate_header_footer(top_page_path)
     top_page_products = products[:PRODUCTS_PER_PAGE]
+    
     products_html = ""
     for product in top_page_products:
         products_html += f"""
@@ -176,7 +180,7 @@ def generate_site():
                 </a>
         """
     with open(top_page_path, 'w', encoding='utf-8') as f:
-        f.write(header + products_html + footer)
+        f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div></div></main>' + footer)
     print("index.html が生成されました。")
 
     # 個別ページを商品ごとに生成
