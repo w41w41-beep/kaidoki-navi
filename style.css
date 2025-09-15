@@ -564,8 +564,8 @@ footer {
     color: inherit;
 }
 
-/* トップページと個別ページ共通のスタイル */
-.price-status-title {
+/* トップページの商品カード内の「買い時」テキストのスタイル */
+.product-card .price-status-title {
     font-size: 14px;
     color: #28a745;
     font-weight: bold;
@@ -574,18 +574,28 @@ footer {
     margin-bottom: 0px;
 }
 
-.price-status-content {
+.product-card .price-status-content {
     font-size: 14px;
     color: #333;
     text-align: center;
     margin-top: 0px;
     margin-bottom: 5px;
 }
-/* 個別ページの「カイドキ-ナビが選ぶ「買い時」」のスタイル */
+
+/* 個別ページの「買い時」テキストのスタイル */
 .product-detail .price-status-title {
     font-size: 20px;
+    color: #28a745; /* 色を再度指定 */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 0px;
 }
 
 .product-detail .price-status-content {
     font-size: 20px;
+    color: #333;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
