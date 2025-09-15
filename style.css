@@ -447,10 +447,20 @@ footer {
         min-width: auto;
     }
 }
-/* 新しい購入ボタンのスタイル */
+/* AI分析の枠のスタイル */
+.ai-recommendation-section {
+    padding: 20px;
+    background-color: #f0f8ff; /* AI分析の背景色 */
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 購入ボタンのスタイル */
 .purchase-button {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     text-align: center;
     padding: 15px 20px;
     margin-top: 15px;
@@ -464,5 +474,31 @@ footer {
 }
 
 .purchase-button:hover {
+    background-color: #0056b3; /* ホバー時の色を濃い青に変更 */
+}
+
+/* 最安値ショップのボタンを整えるスタイル */
+.affiliate-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* ボタンを中央に寄せる */
+    gap: 10px; /* ボタン間の余白を確保 */
+    margin-top: 20px; /* 上の要素との余白を確保 */
+}
+
+.affiliate-links .shop-link {
+    flex-grow: 1; /* ボタンが均等に広がるようにする */
+    min-width: 120px; /* ボタンの最小幅を指定 */
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff; /* 青色に変更 */
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.affiliate-links .shop-link:hover {
     background-color: #0056b3; /* ホバー時の色を濃い青に変更 */
 }
