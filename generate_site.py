@@ -236,22 +236,17 @@ def generate_site():
         elif main_ec_site == "Yahoo" and "yahoo_url" in product:
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
         
-        ai_purchase_block_html = f"""
-        <div class="ai-recommendation-section">
-            <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
-            {purchase_button_html}
-        </div>
-        """
-
         affiliate_links_html = f"""
             <div class="affiliate-links">
                 <p class="links-title">最安値ショップをチェック！</p>
-                {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                <div class="shop-buttons">
+                    {f'<a href="{product["amazon_url"]}" class="shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                    {f'<a href="{product["rakuten_url"]}" class="shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                    {f'<a href="{product["yahoo_url"]}" class="shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                </div>
             </div>
         """
-
+        
         item_html_content = f"""
     <main class="container">
         <div class="item-detail">
@@ -265,7 +260,10 @@ def generate_site():
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
-                {ai_purchase_block_html}
+                <div class="ai-recommendation-section">
+                    <p class="price-status">AI分析：**{product['ai_analysis']}**</p>
+                    {purchase_button_html}
+                </div>
                 {affiliate_links_html}
 
                 <div class="item-description">
