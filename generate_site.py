@@ -138,18 +138,16 @@ def generate_site():
         products_html = ""
         for product in main_cat_products:
             products_html += f"""
-<div class="product-card">
-    <a href="../../{product['page_url']}">
-        <img src="../../{product['image_url']}" alt="{product['name']}">
-    </a>
+<a href="{product['page_url']}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name">{product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
-</div>
-            """
+</a>
+        """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + products_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
@@ -171,18 +169,16 @@ def generate_site():
             products_html = ""
             for product in sub_cat_products:
                 products_html += f"""
-<div class="product-card">
-    <a href="../../{product['page_url']}">
-        <img src="../../{product['image_url']}" alt="{product['name']}">
-    </a>
+<a href="{product['page_url']}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name"><a href="../../{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name">{product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
-</div>
-                """
+</a>
+        """
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + footer)
             print(f"{page_path} が生成されました。")
@@ -196,18 +192,16 @@ def generate_site():
     products_html = ""
     for product in top_page_products:
         products_html += f"""
-<div class="product-card">
-    <a href="{product['page_url']}">
-        <img src="{product['image_url']}" alt="{product['name']}">
-    </a>
+<a href="{product['page_url']}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
-        <h3 class="product-name"><a href="{product['page_url']}">{product['name']}</a></h3>
+        <h3 class="product-name">{product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
-</div>
-    """
+</a>
+        """
     with open(top_page_path, 'w', encoding='utf-8') as f:
         f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div></div></main>' + footer)
     print("index.html が生成されました。")
