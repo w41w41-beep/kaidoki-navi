@@ -138,6 +138,8 @@ footer {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
 }
 .product-card:hover { transform: translateY(-5px); }
 .product-card img {
@@ -444,26 +446,4 @@ footer {
 
 .product-detail .price-status-content {
     font-size: 20px;
-}
-/* トップページの商品カード内のリンクの下線と色をリセット */
-.product-card a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* 訪問済みリンクの色もリセット */
-.product-card a:visited {
-    color: inherit;
-}
-
-/* リンクと認識されないように、product-card内のh3とdivのリンクを無効化 */
-.product-card h3 a,
-.product-card div a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.product-card h3 a:visited,
-.product-card div a:visited {
-    color: inherit;
 }
