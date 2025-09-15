@@ -259,7 +259,7 @@ def generate_site():
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="../../category/{product['category']['main']}/index.html">{product['category']['main']}</a> &gt; <a href="../../category/{product['category']['main']}/{product['category']['sub'].replace(' ', '')}.html">{product['category']['sub']}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt; <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
