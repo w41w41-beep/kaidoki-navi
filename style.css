@@ -564,25 +564,23 @@ footer {
     color: inherit;
 }
 
-/* トップページの商品カード内の「買い時」テキストのスタイル */
 .product-card .price-status-title {
     font-size: 14px;
     color: #28a745;
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
-    margin-bottom: 0; /* 余白をゼロに */
+    margin-bottom: 0;
 }
 
 .product-card .price-status-content {
     font-size: 14px;
     color: #333;
     text-align: center;
-    margin-top: 0; /* 余白をゼロに */
+    margin-top: 0;
     margin-bottom: 5px;
 }
 
-/* 個別ページの「買い時」テキストのスタイル */
 .product-detail .price-status-title {
     font-size: 20px;
     color: #28a745;
@@ -599,9 +597,27 @@ footer {
     margin-top: 0;
     margin-bottom: 5px;
 }
-.product-card > * {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+
+.product-info {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /* この行を削除: justify-content: space-between; */
+    min-height: 120px;
+}
+
+.product-name {
+    margin-bottom: 5px;
+}
+.product-price { 
+    margin-bottom: 5px;
+}
+
+.product-card a {
+    text-decoration: none;
+    color: inherit;
+}
+.product-card a:visited {
+    color: inherit;
 }
