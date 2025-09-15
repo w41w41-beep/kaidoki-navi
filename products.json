@@ -14,6 +14,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=ソニー+WH-1000XM5",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/ソニー+WH-1000XM5/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=ソニー+WH-1000XM5",
+    "main_ec_site": "Amazon",
     "specs": "重さ: 約250g, 連続再生時間: 最大30時間"
   },
   {
@@ -31,6 +32,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=BOSE+QuietComfort+45",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/BOSE+QuietComfort+45/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=BOSE+QuietComfort+45",
+    "main_ec_site": "楽天",
     "specs": "重さ: 約240g, 連続再生時間: 最大24時間"
   },
   {
@@ -48,6 +50,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=MacBook+Air+M2",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/MacBook+Air+M2/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=MacBook+Air+M2",
+    "main_ec_site": "Amazon",
     "specs": "チップ: Apple M2, メモリ: 8GB, ストレージ: 256GB SSD"
   },
   {
@@ -65,6 +68,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=ロジクール+MX+Master+3S",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/ロジクール+MX+Master+3S/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=ロジクール+MX+Master+3S",
+    "main_ec_site": "Amazon",
     "specs": "センサーテクノロジー: Darkfield, ワイヤレス操作距離: 10m"
   },
   {
@@ -82,6 +86,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=Anker+Soundcore+Liberty+4",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/Anker+Soundcore+Liberty+4/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Anker+Soundcore+Liberty+4",
+    "main_ec_site": "Amazon",
     "specs": "連続再生時間: 最大9時間(イヤホン単体), 接続: Bluetooth 5.3"
   },
   {
@@ -99,6 +104,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=Dell+XPS+13",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/Dell+XPS+13/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Dell+XPS+13",
+    "main_ec_site": "楽天",
     "specs": "ディスプレイ: 13.4インチ, CPU: Intel Core i7, メモリ: 16GB"
   },
   {
@@ -116,6 +122,7 @@
     "amazon_url": "https://www.amazon.co.jp/s?k=Apple+Watch+Series+8",
     "rakuten_url": "https://search.rakuten.co.jp/search/mall/Apple+Watch+Series+8/",
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Apple+Watch+Series+8",
+    "main_ec_site": "Yahoo!",
     "specs": "ディスプレイ: 常時表示Retinaディスプレイ, 機能: 心電図センサー、血中酸素ウェルネス"
   }
 ]
