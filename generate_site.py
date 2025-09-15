@@ -253,8 +253,8 @@ def generate_site():
         """
         
         item_html_content = f"""
-    <main class="container">
-        <div class="item-detail">
+<main class="container">
+    <div class="product-detail">  <div class="item-detail">
             <div class="item-image">
                 <img src="../../{product['image_url']}" alt="{product['name']}">
             </div>
@@ -279,7 +279,7 @@ def generate_site():
                 {specs_html}
             </div>
         </div>
-    </main>
+    </div> </main>
         """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
@@ -293,7 +293,7 @@ def generate_site():
         <div class="static-content">
             <h1>お問い合わせ</h1>
             <p>ご質問やご要望がございましたら、以下のメールアドレスまでご連絡ください。</p>
-            <p>メールアドレス: your-email@example.com</p>
+            <p>メールアドレス: sokux001@gmail.com</p>
         </div>
     </main>
     """
