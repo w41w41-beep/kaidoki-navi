@@ -566,8 +566,8 @@ footer {
 
 /* トップページと個別ページ共通のスタイル */
 .price-status-title {
-    font-size: 18px;
-    color: #007bff;
+    font-size: 14px;
+    color: #28a745;
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
@@ -575,9 +575,9 @@ footer {
 }
 
 .price-status-content {
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 0px;
     margin-bottom: 5px;
 }
