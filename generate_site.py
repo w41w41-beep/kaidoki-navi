@@ -98,6 +98,7 @@ def generate_site():
             <a href="{base_path}/contact.html">お問い合わせ</a>
         </div>
     </footer>
+    <script src="{base_path}/script.js"></script>
 </body>
 </html>
         """
@@ -204,6 +205,15 @@ def generate_site():
         page_path = product['page_url']
         header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
         
+        specs_html = ""
+        if "specs" in product:
+            specs_html = f"""
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>{product['specs']}</p>
+                </div>
+            """
+
         item_html_content = f"""
     <main class="container">
         <div class="item-detail">
@@ -228,6 +238,7 @@ def generate_site():
                     <h2>商品説明</h2>
                     <p>{product['description']}</p>
                 </div>
+                {specs_html}
             </div>
         </div>
     </main>
