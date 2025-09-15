@@ -455,3 +455,15 @@ footer {
 .product-card a:visited {
     color: inherit;
 }
+
+/* リンクと認識されないように、product-card内のh3とdivのリンクを無効化 */
+.product-card h3 a,
+.product-card div a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-card h3 a:visited,
+.product-card div a:visited {
+    color: inherit;
+}
