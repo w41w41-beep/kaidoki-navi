@@ -72,6 +72,7 @@ def generate_site():
     <title>カイドキ-ナビ | {page_title}</title>
     <link rel="stylesheet" href="{base_path}/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
 </head>
 <body>
     <header>
