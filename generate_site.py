@@ -391,6 +391,80 @@ def generate_site():
     """
     generate_static_page("disclaimer.html", "免責事項", disclaimer_content)
 
+    # サイトマップを生成する関数
+    def create_sitemap():
+        base_url = "https://w41w41-beep.github.io/kaidoki-navi/"
+        
+        # XML形式のサイトマップを構築
+        sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+
+        # トップページのURLを追加
+        sitemap_content += '  <url>\n'
+        sitemap_content += f'    <loc>{base_url}</loc>\n'
+        sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+        sitemap_content += '    <changefreq>daily</changefreq>\n'
+        sitemap_content += '    <priority>1.0</priority>\n'
+        sitemap_content += '  </url>\n'
+
+        # カテゴリページのURLを追加
+        # カテゴリ情報を収集する既存のロジックから取得
+        categories = {}
+        for product in products:
+            main_cat = product['category']['main']
+            sub_cat = product['category']['sub']
+
+            if main_cat not in categories:
+                categories[main_cat] = set()
+            categories[main_cat].add(sub_cat)
+
+        for main_cat, sub_cats in categories.items():
+            # メインカテゴリーのURLを追加
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>daily</changefreq>\n'
+            sitemap_content += '    <priority>0.8</priority>\n'
+            sitemap_content += '  </url>\n'
+            
+            # サブカテゴリーのURLを追加
+            for sub_cat in sub_cats:
+                sitemap_content += '  <url>\n'
+                sitemap_content += f'    <loc>{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+                sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+                sitemap_content += '    <changefreq>daily</changefreq>\n'
+                sitemap_content += '    <priority>0.7</priority>\n'
+                sitemap_content += '  </url>\n'
+
+        # 商品ごとのURLを追加
+        for product in products:
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}{product["page_url"]}</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>daily</changefreq>\n'
+            sitemap_content += '    <priority>0.6</priority>\n'
+            sitemap_content += '  </url>\n'
+            
+        # 静的ページのURLを追加
+        static_pages = ["privacy.html", "disclaimer.html", "contact.html"]
+        for page in static_pages:
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}{page}</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>monthly</changefreq>\n'
+            sitemap_content += '    <priority>0.5</priority>\n'
+            sitemap_content += '  </url>\n'
+
+        sitemap_content += '</urlset>'
+
+        # sitemap.xmlファイルとして保存
+        with open('sitemap.xml', 'w', encoding='utf-8') as f:
+            f.write(sitemap_content)
+        print("sitemap.xml が生成されました。")
+    
+    # generate_site関数の最後にサイトマップ生成関数を呼び出す
+    create_sitemap()
+
     print("サイトのファイル生成が完了しました！")
 
 if __name__ == "__main__":
