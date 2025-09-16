@@ -106,5 +106,365 @@
     "yahoo_url": "https://shopping.yahoo.co.jp/search?p=Dell+XPS+13",
     "main_ec_site": "楽天",
     "specs": "ディスプレイ: 13.4インチ, CPU: Intel Core i7, メモリ: 16GB"
+  },
+    {
+    "id": "7",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "8",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "9",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "10",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "11",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "12",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "13",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "14",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "15",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "16",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "17",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "18",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "19",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "20",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "21",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "22",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "23",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "24",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "25",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
+  },
+    {
+    "id": "26",
+    "name": "●",
+    "description": "●",
+    "image_url": "●",
+    "price": "●円",
+    "ai_analysis": "買い時です！",
+    "category": {
+      "main": "オーディオ",
+      "sub": "イヤホン・ヘッドホン"
+    },
+    "page_url": "pages/●●●.html",
+    "amazon_url": "●",
+    "rakuten_url": "●",
+    "yahoo_url": "●",
+    "main_ec_site": "楽天",
+    "specs": "●"
   }
 ]
