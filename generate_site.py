@@ -24,6 +24,11 @@ def generate_site():
     with open('products.json', 'r', encoding='utf-8') as f:
         products = json.load(f)
 
+    # 日付順に並び替え
+    # 'date'フィールドがない場合はスキップ
+    if 'date' in products[0]:
+        products.sort(key=lambda p: p['date'], reverse=True)
+
     # カテゴリー情報を収集
     categories = {}
     for product in products:
@@ -272,7 +277,7 @@ def generate_site():
             <div class="ai-analysis-block">
                 <div class="ai-analysis-text">
                     <h2>AIによる買い時分析</h2>
-                    <p>価格推移グラフと詳細分析をここに表示予定です。</p>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
                 </div>
             </div>
         """
