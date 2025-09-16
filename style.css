@@ -84,10 +84,10 @@ header h1 a {
     max-width: 960px;
     margin: 0 auto;
     display: flex;
-    flex-wrap: wrap;  /* この行を追加 */
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 10px;        /* 20px から 10px に変更 */
+    gap: 10px;
 }
 .genre-links a {
     color: #007bff;
@@ -185,39 +185,44 @@ footer {
     padding-bottom: 5px;
     border-bottom: 4px solid #007bff;
 }
-.pagination-container {
-    text-align: center;
-    margin-top: 20px;
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
 }
-.pagination-link {
-    display: inline-block;
-    margin: 0 5px;
-    padding: 8px 12px;
-    color: #007bff;
+
+.pagination a {
+    display: block;
+    padding: 8px 16px;
+    margin: 0 4px;
+    background-color: #f4f4f4;
+    color: #333;
     text-decoration: none;
-    border: 1px solid #007bff;
-    border-radius: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
     transition: background-color 0.3s;
 }
-.pagination-link.disabled {
-    color: #ccc;
-    border: 1px solid #ccc;
-    cursor: not-allowed;
-    pointer-events: none;
+
+.pagination a.active {
+    background-color: #4a90e2;
+    color: white;
+    border-color: #4a90e2;
 }
-.pagination-link:not(.disabled):hover {
-    background-color: #007bff;
-    color: #fff;
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
 }
-.pagination-link.active {
-    background-color: #007bff;
-    color: #fff;
+
+.pagination a.prev,
+.pagination a.next {
     font-weight: bold;
+    color: #4a90e2;
 }
-.pagination-ellipsis {
-    display: inline-block;
-    margin: 0 5px;
-    padding: 8px 0;
+
+.pagination a.prev:hover,
+.pagination a.next:hover {
+    background-color: #f4f4f4;
 }
 
 /* 個別ページ用のスタイル */
@@ -454,4 +459,45 @@ footer {
     line-height: 1.4;
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+/* ページネーションのスタイル */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 16px;
+    margin: 0 4px;
+    background-color: #f4f4f4;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.pagination a.active {
+    background-color: #4a90e2;
+    color: white;
+    border-color: #4a90e2;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+.pagination a.prev,
+.pagination a.next {
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.pagination a.prev:hover,
+.pagination a.next:hover {
+    background-color: #f4f4f4;
 }
