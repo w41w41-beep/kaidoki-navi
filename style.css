@@ -141,6 +141,7 @@ footer {
     box-sizing: border-box;
     text-decoration: none;
     color: inherit;
+    padding: 15px 15px 0;
 }
 .product-card:hover { transform: translateY(-5px); }
 .product-card img {
@@ -148,7 +149,7 @@ footer {
     height: 180px;
     object-fit: contain;
     display: block;
-    padding: 0;
+    margin-top: 10px;
 }
 .product-info {
     padding: 15px;
