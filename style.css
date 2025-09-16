@@ -523,3 +523,11 @@ footer {
     color: #666;
     line-height: 1.6;
 }
+.ai-analysis {
+  font-weight: bold;
+  color: #dc3545; /* 赤色 */
+  background-color: #f8f9fa; /* 薄いグレー */
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+}
