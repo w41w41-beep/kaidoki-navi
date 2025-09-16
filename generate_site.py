@@ -41,18 +41,13 @@ def generate_site():
     # ヘッダーとフッターを生成する関数
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
         
-        is_root = True if "pages" not in current_path and "category" not in current_path else False
-        is_category = True if "category" in current_path else False
-        is_pagination = True if "pages" in current_path else False
-
-        if is_root:
-            base_path = "."
-        elif is_category:
+        # パスに応じてベースパスを動的に決定
+        if "pages" in current_path:
+            base_path = ".."
+        elif "category" in current_path:
             base_path = "../.."
-        elif is_pagination:
-            base_path = ".."
-        else: # pages
-            base_path = ".."
+        else:
+            base_path = "."
 
         main_links_html = ""
         for mc_link in sorted_main_cats:
