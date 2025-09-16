@@ -507,7 +507,8 @@ footer {
 
 .pagination a.prev:hover,
 .pagination a.next:hover {
-    background-color: #f4f4f4;}
+    background-color: #f4f4f4;
+}
 /* AI分析ブロック */
 .ai-analysis-block {
     border: 1px solid #e0e0e0;
