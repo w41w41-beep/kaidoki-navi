@@ -165,7 +165,7 @@ def generate_site():
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
-        <div class="price-status-content">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
 </a>
             """
@@ -198,7 +198,7 @@ def generate_site():
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
-        <div class="price-status-content">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
 </a>
                 """
@@ -233,7 +233,7 @@ def generate_site():
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
         <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
-        <div class="price-status-content">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
 </a>
         """
@@ -336,7 +336,7 @@ def generate_site():
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡カイドキ-ナビが選ぶ「買い時」</div>
-                    <div class="price-status-content">{product['ai_analysis']}</div>
+                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
                     {purchase_button_html}
                 </div>
                 {ai_analysis_block_html}
