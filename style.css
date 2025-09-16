@@ -141,7 +141,7 @@ footer {
     box-sizing: border-box;
     text-decoration: none;
     color: inherit;
-    padding: 15px 15px 0;
+    padding: 0;
 }
 .product-card:hover { transform: translateY(-5px); }
 .product-card img {
@@ -150,6 +150,8 @@ footer {
     object-fit: contain;
     display: block;
     margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .product-info {
     padding: 15px;
@@ -230,9 +232,7 @@ footer {
 
 .pagination a.prev:hover,
 .pagination a.next:hover {
-    background-color: #f4f4f4;
-}
-
+    background-color: #f4f4f4;}
 /* 個別ページ用のスタイル */
 .item-detail {
     display: flex;
@@ -507,8 +507,7 @@ footer {
 
 .pagination a.prev:hover,
 .pagination a.next:hover {
-    background-color: #f4f4f4;
-}
+    background-color: #f4f4f4;}
 /* AI分析ブロック */
 .ai-analysis-block {
     border: 1px solid #e0e0e0;
