@@ -145,28 +145,33 @@ footer {
 .product-card:hover { transform: translateY(-5px); }
 .product-card img {
     width: 100%;
-    height: 180px;
+    height: 160px; /* 画像の高さを少し低く調整 */
     object-fit: contain;
     display: block;
+    padding: 10px; /* 画像の上下の余白を少し調整 */
 }
 .product-info {
-    padding: 15px;
+    padding: 10px; /* ここを15pxから10pxに調整 */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    min-height: 120px;
 }
 .product-name {
-    font-size: 18px;
+    font-size: 16px; /* フォントサイズを少し小さく調整 */
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 2px; /* 余白を減らす */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
-.product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+.product-price { 
+    color: #dc3545; 
+    font-size: 18px; /* フォントサイズを少し小さく調整 */
+    font-weight: bold; 
+    margin-bottom: 5px; 
+}
 .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
 .ai-recommendation-section {
     background-color: #e9f0f1;
@@ -395,13 +400,13 @@ footer {
         gap: 20px;
     }
     .product-name {
-        font-size: 16px;
+        font-size: 14px;
     }
     .product-price {
-        font-size: 18px;
+        font-size: 16px;
     }
     .product-status {
-        font-size: 12px;
+        font-size: 10px;
     }
     .item-detail {
         flex-direction: column;
