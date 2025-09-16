@@ -72,7 +72,7 @@ header h1 a {
 
 /* ジャンルリンクのコンテナスタイル */
 .genre-links-container {
-    margin: 0;
+    margin: 0 0 10px;
     padding: 10px 0;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -105,7 +105,7 @@ footer {
     padding: 20px;
     border-top: 1px solid #ddd;
     background-color: #fff;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .footer-links {
     display: flex;
@@ -183,7 +183,7 @@ footer {
     padding: 30px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
+    margin-bottom: 0;
     text-align: center;
 }
 .ai-section-title {
@@ -507,8 +507,7 @@ footer {
 
 .pagination a.prev:hover,
 .pagination a.next:hover {
-    background-color: #f4f4f4;
-}
+    background-color: #f4f4f4;}
 /* AI分析ブロック */
 .ai-analysis-block {
     border: 1px solid #e0e0e0;
