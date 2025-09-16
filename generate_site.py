@@ -266,7 +266,20 @@ def generate_site():
             os.makedirs(dir_name, exist_ok=True)
             
         header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
-        
+
+        # ここに価格推移グラフとAI分析のテキストブロックを追加
+        ai_analysis_content = f"""
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>{product['ai_analysis']}</p>
+                </div>
+                <div class="price-graph">
+                    <p>価格推移グラフをここに表示予定です。</p>
+                </div>
+            </div>
+        """
+    
         specs_html = ""
         if "specs" in product:
             specs_html = f"""
@@ -302,7 +315,8 @@ def generate_site():
         
         item_html_content = f"""
 <main class="container">
-    <div class="product-detail"> <div class="item-detail">
+    <div class="product-detail">
+        <div class="item-detail">
             <div class="item-image">
                 <img src="{product['image_url']}" alt="{product['name']}">
             </div>
@@ -319,15 +333,16 @@ def generate_site():
                     {purchase_button_html}
                 </div>
                 {affiliate_links_html}
-                <div class="item-description">
+                {ai_analysis_content} <div class="item-description">
                     <h2>商品説明</h2>
                     <p>{product['description']}</p>
                 </div>
                 {specs_html}
             </div>
         </div>
-    </div> </main>
-        """
+    </div>
+</main>
+    """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
