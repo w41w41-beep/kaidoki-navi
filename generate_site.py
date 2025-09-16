@@ -267,15 +267,12 @@ def generate_site():
             
         header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
 
-        # ここに価格推移グラフとAI分析のテキストブロックを追加
-        ai_analysis_content = f"""
+        # AI分析のブロックを定義
+        ai_analysis_block_html = f"""
             <div class="ai-analysis-block">
                 <div class="ai-analysis-text">
                     <h2>AIによる買い時分析</h2>
-                    <p>{product['ai_analysis']}</p>
-                </div>
-                <div class="price-graph">
-                    <p>価格推移グラフをここに表示予定です。</p>
+                    <p>価格推移グラフと詳細分析をここに表示予定です。</p>
                 </div>
             </div>
         """
@@ -332,8 +329,9 @@ def generate_site():
                     <div class="price-status-content">{product['ai_analysis']}</div>
                     {purchase_button_html}
                 </div>
+                {ai_analysis_block_html}
                 {affiliate_links_html}
-                {ai_analysis_content} <div class="item-description">
+                <div class="item-description">
                     <h2>商品説明</h2>
                     <p>{product['description']}</p>
                 </div>
