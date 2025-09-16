@@ -152,11 +152,10 @@ def generate_site():
         products_html = ""
         for product in main_cat_products:
             # カテゴリーページ内の画像パスとリンクパスを修正
-            image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{image_path}" alt="{product['name']}">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -186,11 +185,10 @@ def generate_site():
             products_html = ""
             for product in sub_cat_products:
                 # サブカテゴリーページ内の画像パスとリンクパスを修正
-                image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
                 link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
                 products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{image_path}" alt="{product['name']}">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -235,13 +233,27 @@ def generate_site():
 </a>
         """
         
+        # ページネーションのHTMLを生成
         pagination_html = ""
         if total_pages > 1:
-            pagination_html = '<div class="pagination">'
+            pagination_html += '<div class="pagination">'
+
+            # 「前へ」ボタン
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'pages/page{page_num - 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(prev_link, os.path.dirname(page_path))}" class="prev">前へ</a>'
+
+            # ページ番号
             for p in range(1, total_pages + 1):
                 page_link = 'index.html' if p == 1 else f'pages/page{p}.html'
                 active_class = 'active' if p == page_num else ''
                 pagination_html += f'<a href="{os.path.relpath(page_link, os.path.dirname(page_path))}" class="{active_class}">{p}</a>'
+
+            # 「次へ」ボタン
+            if page_num < total_pages:
+                next_link = f'pages/page{page_num + 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(next_link, os.path.dirname(page_path))}" class="next">次へ</a>'
+
             pagination_html += '</div>'
             
         with open(page_path, 'w', encoding='utf-8') as f:
