@@ -447,3 +447,10 @@ footer {
 .product-detail .price-status-content {
     font-size: 20px;
 }
+/* 個別ページの商品タイトル */
+.product-detail h1.item-name {
+    font-size: 20px; /* ここでフォントサイズを調整してください */
+    line-height: 1.4;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
