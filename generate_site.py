@@ -148,12 +148,11 @@ def generate_site():
         
         products_html = ""
         for product in main_cat_products:
-            # カテゴリーページ内の画像パスとリンクパスを修正
-            image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
+            # 画像パスは完全なURLなのでそのまま使用
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{image_path}" alt="{product['name']}">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -182,12 +181,11 @@ def generate_site():
             
             products_html = ""
             for product in sub_cat_products:
-                # サブカテゴリーページ内の画像パスとリンクパスを修正
-                image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
+                # 画像パスは完全なURLなのでそのまま使用
                 link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
                 products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{image_path}" alt="{product['name']}">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -208,12 +206,11 @@ def generate_site():
     
     products_html = ""
     for product in top_page_products:
-        # トップページ内の画像パスとリンクパスを修正
-        image_path = os.path.relpath(product['image_url'], os.path.dirname(top_page_path))
+        # 画像パスは完全なURLなのでそのまま使用
         link_path = os.path.relpath(product['page_url'], os.path.dirname(top_page_path))
         products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{image_path}" alt="{product['name']}">
+    <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -275,7 +272,7 @@ def generate_site():
 <main class="container">
     <div class="product-detail"> <div class="item-detail">
             <div class="item-image">
-                <img src="{os.path.relpath(product['image_url'], os.path.dirname(page_path))}" alt="{product['name']}">
+                <img src="{product['image_url']}" alt="{product['name']}">
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
