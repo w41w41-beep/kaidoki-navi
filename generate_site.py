@@ -43,11 +43,14 @@ def generate_site():
         
         is_root = True if "pages" not in current_path and "category" not in current_path else False
         is_category = True if "category" in current_path else False
+        is_pagination = True if "pages" in current_path else False
 
         if is_root:
             base_path = "."
         elif is_category:
             base_path = "../.."
+        elif is_pagination:
+            base_path = ".."
         else: # pages
             base_path = ".."
 
@@ -148,11 +151,12 @@ def generate_site():
         
         products_html = ""
         for product in main_cat_products:
-            # 画像パスは完全なURLなのでそのまま使用
+            # カテゴリーページ内の画像パスとリンクパスを修正
+            image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{product['image_url']}" alt="{product['name']}">
+    <img src="{image_path}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -181,11 +185,12 @@ def generate_site():
             
             products_html = ""
             for product in sub_cat_products:
-                # 画像パスは完全なURLなのでそのまま使用
+                # サブカテゴリーページ内の画像パスとリンクパスを修正
+                image_path = os.path.relpath(product['image_url'], os.path.dirname(page_path))
                 link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
                 products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{product['image_url']}" alt="{product['name']}">
+    <img src="{image_path}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}</p>
@@ -198,17 +203,27 @@ def generate_site():
                 f.write(header + main_content_html + products_html + footer)
             print(f"{page_path} が生成されました。")
 
-    # トップページのHTMLを生成
+    # トップページのHTMLを生成 (ページネーション付き)
     # ----------------------------------------------------
-    top_page_path = 'index.html'
-    header, footer = generate_header_footer(top_page_path)
-    top_page_products = products[:PRODUCTS_PER_PAGE]
+    total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     
-    products_html = ""
-    for product in top_page_products:
-        # 画像パスは完全なURLなのでそのまま使用
-        link_path = os.path.relpath(product['page_url'], os.path.dirname(top_page_path))
-        products_html += f"""
+    for i in range(total_pages):
+        start_index = i * PRODUCTS_PER_PAGE
+        end_index = start_index + PRODUCTS_PER_PAGE
+        paginated_products = products[start_index:end_index]
+        
+        page_num = i + 1
+        page_path = 'index.html' if page_num == 1 else f'pages/page{page_num}.html'
+        
+        if page_num > 1:
+            os.makedirs(os.path.dirname(page_path), exist_ok=True)
+            
+        header, footer = generate_header_footer(page_path)
+        
+        products_html = ""
+        for product in paginated_products:
+            link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+            products_html += f"""
 <a href="{link_path}" class="product-card">
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
@@ -218,10 +233,20 @@ def generate_site():
         <div class="price-status-content">{product['ai_analysis']}</div>
     </div>
 </a>
-    """
-    with open(top_page_path, 'w', encoding='utf-8') as f:
-        f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div></div></main>' + footer)
-    print("index.html が生成されました。")
+        """
+        
+        pagination_html = ""
+        if total_pages > 1:
+            pagination_html = '<div class="pagination">'
+            for p in range(1, total_pages + 1):
+                page_link = 'index.html' if p == 1 else f'pages/page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{os.path.relpath(page_link, os.path.dirname(page_path))}" class="{active_class}">{p}</a>'
+            pagination_html += '</div>'
+            
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
+        print(f"{page_path} が生成されました。")
 
     # 個別ページを商品ごとに生成
     # ----------------------------------------------------
