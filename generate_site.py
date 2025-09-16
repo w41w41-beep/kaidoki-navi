@@ -2,6 +2,7 @@ import json
 import math
 import os
 import shutil
+from datetime import date
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -24,10 +25,14 @@ def generate_site():
     with open('products.json', 'r', encoding='utf-8') as f:
         products = json.load(f)
 
+    # 日付データを追加
+    today = date.today().isoformat()
+    for product in products:
+        if 'date' not in product:
+            product['date'] = today
+
     # 日付順に並び替え
-    # 'date'フィールドがない場合はスキップ
-    if 'date' in products[0]:
-        products.sort(key=lambda p: p['date'], reverse=True)
+    products.sort(key=lambda p: p['date'], reverse=True)
 
     # カテゴリー情報を収集
     categories = {}
