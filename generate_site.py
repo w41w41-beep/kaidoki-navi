@@ -266,62 +266,62 @@ def generate_site():
             f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
 
-    # 個別ページを商品ごとに生成
-    # ----------------------------------------------------
-    for product in products:
-        page_path = product['page_url']
-        
-        # 親ディレクトリが存在しない場合は作成
-        dir_name = os.path.dirname(page_path)
-        if dir_name:
-            os.makedirs(dir_name, exist_ok=True)
-            
-        header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
-
-        # AI分析のブロックを定義
-        ai_analysis_block_html = f"""
-            <div class="ai-analysis-block">
-                <div class="ai-analysis-text">
-                    <h2>AIによる買い時分析</h2>
-                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
-                </div>
-            </div>
-        """
+# 個別ページを商品ごとに生成
+# ----------------------------------------------------
+for product in products:
+    page_path = product['page_url']
     
-        specs_html = ""
-        if "specs" in product:
-            specs_html = f"""
-                <div class="item-specs">
-                    <h2>製品仕様・スペック</h2>
-                    <p>{product['specs']}</p>
-                </div>
-            """
+    # 親ディレクトリが存在しない場合は作成
+    dir_name = os.path.dirname(page_path)
+    if dir_name:
+        os.makedirs(dir_name, exist_ok=True)
         
-        # 購入ボタンをECサイトの指定に基づいて生成するロジック
-        purchase_button_html = ""
-        main_ec_site = product.get("main_ec_site")
-        
-        if main_ec_site == "Amazon" and "amazon_url" in product:
-            purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
-        elif main_ec_site == "楽天" and "rakuten_url" in product:
-            purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
-        elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
-            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        elif main_ec_site == "Yahoo" and "yahoo_url" in product:
-            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        
-        affiliate_links_html = f"""
-            <div class="lowest-price-section">
-                <p class="lowest-price-label">最安値ショップをチェック！</p>
-                <div class="lowest-price-buttons">
-                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
-                </div>
+    header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
+
+    # AI分析のブロックを定義
+    ai_analysis_block_html = f"""
+        <div class="ai-analysis-block">
+            <div class="ai-analysis-text">
+                <h2>AIによる買い時分析</h2>
+                <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+            </div>
+        </div>
+    """
+
+    specs_html = ""
+    if "specs" in product:
+        specs_html = f"""
+            <div class="item-specs">
+                <h2>製品仕様・スペック</h2>
+                <p>{product['specs']}</p>
             </div>
         """
         
-        item_html_content = f"""
+    # 購入ボタンをECサイトの指定に基づいて生成するロジック
+    purchase_button_html = ""
+    main_ec_site = product.get("main_ec_site")
+    
+    if main_ec_site == "Amazon" and "amazon_url" in product:
+        purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
+    elif main_ec_site == "楽天" and "rakuten_url" in product:
+        purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
+    elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
+        purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+    elif main_ec_site == "Yahoo" and "yahoo_url" in product:
+        purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+        
+    affiliate_links_html = f"""
+        <div class="lowest-price-section">
+            <p class="lowest-price-label">最安値ショップをチェック！</p>
+            <div class="lowest-price-buttons">
+                {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+            </div>
+        </div>
+    """
+    
+    item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
@@ -363,9 +363,9 @@ def generate_site():
     </div>
 </main>
 """
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + item_html_content + footer)
-        print(f"{page_path} が生成されました。")
+    with open(page_path, 'w', encoding='utf-8') as f:
+        f.write(header + item_html_content + footer)
+    print(f"{page_path} が生成されました。")
 
 # タグのページを生成
 all_tags = set(tag for product in products for tag in product.get('tags', []))
