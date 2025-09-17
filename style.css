@@ -636,19 +636,19 @@ footer {
     border-color: #007bff;
 }
 
-/* スライダーとギャラリーの表示・非表示を切り替える */
-@media (min-width: 769px) {
+/* PCでの表示 (1024px以上の画面幅) */
+@media (min-width: 1024px) {
     .item-image-swiper {
-        display: none; /* PCではスライダーを非表示 */
+        display: none; /* スマホ用スライダーを非表示 */
     }
     .item-image-gallery {
-        display: flex; /* PCではギャラリーを表示 */
+        display: flex; /* PC用ギャラリーを表示 */
         flex-direction: column;
         align-items: center;
     }
     .item-detail {
         display: grid;
-        grid-template-columns: 1fr 2fr; /* 修正しました：画像を狭く、情報を広く */
+        grid-template-columns: 1fr 2fr;
         gap: 40px;
         flex-wrap: nowrap;
         margin-top: 40px;
@@ -656,6 +656,30 @@ footer {
     }
 }
 
+/* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
+@media (min-width: 769px) and (max-width: 1023px) {
+    .item-image-swiper {
+        display: none; /* スマホ用スライダーを非表示 */
+    }
+    .item-image-gallery {
+        display: flex; /* PC用ギャラリーを表示 */
+        flex-direction: column;
+        align-items: center;
+    }
+    .item-detail {
+        display: flex;
+        flex-direction: column; /* ここを縦並びにすることでレイアウト崩れを防ぐ */
+        align-items: center;
+        gap: 20px;
+    }
+    /* 画像と情報エリアの幅を調整 */
+    .item-image, .item-info {
+        width: 90%;
+        max-width: 600px;
+    }
+}
+
+/* スマートフォンでの表示 (768px以下) */
 @media (max-width: 768px) {
     .item-image-swiper {
         display: block; /* スマホではスライダーを表示 */
