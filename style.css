@@ -684,7 +684,7 @@ footer {
     }
     .swiper-button-prev,
     .swiper-button-next {
-        display: none;
+        display: none; /* スライダーの矢印を非表示に */
     }
     .item-image-gallery {
         display: none;
@@ -694,14 +694,18 @@ footer {
         flex-direction: column;
         align-items: center;
         gap: 20px;
+        /* 追加: 親要素の幅に合わせてパディングを調整 */
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 10px;
     }
     .item-image, .item-info {
-        /* ここを修正しました。画面幅に合わせます。 */
+        /* 修正: 画面幅いっぱいに広がるように設定 */
         width: 100%;
         min-width: auto;
     }
     .item-image img {
-        /* ここを修正しました。画像がはみ出さないようにします。 */
+        /* 追加: 画像がはみ出さないように設定 */
         width: 100%;
         height: auto;
     }
