@@ -228,15 +228,13 @@ footer {
 /* 個別ページ用のスタイル（修正箇所） */
 .item-detail {
     display: flex;
-    flex-direction: column; /* 縦一列に並べる */
-    align-items: center; /* 中央寄せ */
-    gap: 20px;
+    gap: 40px;
+    flex-wrap: wrap;
     margin-top: 40px;
-    padding: 0 10px; /* スマホ時のpaddingを考慮 */
 }
 .item-image {
-    width: 100%; /* 親要素の幅いっぱいに */
-    max-width: 600px; /* 最大幅を設定 */
+    flex: 1;
+    min-width: 300px;
     text-align: center;
 }
 .item-image img {
@@ -246,8 +244,7 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .item-info {
-    width: 100%; /* 親要素の幅いっぱいに */
-    max-width: 600px; /* 最大幅を設定 */
+    flex: 2;
 }
 .item-name {
     font-size: 28px;
@@ -624,10 +621,9 @@ footer {
         display: none;
     }
     .item-image-gallery {
-        display: block;
-        display: flex; /* 追加 */
-        flex-direction: column; /* 追加 */
-        align-items: center; /* 追加 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     .item-image-gallery .main-image img {
         max-width: 100%;
@@ -635,7 +631,7 @@ footer {
     }
     .thumbnail-container {
         display: flex;
-        flex-wrap: nowrap; /* 追加 */
+        flex-wrap: nowrap;
         justify-content: center;
         gap: 10px;
         margin-top: 10px;
