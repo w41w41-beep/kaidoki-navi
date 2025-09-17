@@ -648,7 +648,7 @@ footer {
     }
     .item-detail {
         display: grid;
-        grid-template-columns: 1fr 1.5fr; /* 修正箇所: 画像を狭く、情報を広く */
+        grid-template-columns: 1fr 2fr; /* 修正しました：画像を狭く、情報を広く */
         gap: 40px;
         flex-wrap: nowrap;
         margin-top: 40px;
