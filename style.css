@@ -696,7 +696,8 @@ footer {
     }
     .swiper-button-prev,
     .swiper-button-next {
-        color: #007bff;
+        /* ここを修正しました。矢印ボタンを非表示にします。 */
+        display: none;
     }
     .item-image-gallery {
         display: none;
