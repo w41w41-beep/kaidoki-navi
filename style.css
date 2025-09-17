@@ -618,13 +618,13 @@ footer {
 /* サムネイル画像ギャラリーのスタイル */
 .thumbnail-container {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap; /* 修正しました: 画像の折り返しを有効に */
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
 }
 .thumbnail-container img {
-    width: 80px;
+    max-width: 80px; /* 修正しました: 最大幅を設定 */
     height: 80px;
     object-fit: cover;
     cursor: pointer;
