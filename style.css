@@ -386,10 +386,10 @@ footer {
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
     .container {
-        padding: 0 10px; /* ここを修正しました */
+        padding: 0 10px;
     }
     .ai-recommendation-section {
-        padding: 20px 10px; /* ここも修正しました */
+        padding: 20px 10px;
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -459,7 +459,7 @@ footer {
 }
 /* 個別ページの商品タイトル */
 .product-detail h1.item-name {
-    font-size: 20px; /* ここでフォントサイズを調整してください */
+    font-size: 20px;
     line-height: 1.4;
     font-weight: bold;
     margin-bottom: 10px;
@@ -521,8 +521,8 @@ footer {
 }
 .ai-analysis {
   font-weight: bold;
-  color: #dc3545; /* 赤色 */
-  background-color: #f8f9fa; /* 薄いグレー */
+  color: #dc3545;
+  background-color: #f8f9fa;
   padding: 5px;
   border-radius: 5px;
   display: inline-block;
@@ -574,12 +574,6 @@ footer {
     color: #0056b3;
     text-decoration: none;
 }
-/* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
-@media (max-width: 768px) {
-    .tag-button-container {
-        margin: 10px auto;
-    }
-}
 /* サブカテゴリーのタイトル */
 .product-list-title {
     font-size: 24px;
@@ -618,13 +612,13 @@ footer {
 /* サムネイル画像ギャラリーのスタイル */
 .thumbnail-container {
     display: flex;
-    flex-wrap: wrap; /* 修正しました: 画像の折り返しを有効に */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
 }
 .thumbnail-container img {
-    max-width: 80px; /* 修正しました: 最大幅を設定 */
+    max-width: 80px;
     height: 80px;
     object-fit: cover;
     cursor: pointer;
@@ -713,5 +707,8 @@ footer {
     }
     .item-image, .item-info {
         min-width: auto;
+    }
+    .tag-button-container {
+        margin: 10px auto;
     }
 }
