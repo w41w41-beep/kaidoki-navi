@@ -226,6 +226,11 @@ footer {
 }
 
 /* 個別ページ用のスタイル */
+.item-detail-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 .item-detail {
     display: flex;
     gap: 40px;
@@ -383,55 +388,6 @@ footer {
     gap: 10px;
 }
 
-/* レスポンシブデザイン */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 10px;
-    }
-    .ai-recommendation-section {
-        padding: 20px 10px;
-    }
-    .product-card {
-        flex: 1 1 calc(50% - 10px);
-    }
-    .product-grid {
-        gap: 20px;
-    }
-    .product-name {
-        font-size: 16px;
-    }
-    .product-price {
-        font-size: 18px;
-    }
-    .product-status {
-        font-size: 12px;
-    }
-    .item-detail {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .item-image, .item-info {
-        min-width: auto;
-    }
-    .lowest-price-section {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .lowest-price-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-    .lowest-price-buttons .btn {
-        width: 90%;
-        margin: 0 auto;
-        text-align: center;
-        border-radius: 8px;
-    }
-    /* すべてのタグを見るボタンのスタイル */
-    .tag-button-container {
-        margin: 10px auto;
-    }
-}
 /* トップページと個別ページ共通の「買い時」テキストのスタイル */
 .product-card .price-status-title,
 .product-detail .price-status-title {
@@ -650,8 +606,8 @@ footer {
     }
 }
 
-/* PCでの表示 (1024px以上の画面幅) */
-@media (min-width: 1024px) {
+/* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
+@media (min-width: 769px) and (max-width: 1023px) {
     .item-image-swiper {
         display: none;
     }
@@ -659,23 +615,35 @@ footer {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
     }
     .item-detail {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 40px;
-        flex-wrap: nowrap;
-        margin-top: 40px;
-        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    .main-image {
+        width: 100%;
+    }
+    .main-image img {
+        width: 100%;
+        height: auto;
+    }
+    .item-image, .item-info {
+        width: 90%;
+        max-width: 600px;
     }
 }
 
-/* タブレット・スマートフォンでの表示 (1023px以下) */
-@media (max-width: 1023px) {
+/* スマートフォンでの表示 (768px以下) */
+@media (max-width: 768px) {
     .item-image-swiper {
         display: block;
         width: 100%;
-        height: auto;
+        height: 100%;
     }
     .swiper-pagination {
         position: relative;
@@ -684,45 +652,17 @@ footer {
     }
     .swiper-button-prev,
     .swiper-button-next {
-        display: none; /* スライダーの矢印を非表示に */
+        color: #007bff;
     }
     .item-image-gallery {
         display: none;
     }
     .item-detail {
-        display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
-        /* 追加: 親要素の幅に合わせてパディングを調整 */
-        width: 100%;
-        box-sizing: border-box;
-        padding: 0 10px;
     }
     .item-image, .item-info {
-        /* 修正: 画面幅いっぱいに広がるように設定 */
-        width: 100%;
         min-width: auto;
-    }
-    .item-image img {
-        /* 追加: 画像がはみ出さないように設定 */
-        width: 100%;
-        height: auto;
-    }
-    .lowest-price-section {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-    .lowest-price-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-    .lowest-price-buttons .btn {
-        width: 90%;
-        margin: 0 auto;
-        text-align: center;
-        border-radius: 8px;
     }
     .tag-button-container {
         margin: 10px auto;
