@@ -559,18 +559,18 @@ footer {
 /* --- すべてのタグを見るボタンのスタイル --- */
 .tag-button-container {
     text-align: center;
-    margin: 10px auto 0; /* 下側の余白を0に設定 */
+    margin: 10px auto 0;
     width: 90%;
     max-width: 1200px;
 }
 
 .all-tags-button {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: #fff; /* 背景を白に */
-    color: #007bff; /* 文字色を青に */
-    border: 2px solid #007bff; /* 青い枠線を追加 */
-    font-size: 16px;
+    padding: 5px 10px; /* パディングを小さくしてボタンをコンパクトに */
+    background-color: #fff;
+    color: #007bff;
+    border: 2px solid #007bff;
+    font-size: 14px; /* フォントサイズをナビゲーションリンクと合わせる */
     font-weight: bold;
     text-decoration: none;
     border-radius: 5px;
@@ -578,6 +578,6 @@ footer {
 }
 
 .all-tags-button:hover {
-    background-color: #007bff; /* ホバー時に背景を青に */
-    color: #fff; /* ホバー時に文字色を白に */
+    background-color: #007bff;
+    color: #fff;
 }
