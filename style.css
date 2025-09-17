@@ -175,7 +175,6 @@ footer {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     margin-top: 0; /* 上側のマージンだけを0に設定 */
     margin-bottom: 10px; /* 下側のマージンは残す */
-}
     text-align: center;
 }
 .ai-section-title {
