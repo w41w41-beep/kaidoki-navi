@@ -85,6 +85,10 @@ def generate_site():
             {main_links_html}
         </div>
     </div>
+
+    <div class="tag-button-container">
+        <a href="{base_path}/tags/index.html" class="all-tags-button">すべてのタグを見る</a>
+    </div>
 """
         
         # サブカテゴリーリンクのセクション
@@ -372,10 +376,31 @@ def generate_site():
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-    # タグのページを生成
+    # タグの一覧ページを生成
+    # ----------------------------------------------------
+    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    
+    if all_tags:
+        tag_list_html_content = f"""
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">すべてのタグ</h2>
+        <div class="product-tags all-tags-list">
+            {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in all_tags])}
+        </div>
+    </div>
+</main>
+"""
+        tag_header, tag_footer = generate_header_footer("tags/index.html", page_title="タグ一覧")
+        
+        os.makedirs('tags', exist_ok=True)
+        with open('tags/index.html', 'w', encoding='utf-8') as f:
+            f.write(tag_header + tag_list_html_content + tag_footer)
+        print("tags/index.html が生成されました。")
+
+    # 個別のタグページを生成
     # ----------------------------------------------------
     all_tags = set(tag for product in products for tag in product.get('tags', []))
-    os.makedirs('tags', exist_ok=True)
     
     for tag in all_tags:
         tag_page_path = f'tags/{tag}.html'
