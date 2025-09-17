@@ -389,10 +389,10 @@ footer {
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
     .container {
-        padding: 0 10px; /* ここを修正しました */
+        padding: 0 10px;
     }
     .ai-recommendation-section {
-        padding: 20px 10px; /* ここも修正しました */
+        padding: 20px 10px;
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -616,4 +616,30 @@ footer {
 }
 .gallery-thumbs .swiper-slide-active {
     opacity: 1;
+}
+
+/* スライダーとギャラリーの表示・非表示を切り替える修正 */
+@media (min-width: 769px) {
+    .item-image-swiper {
+        display: none;
+    }
+    .item-image-gallery {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .item-image-swiper {
+        display: block;
+    }
+    .item-image-gallery {
+        display: none;
+    }
+    .item-detail {
+      flex-direction: column;
+      align-items: center;
+    }
+    .item-image, .item-info {
+        min-width: auto;
+    }
 }
