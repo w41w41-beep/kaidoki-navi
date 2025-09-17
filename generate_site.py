@@ -45,6 +45,8 @@ def generate_site():
             base_path = ".."
         elif "category" in current_path:
             base_path = "../.."
+        elif "tags" in current_path:
+            base_path = ".."
         else:
             base_path = "."
 
@@ -136,6 +138,9 @@ def generate_site():
     
     if os.path.exists('pages'):
         shutil.rmtree('pages')
+        
+    if os.path.exists('tags'):
+        shutil.rmtree('tags')
 
     # メインカテゴリーごとのページを生成
     # ----------------------------------------------------
@@ -367,7 +372,7 @@ def generate_site():
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-# タグのページを生成
+    # タグのページを生成
     # ----------------------------------------------------
     all_tags = set(tag for product in products for tag in product.get('tags', []))
     os.makedirs('tags', exist_ok=True)
