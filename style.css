@@ -118,25 +118,6 @@ footer {
     text-decoration: none;
 }
 
-/* 共通のAI分析の枠のスタイル */
-.ai-recommendation-section {
-    background-color: #e9f0f1;
-    padding: 30px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    margin: 20px 0; /* PC版と統一 */
-    text-align: center;
-}
-.ai-section-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #007bff;
-    display: inline-block;
-    padding-bottom: 5px;
-    border-bottom: 4px solid #007bff;
-}
-
 /* トップページ用のスタイル */
 .content { padding: 0; }
 .section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
@@ -187,6 +168,23 @@ footer {
 }
 .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 5px; }
 .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
+.ai-recommendation-section {
+    background-color: #e9f0f1;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin: 10px 0;
+    text-align: center;
+}
+.ai-section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 4px solid #007bff;
+}
 .pagination {
     display: flex;
     justify-content: center;
@@ -232,7 +230,7 @@ footer {
     display: flex;
     gap: 40px;
     flex-wrap: wrap;
-    padding-top: 20px;
+    margin-top: 40px;
 }
 .item-image {
     flex: 1;
@@ -312,6 +310,15 @@ footer {
     line-height: 1.6;
 }
 
+/* AI分析の枠のスタイル */
+.ai-recommendation-section {
+    padding: 20px;
+    background-color: #f0f8ff;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+}
+
 /* 購入ボタンのスタイル */
 .purchase-button {
     display: block;
@@ -379,7 +386,10 @@ footer {
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
     .container {
-        padding: 0 20px;
+        padding: 0 10px; /* ここを修正しました */
+    }
+    .ai-recommendation-section {
+        padding: 20px 10px; /* ここも修正しました */
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -399,7 +409,6 @@ footer {
     .item-detail {
         flex-direction: column;
         gap: 20px;
-        padding-top: 20px; /* スマホ版の個別ページ上部余白を調整 */
     }
     .item-image, .item-info {
         min-width: auto;
@@ -418,26 +427,11 @@ footer {
         text-align: center;
         border-radius: 8px;
     }
-    /* genre-links-containerとai-recommendation-sectionの間の余白を調整 */
-    .genre-links-container {
-        margin-bottom: 0;
-    }
-    .ai-recommendation-section {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    /* `main`タグの上下の余白を適切に設定 */
-    main.container {
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-    /* スマホ版のカテゴリーと本体の余白を統一 */
-    .product-list-title {
-        margin-top: 20px; /* スマホ版の余白を調整 */
-        margin-bottom: 20px;
+    /* すべてのタグを見るボタンのスタイル */
+    .tag-button-container {
+        margin: 10px auto;
     }
 }
-
 /* トップページと個別ページ共通の「買い時」テキストのスタイル */
 .product-card .price-status-title,
 .product-detail .price-status-title {
@@ -456,12 +450,10 @@ footer {
     margin-top: 0;
     margin-bottom: 5px;
 }
-
 /* 個別ページの文字サイズを大きくするスタイル（優先度を上げるため、別途定義） */
 .product-detail .price-status-title {
     font-size: 20px;
 }
-
 .product-detail .price-status-content {
     font-size: 20px;
 }
@@ -472,7 +464,6 @@ footer {
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 /* ページネーションのスタイル */
 .pagination {
     display: flex;
@@ -480,7 +471,6 @@ footer {
     align-items: center;
     margin: 20px 0;
 }
-
 .pagination a {
     display: block;
     padding: 8px 16px;
@@ -492,23 +482,19 @@ footer {
     border: 1px solid #ddd;
     transition: background-color 0.3s;
 }
-
 .pagination a.active {
     background-color: #4a90e2;
     color: white;
     border-color: #4a90e2;
 }
-
 .pagination a:hover:not(.active) {
     background-color: #ddd;
 }
-
 .pagination a.prev,
 .pagination a.next {
     font-weight: bold;
     color: #4a90e2;
 }
-
 .pagination a.prev:hover,
 .pagination a.next:hover {
     background-color: #f4f4f4;
@@ -521,7 +507,6 @@ footer {
     margin: 20px 0;
     background-color: #f9f9f9;
 }
-
 .ai-analysis-block h2 {
     font-size: 1.2rem;
     color: #333;
@@ -529,7 +514,6 @@ footer {
     padding-bottom: 5px;
     margin-bottom: 15px;
 }
-
 .ai-analysis-block p {
     font-size: 1rem;
     color: #666;
@@ -550,7 +534,6 @@ footer {
     flex-wrap: wrap;
     gap: 10px;
 }
-
 .product-tags .tag-button {
     display: inline-block;
     padding: 6px 12px;
@@ -562,11 +545,40 @@ footer {
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
-
 .product-tags .tag-button:hover {
     background-color: #e0e0e0;
     border-color: #ccc;
     color: #333;
+}
+/* --- すべてのタグを見るボタンのスタイル --- */
+.tag-button-container {
+    text-align: center;
+    margin: 10px auto;
+    width: 90%;
+    max-width: 1200px;
+}
+.all-tags-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #007bff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.all-tags-button:hover {
+    background-color: #fff;
+    color: #0056b3;
+    text-decoration: none;
+}
+/* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
+@media (max-width: 768px) {
+    .tag-button-container {
+        margin: 10px auto;
+    }
 }
 /* サブカテゴリーのタイトル */
 .product-list-title {
