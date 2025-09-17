@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/41fMRMNbVsS._AC_SX679_.jpg" alt="【Amazon Alexa 認定取得】 TP-Link ネットワークWi-Fiカメラ ペットカメラ フルHD 屋内カメラ 夜間撮影 相互音声会話 動作検知 スマホ通知 ドーム型防犯カメラ Tapo C200 3年保証"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/41fMRMNbVsS._AC_SX679_.jpg" alt="【Amazon Alexa 認定取得】 TP-Link ネットワークWi-Fiカメラ ペットカメラ フルHD 屋内カメラ 夜間撮影 相互音声会話 動作検知 スマホ通知 ドーム型防犯カメラ Tapo C200 3年保証">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">【Amazon Alexa 認定取得】 TP-Link ネットワークWi-Fiカメラ ペットカメラ フルHD 屋内カメラ 夜間撮影 相互音声会話 動作検知 スマホ通知 ドーム型防犯カメラ Tapo C200 3年保証</h1>
+                <p class="item-category">カテゴリ：<a href="../category/家電/index.html">家電</a> &gt;
+                <a href="../category/家電/防犯カメラ.html">防犯カメラ</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>3,980円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">-9% ￥3,980</div>
+                    <a href="https://amzn.to/4nwZ9F7" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/4nwZ9F7" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://search.rakuten.co.jp/search/mall/TP-Link+Tapo+C200/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/search?p=TP-Link+Tapo+C200" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>[特徴] スマホでかんたんに操作&確認可能な見守りカメラ。胴体検知など便利な機能群を搭載。[パン・チルト機能] 水平方向 360°、垂直方向114°までを広範囲カバー[マイクロSD対応] 512GBまでのマイクロSDカード※に対応(※別売り)[動作検知] 検知してスマホアプリ通知を可能に[相互音声会話] スマホから音声会話を可能に[アプリ] スマホ用アプリで最大32台のTapoカメラを登録可能。ひとつの画面を4分割して、最大4つのカメラを一度に確認可能。iOS 10+, Android 4.4x+に対応。</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>商品の推奨用途ペット,屋内ブランドTapo(タポ)モデル名‎Tapo C200接続技術Wi-Fi 内蔵特徴モーションセンサー屋内/屋外使用インドア対応デバイススマートフォン電源電源コード式接続プロトコルWi-Fiコントローラーの種類アンドロイド|グーグルアシスタント|アマゾンアレクサ</p>
                 </div>
+            
             </div>
         </div>
     </div>

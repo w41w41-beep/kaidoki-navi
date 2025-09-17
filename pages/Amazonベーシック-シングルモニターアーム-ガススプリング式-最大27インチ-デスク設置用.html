@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/511QVoYojOL._AC_SX679_.jpg" alt="Amazonベーシック シングルモニターアーム ガススプリング式 (最大27インチ) デスク設置用 ブラック"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/511QVoYojOL._AC_SX679_.jpg" alt="Amazonベーシック シングルモニターアーム ガススプリング式 (最大27インチ) デスク設置用 ブラック">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">Amazonベーシック シングルモニターアーム ガススプリング式 (最大27インチ) デスク設置用 ブラック</h1>
+                <p class="item-category">カテゴリ：<a href="../category/パソコン/index.html">パソコン</a> &gt;
+                <a href="../category/パソコン/PC周辺機器.html">PC周辺機器</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>3,534円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">過去1か月で2000点以上購入されました</div>
+                    <a href="https://amzn.to/3VOuBmu" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/3VOuBmu" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://search.rakuten.co.jp/search/mall/エルゴトロン+LX+デスク+モニターアーム/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/search?p=エルゴトロン+LX+デスク+モニターアーム" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>シングルモニター デスクマウント: 38~69cmのLCD LEDスクリーンに対応。関節式ガススプリング式モニター用アームは、シングルモニターの設定に省スペースで効率的なソリューションを提供します。注意：アーム内のガススプリングは、7kgまでのモニターに対応できるよう調整済みです。これより軽いモニターをお使いの場合は、調整ナットを時計回りの方向（-）に回してアームの力を弱めてください。モニターの重さによって、16〜20回ほど回す必要があります。詳しい調整方法は取扱説明書をご確認ください。調節可能な設計:: 75x75mmまたは100x100mmのVESA規格対応。傾斜-90°~+85°、回転(スイベル)90°、回転(ローテーション)360°。長さ52cm/高さ46cmまで延長可能。取り付け簡単: C型クランプおよびグロメット式ベースマウントを装備し、あらゆるデスクに取り付けられます(デスクの厚さは1~10cm以内)。穴径4~6cm以内。効率的なケーブル管理: ケーブルをきちんと整理して保管するためのケーブル管理システム、ステップごとに詳しく説明された取扱説明書、簡単に取り付けられるように整理された金具セットが付属します。</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>取り付けタイプテーブルトップマウントムーブメントタイプスイベル式ブランドAmazonベーシック(Amazon Basics)材質アルミニウム色ブラック対応デバイスモニター</p>
                 </div>
+            
             </div>
         </div>
     </div>

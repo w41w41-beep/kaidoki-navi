@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/31PcZI4b-dL._SX522_.jpg" alt="ベンキュー PCモニター アイケアGWシリーズ ブラック GW2490-JP [23.8型 /フルHD 1920×1080 /ワイド] GW2490JP"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/31PcZI4b-dL._SX522_.jpg" alt="ベンキュー PCモニター アイケアGWシリーズ ブラック GW2490-JP [23.8型 /フルHD 1920×1080 /ワイド] GW2490JP">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">ベンキュー PCモニター アイケアGWシリーズ ブラック GW2490-JP [23.8型 /フルHD 1920×1080 /ワイド] GW2490JP</h1>
+                <p class="item-category">カテゴリ：<a href="../category/パソコン/index.html">パソコン</a> &gt;
+                <a href="../category/パソコン/PC周辺機器.html">PC周辺機器</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>17,091円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">残り6点 ご注文はお早めに</div>
+                    <a href="https://amzn.to/3IfItDi" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/3IfItDi" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://search.rakuten.co.jp/search/mall/BenQ+GW2490-JP/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/search?p=BenQ+GW2490-JP" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>ブランドBenQ画面サイズ27 インチ解像度FHD 1080p縦横比16:9画面表面の説明非光沢</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>ディスプレイ: 23.8インチ, 解像度: フルHD, アイケア技術</p>
                 </div>
+            
             </div>
         </div>
     </div>

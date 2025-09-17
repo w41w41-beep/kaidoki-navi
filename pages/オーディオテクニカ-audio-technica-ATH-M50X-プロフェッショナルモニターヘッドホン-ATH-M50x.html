@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/81v8UeBnyeL._AC_SY450_.jpg" alt="オーディオテクニカ ATH-M50x プロフェッショナルモニターヘッドホン 有線 DTM レコーディング ミックス マスタリング DJ 宅録 【国内正規品】ブラック"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/81v8UeBnyeL._AC_SY450_.jpg" alt="オーディオテクニカ ATH-M50x プロフェッショナルモニターヘッドホン 有線 DTM レコーディング ミックス マスタリング DJ 宅録 【国内正規品】ブラック">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">オーディオテクニカ ATH-M50x プロフェッショナルモニターヘッドホン 有線 DTM レコーディング ミックス マスタリング DJ 宅録 【国内正規品】ブラック</h1>
+                <p class="item-category">カテゴリ：<a href="../category/オーディオ/index.html">オーディオ</a> &gt;
+                <a href="../category/オーディオ/イヤホン・ヘッドホン.html">イヤホン・ヘッドホン</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>20,718円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">過去1か月で200点以上購入されました</div>
+                    <a href="https://amzn.to/4nDJnZj" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/4nDJnZj" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://search.rakuten.co.jp/search/mall/オーディオテクニカ+ATH-M50X/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/search?p=オーディオテクニカ+ATH-M50X" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>大口径の強磁力φ45mmCCAWボイスコイルドライバーで情報量豊かな高解像度再生。新採用のイヤパッド、ヘッドパッド素材で高耐久性を実現。世界が認めたM50の次世代モデル。遮音性を高める楕円形状のイヤカップを採用し長時間使用でも快適なモニタリング。全世界累計出荷台数250万台突破! 定番スタジオモニターヘッドホン。(2025/6/1時点)</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>ブランドAudio Technica(オーディオテクニカ)色ブラック耳の位置オーバーイヤーヘッドホンヘッドホン型式オーバーイヤーインピーダンス38 オーム</p>
                 </div>
+            
             </div>
         </div>
     </div>

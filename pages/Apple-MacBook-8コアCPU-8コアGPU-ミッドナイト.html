@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/71uJwr1IrZL._AC_SX425_.jpg" alt="【整備済み品】Apple MacBook Air M2 2022 (13インチ,8GB RAM,256GB SSD,8コアCPU/8コアGPU) ミッドナイト"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/71uJwr1IrZL._AC_SX425_.jpg" alt="【整備済み品】Apple MacBook Air M2 2022 (13インチ,8GB RAM,256GB SSD,8コアCPU/8コアGPU) ミッドナイト">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">【整備済み品】Apple MacBook Air M2 2022 (13インチ,8GB RAM,256GB SSD,8コアCPU/8コアGPU) ミッドナイト</h1>
+                <p class="item-category">カテゴリ：<a href="../category/パソコン/index.html">パソコン</a> &gt;
+                <a href="../category/パソコン/ノートPC.html">ノートPC</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>108,294円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">過去1か月で50点以上購入されました</div>
+                    <a href="https://amzn.to/4mCykid" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/4mCykid" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://www.rakuten.co.jp/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>ブランドApple(アップル)画面サイズ13.6 インチ色ミッドナイトハードディスク容量256 GBCPUモデルApple M2インストール済みのRAMメモリサイズ8 GB特徴ステレオ,ドルビーグラフィックカードの説明Apple 8コアGPUグラフィックコプロセッサApple 8コアGPUCPUスピード3.2 GHz</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>カラーミッドナイトHDD容量256 GB商品の追加説明1ステレオ,ドルビーグラフィックの説明Apple 8コアGPUグラフィックハードウェアApple 8コアGPUハードディスクの説明SSD商品の重量2.31 キログラムGPU製造会社AppleハードディスクインターフェイスThunderboltカメラの説明1080p FaceTime HDカメラ品目の寸法（長さ x 幅x 厚さ）21.5長さ x 30.4幅 x 1.1厚み cm</p>
                 </div>
+            
             </div>
         </div>
     </div>

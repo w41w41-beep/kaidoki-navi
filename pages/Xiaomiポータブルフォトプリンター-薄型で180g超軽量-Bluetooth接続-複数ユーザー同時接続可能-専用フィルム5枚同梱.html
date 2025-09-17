@@ -34,38 +34,48 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/51fbw6UF9SL._AC_SX679_.jpg" alt="Xiaomiポータブルフォトプリンター 1S インクレス印刷 薄型で180g超軽量 Bluetooth接続 複数ユーザー同時接続可能 シールフィルム 専用フィルム5枚同梱"></div>
-                        
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="https://m.media-amazon.com/images/I/51fbw6UF9SL._AC_SX679_.jpg" alt="Xiaomiポータブルフォトプリンター 1S インクレス印刷 薄型で180g超軽量 Bluetooth接続 複数ユーザー同時接続可能 シールフィルム 専用フィルム5枚同梱">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">Xiaomiポータブルフォトプリンター 1S インクレス印刷 薄型で180g超軽量 Bluetooth接続 複数ユーザー同時接続可能 シールフィルム 専用フィルム5枚同梱</h1>
+                <p class="item-category">カテゴリ：<a href="../category/家電/index.html">家電</a> &gt;
+                <a href="../category/家電/プリンター.html">プリンター</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
+                    <p class="current-price">現在の価格：<span>8,980円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
-                    {purchase_button_html}
+                    <div class="price-status-content ai-analysis">Amazon おすすめ</div>
+                    <a href="https://amzn.to/3K7gru8" class="purchase-button" target="_blank">Amazonで購入する</a>
                 </div>
-                {ai_analysis_block_html}
-                {affiliate_links_html}
+                
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
+            </div>
+        
+                
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="https://amzn.to/3K7gru8" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="https://search.rakuten.co.jp/search/mall/Xiaomi+ポータブルフォトプリンター1S/" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="https://shopping.yahoo.co.jp/search?p=Xiaomi+ポータブルフォトプリンター1S" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>📷【ポケットサイズで持ち運び簡単】本体は180gで、薄型軽量設計でどこでも持ち運びが可能です。📷【インクレス印刷で撮ってすぐプリント】ZINKインクレス印刷技術によって、プリンターが熱を加えることで専用フィルムにプリントします。インクカートリッジを必要としないため、外出先でもすばやく簡単に印刷が可能です。📷【Bluetoothで思い出を共有】複数のBluetooth接続（Wi-Fi不要）をサポートしており、各々のスマートフォンからプリントが可能です。※最大3人のユーザーが同時にプリンターに接続可能です。📷【シールフィルムで思い出は色々な場所に】裏面がシールになっているZINKフォトフィルムが付属しており、思い出の写真を自由に貼り付けることができます。📷【フォトフレームと透かしをカスタマイズ】多種多様なフォトフレームからお好きなものを選び、Xiaomi Homeでアバターと透かしの設定をお好みに合わせて調節するだけであなたのオリジナルが作れます。📷【8種のフィルターで、その瞬間を鮮やかに表現】Xiaomi Homeのフィルターからお好きなものを選ぶことで、写真の雰囲気をさらに際立たせます。</p>
                 </div>
-                {specs_html}
-                <div class="product-tags">
-                    
+                
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>ブランドxiaomi(シャオミ)接続技術Bluetooth印刷技術ZINK Zero Ink特徴Bluetooth接続。, ゼロインク印刷。, ポータブル, ポータブル。, 自己粘着フォトペーパー。色シルバーモデル名1S</p>
                 </div>
+            
             </div>
         </div>
     </div>
