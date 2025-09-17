@@ -329,25 +329,34 @@ def generate_site():
             </div>
         """
         
-        item_html_content = f"""
+            item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
-            <div class="item-image">
-                <div class="swiper">
+            <div class="item-image-container">
+                <div class="item-image-gallery">
+                    <div class="main-image">
+                        <img src="{product['image_url']}" alt="{product['name']}">
+                    </div>
+                    <div class="thumbnail-container">
+                        <img class="thumbnail active" src="{product['image_url']}" alt="{product['name']}">
+                        {"".join([f'<img class="thumbnail" src="{img}" alt="{product["name"]}" >' for img in product.get('images', [])])}
+                    </div>
+                </div>
+
+                <div class="item-image-swiper swiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
+                        <div class="swiper-slide">
+                            <img src="{product['image_url']}" alt="{product['name']}">
+                        </div>
                         {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
                     </div>
                     <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
                 </div>
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt; <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
@@ -371,9 +380,9 @@ def generate_site():
     </div>
 </main>
 """
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + item_html_content + footer)
-        print(f"{page_path} が生成されました。")
+            with open(page_path, 'w', encoding='utf-8') as f:
+                f.write(header + item_html_content + footer)
+            print(f"{page_path} が生成されました。")
 
     # タグの一覧ページを生成（ページネーション付き）
     # ----------------------------------------------------
