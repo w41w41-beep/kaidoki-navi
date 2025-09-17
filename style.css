@@ -226,29 +226,31 @@ footer {
 }
 
 /* 個別ページ用のスタイル（修正箇所） */
-.item-detail {
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin-top: 40px;
-    align-items: flex-start;
-}
-.item-image {
-    flex: 1 1 50%;
-    min-width: 300px;
-    text-align: center;
+@media (min-width: 769px) {
+    .item-detail {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr; /* 左:画像, 右:情報 の幅を定義 */
+        gap: 40px;
+        flex-wrap: nowrap;
+        margin-top: 40px;
+        align-items: flex-start;
+    }
+    .item-image {
+        min-width: auto; /* gridに合わせて調整 */
+        text-align: center;
+    }
+    .item-info {
+        min-width: auto; /* gridに合わせて調整 */
+    }
 }
 .item-image img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
-    max-width: 400px; /* メイン画像の最大幅を統一 */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .item-info {
-    flex: 1 1 50%;
-    min-width: 400px; /* ボタンが並ぶために必要な最小幅を確保 */
+    flex: 2;
 }
 .item-name {
     font-size: 28px;
@@ -291,7 +293,7 @@ footer {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    justify-content: center; /* ボタンの配置を中央に */
+    justify-content: flex-start; /* ボタンを左寄せに */
 }
 .links-title {
     font-size: 16px;
@@ -635,6 +637,7 @@ footer {
     border: 2px solid transparent;
     transition: border-color 0.2s ease-in-out;
 }
+.thumbnail-container img.active,
 .thumbnail-container img:hover {
     border-color: #007bff;
 }
@@ -650,8 +653,8 @@ footer {
         align-items: center;
     }
     .item-detail {
-        display: flex;
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: 1fr 1.5fr; /* 左:画像, 右:情報 の幅を定義 */
         gap: 40px;
         flex-wrap: nowrap;
         margin-top: 40px;
