@@ -334,7 +334,7 @@ def generate_site():
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="item-image-swiper swiper">
+                <div class="swiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
                         {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
@@ -342,15 +342,6 @@ def generate_site():
                     <div class="swiper-pagination"></div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
-                </div>
-                <div class="item-image-gallery">
-                    <div class="main-image">
-                        <img src="{product['image_url']}" alt="{product['name']}">
-                    </div>
-                    <div class="thumbnail-container">
-                        <img class="thumbnail-image active" src="{product['image_url']}" alt="{product['name']}">
-                        {"".join([f'<img class="thumbnail-image" src="{img}" alt="{product["name"]}">' for img in product.get('images', [])])}
-                    </div>
                 </div>
             </div>
             <div class="item-info">
