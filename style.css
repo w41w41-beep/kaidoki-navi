@@ -588,3 +588,91 @@ footer {
     text-align: center;
     margin-top: 30px;
 }
+/* --- 商品画像のギャラリーとスライダーのスタイル --- */
+.item-image-container {
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
+/* PC用ギャラリーのスタイル */
+.item-image-gallery {
+    display: none; /* スマホでは非表示 */
+}
+
+.item-image-gallery .main-image {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.item-image-gallery .main-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.item-image-gallery .thumbnail-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.item-image-gallery .thumbnail {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: border-color 0.2s, transform 0.2s;
+    object-fit: cover;
+}
+
+.item-image-gallery .thumbnail:hover,
+.item-image-gallery .thumbnail.active {
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+/* スマホ用スライダーのスタイル */
+.item-image-swiper {
+    width: 100%;
+    max-width: 100%; /* 全幅に広げる */
+}
+
+.item-image-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-image-swiper .swiper-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+/* PC版の表示 */
+@media (min-width: 768px) {
+    .item-image-container {
+        margin: 0;
+    }
+    .item-detail {
+        display: flex;
+        gap: 30px;
+    }
+    .item-image-gallery {
+        display: block; /* PCでは表示 */
+    }
+    .item-image-swiper {
+        display: none; /* PCでは非表示 */
+    }
+    .item-image-container {
+        flex-shrink: 0;
+    }
+    .item-info {
+        flex-grow: 1;
+    }
+}
