@@ -1,23 +1,35 @@
 [
-  {
-    "id": "1",
-    "name": "【Amazon.co.jp限定】 ロジクール Bluetooth ワイヤレスマウス キーボード セット MK250GRd テンキー コンパクト 日本語配列 耐水 無線 ワイヤレス MK250 Windows Mac Chrome グラファイト 国内正規品 ※Amazon.co.jp限定 壁紙ダウンロード付き",
-    "description": "Bluetoothで簡単に接続できるテンキー付きのコンパクトなワイヤレスキーボードとワイヤレスマウスのセットMK250GRd ／ 保証期間1年間のAmazon.co.jp限定モデル ※Amazon.co.jp限定 壁紙ダウンロード付き品質を追求して設計されたK250はキーが長持ちし、さらに耐水設計*が施されており、耐久性と信頼性があります。*最大60mlの液体（水）量の試験条件による結果です。キーボードを液体に浸さないでください。テンキー、矢印キー、便利なFキーショートカットを搭載しながらも、コンパクトなレイアウトでスペースを取りませんセットのBluettoth接続ワイヤレスマウスは、バッグに放り込めるほどコンパクトで、両手利き用の形状により左右の手どちらもで快適に使用できます。",
-    "image_url": "https://m.media-amazon.com/images/I/71K0x3is8BL._AC_SY450_.jpg",
-    "price": "3,708円",
-    "ai_analysis": "ベストセラー1位",
-    "category": {
-      "main": "パソコン",
-      "sub": "PC周辺機器"
-    },
-    "page_url": "pages/【Amazon-co-jp限定】-ロジクール-MK250GRd-※Amazon-co-jp限定-壁紙ダウンロード付き.html",
-    "amazon_url": "https://amzn.to/4mhtCpA",
-    "rakuten_url": "https://www.rakuten.co.jp/",
-    "yahoo_url": "https://shopping.yahoo.co.jp/",
-    "main_ec_site": "Amazon",
-    "specs": "",
-    "date": "2025-09-16"
-  },
+{
+    "id": "1",
+    "name": "【Amazon.co.jp限定】 ロジクール Bluetooth ワイヤレスマウス キーボード セット MK250GRd テンキー コンパクト 日本語配列 耐水 無線 ワイヤレス MK250 Windows Mac Chrome グラファイト 国内正規品 ※Amazon.co.jp限定 壁紙ダウンロード付き",
+    "description": "Bluetoothで簡単に接続できるテンキー付きのコンパクトなワイヤレスキーボードとワイヤレスマウスのセットMK250GRd ／ 保証期間1年間のAmazon.co.jp限定モデル ※Amazon.co.jp限定 壁紙ダウンロード付き品質を追求して設計されたK250はキーが長持ちし、さらに耐水設計*が施されており、耐久性と信頼性があります。*最大60mlの液体（水）量の試験条件による結果です。キーボードを液体に浸さないでください。テンキー、矢印キー、便利なFキーショートカットを搭載しながらも、コンパクトなレイアウトでスペースを取りませんセットのBluettoth接続ワイヤレスマウスは、バッグに放り込めるほどコンパクトで、両手利き用の形状により左右の手どちらもで快適に使用できます。",
+    "image_url": "https://m.media-amazon.com/images/I/71K0x3is8BL._AC_SY450_.jpg",
+    "price": "3,708円",
+    "ai_analysis": "ベストセラー1位",
+    "category": {
+      "main": "パソコン",
+      "sub": "PC周辺機器"
+    },
+    "page_url": "pages/【Amazon-co-jp限定】-ロジクール-MK250GRd-※Amazon-co-jp限定-壁紙ダウンロード付き.html",
+    "amazon_url": "https://amzn.to/4mhtCpA",
+    "rakuten_url": "https://www.rakuten.co.jp/",
+    "yahoo_url": "https://shopping.yahoo.co.jp/",
+    "main_ec_site": "Amazon",
+    "specs": "",
+    "date": "2025-09-16",
+    "images": [
+      "https://m.media-amazon.com/images/I/71K0x3is8BL._AC_SY450_.jpg",
+      "https://m.media-amazon.com/images/I/71K0x3is8BL._AC_SY450_.jpg",
+      "https://m.media-amazon.com/images/I/71K0x3is8BL._AC_SY450_.jpg"
+    ],
+    "tags": [
+      "ロジクール",
+      "ワイヤレスマウス",
+      "キーボード",
+      "Bluetooth",
+      "耐水"
+    ]
+},
   {
     "id": "2",
     "name": "マキタ コードレス掃除機CL107 紙パック式 標準25分稼働/充電22分 軽量定番モデル 10.8Vバッテリ充電器付 CL107FDSHW",
