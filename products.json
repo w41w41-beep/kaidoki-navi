@@ -7,8 +7,8 @@
     "price": "3,708円",
     "ai_analysis": "ベストセラー1位",
     "category": {
-      "main": "パソコン",
-      "sub": "PC周辺機器"
+        "main": "パソコン",
+        "sub": "PC周辺機器"
     },
     "page_url": "pages/【Amazon-co-jp限定】-ロジクール-MK250GRd-※Amazon-co-jp限定-壁紙ダウンロード付き.html",
     "amazon_url": "https://amzn.to/4mhtCpA",
@@ -17,20 +17,12 @@
     "main_ec_site": "Amazon",
     "specs": "",
     "date": "2025-09-16",
-    "images": [
-      "https://m.media-amazon.com/images/I/81KzOCSpLXL._AC_SY450_.jpg",
-      "https://m.media-amazon.com/images/I/71kZp7TQ5KL._AC_SY450_.jpg",
-      "https://m.media-amazon.com/images/I/71zUIuFxlxL._AC_SY450_.jpg",
-      "https://m.media-amazon.com/images/I/81UoRM7gcdL._AC_SY450_.jpg",
-      "https://m.media-amazon.com/images/I/71mBWyPcZGL._AC_SY450_.jpg",
-      "https://m.media-amazon.com/images/I/612uQZGGSQL._AC_SY450_.jpg"
-    ],
     "tags": [
-      "ロジクール",
-      "ワイヤレスマウス",
-      "キーボード",
-      "Bluetooth",
-      "耐水"
+        "ロジクール",
+        "ワイヤレスマウス",
+        "キーボード",
+        "Bluetooth",
+        "耐水"
     ]
   },
   {
