@@ -321,7 +321,7 @@ def generate_site():
             </div>
         """
         
-        item_html_content = f"""
+item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
@@ -329,7 +329,7 @@ def generate_site():
                 <div class="swiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
-                        """ + "".join([f"<div class=\"swiper-slide\"><img src=\"{img}\" alt=\"{product['name']}\"></div>" for img in product.get('images', [])]) + """
+                        {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
                     </div>
                     <div class="swiper-pagination"></div>
                     <div class="swiper-button-prev"></div>
@@ -356,13 +356,13 @@ def generate_site():
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    """ + "".join([f'<span class="tag">#{tag}</span>' for tag in product.get('tags', [])]) + """
+                    {"".join([f'<span class="tag">#{tag}</span>' for tag in product.get('tags', [])])}
                 </div>
             </div>
         </div>
     </div>
 </main>
-    """
+"""
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
