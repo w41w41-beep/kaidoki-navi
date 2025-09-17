@@ -13,7 +13,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/PC周辺機器.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ノートPC.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -25,13 +25,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ストレージ.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/PC周辺機器.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ノートPC.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ストレージ.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -43,13 +43,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/電源・配線.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/プリンター.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/スマートホーム.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -61,19 +55,13 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/電源・配線.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/キッチン家電.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/掃除機.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/スマートホーム.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -85,7 +73,19 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/プリンター.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/スマートスピーカー.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/掃除機.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
