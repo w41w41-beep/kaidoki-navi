@@ -559,7 +559,7 @@ footer {
 /* --- すべてのタグを見るボタンのスタイル --- */
 .tag-button-container {
     text-align: center;
-    margin: 10px auto 20px;
+    margin: 10px auto 0; /* 下側の余白を0に設定 */
     width: 90%;
     max-width: 1200px;
 }
