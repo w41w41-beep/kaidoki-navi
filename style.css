@@ -124,7 +124,7 @@ footer {
     padding: 30px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    margin: 10px 0;
+    margin: 20px 0; /* PC版と統一 */
     text-align: center;
 }
 .ai-section-title {
@@ -139,7 +139,7 @@ footer {
 
 /* トップページ用のスタイル */
 .content { padding: 0; }
-.section-title { font-sfont-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+.section-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; }
 .product-grid {
     display: flex;
     flex-wrap: wrap;
@@ -232,6 +232,7 @@ footer {
     display: flex;
     gap: 40px;
     flex-wrap: wrap;
+    padding-top: 20px;
 }
 .item-image {
     flex: 1;
@@ -377,8 +378,8 @@ footer {
 
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
-    .container, .ai-recommendation-section {
-        padding: 20px 10px;
+    .container {
+        padding: 0 10px; /* スマホでは左右の余白を少し減らす */
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -427,6 +428,18 @@ footer {
     main.container {
         padding-top: 20px;
         padding-bottom: 20px;
+    }
+    /* スマホ版のカテゴリーと本体の余白を統一 */
+    .product-list-title {
+        margin-top: 20px; /* スマホ版の余白を調整 */
+        margin-bottom: 20px;
+    }
+    .item-detail {
+        padding-top: 20px; /* スマホ版の個別ページ上部余白を調整 */
+    }
+    .ai-recommendation-section {
+        margin-top: 10px; /* 修正: 個別ページの余白を狭くする */
+        margin-bottom: 20px;
     }
 }
 
@@ -559,4 +572,12 @@ footer {
     background-color: #e0e0e0;
     border-color: #ccc;
     color: #333;
+}
+/* サブカテゴリーのタイトル */
+.product-list-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-top: 30px;
 }
