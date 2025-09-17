@@ -383,6 +383,55 @@ footer {
     gap: 10px;
 }
 
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px; /* ここを修正しました */
+    }
+    .ai-recommendation-section {
+        padding: 20px 10px; /* ここも修正しました */
+    }
+    .product-card {
+        flex: 1 1 calc(50% - 10px);
+    }
+    .product-grid {
+        gap: 20px;
+    }
+    .product-name {
+        font-size: 16px;
+    }
+    .product-price {
+        font-size: 18px;
+    }
+    .product-status {
+        font-size: 12px;
+    }
+    .item-detail {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .item-image, .item-info {
+        min-width: auto;
+    }
+    .lowest-price-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .lowest-price-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .lowest-price-buttons .btn {
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 8px;
+    }
+    /* すべてのタグを見るボタンのスタイル */
+    .tag-button-container {
+        margin: 10px auto;
+    }
+}
 /* トップページと個別ページ共通の「買い時」テキストのスタイル */
 .product-card .price-status-title,
 .product-detail .price-status-title {
@@ -410,7 +459,7 @@ footer {
 }
 /* 個別ページの商品タイトル */
 .product-detail h1.item-name {
-    font-size: 20px;
+    font-size: 20px; /* ここでフォントサイズを調整してください */
     line-height: 1.4;
     font-weight: bold;
     margin-bottom: 10px;
@@ -472,8 +521,8 @@ footer {
 }
 .ai-analysis {
   font-weight: bold;
-  color: #dc3545;
-  background-color: #f8f9fa;
+  color: #dc3545; /* 赤色 */
+  background-color: #f8f9fa; /* 薄いグレー */
   padding: 5px;
   border-radius: 5px;
   display: inline-block;
@@ -525,6 +574,12 @@ footer {
     color: #0056b3;
     text-decoration: none;
 }
+/* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
+@media (max-width: 768px) {
+    .tag-button-container {
+        margin: 10px auto;
+    }
+}
 /* サブカテゴリーのタイトル */
 .product-list-title {
     font-size: 24px;
@@ -561,3 +616,102 @@ footer {
 }
 
 /* サムネイル画像ギャラリーのスタイル */
+.thumbnail-container {
+    display: flex;
+    flex-wrap: wrap; /* 修正しました: 画像の折り返しを有効に */
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.thumbnail-container img {
+    max-width: 80px; /* 修正しました: 最大幅を設定 */
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out;
+}
+.thumbnail-container img:hover,
+.thumbnail-container img.active {
+    border-color: #007bff;
+}
+
+/* PCでの表示 (1024px以上の画面幅) */
+@media (min-width: 1024px) {
+    .item-image-swiper {
+        display: none; /* スマホ用スライダーを非表示 */
+    }
+    .item-image-gallery {
+        display: flex; /* PC用ギャラリーを表示 */
+        flex-direction: column;
+        align-items: center;
+    }
+    .item-detail {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        flex-wrap: nowrap;
+        margin-top: 40px;
+        align-items: flex-start;
+    }
+}
+
+/* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
+@media (min-width: 769px) and (max-width: 1023px) {
+    .item-image-swiper {
+        display: none; /* スライダーを非表示 */
+    }
+    .item-image-gallery {
+        display: flex; /* PC用ギャラリーを常に表示 */
+        flex-direction: column;
+        align-items: center;
+        width: 100%; /* 親要素に合わせる */
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .item-detail {
+        display: flex;
+        flex-direction: column; /* ここを縦並びに */
+        align-items: center;
+        gap: 20px;
+    }
+    .main-image {
+        width: 100%;
+    }
+    .main-image img {
+        width: 100%;
+        height: auto;
+    }
+    .item-image, .item-info {
+        width: 90%;
+        max-width: 600px;
+    }
+}
+
+/* スマートフォンでの表示 (768px以下) */
+@media (max-width: 768px) {
+    .item-image-swiper {
+        display: block; /* スマホではスライダーを表示 */
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-pagination {
+        position: relative;
+        bottom: 0px;
+        margin-top: 10px;
+    }
+    .swiper-button-prev,
+    .swiper-button-next {
+        color: #007bff;
+    }
+    .item-image-gallery {
+        display: none; /* スマホではギャラリーを非表示 */
+    }
+    .item-detail {
+        flex-direction: column;
+        align-items: center;
+    }
+    .item-image, .item-info {
+        min-width: auto;
+    }
+}
