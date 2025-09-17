@@ -376,27 +376,61 @@ def generate_site():
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-    # タグの一覧ページを生成
+# タグの一覧ページを生成（ページネーション付き）
     # ----------------------------------------------------
+    TAGS_PER_PAGE = 50
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     
-    if all_tags:
+    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+    
+    os.makedirs('tags', exist_ok=True)
+
+    for i in range(total_tag_pages):
+        start_index = i * TAGS_PER_PAGE
+        end_index = start_index + TAGS_PER_PAGE
+        paginated_tags = all_tags[start_index:end_index]
+
+        page_num = i + 1
+        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+
         tag_list_html_content = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">すべてのタグ</h2>
         <div class="product-tags all-tags-list">
-            {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in all_tags])}
+            {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in paginated_tags])}
         </div>
     </div>
 </main>
 """
-        tag_header, tag_footer = generate_header_footer("tags/index.html", page_title="タグ一覧")
+        # ページネーションのHTMLを生成
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+
+            # 「前へ」ボタン
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+
+            # ページ番号
+            for p in range(1, total_tag_pages + 1):
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+
+            # 「次へ」ボタン
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+
+            pagination_html += '</div>'
+            
+        tag_header, tag_footer = generate_header_footer(page_path, page_title="タグ一覧")
         
-        os.makedirs('tags', exist_ok=True)
-        with open('tags/index.html', 'w', encoding='utf-8') as f:
-            f.write(tag_header + tag_list_html_content + tag_footer)
-        print("tags/index.html が生成されました。")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(tag_header + tag_list_html_content + pagination_html + tag_footer)
+        print(f"タグページ: {page_path} が生成されました。")
 
     # 個別のタグページを生成
     # ----------------------------------------------------
