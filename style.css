@@ -696,8 +696,29 @@ footer {
         gap: 20px;
     }
     .item-image, .item-info {
+        /* ここを修正しました。画面幅に合わせます。 */
         width: 100%;
         min-width: auto;
+    }
+    .item-image img {
+        /* ここを修正しました。画像がはみ出さないようにします。 */
+        width: 100%;
+        height: auto;
+    }
+    .lowest-price-section {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .lowest-price-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .lowest-price-buttons .btn {
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 8px;
     }
     .tag-button-container {
         margin: 10px auto;
