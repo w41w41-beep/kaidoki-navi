@@ -367,7 +367,8 @@ def generate_site():
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-    # タグのページを生成
+# タグのページを生成
+    # ----------------------------------------------------
     all_tags = set(tag for product in products for tag in product.get('tags', []))
     os.makedirs('tags', exist_ok=True)
     
@@ -378,17 +379,21 @@ def generate_site():
         
         tag_page_content = f"""
 <main class="container">
-    <h1 class="page-title">タグ: #{tag} の商品一覧</h1>
-    <div class="product-grid">
-        {"".join([f'''
-        <div class="product-card">
-            <a href="../{product['page_url']}">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">#{tag} の商品一覧</h2>
+        <div class="product-grid">
+            {"".join([f'''
+            <a href="../{product['page_url']}" class="product-card">
                 <img src="{product['image_url']}" alt="{product['name']}">
+                <div class="product-info">
+                    <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
+                    <p class="product-price">{product['price']}</p>
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+                </div>
             </a>
-            <h3><a href="../{product['page_url']}">{product['name']}</a></h3>
-            <p class="price">{product['price']}</p>
+            ''' for product in tag_products])}
         </div>
-        ''' for product in tag_products])}
     </div>
 </main>
 """
