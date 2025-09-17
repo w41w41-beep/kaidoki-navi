@@ -228,9 +228,11 @@ footer {
 /* 個別ページ用のスタイル（修正箇所） */
 .item-detail {
     display: flex;
+    flex-direction: row; /* PCでは横並びにする */
     gap: 40px;
     flex-wrap: wrap;
     margin-top: 40px;
+    align-items: flex-start; /* 上端を揃える */
 }
 .item-image {
     flex: 1;
@@ -618,10 +620,10 @@ footer {
 /* スライダーとギャラリーの表示・非表示を切り替える修正 */
 @media (min-width: 769px) {
     .item-image-swiper {
-        display: none;
+        display: none !important; /* PCではスライダーを非表示 */
     }
     .item-image-gallery {
-        display: flex;
+        display: flex !important; /* PCではギャラリーを表示 */
         flex-direction: column;
         align-items: center;
     }
@@ -645,7 +647,7 @@ footer {
 
 @media (max-width: 768px) {
     .item-image-swiper {
-        display: block;
+        display: block !important; /* スマホではスライダーを表示 */
         width: 100%;
     }
     .item-image-swiper img {
@@ -653,7 +655,7 @@ footer {
         height: auto;
     }
     .item-image-gallery {
-        display: none;
+        display: none !important; /* スマホではギャラリーを非表示 */
     }
     .item-detail {
       flex-direction: column;
