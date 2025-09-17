@@ -654,9 +654,6 @@ footer {
         margin-top: 40px;
         align-items: flex-start;
     }
-    .item-image, .item-info {
-        min-width: auto;
-    }
 }
 
 /* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
@@ -665,9 +662,12 @@ footer {
         display: none; /* スライダーを非表示 */
     }
     .item-image-gallery {
-        display: flex; /* PC用ギャラリーを表示 */
+        display: flex; /* PC用ギャラリーを常に表示 */
         flex-direction: column;
         align-items: center;
+        width: 100%; /* 親要素に合わせる */
+        max-width: 600px;
+        margin: 0 auto;
     }
     .item-detail {
         display: flex;
@@ -675,7 +675,13 @@ footer {
         align-items: center;
         gap: 20px;
     }
-    /* 画像と情報エリアの幅を調整 */
+    .main-image {
+        width: 100%;
+    }
+    .main-image img {
+        width: 100%;
+        height: auto;
+    }
     .item-image, .item-info {
         width: 90%;
         max-width: 600px;
@@ -688,10 +694,6 @@ footer {
         display: block; /* スマホではスライダーを表示 */
         width: 100%;
         height: 100%;
-    }
-    .item-image-swiper img {
-        width: 100%;
-        height: auto;
     }
     .swiper-pagination {
         position: relative;
