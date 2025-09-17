@@ -336,12 +336,8 @@ def generate_site():
             <div class="item-image">
                 <div class="item-image-swiper swiper">
                     <div class="swiper-wrapper">
-                        {% if product.get('images') %}
-                            <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
-                            {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product['images']])}
-                        {% else %}
-                            <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
-                        {% endif %}
+                        <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
+                        {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
                     </div>
                     <div class="swiper-pagination"></div>
                     <div class="swiper-button-prev"></div>
