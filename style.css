@@ -385,11 +385,8 @@ footer {
 
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
-    .container {
-        padding: 0 10px; /* ここを修正しました */
-    }
-    .ai-recommendation-section {
-        padding: 20px 10px; /* ここも修正しました */
+    .container, .ai-recommendation-section {
+        padding: 20px 10px;
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -427,11 +424,8 @@ footer {
         text-align: center;
         border-radius: 8px;
     }
-    /* すべてのタグを見るボタンのスタイル */
-    .tag-button-container {
-        margin: 10px auto;
-    }
 }
+
 /* トップページと個別ページ共通の「買い時」テキストのスタイル */
 .product-card .price-status-title,
 .product-detail .price-status-title {
@@ -450,10 +444,12 @@ footer {
     margin-top: 0;
     margin-bottom: 5px;
 }
+
 /* 個別ページの文字サイズを大きくするスタイル（優先度を上げるため、別途定義） */
 .product-detail .price-status-title {
     font-size: 20px;
 }
+
 .product-detail .price-status-content {
     font-size: 20px;
 }
@@ -464,6 +460,7 @@ footer {
     font-weight: bold;
     margin-bottom: 10px;
 }
+
 /* ページネーションのスタイル */
 .pagination {
     display: flex;
@@ -471,6 +468,7 @@ footer {
     align-items: center;
     margin: 20px 0;
 }
+
 .pagination a {
     display: block;
     padding: 8px 16px;
@@ -482,19 +480,23 @@ footer {
     border: 1px solid #ddd;
     transition: background-color 0.3s;
 }
+
 .pagination a.active {
     background-color: #4a90e2;
     color: white;
     border-color: #4a90e2;
 }
+
 .pagination a:hover:not(.active) {
     background-color: #ddd;
 }
+
 .pagination a.prev,
 .pagination a.next {
     font-weight: bold;
     color: #4a90e2;
 }
+
 .pagination a.prev:hover,
 .pagination a.next:hover {
     background-color: #f4f4f4;
@@ -507,6 +509,7 @@ footer {
     margin: 20px 0;
     background-color: #f9f9f9;
 }
+
 .ai-analysis-block h2 {
     font-size: 1.2rem;
     color: #333;
@@ -514,6 +517,7 @@ footer {
     padding-bottom: 5px;
     margin-bottom: 15px;
 }
+
 .ai-analysis-block p {
     font-size: 1rem;
     color: #666;
@@ -534,6 +538,7 @@ footer {
     flex-wrap: wrap;
     gap: 10px;
 }
+
 .product-tags .tag-button {
     display: inline-block;
     padding: 6px 12px;
@@ -545,6 +550,7 @@ footer {
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
+
 .product-tags .tag-button:hover {
     background-color: #e0e0e0;
     border-color: #ccc;
@@ -553,38 +559,33 @@ footer {
 /* --- すべてのタグを見るボタンのスタイル --- */
 .tag-button-container {
     text-align: center;
-    margin: 10px auto;
+    margin: 10px auto; /* 上下左右の余白を均等に */
     width: 90%;
     max-width: 1200px;
 }
+
 .all-tags-button {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: #fff;
-    color: #007bff;
-    border: none;
-    font-size: 16px;
+    padding: 10px 20px; /* パディングを元のサイズに戻す */
+    background-color: #fff; /* 背景を白に */
+    color: #007bff; /* 文字色を青に */
+    border: none; /* 枠線をなくす */
+    font-size: 16px; /* フォントサイズを元のサイズに戻す */
     font-weight: bold;
-    text-decoration: underline;
+    text-decoration: underline; /* リンクとして下線を追加 */
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
+
 .all-tags-button:hover {
-    background-color: #fff;
-    color: #0056b3;
-    text-decoration: none;
+    background-color: #fff; /* ホバー時も背景は白のまま */
+    color: #0056b3; /* ホバー時に少し濃い青に */
+    text-decoration: none; /* ホバー時に下線をなくす */
 }
+
 /* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
 @media (max-width: 768px) {
     .tag-button-container {
-        margin: 10px auto;
+        margin: 10px auto; /* スマホでも上下の余白を10pxに設定 */
     }
-}
-/* サブカテゴリーのタイトル */
-.product-list-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-    margin-top: 30px;
 }
