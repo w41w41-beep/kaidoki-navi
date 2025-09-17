@@ -9,19 +9,8 @@ PRODUCTS_PER_PAGE = 24
 
 def generate_site():
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
-
-    # 既存のHTMLファイルとディレクトリを削除
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html']:
-                os.remove(os.path.join(root, file))
     
-    if os.path.exists('category'):
-        shutil.rmtree('category')
-    
-    if os.path.exists('pages'):
-        shutil.rmtree('pages')
-
+    # products.jsonから商品データを読み込む
     with open('products.json', 'r', encoding='utf-8') as f:
         products = json.load(f)
 
@@ -44,7 +33,7 @@ def generate_site():
             categories[main_cat] = []
         if sub_cat not in categories[main_cat]:
             categories[main_cat].append(sub_cat)
-    
+
     # メインカテゴリーを五十音順にソート
     sorted_main_cats = sorted(categories.keys())
 
@@ -62,7 +51,7 @@ def generate_site():
         main_links_html = ""
         for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
-  
+    
         header_html = f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -110,7 +99,7 @@ def generate_site():
         {sub_cat_links_html}
     </div>
 """
- 
+
         footer_html = f"""
     </main>
     <footer>
@@ -135,7 +124,18 @@ def generate_site():
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + content_html + footer)
         print(f"{page_path} が生成されました。")
-
+    
+    # 既存のHTMLファイルとディレクトリを削除
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html']:
+                os.remove(os.path.join(root, file))
+    
+    if os.path.exists('category'):
+        shutil.rmtree('category')
+    
+    if os.path.exists('pages'):
+        shutil.rmtree('pages')
 
     # メインカテゴリーごとのページを生成
     # ----------------------------------------------------
@@ -237,7 +237,7 @@ def generate_site():
         <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
 </a>
-        """
+            """
         
         # ページネーションのHTMLを生成
         pagination_html = ""
@@ -266,62 +266,62 @@ def generate_site():
             f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
 
-# 個別ページを商品ごとに生成
-# ----------------------------------------------------
-for product in products:
-    page_path = product['page_url']
-    
-    # 親ディレクトリが存在しない場合は作成
-    dir_name = os.path.dirname(page_path)
-    if dir_name:
-        os.makedirs(dir_name, exist_ok=True)
+    # 個別ページを商品ごとに生成
+    # ----------------------------------------------------
+    for product in products:
+        page_path = product['page_url']
         
-    header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
+        # 親ディレクトリが存在しない場合は作成
+        dir_name = os.path.dirname(page_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+            
+        header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
 
-    # AI分析のブロックを定義
-    ai_analysis_block_html = f"""
-        <div class="ai-analysis-block">
-            <div class="ai-analysis-text">
-                <h2>AIによる買い時分析</h2>
-                <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+        # AI分析のブロックを定義
+        ai_analysis_block_html = f"""
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                </div>
             </div>
-        </div>
-    """
+        """
 
-    specs_html = ""
-    if "specs" in product:
-        specs_html = f"""
-            <div class="item-specs">
-                <h2>製品仕様・スペック</h2>
-                <p>{product['specs']}</p>
+        specs_html = ""
+        if "specs" in product:
+            specs_html = f"""
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>{product['specs']}</p>
+                </div>
+            """
+            
+        # 購入ボタンをECサイトの指定に基づいて生成するロジック
+        purchase_button_html = ""
+        main_ec_site = product.get("main_ec_site")
+        
+        if main_ec_site == "Amazon" and "amazon_url" in product:
+            purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
+        elif main_ec_site == "楽天" and "rakuten_url" in product:
+            purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
+        elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
+            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+        elif main_ec_site == "Yahoo" and "yahoo_url" in product:
+            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+            
+        affiliate_links_html = f"""
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                </div>
             </div>
         """
         
-    # 購入ボタンをECサイトの指定に基づいて生成するロジック
-    purchase_button_html = ""
-    main_ec_site = product.get("main_ec_site")
-    
-    if main_ec_site == "Amazon" and "amazon_url" in product:
-        purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
-    elif main_ec_site == "楽天" and "rakuten_url" in product:
-        purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
-    elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
-        purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-    elif main_ec_site == "Yahoo" and "yahoo_url" in product:
-        purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        
-    affiliate_links_html = f"""
-        <div class="lowest-price-section">
-            <p class="lowest-price-label">最安値ショップをチェック！</p>
-            <div class="lowest-price-buttons">
-                {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
-            </div>
-        </div>
-    """
-    
-    item_html_content = f"""
+        item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
@@ -363,20 +363,20 @@ for product in products:
     </div>
 </main>
 """
-    with open(page_path, 'w', encoding='utf-8') as f:
-        f.write(header + item_html_content + footer)
-    print(f"{page_path} が生成されました。")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + item_html_content + footer)
+        print(f"{page_path} が生成されました。")
 
-# タグのページを生成
-all_tags = set(tag for product in products for tag in product.get('tags', []))
-os.makedirs('tags', exist_ok=True)
-
-for tag in all_tags:
-    tag_page_path = f'tags/{tag}.html'
+    # タグのページを生成
+    all_tags = set(tag for product in products for tag in product.get('tags', []))
+    os.makedirs('tags', exist_ok=True)
     
-    tag_products = [product for product in products if tag in product.get('tags', [])]
-    
-    tag_page_content = f"""
+    for tag in all_tags:
+        tag_page_path = f'tags/{tag}.html'
+        
+        tag_products = [product for product in products if tag in product.get('tags', [])]
+        
+        tag_page_content = f"""
 <main class="container">
     <h1 class="page-title">タグ: #{tag} の商品一覧</h1>
     <div class="product-grid">
@@ -392,13 +392,13 @@ for tag in all_tags:
     </div>
 </main>
 """
-    tag_header, tag_footer = generate_header_footer(tag_page_path, page_title=f"#{tag} の商品一覧")
-    
-    with open(tag_page_path, 'w', encoding='utf-8') as f:
-        f.write(tag_header + tag_page_content + tag_footer)
-    
-    print(f"タグページ: {tag_page_path} が生成されました。")
-    
+        tag_header, tag_footer = generate_header_footer(tag_page_path, page_title=f"#{tag} の商品一覧")
+        
+        with open(tag_page_path, 'w', encoding='utf-8') as f:
+            f.write(tag_header + tag_page_content + tag_footer)
+        
+        print(f"タグページ: {tag_page_path} が生成されました。")
+        
     # 静的ページを生成
     # ----------------------------------------------------
     contact_content = """
@@ -497,7 +497,7 @@ for tag in all_tags:
             sitemap_content += '    <changefreq>monthly</changefreq>\n'
             sitemap_content += '    <priority>0.5</priority>\n'
             sitemap_content += '  </url>\n'
-
+            
         sitemap_content += '</urlset>'
 
         # sitemap.xmlファイルとして保存
@@ -507,8 +507,8 @@ for tag in all_tags:
     
     # generate_site関数の最後にサイトマップ生成関数を呼び出す
     create_sitemap()
-
     print("サイトのファイル生成が完了しました！")
 
+# スクリプトを実行
 if __name__ == "__main__":
     generate_site()
