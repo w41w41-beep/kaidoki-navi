@@ -13,13 +13,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ディスプレイ.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ストレージ.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/マウス.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ノートPC.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -31,43 +31,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/電源タップ.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ルーター.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/外付けSSD.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/index.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/ヘッドホン.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/Bluetoothスピーカー.html</loc>
-    <lastmod>2025-09-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/イヤホン.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/ケーブル・アダプタ.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -79,145 +43,235 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/BD・DVD.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/電源・配線.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/ネットワークカメラ.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/防犯カメラ.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/ロボット掃除機.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/スマートホーム.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/【Amazon-co-jp限定】-ロジクール-MK250-ワイヤレスマウス-キーボード-セット.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/キッチン家電.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/プリンター.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/モバイルバッテリー.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/スマートスピーカー.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/掃除機.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/index.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/Bluetoothスピーカー.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/オーディオ/イヤホン・ヘッドホン.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/【Amazon-co-jp限定】-ロジクール-MK250GRd-※Amazon-co-jp限定-壁紙ダウンロード付き.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-Soundcore-Motion+-Bluetooth-スピーカー.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/コードレス掃除機CL107-標準25分稼働-軽量定番モデル-10-8Vバッテリ充電器付-CL107FDSHW.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/BenQ-モニター-ディスプレイ-GW2780-27インチ.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Apple-MacBook-8コアCPU-8コアGPU-ミッドナイト.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/JBL-FLIP-7-ポータブル-Bluetooth-スピーカー.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/ロジクール-MX2300GR-Bluetooth-Unifying非対応-高速スクロールホイール.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Eufy-Robot-Vacuum-Omni-C20.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Soundcore-4（ワイヤレスイヤホン-5-3）【完全ワイヤレスイヤホン-ウルトラノイズキャンセリング-PSE技術基準適合】ミッドナイトブラック.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-525-Charging-Station-6-in-1-USB-Power-Strip.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Dell-i5-1230U-SSD256GB-Windows11-MX95A3A-DNLBL.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-Soundcore-Life-Q30-Bluetooth5-0対応.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/ロジクール-K820-エルゴノミックキーボード-Bluetooth-ワイヤレスキーボード.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/バッファロー-WiFi-ルーター-無線LAN-WiFi7-最新規格-BE3600.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/EIZO-EV3895-BK-3840×1600-ウルトラワイド曲面モニター-アンチグレアIPS.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/エレコム-マウス-有線-M-BL27UBBK.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Echo-Pop-エコーポップ-コンパクトスマートスピーカー-with-Alexa-チャコール.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/TP-Link-Tapo-C200.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/SharkNinja-ブレンダー-コードレスミキサー-BC151J-クリムゾンレッド.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/バッファロー-SSD-PUT250U3-B-N.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-Connector-モバイルバッテリー-【PowerIQ搭載-USB-C一体型】.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-647-Charging-Station.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/JBL-ポータブルスピーカー-Bluetooth対応-ストラップ・カラビナ付属-JBLFLIP7BLK.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/TP-Link-Tapo-C210.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Xiaomiポータブルフォトプリンター-薄型で180g超軽量-Bluetooth接続-複数ユーザー同時接続可能-専用フィルム5枚同梱.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/バッファロー-SSD-PUT1.0U3-B-N.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/SwitchBot-スマートロック-Ultra-スマートキー-スイッチボット.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-Soundcore-Liberty-4.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/ScreenBar-モニターライト-輝度．色温度調整-湾曲モニター対応-映り込み軽減.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/エレコム-マウス-有線-M-BL27UBRD.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Amazonベーシック-シングルモニターアーム-ガススプリング式-最大27インチ-デスク設置用.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/BenQ-モニター-ディスプレイ-GW2790-27インチ.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Soundcore-チタニウムドライバー-デュアルパッシブラジエーター-BassUpテクノロジー-PartyCast機能.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Anker-Soundcore-Space-Q45.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/オーディオテクニカ-audio-technica-ATH-M50X-プロフェッショナルモニターヘッドホン-ATH-M50x.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/エレコム-電源タップ-6個口-2m-雷ガード-個別スイッチ-ほこりシャッター付-耐熱-PSE技術基準適合-ブラック-T-K6A-2620BK.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Amazonベーシック-ライトニングケーブル-MFi認証済み-iPhone-ダークグレー.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Verbatim-ブルーレイディスク-BD-R-50枚＋3枚増量パック.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Amazonベーシック-マイクロSDカード-リーダーアダプター付き-最大速度200MB-128GB.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/エレコム-電源タップ-6個口-3m-雷ガード-個別スイッチ-ほこりシャッター付-耐熱-PSE技術基準適合-ブラック-T-K6A-2630BK.html</loc>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/【Amazon-TP-Link-ネットワークWi-Fiカメラ-Tapo-C200.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Eufy-ユーフィ-【加圧式デュアル回転モップ搭載-自動ゴミ収集ステーション-モップの自動洗浄・乾燥機能付き.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/JBL-ポータブルスピーカー-Bluetooth対応-ストラップ・カラビナ付属-JBLFLIP7BLK.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/PCモニター-アイケアGWシリーズ-GW2490-JP-1920×1080-GW2490JP.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Soundcore-Bluetooth-Qualcomm®-audio対応-パッシブラジエーター.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/【Amazon-co-jp限定】バッファロー-デュアルバンド-688Mbps-WSR3600BE4P-NBK.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/Verbatim-バーベイタム-ブルーレイディスク-3枚増量パック-インクジェットプリンタ対応.html</loc>
+    <lastmod>2025-09-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/エレコム-電源タップ-個別スイッチ-ほこりシャッター付-T-K6A-2630BK.html</loc>
     <lastmod>2025-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
