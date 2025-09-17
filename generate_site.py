@@ -52,7 +52,7 @@ def generate_site():
 
         main_links_html = ""
         # 「すべてのタグを見る」リンクを先頭に固定
-        main_links_html += f'<a href="{base_path}/tags/index.html">すべてのタグを見る</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
         
         for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
@@ -395,7 +395,7 @@ def generate_site():
         tag_list_html_content = f"""
 <main class="container">
     <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">すべてのタグ</h2>
+        <h2 class="ai-section-title">タグから探す</h2>
         <div class="product-tags all-tags-list">
             {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in paginated_tags])}
         </div>
