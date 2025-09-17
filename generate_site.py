@@ -333,7 +333,7 @@ def generate_site():
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
-            <div class="item-image">
+<div class="item-image">
     <div class="item-image-swiper swiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
