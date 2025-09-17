@@ -362,7 +362,7 @@ item_html_content = f"""
         </div>
     </div>
 </main>
-"""
+    """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
