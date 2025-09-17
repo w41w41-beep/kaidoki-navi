@@ -67,8 +67,6 @@ def generate_site():
     <link rel="stylesheet" href="{base_path}/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
-    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
-    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 </head>
 <body>
     <header>
@@ -335,26 +333,26 @@ def generate_site():
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
-<div class="item-image">
-    <div class="item-image-swiper swiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
-            {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
-        </div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-    </div>
-    <div class="item-image-gallery">
-        <div class="main-image">
-            <img src="{product['image_url']}" alt="{product['name']}">
-        </div>
-        <div class="thumbnail-container">
-            <img class="thumbnail-image active" src="{product['image_url']}" alt="{product['name']}">
-            {"".join([f'<img class="thumbnail-image" src="{img}" alt="{product["name"]}">' for img in product.get('images', [])])}
-        </div>
-    </div>
-</div>
+            <div class="item-image">
+                <div class="item-image-swiper swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
+                        {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+                <div class="item-image-gallery">
+                    <div class="main-image">
+                        <img src="{product['image_url']}" alt="{product['name']}">
+                    </div>
+                    <div class="thumbnail-container">
+                        <img class="thumbnail-image active" src="{product['image_url']}" alt="{product['name']}">
+                        {"".join([f'<img class="thumbnail-image" src="{img}" alt="{product["name"]}">' for img in product.get('images', [])])}
+                    </div>
+                </div>
+            </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
                 <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
