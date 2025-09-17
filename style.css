@@ -566,11 +566,11 @@ footer {
 
 .all-tags-button {
     display: inline-block;
-    padding: 5px 10px; /* パディングを小さくしてボタンをコンパクトに */
+    padding: 5px 10px;
     background-color: #fff;
     color: #007bff;
     border: 2px solid #007bff;
-    font-size: 14px; /* フォントサイズをナビゲーションリンクと合わせる */
+    font-size: 14px;
     font-weight: bold;
     text-decoration: none;
     border-radius: 5px;
@@ -580,4 +580,11 @@ footer {
 .all-tags-button:hover {
     background-color: #007bff;
     color: #fff;
+}
+
+/* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
+@media (max-width: 768px) {
+    .tag-button-container {
+        margin: 0 auto 0; /* スマホでは上下の余白を0に設定 */
+    }
 }
