@@ -356,7 +356,7 @@ def generate_site():
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    """ + "".join([f"<span class=\"tag\">#{tag}</span>" for tag in product.get('tags', [])]) + """
+                    """ + "".join([f'<span class="tag">#{tag}</span>' for tag in product.get('tags', [])]) + """
                 </div>
             </div>
         </div>
