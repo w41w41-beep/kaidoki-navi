@@ -659,10 +659,10 @@ footer {
 /* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
 @media (min-width: 769px) and (max-width: 1023px) {
     .item-image-swiper {
-        display: none;
+        display: none; /* ここは変わらず、スライダーは非表示 */
     }
     .item-image-gallery {
-        display: flex;
+        display: flex; /* ここはギャラリーを表示 */
         flex-direction: column;
         align-items: center;
         width: 100%;
@@ -691,7 +691,7 @@ footer {
 /* スマートフォンでの表示 (768px以下) */
 @media (max-width: 768px) {
     .item-image-swiper {
-        display: block;
+        display: block; /* スライダーを表示 */
         width: 100%;
         height: 100%;
     }
@@ -705,7 +705,7 @@ footer {
         color: #007bff;
     }
     .item-image-gallery {
-        display: none;
+        display: none; /* ギャラリーを非表示 */
     }
     .item-detail {
         flex-direction: column;
