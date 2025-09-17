@@ -288,12 +288,12 @@ def generate_site():
 
         # AI分析のブロックを定義
         ai_analysis_block_html = f"""
-                <div class="ai-analysis-block">
-                    <div class="ai-analysis-text">
-                        <h2>AIによる買い時分析</h2>
-                        <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
-                    </div>
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
                 </div>
+            </div>
         """
 
         specs_html = ""
@@ -319,44 +319,35 @@ def generate_site():
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
             
         affiliate_links_html = f"""
-                <div class="lowest-price-section">
-                    <p class="lowest-price-label">最安値ショップをチェック！</p>
-                    <div class="lowest-price-buttons">
-                        {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                        {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                        {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
-                    </div>
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
                 </div>
+            </div>
         """
         
         item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
-            <div class="item-image-container">
-                <div class="item-image-gallery">
-                    <div class="main-image">
-                        <img src="{product['image_url']}" alt="{product['name']}">
-                    </div>
-                    <div class="thumbnail-container">
-                        <img class="thumbnail active" src="{product['image_url']}" alt="{product['name']}">
-                        {"".join([f'<img class="thumbnail" src="{img}" alt="{product["name"]}" >' for img in product.get('images', [])])}
-                    </div>
-                </div>
-
-                <div class="item-image-swiper swiper">
+            <div class="item-image">
+                <div class="swiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{product['image_url']}" alt="{product['name']}">
-                        </div>
+                        <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
                         {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
                     </div>
                     <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt; <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
+                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
