@@ -379,7 +379,7 @@ footer {
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
     .container {
-        padding: 0 10px; /* スマホでは左右の余白を少し減らす */
+        padding: 0 20px;
     }
     .product-card {
         flex: 1 1 calc(50% - 10px);
@@ -399,6 +399,7 @@ footer {
     .item-detail {
         flex-direction: column;
         gap: 20px;
+        padding-top: 20px; /* スマホ版の個別ページ上部余白を調整 */
     }
     .item-image, .item-info {
         min-width: auto;
@@ -422,7 +423,8 @@ footer {
         margin-bottom: 0;
     }
     .ai-recommendation-section {
-        margin-top: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
     /* `main`タグの上下の余白を適切に設定 */
     main.container {
@@ -432,13 +434,6 @@ footer {
     /* スマホ版のカテゴリーと本体の余白を統一 */
     .product-list-title {
         margin-top: 20px; /* スマホ版の余白を調整 */
-        margin-bottom: 20px;
-    }
-    .item-detail {
-        padding-top: 20px; /* スマホ版の個別ページ上部余白を調整 */
-    }
-    .ai-recommendation-section {
-        margin-top: 10px; /* 修正: 個別ページの余白を狭くする */
         margin-bottom: 20px;
     }
 }
