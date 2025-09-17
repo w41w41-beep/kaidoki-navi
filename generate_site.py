@@ -366,6 +366,38 @@ def generate_site():
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
+
+# タグのページを生成
+all_tags = set(tag for product in products for tag in product.get('tags', []))
+os.makedirs('tags', exist_ok=True)
+
+for tag in all_tags:
+    tag_page_path = f'tags/{tag}.html'
+    
+    tag_products = [product for product in products if tag in product.get('tags', [])]
+    
+    tag_page_content = f"""
+<main class="container">
+    <h1 class="page-title">タグ: #{tag} の商品一覧</h1>
+    <div class="product-grid">
+        {"".join([f'''
+        <div class="product-card">
+            <a href="../{product['page_url']}">
+                <img src="{product['image_url']}" alt="{product['name']}">
+            </a>
+            <h3><a href="../{product['page_url']}">{product['name']}</a></h3>
+            <p class="price">{product['price']}</p>
+        </div>
+        ''' for product in tag_products])}
+    </div>
+</main>
+"""
+    tag_header, tag_footer = generate_header_footer(tag_page_path, page_title=f"#{tag} の商品一覧")
+    
+    with open(tag_page_path, 'w', encoding='utf-8') as f:
+        f.write(tag_header + tag_page_content + tag_footer)
+    
+    print(f"タグページ: {tag_page_path} が生成されました。")
     
     # 静的ページを生成
     # ----------------------------------------------------
