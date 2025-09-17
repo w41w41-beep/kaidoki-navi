@@ -304,7 +304,7 @@ def generate_site():
                     <p>{product['specs']}</p>
                 </div>
             """
-            
+                
         # 購入ボタンをECサイトの指定に基づいて生成するロジック
         purchase_button_html = ""
         main_ec_site = product.get("main_ec_site")
@@ -317,7 +317,7 @@ def generate_site():
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
         elif main_ec_site == "Yahoo" and "yahoo_url" in product:
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-            
+                
         affiliate_links_html = f"""
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
@@ -334,15 +334,7 @@ def generate_site():
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="{product['image_url']}" alt="{product['name']}"></div>
-                        {"".join([f'<div class="swiper-slide"><img src="{img}" alt="{product["name"]}"></div>' for img in product.get('images', [])])}
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                <img src="{product['image_url']}" alt="{product['name']}" class="main-product-image">
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product['name']}</h1>
