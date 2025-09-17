@@ -559,32 +559,33 @@ footer {
 /* --- すべてのタグを見るボタンのスタイル --- */
 .tag-button-container {
     text-align: center;
-    margin: 10px auto 0;
+    margin: 10px auto; /* 上下左右の余白を均等に */
     width: 90%;
     max-width: 1200px;
 }
 
 .all-tags-button {
     display: inline-block;
-    padding: 5px 10px;
-    background-color: #fff;
-    color: #007bff;
-    border: 2px solid #007bff;
-    font-size: 14px;
+    padding: 10px 20px; /* パディングを元のサイズに戻す */
+    background-color: #fff; /* 背景を白に */
+    color: #007bff; /* 文字色を青に */
+    border: none; /* 枠線をなくす */
+    font-size: 16px; /* フォントサイズを元のサイズに戻す */
     font-weight: bold;
-    text-decoration: none;
+    text-decoration: underline; /* リンクとして下線を追加 */
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .all-tags-button:hover {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #fff; /* ホバー時も背景は白のまま */
+    color: #0056b3; /* ホバー時に少し濃い青に */
+    text-decoration: none; /* ホバー時に下線をなくす */
 }
 
 /* 画面幅が768px以下のデバイス（スマートフォンなど）に適用するスタイル */
 @media (max-width: 768px) {
     .tag-button-container {
-        margin: 0 auto 0; /* スマホでは上下の余白を0に設定 */
+        margin: 10px auto; /* スマホでも上下の余白を10pxに設定 */
     }
 }
