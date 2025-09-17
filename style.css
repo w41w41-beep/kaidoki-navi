@@ -650,8 +650,8 @@ footer {
     }
 }
 
-/* タブレット・PCのブラウザを狭めたときの表示 (769pxから1023px) */
-@media (min-width: 769px) and (max-width: 1023px) {
+/* PCでの表示 (1024px以上の画面幅) */
+@media (min-width: 1024px) {
     .item-image-swiper {
         display: none;
     }
@@ -659,35 +659,23 @@ footer {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
     }
     .item-detail {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-    .main-image {
-        width: 100%;
-    }
-    .main-image img {
-        width: 100%;
-        height: auto;
-    }
-    .item-image, .item-info {
-        width: 90%;
-        max-width: 600px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        flex-wrap: nowrap;
+        margin-top: 40px;
+        align-items: flex-start;
     }
 }
 
-/* スマートフォンでの表示 (768px以下) */
-@media (max-width: 768px) {
+/* タブレット・スマートフォンでの表示 (1023px以下) */
+@media (max-width: 1023px) {
     .item-image-swiper {
         display: block;
         width: 100%;
-        height: 100%;
+        height: auto;
     }
     .swiper-pagination {
         position: relative;
@@ -696,17 +684,19 @@ footer {
     }
     .swiper-button-prev,
     .swiper-button-next {
-        /* ここを修正しました。矢印ボタンを非表示にします。 */
         display: none;
     }
     .item-image-gallery {
         display: none;
     }
     .item-detail {
+        display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 20px;
     }
     .item-image, .item-info {
+        width: 100%;
         min-width: auto;
     }
     .tag-button-container {
