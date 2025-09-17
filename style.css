@@ -229,28 +229,22 @@ footer {
 @media (min-width: 769px) {
     .item-detail {
         display: grid;
-        grid-template-columns: 1fr 1.5fr; /* 左:画像, 右:情報 の幅を定義 */
+        grid-template-columns: 1fr 1.5fr; /* 画像と情報の幅を固定 */
         gap: 40px;
-        flex-wrap: nowrap;
-        margin-top: 40px;
         align-items: flex-start;
     }
-    .item-image {
-        min-width: auto; /* gridに合わせて調整 */
-        text-align: center;
-    }
-    .item-info {
-        min-width: auto; /* gridに合わせて調整 */
-    }
+}
+.item-image {
+    text-align: center;
 }
 .item-image img {
-    max-width: 100%;
+    max-width: 400px; /* メイン画像の最大幅を固定 */
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .item-info {
-    flex: 2;
+    min-width: 300px; /* ボタンが並ぶのに十分な幅を確保 */
 }
 .item-name {
     font-size: 28px;
@@ -637,8 +631,8 @@ footer {
     border: 2px solid transparent;
     transition: border-color 0.2s ease-in-out;
 }
-.thumbnail-container img.active,
-.thumbnail-container img:hover {
+.thumbnail-container img:hover,
+.thumbnail-container img.active {
     border-color: #007bff;
 }
 
