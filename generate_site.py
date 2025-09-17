@@ -376,7 +376,7 @@ def generate_site():
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-# タグの一覧ページを生成（ページネーション付き）
+    # タグの一覧ページを生成（ページネーション付き）
     # ----------------------------------------------------
     TAGS_PER_PAGE = 50
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
@@ -431,7 +431,7 @@ def generate_site():
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(tag_header + tag_list_html_content + pagination_html + tag_footer)
         print(f"タグページ: {page_path} が生成されました。")
-
+        
     # 個別のタグページを生成
     # ----------------------------------------------------
     all_tags = set(tag for product in products for tag in product.get('tags', []))
