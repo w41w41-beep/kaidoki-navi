@@ -9,7 +9,6 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
-
 .container {
     max-width: 960px;
     margin: 0 auto;
@@ -23,15 +22,12 @@ header {
     padding: 5px;
     text-align: center;
 }
-
 header h1, header p {
     margin: 0;
 }
-
 header h1 {
     color: #007bff;
 }
-
 header h1 a {
     text-decoration: none;
     color: inherit;
@@ -45,7 +41,6 @@ header h1 a {
     display: flex;
     justify-content: center;
 }
-
 .search-container {
     position: relative;
     width: 80%;
@@ -55,14 +50,12 @@ header h1 a {
     border-radius: 5px;
     overflow: hidden;
 }
-
 .search-bar input {
     flex-grow: 1;
     border: none;
     padding: 10px;
     font-size: 16px;
 }
-
 .search-button {
     background-color: #007bff;
     color: white;
@@ -80,45 +73,47 @@ header h1 a {
     overflow-x: auto;
     white-space: nowrap;
 }
-
 .genre-links a, .sub-genre-links a {
     text-decoration: none;
     color: #007bff;
     padding: 0 5px;
     font-size: 14px;
 }
-
 .genre-links a:hover, .sub-genre-links a:hover {
     text-decoration: underline;
 }
-
 .separator {
     color: #ccc;
     margin: 0 5px;
 }
 
-/* --- 商品詳細ページのスタイル（修正箇所） --- */
+/* --- 商品詳細ページのスタイル --- */
 .product-detail {
     display: flex;
-    flex-direction: column; /* 縦一列に並べる */
+    flex-direction: column; /* 縦一列に */
     align-items: center; /* 中央寄せ */
     width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .item-detail {
     display: flex;
-    flex-direction: column; /* 縦一列に並べる */
+    flex-direction: column; /* 縦一列に */
     width: 100%;
     max-width: 800px; /* 最大幅を設定して中央に寄せる */
-    padding: 20px;
-    box-sizing: border-box;
 }
 
 .item-image-container {
     width: 100%;
     display: flex;
-    flex-direction: column; /* メイン画像とサムネイルを縦に並べる */
-    align-items: center;
+    flex-direction: column; /* 画像セクション全体を縦に */
+    align-items: center; /* 中央寄せ */
+}
+
+.item-image-gallery, .item-image-swiper {
+    width: 100%;
+    max-width: 600px;
 }
 
 .item-image-gallery {
@@ -130,25 +125,22 @@ header h1 a {
 
 .item-image-gallery .main-image {
     width: 100%;
-    max-width: 600px;
     margin-bottom: 10px;
 }
 
 .item-image-gallery .main-image img {
     width: 100%;
-    height: auto;
+    height: auto; /* 画像の縦横比を維持 */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .thumbnail-container {
     width: 100%;
-    max-width: 600px;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* 幅が狭くなったら折り返す */
     gap: 10px;
-    margin-top: 10px;
+    flex-wrap: wrap; /* 幅に合わせて折り返す */
 }
 
 .thumbnail-container img {
@@ -167,11 +159,11 @@ header h1 a {
     transform: scale(1.05);
 }
 
+/* item-image-swiper（スマホ用スライダー） */
 .item-image-swiper {
     display: none; /* PCでは非表示 */
 }
 
-/* スマホ用スタイル（item-image-swiper） */
 @media (max-width: 768px) {
     .item-image-gallery {
         display: none; /* スマホでは非表示 */
@@ -194,8 +186,6 @@ header h1 a {
 
 .item-info {
     width: 100%;
-    max-width: 800px;
-    margin-top: 20px;
     text-align: center;
 }
 
@@ -541,4 +531,12 @@ footer {
         width: 0;
         height: 0;
     }
+}
+
+/* 追加修正箇所: flexboxプロパティの調整 */
+@media (max-width: 768px) {
+  .product-detail {
+    flex-direction: column;
+    align-items: center;
+  }
 }
