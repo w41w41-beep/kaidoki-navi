@@ -53,18 +53,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Swiperの初期化
-    const swiper = new Swiper('.swiper', {
-        loop: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
+    // 商品詳細ページのスライダーを初期化
+    if (document.querySelector('.item-image-swiper')) {
+        new Swiper('.item-image-swiper', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            // モバイルでは矢印を非表示にするため、navigationを削除
+            // navigation: {
+            //     nextEl: '.swiper-button-next',
+            //     prevEl: '.swiper-button-prev',
+            // },
+        });
+    }
 
     // PC表示でのサムネイル切り替え機能
     const mainImage = document.querySelector('.item-image-gallery .main-image img');
