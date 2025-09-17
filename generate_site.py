@@ -51,9 +51,12 @@ def generate_site():
             base_path = "."
 
         main_links_html = ""
+        # 「すべてのタグを見る」リンクを先頭に固定
+        main_links_html += f'<a href="{base_path}/tags/index.html">すべてのタグを見る</a><span class="separator">|</span>'
+        
         for mc_link in sorted_main_cats:
             main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
-    
+
         header_html = f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -84,10 +87,6 @@ def generate_site():
         <div class="genre-links">
             {main_links_html}
         </div>
-    </div>
-
-    <div class="tag-button-container">
-        <a href="{base_path}/tags/index.html" class="all-tags-button">すべてのタグを見る</a>
     </div>
 """
         
