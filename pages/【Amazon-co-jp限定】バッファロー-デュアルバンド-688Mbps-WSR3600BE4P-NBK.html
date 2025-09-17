@@ -34,48 +34,38 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <img src="https://m.media-amazon.com/images/I/715PqYt8o4L._AC_SY450_.jpg" alt="【Amazon.co.jp限定】バッファロー WiFi ルーター 無線 LAN Wi-Fi 7 11be デュアルバンド 2882+688Mbps エコパッケージ WSR3600BE4P/NBK">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/715PqYt8o4L._AC_SY450_.jpg" alt="【Amazon.co.jp限定】バッファロー WiFi ルーター 無線 LAN Wi-Fi 7 11be デュアルバンド 2882+688Mbps エコパッケージ WSR3600BE4P/NBK"></div>
+                        
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
             </div>
             <div class="item-info">
-                <h1 class="item-name">【Amazon.co.jp限定】バッファロー WiFi ルーター 無線 LAN Wi-Fi 7 11be デュアルバンド 2882+688Mbps エコパッケージ WSR3600BE4P/NBK</h1>
-                <p class="item-category">カテゴリ：<a href="../category/パソコン/index.html">パソコン</a> &gt;
-                <a href="../category/パソコン/PC周辺機器.html">PC周辺機器</a></p>
+                <h1 class="item-name">{product['name']}</h1>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
+                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>10,980円</span></p>
+                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">過去1か月で5000点以上購入されました</div>
-                    <a href="https://amzn.to/41Ye1UR" class="purchase-button" target="_blank">Amazonで購入する</a>
+                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+                    {purchase_button_html}
                 </div>
-                
-            <div class="ai-analysis-block">
-                <div class="ai-analysis-text">
-                    <h2>AIによる買い時分析</h2>
-                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
-                </div>
-            </div>
-        
-                
-            <div class="lowest-price-section">
-                <p class="lowest-price-label">最安値ショップをチェック！</p>
-                <div class="lowest-price-buttons">
-                    <a href="https://amzn.to/41Ye1UR" class="btn shop-link" target="_blank">Amazonで見る</a>
-                    <a href="https://search.rakuten.co.jp/search/mall/BUFFALO+Wi-Fi+7+%E3%83%AB%E3%83%BC%E3%82%BF%E3%83%BC/" class="btn shop-link" target="_blank">楽天市場で見る</a>
-                    <a href="https://shopping.yahoo.co.jp/search?p=BUFFALO+Wi-Fi+7+%E3%83%AB%E3%83%BC%E3%82%BF%E3%83%BC" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
-                </div>
-            </div>
-        
+                {ai_analysis_block_html}
+                {affiliate_links_html}
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>【Wi-Fi 7 デュアルバンド対応】通信効率や通信遅延が改善された第7世代の通信規格「Wi-Fi 7」に対応したコンパクトなWi-Fiルーターです。【離れた部屋でも快適通信】3本の5GHzアンテナが機能し、これまで電波が届きにくかった離れた部屋でも快適に動画やゲームなどを楽しめます。【MLOでWi-Fi通信を高速・安定化】複数の通信帯域を同時に利用する｢2バンド 同時モード｣、電波干渉時に影響のない通信帯域へ切り替える「2バンド切り替えモード」に対応。高速で安定したWi-Fi通信を実現します。※端末側も対応している必要があります。【スマホで簡単セットアップ】スマホアプリ「AirStationアプリ」を使って簡単にセットアップが完了！接続状態の確認やファームウェアの更新などもアプリ上で行うことができます。【場所を取らないコンパクトサイズ】デスク上やテレビ横などでもスペースを気にせず設置することができるコンパクトサイズ。壁掛けにも対応しています。【Amazon限定】環境に配慮した包装でお届けします。</p>
+                    <p>{product['description']}</p>
                 </div>
-                
-                <div class="item-specs">
-                    <h2>製品仕様・スペック</h2>
-                    <p>ブランドバッファローモデル名WSR3600BE4Pシリーズ周波数帯クラスデュアルバンドワイヤレス通信規格802.11.be対応デバイススマートフォン パソコン ゲーム機</p>
+                {specs_html}
+                <div class="product-tags">
+                    
                 </div>
-            
             </div>
         </div>
     </div>

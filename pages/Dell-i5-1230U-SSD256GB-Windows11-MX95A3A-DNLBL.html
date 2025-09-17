@@ -34,48 +34,38 @@
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <img src="https://m.media-amazon.com/images/I/71nyfCYVgqL._AC_SX425_.jpg" alt="Dell ノートパソコン XPS 13 9315 13.4インチ Intel 第12世代 Core i5-1230U メモリ8GB SSD256GB Windows11 重量1.1kg スカイ MX95A3A-DNLBL">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="https://m.media-amazon.com/images/I/71nyfCYVgqL._AC_SX425_.jpg" alt="Dell ノートパソコン XPS 13 9315 13.4インチ Intel 第12世代 Core i5-1230U メモリ8GB SSD256GB Windows11 重量1.1kg スカイ MX95A3A-DNLBL"></div>
+                        
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
             </div>
             <div class="item-info">
-                <h1 class="item-name">Dell ノートパソコン XPS 13 9315 13.4インチ Intel 第12世代 Core i5-1230U メモリ8GB SSD256GB Windows11 重量1.1kg スカイ MX95A3A-DNLBL</h1>
-                <p class="item-category">カテゴリ：<a href="../category/パソコン/index.html">パソコン</a> &gt;
-                <a href="../category/パソコン/ノートPC.html">ノートPC</a></p>
+                <h1 class="item-name">{product['name']}</h1>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
+                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>116,000円</span></p>
+                    <p class="current-price">現在の価格：<span>{product['price']}</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">ポイント: 1160pt  (1%)</div>
-                    <a href="https://amzn.to/46hwop2" class="purchase-button" target="_blank">Amazonで購入する</a>
+                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+                    {purchase_button_html}
                 </div>
-                
-            <div class="ai-analysis-block">
-                <div class="ai-analysis-text">
-                    <h2>AIによる買い時分析</h2>
-                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
-                </div>
-            </div>
-        
-                
-            <div class="lowest-price-section">
-                <p class="lowest-price-label">最安値ショップをチェック！</p>
-                <div class="lowest-price-buttons">
-                    <a href="https://amzn.to/46hwop2" class="btn shop-link" target="_blank">Amazonで見る</a>
-                    <a href="https://search.rakuten.co.jp/search/mall/Dell+XPS+13/" class="btn shop-link" target="_blank">楽天市場で見る</a>
-                    <a href="https://shopping.yahoo.co.jp/search?p=Dell+XPS+13" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
-                </div>
-            </div>
-        
+                {ai_analysis_block_html}
+                {affiliate_links_html}
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>XPS 13 ノートパソコン。あらゆるライフスタイルに合わせて、携帯性を追求した薄型軽量のノートパソコン。最新の第12世代インテルプロセッサー、インテル Iris Xe グラフィックス搭載のインテルEvo認証モデル。バッテリー駆動時間最長約12 時間で、軽量設計でスピード、パフォーマンス、モビリティーの卓越した組み合わせを実現します。 〔タフなバッテリー〕最新の第12世代インテルプロセッサーを搭載。バッテリー駆動時間最長約12時間、ExpressCharge機能により、1時間以内に最大80％まで急速充電できます。どこでもタフに使用できる13インチ　モバイルノートPCです。 〔卓越したモビリティー設計〕ボディには軽量で耐久性に優れたアルミ加工を使用し、耐久性のある軽量超薄モデルを実現しました。場所にとらわれず、どこでも身軽に持ち運んでご使用いただけます。 〔感動を呼び起こす映像とサウンド〕広い表示領域のアスペクト比16:10パネル採用した13インチ フルHD＋ ディスプレイ。高画質フレームレス ディスプレイと高音質のオーディオが臨場感溢れる視聴体験を実現します。 〔日常を便利にする機能〕顔認証対応のHD Webカメラや、指紋認証が搭載されており、素早く安心にサインインが可能。</p>
+                    <p>{product['description']}</p>
                 </div>
-                
-                <div class="item-specs">
-                    <h2>製品仕様・スペック</h2>
-                    <p>スタイル: Core i5 8GB/256GB ブランドDellモデル名XPS 13 9315画面サイズ13.4 インチ色ブルーハードディスク容量256 GBCPUモデルCore i5インストール済みのRAMメモリサイズ8 GBオペレーティングシステムWindows 11 Home特徴HDオーディオ, バックライト付きキーボード, 指紋リーダーグラフィックカードの説明統合型</p>
+                {specs_html}
+                <div class="product-tags">
+                    
                 </div>
-            
             </div>
         </div>
     </div>
