@@ -556,3 +556,26 @@ footer {
     border-color: #ccc;
     color: #333;
 }
+/* --- すべてのタグを見るボタンのスタイル --- */
+.tag-button-container {
+    text-align: center;
+    margin: 10px auto 20px;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.all-tags-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.all-tags-button:hover {
+    background-color: #0056b3;
+}
