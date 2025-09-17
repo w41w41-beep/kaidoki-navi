@@ -288,12 +288,12 @@ def generate_site():
 
         # AI分析のブロックを定義
         ai_analysis_block_html = f"""
-            <div class="ai-analysis-block">
-                <div class="ai-analysis-text">
-                    <h2>AIによる買い時分析</h2>
-                    <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                <div class="ai-analysis-block">
+                    <div class="ai-analysis-text">
+                        <h2>AIによる買い時分析</h2>
+                        <p>価格推移グラフとAIによる詳細分析を近日公開！乞うご期待！</p>
+                    </div>
                 </div>
-            </div>
         """
 
         specs_html = ""
@@ -319,17 +319,17 @@ def generate_site():
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
             
         affiliate_links_html = f"""
-            <div class="lowest-price-section">
-                <p class="lowest-price-label">最安値ショップをチェック！</p>
-                <div class="lowest-price-buttons">
-                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                <div class="lowest-price-section">
+                    <p class="lowest-price-label">最安値ショップをチェック！</p>
+                    <div class="lowest-price-buttons">
+                        {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
+                        {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
+                        {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                    </div>
                 </div>
-            </div>
         """
         
-            item_html_content = f"""
+        item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
@@ -380,9 +380,9 @@ def generate_site():
     </div>
 </main>
 """
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + item_html_content + footer)
-            print(f"{page_path} が生成されました。")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + item_html_content + footer)
+        print(f"{page_path} が生成されました。")
 
     # タグの一覧ページを生成（ページネーション付き）
     # ----------------------------------------------------
