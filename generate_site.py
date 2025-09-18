@@ -352,7 +352,7 @@ def generate_site(products):
                 {affiliate_links_html}
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product['description']}</p>
+                    <p>{product.get('description', '商品説明は現在準備中です。')}</p>
                 </div>
                 {specs_html}
                 <div class="product-tags">
