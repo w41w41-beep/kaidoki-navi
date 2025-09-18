@@ -32,6 +32,9 @@ def fetch_rakuten_items():
             for item in items:
                 item_data = item['Item']
                 
+                # 'genreName'が存在しない場合を考慮してget()メソッドを使用
+                genre_name = item_data.get('genreName', '') 
+                
                 # カテゴリを正しく設定
                 main_cat = keyword
                 
@@ -44,7 +47,7 @@ def fetch_rakuten_items():
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {
                         "main": main_cat,
-                        "sub": item_data['genreName']
+                        "sub": genre_name
                     },
                     "ai_analysis": "AIによる価格分析は近日公開！",
                     "date": date.today().isoformat()
