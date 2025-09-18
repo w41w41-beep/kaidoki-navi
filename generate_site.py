@@ -3,16 +3,88 @@ import math
 import os
 import shutil
 from datetime import date
+import requests # requestsライブラリを追加
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
 
-def generate_site():
-    """products.jsonを読み込み、HTMLファイルを生成する関数"""
+def fetch_rakuten_items():
+    """楽天APIから商品データを取得する関数"""
+    app_id = os.environ.get('RAKUTEN_API_KEY')
+    if not app_id:
+        print("RAKUTEN_API_KEYが設定されていません。")
+        return []
+
+    keyword = '家電' # 取得したい商品のキーワード
+    url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-itemPrice"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status() # HTTPエラーをチェック
+        data = response.json()
+        items = data.get('Items', [])
+        
+        # 取得したデータを新しい形式に変換
+        # 価格が下がった商品や、注目ポイントをAIで分析するロジックをここに追加
+        new_products = []
+        for item in items:
+            item_data = item['Item']
+            # AI分析のダミーデータ（後でAIに置き換える部分）
+            ai_analysis_text = "このアイテムは今週の価格変動が大きいため、買い時です！"
+
+            new_products.append({
+                "id": item_data['itemCode'],
+                "name": item_data['itemName'],
+                "price": f"{int(item_data['itemPrice']):,}", # カンマを追加
+                "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
+                "rakuten_url": item_data['itemUrl'],
+                "page_url": f"pages/{item_data['itemCode']}.html",
+                "category": {
+                    "main": "家電", # メインカテゴリ
+                    "sub": item_data['genreName'] # 楽天のサブカテゴリ名
+                },
+                "ai_analysis": ai_analysis_text,
+                "date": date.today().isoformat()
+            })
+        return new_products
+    except requests.exceptions.RequestException as e:
+        print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
+        return []
+
+def update_products_json(new_products):
+    """新しい商品データを既存のproducts.jsonに統合・更新する関数"""
+    try:
+        if os.path.exists('products.json'):
+            with open('products.json', 'r', encoding='utf-8') as f:
+                existing_products = json.load(f)
+        else:
+            existing_products = []
+    except json.JSONDecodeError:
+        print("products.jsonが破損しているため、新規作成します。")
+        existing_products = []
+
+    # 新しい商品データを追加または更新
+    updated_products = {p['id']: p for p in existing_products}
+    for new_product in new_products:
+        updated_products[new_product['id']] = new_product
     
-    # products.jsonから商品データを読み込む
-    with open('products.json', 'r', encoding='utf-8') as f:
-        products = json.load(f)
+    # 90日間の追跡ロジック（後ほど実装）
+    # ...
+
+    final_products = list(updated_products.values())
+    
+    with open('products.json', 'w', encoding='utf-8') as f:
+        json.dump(final_products, f, ensure_ascii=False, indent=4)
+    
+    print(f"products.jsonが更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
+    return final_products
+
+def generate_site(products):
+    """products.jsonを読み込み、HTMLファイルを生成する関数"""
+    # ここから先は、提供されたコードをそのまま使用
+    # ... (長いため省略)
+    # 元のコードをすべてここに貼り付けます
+    # ...
 
     # 日付データを追加
     today = date.today().isoformat()
@@ -37,10 +109,8 @@ def generate_site():
     # メインカテゴリーを五十音順にソート
     sorted_main_cats = sorted(categories.keys())
 
-    # ヘッダーとフッターを生成する関数
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
-        
-        # パスに応じてベースパスを動的に決定
+        # ... (元のコードのまま)
         if "pages" in current_path:
             base_path = ".."
         elif "category" in current_path:
@@ -304,7 +374,7 @@ def generate_site():
                     <p>{product['specs']}</p>
                 </div>
             """
-                
+            
         # 購入ボタンをECサイトの指定に基づいて生成するロジック
         purchase_button_html = ""
         main_ec_site = product.get("main_ec_site")
@@ -571,4 +641,9 @@ def generate_site():
 
 # スクリプトを実行
 if __name__ == "__main__":
-    generate_site()
+    # 最初にAPIから最新データを取得
+    new_products = fetch_rakuten_items()
+    # 既存のデータと統合・更新
+    products = update_products_json(new_products)
+    # 更新されたproducts.jsonをもとにサイトを生成
+    generate_site(products)
