@@ -4,6 +4,7 @@ import os
 import shutil
 from datetime import date
 import requests
+import pandas as pd
 from openai import OpenAI
 
 # 定数定義
@@ -196,7 +197,7 @@ def fetch_rakuten_items():
         
         for genre_id in genre_ids:
             # 取得数を10に設定
-            url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&genreId={genre_id}&format=json&sort=-reviewCount&hits=10"
+            url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&genreId={genre_id}&format=json&sort=-reviewCount&hits=2"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -245,7 +246,7 @@ def fetch_yahoo_items():
         
         for category_id in category_ids:
             # 取得数を10に設定
-            url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&category_id={category_id}&sort=-review_count&hits=10"
+            url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&category_id={category_id}&sort=-review_count&hits=2"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -276,16 +277,18 @@ def fetch_yahoo_items():
             
     return all_products
 
-def update_products_json(new_products):
-    """新しい商品データを既存のproducts.jsonに統合・更新する関数"""
+def update_products_csv(new_products):
+    """新しい商品データを既存のproducts.csvに統合・更新する関数"""
+    csv_file = 'products.csv'
+    
     try:
-        if os.path.exists('products.json'):
-            with open('products.json', 'r', encoding='utf-8') as f:
-                existing_products = json.load(f)
+        if os.path.exists(csv_file):
+            existing_products_df = pd.read_csv(csv_file)
+            existing_products = existing_products_df.to_dict('records')
         else:
             existing_products = []
-    except json.JSONDecodeError:
-        print("products.jsonが破損しているため、新規作成します。")
+    except Exception as e:
+        print(f"products.csvの読み込み中にエラーが発生しました: {e}")
         existing_products = []
 
     # 既存の商品データをIDをキーとする辞書に変換
@@ -301,20 +304,21 @@ def update_products_json(new_products):
                 item_category=new_product['category']
             )
             new_product['specs'] = ai_info['specs']
-            new_product['tags'] = ai_info['tags']
+            new_product['tags'] = json.dumps(ai_info['tags']) # リストをJSON文字列として保存
         # 既存の商品であっても新しい情報で更新
         updated_products[new_product['id']] = new_product
     
     final_products = list(updated_products.values())
     
-    with open('products.json', 'w', encoding='utf-8') as f:
-        json.dump(final_products, f, ensure_ascii=False, indent=4)
+    # DataFrameに変換してCSVに保存
+    final_products_df = pd.DataFrame(final_products)
+    final_products_df.to_csv(csv_file, index=False, encoding='utf-8-sig')
     
-    print(f"products.jsonが更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
+    print(f"{csv_file}が更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
     return final_products
 
 def generate_site(products):
-    """products.jsonを読み込み、HTMLファイルを生成する関数"""
+    """products.csvを読み込み、HTMLファイルを生成する関数"""
     today = date.today().isoformat()
     for product in products:
         if 'date' not in product:
@@ -521,7 +525,7 @@ def generate_site(products):
                 specs_html = f"""
                 <div class="item-specs">
                     <h2>製品仕様・スペック</h2>
-                    <p>{product.get('specs', '')}</p>
+                    <pre>{product.get('specs', '')}</pre>
                 </div>
                 """
             
@@ -544,6 +548,19 @@ def generate_site(products):
                 </div>
             </div>
             """
+            
+            tags_html = ""
+            if "tags" in product and product["tags"]:
+                try:
+                    tags = json.loads(product["tags"])
+                    tags_html = f"""
+                    <div class="product-tags">
+                        {''.join([f'<a href="{os.path.relpath("tags/" + tag.replace(" ", "") + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in tags])}
+                    </div>
+                    """
+                except json.JSONDecodeError:
+                    print(f"タグのJSON解析に失敗しました: {product['tags']}")
+            
             item_html_content = f"""
 <main class="container">
     <div class="product-detail">
@@ -570,9 +587,7 @@ def generate_site(products):
                     <p>{product.get('description', '商品説明は現在準備中です。')}</p>
                 </div>
                 {specs_html}
-                <div class="product-tags">
-                    {"".join([f'<a href="{os.path.relpath("tags/" + tag.replace(" ", "") + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
-                </div>
+                {tags_html}
             </div>
         </div>
     </div>
@@ -584,15 +599,24 @@ def generate_site(products):
     
     def _generate_tag_pages(products):
         """タグページを生成する関数"""
-        all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-        total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+        all_tags = set()
+        for product in products:
+            if "tags" in product and product["tags"]:
+                try:
+                    tags = json.loads(product["tags"])
+                    all_tags.update(tags)
+                except json.JSONDecodeError:
+                    continue
+
+        sorted_tags = sorted(list(all_tags))
+        total_tag_pages = math.ceil(len(sorted_tags) / TAGS_PER_PAGE)
         os.makedirs('tags', exist_ok=True)
         
         # タグ一覧ページを生成
         for i in range(total_tag_pages):
             start_index = i * TAGS_PER_PAGE
             end_index = start_index + TAGS_PER_PAGE
-            paginated_tags = all_tags[start_index:end_index]
+            paginated_tags = sorted_tags[start_index:end_index]
             page_num = i + 1
             page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
             tag_list_html_content = f"""
@@ -625,9 +649,18 @@ def generate_site(products):
             print(f"タグページ: {page_path} が生成されました。")
             
         # 個別タグページを生成
-        for tag in all_tags:
+        for tag in sorted_tags:
             tag_page_path = f'tags/{tag.replace(" ", "")}.html'
-            tag_products = [product for product in products if tag in product.get('tags', [])]
+            tag_products = []
+            for product in products:
+                if "tags" in product and product["tags"]:
+                    try:
+                        tags = json.loads(product["tags"])
+                        if tag in tags:
+                            tag_products.append(product)
+                    except json.JSONDecodeError:
+                        continue
+            
             tag_page_content = f"""
 <main class="container">
     <div class="ai-recommendation-section">
@@ -731,19 +764,10 @@ def generate_site(products):
         print("sitemap.xml が生成されました。")
 
     # メインの実行フロー
-    _generate_index_pages(products)
-    _generate_category_pages(products, categories)
-    _generate_product_detail_pages(products)
-    _generate_tag_pages(products)
-    _generate_static_pages()
-    _create_sitemap(products, categories)
-    print("サイトのファイル生成が完了しました！")
-
-if __name__ == "__main__":
     rakuten_products = fetch_rakuten_items()
     yahoo_products = fetch_yahoo_items()
     
-    new_products = rakuten_products + yahoo_products
+    new_products = (rakuten_products + yahoo_products)[:20]
     
-    products = update_products_json(new_products)
+    products = update_products_csv(new_products)
     generate_site(products)
