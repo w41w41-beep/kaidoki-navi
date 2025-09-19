@@ -328,8 +328,8 @@ def generate_site(products):
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
                 <div class="lowest-price-buttons">
-                    <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link" target="_blank">楽天市場で見る</a>
                     <a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link" target="_blank">楽天市場で見る</a>
                     <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
                 </div>
             </div>
