@@ -4,9 +4,179 @@ import os
 import shutil
 from datetime import date
 import requests
+from openai import OpenAI
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
+
+# 楽天のジャンルIDとサイトのカテゴリーのマッピングを定義
+RAKUTEN_GENRE_MAP = {
+    # 家電
+    "掃除機": {
+        "main": "家電",
+        "sub": "掃除機",
+        "ids": ["212871", "562768"] # 掃除機・クリーナー、ロボット掃除機
+    },
+    "空気清浄機": {
+        "main": "家電",
+        "sub": "空気清浄機",
+        "ids": ["210214"] # 空気清浄機
+    },
+    "エアコン": {
+        "main": "家電",
+        "sub": "エアコン",
+        "ids": ["100032"] # エアコン
+    },
+    "冷蔵庫": {
+        "main": "家電",
+        "sub": "冷蔵庫",
+        "ids": ["100259"] # 冷蔵庫
+    },
+    "電子レンジ": {
+        "main": "家電",
+        "sub": "電子レンジ",
+        "ids": ["100262"] # 電子レンジ・オーブンレンジ
+    },
+    
+    # パソコン・周辺機器
+    "ノートPC": {
+        "main": "パソコン",
+        "sub": "ノートPC",
+        "ids": ["562629"] # ノートPC
+    },
+    "デスクトップPC": {
+        "main": "パソコン",
+        "sub": "デスクトップPC",
+        "ids": ["562630"] # デスクトップPC
+    },
+    "モニター": {
+        "main": "パソコン",
+        "sub": "モニター",
+        "ids": ["200109"] # ディスプレイ
+    },
+    "プリンター": {
+        "main": "パソコン",
+        "sub": "プリンター",
+        "ids": ["100277"] # プリンタ
+    },
+    "周辺機器": {
+        "main": "パソコン",
+        "sub": "周辺機器",
+        "ids": ["200100", "200101", "200102"] # パソコン周辺機器、マウス・キーボード
+    }
+}
+
+# ヤフーショッピングのカテゴリーIDとサイトのカテゴリーのマッピングを定義
+YAHOO_CATEGORY_MAP = {
+    # 家電
+    "掃除機": {
+        "main": "家電",
+        "sub": "掃除機",
+        "ids": ["12999"]
+    },
+    "空気清浄機": {
+        "main": "家電",
+        "sub": "空気清浄機",
+        "ids": ["12479"]
+    },
+    "エアコン": {
+        "main": "家電",
+        "sub": "エアコン",
+        "ids": ["2513"]
+    },
+    "冷蔵庫": {
+        "main": "家電",
+        "sub": "冷蔵庫",
+        "ids": ["12995"]
+    },
+    "電子レンジ": {
+        "main": "家電",
+        "sub": "電子レンジ",
+        "ids": ["12996"]
+    },
+    
+    # パソコン・周辺機器
+    "ノートPC": {
+        "main": "パソコン",
+        "sub": "ノートPC",
+        "ids": ["2502"]
+    },
+    "デスクトップPC": {
+        "main": "パソコン",
+        "sub": "デスクトップPC",
+        "ids": ["2502"]
+    },
+    "モニター": {
+        "main": "パソコン",
+        "sub": "モニター",
+        "ids": ["2505"]
+    },
+    "プリンター": {
+        "main": "パソコン",
+        "sub": "プリンター",
+        "ids": ["2508"]
+    },
+    "周辺機器": {
+        "main": "パソコン",
+        "sub": "周辺機器",
+        "ids": ["2507", "12984"] # マウス、キーボード
+    }
+}
+
+# OpenAIクライアントの初期化
+client = OpenAI(
+    api_key=os.environ.get('OPENAI_API_KEY')
+)
+
+def generate_ai_info(item_name, item_description, item_category):
+    """AIを使って製品スペックとタグを生成する関数"""
+    prompt = f"""
+以下の商品の情報から、主な製品仕様（スペック）を箇条書きで分かりやすく簡潔にまとめてください。
+また、ユーザーが検索しそうなキーワードを3〜5個、単語で抽出して「タグ」として生成してください。
+
+商品名: {item_name}
+商品説明: {item_description}
+カテゴリ: {item_category['main']} > {item_category['sub']}
+
+---
+出力形式：
+スペック：
+- [スペック1]
+- [スペック2]
+- ...
+タグ：
+[タグ1], [タグ2], [タグ3], ...
+"""
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        content = response.choices[0].message.content.strip()
+        
+        # 出力形式を解析
+        specs_start = content.find("スペック：")
+        tags_start = content.find("タグ：")
+        
+        specs_text = content[specs_start + len("スペック："):tags_start].strip()
+        tags_text = content[tags_start + len("タグ："):].strip()
+        
+        specs_list = [line.lstrip('- ').strip() for line in specs_text.split('\n') if line.lstrip('- ').strip()]
+        tags_list = [tag.strip() for tag in tags_text.split(',') if tag.strip()]
+        
+        return {
+            "specs": "\n".join([f"・{spec}" for spec in specs_list]),
+            "tags": tags_list
+        }
+
+    except Exception as e:
+        print(f"AI情報生成中にエラーが発生しました: {e}")
+        return {
+            "specs": "AIによる製品仕様の生成に失敗しました。",
+            "tags": []
+        }
 
 def fetch_rakuten_items():
     """楽天APIから複数のカテゴリで商品データを取得する関数"""
@@ -15,49 +185,44 @@ def fetch_rakuten_items():
         print("RAKUTEN_API_KEYが設定されていません。")
         return []
 
-    # 検索したいキーワードのリスト
-    keywords = ['パソコン', '家電']
     all_products = []
-
-    for keyword in keywords:
-        # 各キーワードでAPIを呼び出す（それぞれ10件取得）
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=10"
-
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()
-            items = data.get('Items', [])
-            
-            for item in items:
-                item_data = item['Item']
+    
+    for cat_info in RAKUTEN_GENRE_MAP.values():
+        main_cat = cat_info["main"]
+        sub_cat = cat_info.get("sub", "")
+        genre_ids = cat_info["ids"]
+        
+        for genre_id in genre_ids:
+            url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&genreId={genre_id}&format=json&sort=-reviewCount&hits=10"
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()
+                items = data.get('Items', [])
                 
-                # 'genreName'が存在しない場合を考慮してget()メソッドを使用
-                genre_name = item_data.get('genreName', '')
-                
-                # カテゴリを正しく設定
-                main_cat = keyword
-                
-                all_products.append({
-                    "id": item_data['itemCode'],
-                    "name": item_data['itemName'],
-                    "price": f"{int(item_data['itemPrice']):,}",
-                    "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
-                    "rakuten_url": item_data['itemUrl'],
-                    "yahoo_url": "https://shopping.yahoo.co.jp/", 
-                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
-                    "page_url": f"pages/{item_data['itemCode']}.html",
-                    "category": {
-                        "main": main_cat,
-                        "sub": genre_name
-                    },
-                    "ai_analysis": "AIによる価格分析は近日公開！",
-                    "description": "商品説明は現在準備中です。",
-                    "date": date.today().isoformat(),
-                    "main_ec_site": "楽天" # メインのECサイトを記録
-                })
-        except requests.exceptions.RequestException as e:
-            print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
+                for item in items:
+                    item_data = item['Item']
+                    
+                    all_products.append({
+                        "id": item_data['itemCode'],
+                        "name": item_data['itemName'],
+                        "price": f"{int(item_data['itemPrice']):,}",
+                        "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
+                        "rakuten_url": item_data['itemUrl'],
+                        "yahoo_url": "https://shopping.yahoo.co.jp/", 
+                        "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                        "page_url": f"pages/{item_data['itemCode']}.html",
+                        "category": {
+                            "main": main_cat,
+                            "sub": sub_cat
+                        },
+                        "ai_analysis": "AIによる価格分析は近日公開！",
+                        "description": item_data.get('itemCaption', '商品説明は現在準備中です。'),
+                        "date": date.today().isoformat(),
+                        "main_ec_site": "楽天"
+                    })
+            except requests.exceptions.RequestException as e:
+                print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
 
     return all_products
 
@@ -68,41 +233,42 @@ def fetch_yahoo_items():
         print("YAHOO_API_KEYが設定されていません。")
         return []
 
-    # 検索したいキーワードのリスト
-    keywords = ['掃除機', 'イヤホン']
     all_products = []
     
-    for keyword in keywords:
-        url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&query={keyword}&sort=-review_count&hits=5"
+    for cat_info in YAHOO_CATEGORY_MAP.values():
+        main_cat = cat_info["main"]
+        sub_cat = cat_info.get("sub", "")
+        category_ids = cat_info["ids"]
         
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()
-            items = data.get('hits', [])
-            
-            for item in items:
-                # Yahoo!ショッピングのデータ構造に合わせて変換
-                all_products.append({
-                    "id": item['jan_code'], # JANコードをIDとして使用
-                    "name": item['name'],
-                    "price": f"{int(item['price']):,}",
-                    "image_url": item['image']['medium'],
-                    "rakuten_url": "https://www.rakuten.co.jp/",
-                    "yahoo_url": item['url'],
-                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
-                    "page_url": f"pages/{item['jan_code']}.html",
-                    "category": {
-                        "main": keyword, # キーワードをメインカテゴリに
-                        "sub": item.get('category_name', '') # カテゴリ名を取得
-                    },
-                    "ai_analysis": "AIによる価格分析は近日公開！",
-                    "description": item.get('description', '商品説明は現在準備中です。'),
-                    "date": date.today().isoformat(),
-                    "main_ec_site": "Yahoo!" # メインのECサイトを記録
-                })
-        except requests.exceptions.RequestException as e:
-            print(f"Yahoo! APIへのリクエスト中にエラーが発生しました: {e}")
+        for category_id in category_ids:
+            url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&category_id={category_id}&sort=-review_count&hits=5"
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()
+                items = data.get('hits', [])
+                
+                for item in items:
+                    all_products.append({
+                        "id": item['jan_code'],
+                        "name": item['name'],
+                        "price": f"{int(item['price']):,}",
+                        "image_url": item['image']['medium'],
+                        "rakuten_url": "https://www.rakuten.co.jp/",
+                        "yahoo_url": item['url'],
+                        "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                        "page_url": f"pages/{item['jan_code']}.html",
+                        "category": {
+                            "main": main_cat,
+                            "sub": sub_cat
+                        },
+                        "ai_analysis": "AIによる価格分析は近日公開！",
+                        "description": item.get('description', '商品説明は現在準備中です。'),
+                        "date": date.today().isoformat(),
+                        "main_ec_site": "Yahoo!"
+                    })
+            except requests.exceptions.RequestException as e:
+                print(f"Yahoo! APIへのリクエスト中にエラーが発生しました: {e}")
             
     return all_products
 
@@ -119,7 +285,16 @@ def update_products_json(new_products):
         existing_products = []
 
     updated_products = {p['id']: p for p in existing_products}
+    
+    # 新しい商品情報をAIで生成して追加
     for new_product in new_products:
+        ai_info = generate_ai_info(
+            item_name=new_product['name'],
+            item_description=new_product['description'],
+            item_category=new_product['category']
+        )
+        new_product['specs'] = ai_info['specs']
+        new_product['tags'] = ai_info['tags']
         updated_products[new_product['id']] = new_product
     
     final_products = list(updated_products.values())
@@ -143,7 +318,7 @@ def generate_site(products):
         sub_cat = product['category']['sub']
         if main_cat not in categories:
             categories[main_cat] = []
-        if sub_cat not in categories[main_cat]:
+        if sub_cat and sub_cat not in categories[main_cat]:
             categories[main_cat].append(sub_cat)
     sorted_main_cats = sorted(categories.keys())
 
@@ -357,7 +532,6 @@ def generate_site(products):
                     <p>{product.get('specs', '')}</p>
                 </div>
             """
-        # メインECサイトの購入ボタンを生成
         purchase_button_html = ""
         main_ec_site = product.get("main_ec_site")
         
@@ -368,7 +542,6 @@ def generate_site(products):
         elif main_ec_site == "Yahoo!":
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
 
-        # 最安値ショップのボタンを常に3つ表示
         affiliate_links_html = f"""
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
@@ -391,7 +564,7 @@ def generate_site(products):
                 <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
                 <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{product['price']}</span>円</p>
+                    <p class="current-price">現在の価格：<span>{product['price']}円</span></p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
@@ -406,7 +579,7 @@ def generate_site(products):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="../tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
+                    {"".join([f'<a href="{os.path.relpath("tags/" + tag + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
                 </div>
             </div>
         </div>
@@ -573,7 +746,6 @@ if __name__ == "__main__":
     rakuten_products = fetch_rakuten_items()
     yahoo_products = fetch_yahoo_items()
     
-    # 2つのAPIからの結果を結合
     new_products = rakuten_products + yahoo_products
     
     products = update_products_json(new_products)
