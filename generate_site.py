@@ -33,7 +33,7 @@ def fetch_rakuten_items():
                 item_data = item['Item']
                 
                 # 'genreName'が存在しない場合を考慮してget()メソッドを使用
-                genre_name = item_data.get('genreName', '') 
+                genre_name = item_data.get('genreName', '')
                 
                 # カテゴリを正しく設定
                 main_cat = keyword
@@ -44,13 +44,17 @@ def fetch_rakuten_items():
                     "price": f"{int(item_data['itemPrice']):,}",
                     "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
                     "rakuten_url": item_data['itemUrl'],
+                    "yahoo_url": "https://shopping.yahoo.co.jp/", # Yahoo!のトップページURLを設定
+                    "amazon_url": "https://www.amazon.co.jp/", # AmazonのトップページURLを設定
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {
                         "main": main_cat,
                         "sub": genre_name
                     },
                     "ai_analysis": "AIによる価格分析は近日公開！",
-                    "date": date.today().isoformat()
+                    "description": "商品説明は現在準備中です。", # descriptionを追加
+                    "date": date.today().isoformat(),
+                    "main_ec_site": "楽天" # メインのECサイトを記録
                 })
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
@@ -306,26 +310,27 @@ def generate_site(products):
             specs_html = f"""
                 <div class="item-specs">
                     <h2>製品仕様・スペック</h2>
-                    <p>{product['specs']}</p>
+                    <p>{product.get('specs', '')}</p>
                 </div>
             """
+        # メインECサイトの購入ボタンを生成
         purchase_button_html = ""
         main_ec_site = product.get("main_ec_site")
-        if main_ec_site == "Amazon" and "amazon_url" in product:
+        if main_ec_site == "楽天":
             purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
-        elif main_ec_site == "楽天" and "rakuten_url" in product:
+        elif main_ec_site == "楽天":
             purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
-        elif main_ec_site == "Yahoo!" and "yahoo_url" in product:
+        elif main_ec_site == "Yahoo!":
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        elif main_ec_site == "Yahoo" and "yahoo_url" in product:
-            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+        
+        # 最安値ショップのボタンを常に3つ表示
         affiliate_links_html = f"""
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
                 <div class="lowest-price-buttons">
-                    {f'<a href="{product["amazon_url"]}" class="btn shop-link" target="_blank">Amazonで見る</a>' if "amazon_url" in product else ''}
-                    {f'<a href="{product["rakuten_url"]}" class="btn shop-link" target="_blank">楽天市場で見る</a>' if "rakuten_url" in product else ''}
-                    {f'<a href="{product["yahoo_url"]}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>' if "yahoo_url" in product else ''}
+                    <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
                 </div>
             </div>
         """
