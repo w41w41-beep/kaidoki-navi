@@ -4,36 +4,39 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>商品紹介サイト</title>
-        <link rel="stylesheet" href="style.css">
+        <title>カイドキナビ | 最新の家電・ガジェット</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
-        .product-card {
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        .product-card img {
-            width: 100%;
-            height: 192px; /* h-48 */
-            object-fit: cover;
-        }
+            body {
+                font-family: 'Noto Sans JP', sans-serif;
+            }
         </style>
     </head>
-    <body class="bg-gray-100 font-sans">
-        <div class="container mx-auto p-4 sm:p-8">
-            <header class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-gray-800 mb-2">最新の人気商品</h1>
-                <p class="text-gray-600">最新の人気商品とAIによる分析情報をチェック</p>
-            </header>
-            
-            <section class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">カテゴリから探す</h2>
-                <div class="flex flex-wrap gap-2">
+    <body class="bg-gray-100 min-h-screen flex flex-col">
+        <nav class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                <a href="index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                    <a href="privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                    <a href="disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
+                </div>
+            </div>
+        </nav>
+
+        <header class="text-center py-12 bg-white shadow-sm">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-2">最新の人気商品</h1>
+            <p class="text-gray-500 text-lg">最新の人気商品とAIによる分析情報をチェック</p>
+        </header>
+        
+        <main class="flex-grow container mx-auto p-4 sm:p-8">
+            <section class="mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">カテゴリから探す</h2>
+                <div class="flex flex-wrap gap-3 justify-center sm:justify-start">
                     
         <a href="category/掃除機.html" class="py-2 px-4 rounded-full border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition duration-300">
             掃除機
@@ -79,212 +82,178 @@
             </section>
 
             <section>
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">商品一覧</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">商品一覧</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10005073.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330783495.jpg?_ex=300x300" alt="日立 紙パック式クリーナー かるパック CV-KP300L（N） ライトゴールド キャニスター型 吸い込み仕事率650W" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">日立 紙パック式クリーナー かるパック CV-KP300L（N） ライトゴールド キャニスター型 吸い込み仕事率650W</h2>
-                    <p class="text-gray-600">33,200円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10005073.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330783495.jpg?_ex=300x300" alt="日立 紙パック式クリーナー かるパック CV-KP300L（N） ライトゴールド キャニスター型 吸い込み仕事率650W" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">日立 紙パック式クリーナー かるパック CV-KP300L（N） ライトゴールド キャニスター型 吸い込み仕事率650W</h2>
+                <p class="text-gray-600">33,200円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f082023-hitachi:10000349.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-090-a-set.jpg?_ex=300x300" alt="【ふるさと納税】【すごかるスティック】掃除機 PV-BS1M (H)【 軽量 コードレス 吸引力 HITACHI おすすめ 人気 日立 家電 茨城県 日立市】" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【すごかるスティック】掃除機 PV-BS1M (H)【 軽量 コードレス 吸引力 HITACHI おすすめ 人気 日立 家電 茨城県 日立市】</h2>
-                    <p class="text-gray-600">124,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f082023-hitachi:10000349.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-090-a-set.jpg?_ex=300x300" alt="【ふるさと納税】【すごかるスティック】掃除機 PV-BS1M (H)【 軽量 コードレス 吸引力 HITACHI おすすめ 人気 日立 家電 茨城県 日立市】" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【すごかるスティック】掃除機 PV-BS1M (H)【 軽量 コードレス 吸引力 HITACHI おすすめ 人気 日立 家電 茨城県 日立市】</h2>
+                <p class="text-gray-600">124,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f082023-hitachi:10000325.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-091-b-set.jpg?_ex=300x300" alt="【ふるさと納税】【パワーブーストサイクロン】コードレスPV-BH900SM (K)【 コードレス 掃除機 HITACHI 日立 家電 茨城県 日立市】" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【パワーブーストサイクロン】コードレスPV-BH900SM (K)【 コードレス 掃除機 HITACHI 日立 家電 茨城県 日立市】</h2>
-                    <p class="text-gray-600">217,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f082023-hitachi:10000325.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-091-b-set.jpg?_ex=300x300" alt="【ふるさと納税】【パワーブーストサイクロン】コードレスPV-BH900SM (K)【 コードレス 掃除機 HITACHI 日立 家電 茨城県 日立市】" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【パワーブーストサイクロン】コードレスPV-BH900SM (K)【 コードレス 掃除機 HITACHI 日立 家電 茨城県 日立市】</h2>
+                <p class="text-gray-600">217,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_shark:10000156.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/shark/cabinet/renamethum/p10/cs651j_40off.jpg?_ex=300x300" alt="40％OFF セール ポイント10倍 【Shark 公式】Shark シャーク EVOPOWER SYSTEM ADV コードレススティッククリーナー エヴォパワーシステムアドバンス CS651J 掃除機 スタンド 充電式 スティック掃除機 コードレス ハンディ 多機能 ハンディークリーナー" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">40％OFF セール ポイント10倍 【Shark 公式】Shark シャーク EVOPOWER SYSTEM ADV コードレススティッククリーナー エヴォパワーシステムアドバンス CS651J 掃除機 スタンド 充電式 スティック掃除機 コードレス ハンディ 多機能 ハンディークリーナー</h2>
-                    <p class="text-gray-600">35,970円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_shark:10000156.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/shark/cabinet/renamethum/p10/cs651j_40off.jpg?_ex=300x300" alt="40％OFF セール ポイント10倍 【Shark 公式】Shark シャーク EVOPOWER SYSTEM ADV コードレススティッククリーナー エヴォパワーシステムアドバンス CS651J 掃除機 スタンド 充電式 スティック掃除機 コードレス ハンディ 多機能 ハンディークリーナー" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">40％OFF セール ポイント10倍 【Shark 公式】Shark シャーク EVOPOWER SYSTEM ADV コードレススティッククリーナー エヴォパワーシステムアドバンス CS651J 掃除機 スタンド 充電式 スティック掃除機 コードレス ハンディ 多機能 ハンディークリーナー</h2>
+                <p class="text-gray-600">35,970円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_b-surprise2:10082750.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/b-surprise2/cabinet/11479466/4549873142449.jpg?_ex=300x300" alt="【10％OFF★9/19 20:00〜9/24 1:59】 掃除機 日立 HITACHI ラクかるスティック PV-BL3J-N シャンパンゴールド コードレス スティック クリーナー 縦型 軽い 軽量 充電式" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【10％OFF★9/19 20:00〜9/24 1:59】 掃除機 日立 HITACHI ラクかるスティック PV-BL3J-N シャンパンゴールド コードレス スティック クリーナー 縦型 軽い 軽量 充電式</h2>
-                    <p class="text-gray-600">32,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_b-surprise2:10082750.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/b-surprise2/cabinet/11479466/4549873142449.jpg?_ex=300x300" alt="【10％OFF★9/19 20:00〜9/24 1:59】 掃除機 日立 HITACHI ラクかるスティック PV-BL3J-N シャンパンゴールド コードレス スティック クリーナー 縦型 軽い 軽量 充電式" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【10％OFF★9/19 20:00〜9/24 1:59】 掃除機 日立 HITACHI ラクかるスティック PV-BL3J-N シャンパンゴールド コードレス スティック クリーナー 縦型 軽い 軽量 充電式</h2>
+                <p class="text-gray-600">32,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f082023-hitachi:10000351.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-131.jpg?_ex=300x300" alt="【ふるさと納税】【コードレススティック】掃除機PV-BL3M(C)【 コードレス HITACHI 日立 家電 茨城県 日立市 】" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【コードレススティック】掃除機PV-BL3M(C)【 コードレス HITACHI 日立 家電 茨城県 日立市 】</h2>
-                    <p class="text-gray-600">172,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f082023-hitachi:10000351.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f082023-hitachi/cabinet/henreihin/167-5-131.jpg?_ex=300x300" alt="【ふるさと納税】【コードレススティック】掃除機PV-BL3M(C)【 コードレス HITACHI 日立 家電 茨城県 日立市 】" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】【コードレススティック】掃除機PV-BL3M(C)【 コードレス HITACHI 日立 家電 茨城県 日立市 】</h2>
+                <p class="text-gray-600">172,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10004890.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/yamada/2024/11188430/imgrc0330541041.jpg?_ex=300x300" alt="日立 サイクロン式クリーナー CV-SP300L N ライトゴールド パワかるサイクロン" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">日立 サイクロン式クリーナー CV-SP300L N ライトゴールド パワかるサイクロン</h2>
-                    <p class="text-gray-600">39,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10004890.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/yamada/2024/11188430/imgrc0330541041.jpg?_ex=300x300" alt="日立 サイクロン式クリーナー CV-SP300L N ライトゴールド パワかるサイクロン" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">日立 サイクロン式クリーナー CV-SP300L N ライトゴールド パワかるサイクロン</h2>
+                <p class="text-gray-600">39,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10004410.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11542220/imgrc0331188316.jpg?_ex=300x300" alt="日立 スティッククリーナー コードレス式 PKV-BK3K(V) ライトラベンダー かるパックスティック" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">日立 スティッククリーナー コードレス式 PKV-BK3K(V) ライトラベンダー かるパックスティック</h2>
-                    <p class="text-gray-600">41,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10004410.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11542220/imgrc0331188316.jpg?_ex=300x300" alt="日立 スティッククリーナー コードレス式 PKV-BK3K(V) ライトラベンダー かるパックスティック" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">日立 スティッククリーナー コードレス式 PKV-BK3K(V) ライトラベンダー かるパックスティック</h2>
+                <p class="text-gray-600">41,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10005234.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11424778/imgrc0331006710.jpg?_ex=300x300" alt="日立 スティッククリーナー（コードレス式）PV-BH900SL(K) サテンブラック パワーブーストサイクロン スタンド式充電台付き 強烈パワー＆軽量" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">日立 スティッククリーナー（コードレス式）PV-BH900SL(K) サテンブラック パワーブーストサイクロン スタンド式充電台付き 強烈パワー＆軽量</h2>
-                    <p class="text-gray-600">49,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10005234.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11424778/imgrc0331006710.jpg?_ex=300x300" alt="日立 スティッククリーナー（コードレス式）PV-BH900SL(K) サテンブラック パワーブーストサイクロン スタンド式充電台付き 強烈パワー＆軽量" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">日立 スティッククリーナー（コードレス式）PV-BH900SL(K) サテンブラック パワーブーストサイクロン スタンド式充電台付き 強烈パワー＆軽量</h2>
+                <p class="text-gray-600">49,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10004300.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/10952437/imgrc0330041506.jpg?_ex=300x300" alt="Dyson Digital Slim Origin サイクロン式 コードレスクリーナー SV18 FF OR2 アイアン/ニッケル" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">Dyson Digital Slim Origin サイクロン式 コードレスクリーナー SV18 FF OR2 アイアン/ニッケル</h2>
-                    <p class="text-gray-600">44,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10004300.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/10952437/imgrc0330041506.jpg?_ex=300x300" alt="Dyson Digital Slim Origin サイクロン式 コードレスクリーナー SV18 FF OR2 アイアン/ニッケル" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">Dyson Digital Slim Origin サイクロン式 コードレスクリーナー SV18 FF OR2 アイアン/ニッケル</h2>
+                <p class="text-gray-600">44,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10004835.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330774940.jpg?_ex=300x300" alt="シャープ 加湿清浄機 KI-RS40-W プラズマクラスター25000 スリム コンパクト おすすめ畳数〜10畳 花粉 消臭 ウイルス" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">シャープ 加湿清浄機 KI-RS40-W プラズマクラスター25000 スリム コンパクト おすすめ畳数〜10畳 花粉 消臭 ウイルス</h2>
-                    <p class="text-gray-600">27,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10004835.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330774940.jpg?_ex=300x300" alt="シャープ 加湿清浄機 KI-RS40-W プラズマクラスター25000 スリム コンパクト おすすめ畳数〜10畳 花粉 消臭 ウイルス" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">シャープ 加湿清浄機 KI-RS40-W プラズマクラスター25000 スリム コンパクト おすすめ畳数〜10畳 花粉 消臭 ウイルス</h2>
+                <p class="text-gray-600">27,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10003863.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330751752.jpg?_ex=300x300" alt="シャープ 除加湿空気清浄機 KI-PD50-W ホワイト系 プラズマクラスター25000" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">シャープ 除加湿空気清浄機 KI-PD50-W ホワイト系 プラズマクラスター25000</h2>
-                    <p class="text-gray-600">44,500円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10003863.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/10528769/11290027/imgrc0330751752.jpg?_ex=300x300" alt="シャープ 除加湿空気清浄機 KI-PD50-W ホワイト系 プラズマクラスター25000" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">シャープ 除加湿空気清浄機 KI-PD50-W ホワイト系 プラズマクラスター25000</h2>
+                <p class="text-gray-600">44,500円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f252069-kusatsu:10000269.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f252069-kusatsu/cabinet/frp_goods/frp001/19827151.jpg?_ex=300x300" alt="【ふるさと納税】ダイキン 加湿ストリーマ 空気清浄機 ホワイト ACK705A-W(適用畳数：31畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ 加湿器 ウイルス対策 花粉対策 ハウスダスト 省エネ お取り寄せ 通販 送料無料 ふるさと納税" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】ダイキン 加湿ストリーマ 空気清浄機 ホワイト ACK705A-W(適用畳数：31畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ 加湿器 ウイルス対策 花粉対策 ハウスダスト 省エネ お取り寄せ 通販 送料無料 ふるさと納税</h2>
-                    <p class="text-gray-600">218,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f252069-kusatsu:10000269.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f252069-kusatsu/cabinet/frp_goods/frp001/19827151.jpg?_ex=300x300" alt="【ふるさと納税】ダイキン 加湿ストリーマ 空気清浄機 ホワイト ACK705A-W(適用畳数：31畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ 加湿器 ウイルス対策 花粉対策 ハウスダスト 省エネ お取り寄せ 通販 送料無料 ふるさと納税" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】ダイキン 加湿ストリーマ 空気清浄機 ホワイト ACK705A-W(適用畳数：31畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ 加湿器 ウイルス対策 花粉対策 ハウスダスト 省エネ お取り寄せ 通販 送料無料 ふるさと納税</h2>
+                <p class="text-gray-600">218,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_superdeal:10006074.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/11661997/12053655/imgrc0332067143.jpg?_ex=300x300" alt="シャープ 空気清浄機 FU-RC01-W ホワイト系 プラズマクラスター7000搭載 おすすめ畳数〜6畳 花粉対策 コンパクト 玄関 キッチン" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">シャープ 空気清浄機 FU-RC01-W ホワイト系 プラズマクラスター7000搭載 おすすめ畳数〜6畳 花粉対策 コンパクト 玄関 キッチン</h2>
-                    <p class="text-gray-600">13,800円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_superdeal:10006074.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/superdeal/cabinet/09061004/11661997/12053655/imgrc0332067143.jpg?_ex=300x300" alt="シャープ 空気清浄機 FU-RC01-W ホワイト系 プラズマクラスター7000搭載 おすすめ畳数〜6畳 花粉対策 コンパクト 玄関 キッチン" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">シャープ 空気清浄機 FU-RC01-W ホワイト系 プラズマクラスター7000搭載 おすすめ畳数〜6畳 花粉対策 コンパクト 玄関 キッチン</h2>
+                <p class="text-gray-600">13,800円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_toconnect:10000032.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/toconnect/cabinet/07831354/09669672/imgrc0106950857.jpg?_ex=300x300" alt="【公式ストア】Airdog X3D 花粉対策 光＆人感センサー搭載 3方向広角排気システム 寝室 子供部屋 会議室 TPAフィルター 浮遊ウイルス対応 エアドッグ カビ ニオイ 対策" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【公式ストア】Airdog X3D 花粉対策 光＆人感センサー搭載 3方向広角排気システム 寝室 子供部屋 会議室 TPAフィルター 浮遊ウイルス対応 エアドッグ カビ ニオイ 対策</h2>
-                    <p class="text-gray-600">122,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_toconnect:10000032.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/toconnect/cabinet/07831354/09669672/imgrc0106950857.jpg?_ex=300x300" alt="【公式ストア】Airdog X3D 花粉対策 光＆人感センサー搭載 3方向広角排気システム 寝室 子供部屋 会議室 TPAフィルター 浮遊ウイルス対応 エアドッグ カビ ニオイ 対策" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【公式ストア】Airdog X3D 花粉対策 光＆人感センサー搭載 3方向広角排気システム 寝室 子供部屋 会議室 TPAフィルター 浮遊ウイルス対応 エアドッグ カビ ニオイ 対策</h2>
+                <p class="text-gray-600">122,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f252069-kusatsu:10000226.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f252069-kusatsu/cabinet/frp_goods/frp001/19827409.jpg?_ex=300x300" alt="【ふるさと納税】ダイキン UVストリーマ空気清浄機 シルバー ACB50Z-S (適用畳数：22畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ ウイルス対策 花粉対策 ハウスダスト 静音設計 省エネ お取り寄せ 通販 送料無料 ふるさと納税" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】ダイキン UVストリーマ空気清浄機 シルバー ACB50Z-S (適用畳数：22畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ ウイルス対策 花粉対策 ハウスダスト 静音設計 省エネ お取り寄せ 通販 送料無料 ふるさと納税</h2>
-                    <p class="text-gray-600">250,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f252069-kusatsu:10000226.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f252069-kusatsu/cabinet/frp_goods/frp001/19827409.jpg?_ex=300x300" alt="【ふるさと納税】ダイキン UVストリーマ空気清浄機 シルバー ACB50Z-S (適用畳数：22畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ ウイルス対策 花粉対策 ハウスダスト 静音設計 省エネ お取り寄せ 通販 送料無料 ふるさと納税" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】ダイキン UVストリーマ空気清浄機 シルバー ACB50Z-S (適用畳数：22畳/PM2.5対応) | 草津市 家電メーカー UV除菌 人気 おすすめ ウイルス対策 花粉対策 ハウスダスト 静音設計 省エネ お取り寄せ 通販 送料無料 ふるさと納税</h2>
+                <p class="text-gray-600">250,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_toconnect:10000031.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/toconnect/cabinet/07831354/09684150/imgrc0106950927.jpg?_ex=300x300" alt="【公式ストア】Airdog X5D 花粉対策 CO2センサー搭載 キャスター付き TPAフィルター 浮遊ウイルス対応 静音設計 ペット リビング 店舗 オフィス エアドッグ カビ ニオイ 対策" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【公式ストア】Airdog X5D 花粉対策 CO2センサー搭載 キャスター付き TPAフィルター 浮遊ウイルス対応 静音設計 ペット リビング 店舗 オフィス エアドッグ カビ ニオイ 対策</h2>
-                    <p class="text-gray-600">162,600円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_toconnect:10000031.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/toconnect/cabinet/07831354/09684150/imgrc0106950927.jpg?_ex=300x300" alt="【公式ストア】Airdog X5D 花粉対策 CO2センサー搭載 キャスター付き TPAフィルター 浮遊ウイルス対応 静音設計 ペット リビング 店舗 オフィス エアドッグ カビ ニオイ 対策" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【公式ストア】Airdog X5D 花粉対策 CO2センサー搭載 キャスター付き TPAフィルター 浮遊ウイルス対応 静音設計 ペット リビング 店舗 オフィス エアドッグ カビ ニオイ 対策</h2>
+                <p class="text-gray-600">162,600円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_a-price:10783843.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/a-price/cabinet/mailmaga/08814302/4550556111386.jpg?_ex=300x300" alt="空気清浄機 加湿空気清浄機 シャープ KC-S50-W ホワイト系 プラズマクラスター7000 SHARP ( 畳数 23畳 / 加湿 14畳 まで) KC-T50 の前型番 加湿器 花粉運転 スピード循環気流 脱臭 集じん PM2.5対応 kcs50 KCS50 リビング 寝室" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">空気清浄機 加湿空気清浄機 シャープ KC-S50-W ホワイト系 プラズマクラスター7000 SHARP ( 畳数 23畳 / 加湿 14畳 まで) KC-T50 の前型番 加湿器 花粉運転 スピード循環気流 脱臭 集じん PM2.5対応 kcs50 KCS50 リビング 寝室</h2>
-                    <p class="text-gray-600">20,900円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_a-price:10783843.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/a-price/cabinet/mailmaga/08814302/4550556111386.jpg?_ex=300x300" alt="空気清浄機 加湿空気清浄機 シャープ KC-S50-W ホワイト系 プラズマクラスター7000 SHARP ( 畳数 23畳 / 加湿 14畳 まで) KC-T50 の前型番 加湿器 花粉運転 スピード循環気流 脱臭 集じん PM2.5対応 kcs50 KCS50 リビング 寝室" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">空気清浄機 加湿空気清浄機 シャープ KC-S50-W ホワイト系 プラズマクラスター7000 SHARP ( 畳数 23畳 / 加湿 14畳 まで) KC-T50 の前型番 加湿器 花粉運転 スピード循環気流 脱臭 集じん PM2.5対応 kcs50 KCS50 リビング 寝室</h2>
+                <p class="text-gray-600">20,900円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f401005-kitakyushu:10000305.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f401005-kitakyushu/cabinet/daikou/098-1376_1a.jpg?_ex=300x300" alt="【ふるさと納税】空気清浄機は光の時代へ。"光除菌が元から分解・除去！" ブルーデオS型 家電 フジコー ウイルス対策 空気清浄機 臭い 匂い 花粉 白 ホワイト 空間除菌 消臭 卓上 日本製 95000円 9万5000円" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】空気清浄機は光の時代へ。"光除菌が元から分解・除去！" ブルーデオS型 家電 フジコー ウイルス対策 空気清浄機 臭い 匂い 花粉 白 ホワイト 空間除菌 消臭 卓上 日本製 95000円 9万5000円</h2>
-                    <p class="text-gray-600">95,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f401005-kitakyushu:10000305.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f401005-kitakyushu/cabinet/daikou/098-1376_1a.jpg?_ex=300x300" alt="【ふるさと納税】空気清浄機は光の時代へ。"光除菌が元から分解・除去！" ブルーデオS型 家電 フジコー ウイルス対策 空気清浄機 臭い 匂い 花粉 白 ホワイト 空間除菌 消臭 卓上 日本製 95000円 9万5000円" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】空気清浄機は光の時代へ。"光除菌が元から分解・除去！" ブルーデオS型 家電 フジコー ウイルス対策 空気清浄機 臭い 匂い 花粉 白 ホワイト 空間除菌 消臭 卓上 日本製 95000円 9万5000円</h2>
+                <p class="text-gray-600">95,000円</p>
+            </div>
+        </a>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/rakuten_f232068-kasugai:10000663.html" class="block">
-                <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f232068-kasugai/cabinet/10043577/imgrc0111965928.jpg?_ex=300x300" alt="【ふるさと納税】 次亜塩素酸 空間除菌脱臭機 「ジアイーノ」F-ML4000B | 家電 空気清浄器 除菌 脱臭 ウイルス 喘息 脱臭 新生活 アレルギー ハウスダスト 花粉症 集じん 加湿 寝室 子ども 家 リビング ペットの毛 パナソニック Panasonic ジアイーノ 家庭用 除湿 なし" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】 次亜塩素酸 空間除菌脱臭機 「ジアイーノ」F-ML4000B | 家電 空気清浄器 除菌 脱臭 ウイルス 喘息 脱臭 新生活 アレルギー ハウスダスト 花粉症 集じん 加湿 寝室 子ども 家 リビング ペットの毛 パナソニック Panasonic ジアイーノ 家庭用 除湿 なし</h2>
-                    <p class="text-gray-600">248,000円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/rakuten_f232068-kasugai:10000663.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/f232068-kasugai/cabinet/10043577/imgrc0111965928.jpg?_ex=300x300" alt="【ふるさと納税】 次亜塩素酸 空間除菌脱臭機 「ジアイーノ」F-ML4000B | 家電 空気清浄器 除菌 脱臭 ウイルス 喘息 脱臭 新生活 アレルギー ハウスダスト 花粉症 集じん 加湿 寝室 子ども 家 リビング ペットの毛 パナソニック Panasonic ジアイーノ 家庭用 除湿 なし" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">【ふるさと納税】 次亜塩素酸 空間除菌脱臭機 「ジアイーノ」F-ML4000B | 家電 空気清浄器 除菌 脱臭 ウイルス 喘息 脱臭 新生活 アレルギー ハウスダスト 花粉症 集じん 加湿 寝室 子ども 家 リビング ペットの毛 パナソニック Panasonic ジアイーノ 家庭用 除湿 なし</h2>
+                <p class="text-gray-600">248,000円</p>
+            </div>
+        </a>
         
                 </div>
             </section>
-        </div>
+        </main>
+        
+        <footer class="bg-gray-800 text-white p-6 mt-12">
+            <div class="container mx-auto text-center">
+                <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+            </div>
+        </footer>
     </body>
     </html>
     
