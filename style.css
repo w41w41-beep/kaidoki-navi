@@ -144,9 +144,7 @@ footer {
 }
 .product-card:hover { transform: translateY(-5px); }
 .product-card img {
-    width: 100%; /* 親要素の幅いっぱいに広げる */
-    height: auto; /* 縦横比を維持する */
-    display: block; /* 余白をなくす */
+    /* width: 100%; この行を削除するか、コメントアウトする */
 }
 .product-info {
     padding: 15px;
@@ -237,10 +235,8 @@ footer {
     text-align: center;
 }
 .item-image img {
-    width: 100%; /* 親要素の幅いっぱいに広げる */
-    height: auto; /* 縦横比を維持する */
-    display: block; /* 余白をなくす */
-    max-width: 400px; /* 画像が大きくなりすぎないように最大幅を設定 */
+    /* width: 100%; この行を削除するか、コメントアウトする */
+    /* max-width: 400px; この行を削除するか、コメントアウトする */
 }
 .item-info {
     flex: 2;
