@@ -256,8 +256,8 @@ def _generate_product_detail_pages(products):
                 tags = json.loads(product["tags"])
                 all_tags.update(tags)
                 tags_html = f"""
-                <div class="product-tags my-4">
-                    {''.join([f'<a href="../tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in tags])}
+                <div class="product-tags my-4 flex flex-wrap gap-2 justify-center sm:justify-start">
+                    {''.join([f'<a href="../tags/{tag}.html" class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full hover:bg-blue-200 transition-colors duration-200">#{tag}</a>' for tag in tags])}
                 </div>
                 """
             except json.JSONDecodeError:
@@ -271,42 +271,67 @@ def _generate_product_detail_pages(products):
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{product['name']} - 商品詳細</title>
-            <link rel="stylesheet" href="../style.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
             <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                body {{
+                    font-family: 'Noto Sans JP', sans-serif;
+                }}
+            </style>
         </head>
-        <body class="bg-gray-100 font-sans">
-            <div class="container mx-auto p-4 sm:p-8">
-                <a href="../index.html" class="text-blue-500 hover:underline mb-4 inline-block">← トップページに戻る</a>
-                
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
-                    <div class="md:flex-shrink-0">
-                        <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-64 object-cover md:h-full md:w-64">
-                    </div>
-                    <div class="p-6 flex flex-col justify-between w-full">
-                        <div>
-                            <h1 class="text-3xl font-bold text-gray-800 mb-2">{product['name']}</h1>
-                            <p class="text-xl font-semibold text-gray-600 mb-4">{int(product['price']):,}円</p>
-                            
-                            <h2 class="text-2xl font-semibold text-gray-700 mt-4 mb-2">商品説明</h2>
-                            <p class="text-gray-600 leading-relaxed whitespace-pre-wrap">{product['description']}</p>
-                            
-                            {tags_html}
-
-                            <h2 class="text-2xl font-semibold text-gray-700 mt-6 mb-2">AIによる商品説明</h2>
-                            <p class="text-gray-600 leading-relaxed whitespace-pre-wrap">{product['ai_description']}</p>
-
-                            <h2 class="text-2xl font-semibold text-gray-700 mt-6 mb-2">AIによる製品仕様・スペック</h2>
-                            <p class="text-gray-600 leading-relaxed whitespace-pre-wrap">{product['specs']}</p>
-                            
-                        </div>
-                        <div class="mt-6 flex flex-wrap gap-4">
-                            <a href="{product['url']}" target="_blank" class="flex-1 text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
-                                {product['shop']}で詳細を見る
-                            </a>
-                        </div>
+        <body class="bg-gray-100 min-h-screen flex flex-col">
+            <nav class="bg-white shadow-md">
+                <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                    <a href="../index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                    <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                        <a href="../index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                        <a href="../contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                        <a href="../privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                        <a href="../disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
                     </div>
                 </div>
-            </div>
+            </nav>
+
+            <main class="flex-grow container mx-auto p-4 sm:p-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <div class="w-full md:w-1/2 flex justify-center items-center">
+                        <img src="{product['image_url']}" alt="{product['name']}" class="max-w-full max-h-96 object-contain rounded-lg shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-col gap-4">
+                        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">{product['name']}</h1>
+                        <p class="text-2xl font-bold text-red-500">{int(product['price']):,}円</p>
+                        
+                        <div class="mt-4">
+                            <h2 class="text-xl font-bold border-b pb-2 mb-2 text-gray-700">商品概要</h2>
+                            <p class="text-gray-600 whitespace-pre-wrap">{product['description']}</p>
+                        </div>
+
+                        {tags_html}
+
+                        <div class="mt-6">
+                            <h2 class="text-xl font-bold border-b pb-2 mb-2 text-gray-700">AIによる詳細分析</h2>
+                            <p class="text-gray-600 whitespace-pre-wrap">{product['ai_description']}</p>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h2 class="text-xl font-bold border-b pb-2 mb-2 text-gray-700">AIによる製品仕様・スペック</h2>
+                            <p class="text-gray-600 whitespace-pre-wrap">{product['specs']}</p>
+                        </div>
+                        
+                        <a href="{product['url']}" target="_blank" class="mt-8 text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition duration-300 w-full text-lg shadow-lg">
+                            {product['shop']}で詳細を見る
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="bg-gray-800 text-white p-6 mt-12">
+                <div class="container mx-auto text-center">
+                    <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+                </div>
+            </footer>
         </body>
         </html>
         """
@@ -321,15 +346,13 @@ def _generate_product_detail_pages(products):
         product_cards = ""
         for p in tag_products:
             product_cards += f"""
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <a href="../pages/{p['id']}.html" class="block">
-                    <img src="{p['image_url']}" alt="{p['name']}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h2 class="text-lg font-semibold text-gray-800">{p['name']}</h2>
-                        <p class="text-gray-600">{int(p['price']):,}円</p>
-                    </div>
-                </a>
-            </div>
+            <a href="../pages/{p['id']}.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <img src="{p['image_url']}" alt="{p['name']}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-lg font-semibold text-gray-800">{p['name']}</h2>
+                    <p class="text-gray-600">{int(p['price']):,}円</p>
+                </div>
+            </a>
             """
         
         tag_html = f"""
@@ -339,17 +362,40 @@ def _generate_product_detail_pages(products):
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>#{tag} の商品一覧</title>
-            <link rel="stylesheet" href="../style.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
             <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                body {{
+                    font-family: 'Noto Sans JP', sans-serif;
+                }}
+            </style>
         </head>
-        <body class="bg-gray-100 font-sans">
-            <div class="container mx-auto p-4 sm:p-8">
-                <a href="../index.html" class="text-blue-500 hover:underline mb-4 inline-block">← トップページに戻る</a>
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">#{tag} の商品一覧</h1>
+        <body class="bg-gray-100 min-h-screen flex flex-col">
+            <nav class="bg-white shadow-md">
+                <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                    <a href="../index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                    <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                        <a href="../index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                        <a href="../contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                        <a href="../privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                        <a href="../disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
+                    </div>
+                </div>
+            </nav>
+            <main class="flex-grow container mx-auto p-4 sm:p-8">
+                <a href="../index.html" class="text-blue-500 hover:underline mb-4 inline-block text-lg">← トップページに戻る</a>
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">#{tag} の商品一覧</h1>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {product_cards}
                 </div>
-            </div>
+            </main>
+            <footer class="bg-gray-800 text-white p-6 mt-12">
+                <div class="container mx-auto text-center">
+                    <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+                </div>
+            </footer>
         </body>
         </html>
         """
@@ -372,15 +418,13 @@ def _generate_category_pages(products):
         product_cards = ""
         for p in category_products:
             product_cards += f"""
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <a href="../pages/{p['id']}.html" class="block">
-                    <img src="{p['image_url']}" alt="{p['name']}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h2 class="text-lg font-semibold text-gray-800">{p['name']}</h2>
-                        <p class="text-gray-600">{int(p['price']):,}円</p>
-                    </div>
-                </a>
-            </div>
+            <a href="../pages/{p['id']}.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <img src="{p['image_url']}" alt="{p['name']}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-lg font-semibold text-gray-800">{p['name']}</h2>
+                    <p class="text-gray-600">{int(p['price']):,}円</p>
+                </div>
+            </a>
             """
         
         html_content = f"""
@@ -390,17 +434,40 @@ def _generate_category_pages(products):
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{category} - 商品一覧</title>
-            <link rel="stylesheet" href="../style.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
             <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                body {{
+                    font-family: 'Noto Sans JP', sans-serif;
+                }}
+            </style>
         </head>
-        <body class="bg-gray-100 font-sans">
-            <div class="container mx-auto p-4 sm:p-8">
-                <a href="../index.html" class="text-blue-500 hover:underline mb-4 inline-block">← トップページに戻る</a>
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">{category}の商品一覧</h1>
+        <body class="bg-gray-100 min-h-screen flex flex-col">
+            <nav class="bg-white shadow-md">
+                <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                    <a href="../index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                    <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                        <a href="../index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                        <a href="../contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                        <a href="../privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                        <a href="../disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
+                    </div>
+                </div>
+            </nav>
+            <main class="flex-grow container mx-auto p-4 sm:p-8">
+                <a href="../index.html" class="text-blue-500 hover:underline mb-4 inline-block text-lg">← トップページに戻る</a>
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">{category}の商品一覧</h1>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {product_cards}
                 </div>
-            </div>
+            </main>
+            <footer class="bg-gray-800 text-white p-6 mt-12">
+                <div class="container mx-auto text-center">
+                    <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+                </div>
+            </footer>
         </body>
         </html>
         """
@@ -422,16 +489,18 @@ def _generate_index_page(products):
     product_cards = ""
     for product in products:
         product_cards += f"""
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="pages/{product['id']}.html" class="block">
-                <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-gray-800">{product['name']}</h2>
-                    <p class="text-gray-600">{int(product['price']):,}円</p>
-                </div>
-            </a>
-        </div>
+        <a href="pages/{product['id']}.html" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-800">{product['name']}</h2>
+                <p class="text-gray-600">{int(product['price']):,}円</p>
+            </div>
+        </a>
         """
+        
+    # AIによる注目アイテムのセクション
+    ai_featured_products = product_cards[:4]
+    remaining_products = product_cards[4:]
 
     html_content = f"""
     <!DOCTYPE html>
@@ -439,66 +508,156 @@ def _generate_index_page(products):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>商品紹介サイト</title>
-        <link rel="stylesheet" href="style.css">
+        <title>カイドキナビ | 最新の家電・ガジェット</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
-        .product-card {{
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-        }}
-        .product-card:hover {{
-            transform: translateY(-5px);
-        }}
-        .product-card img {{
-            width: 100%;
-            height: 192px; /* h-48 */
-            object-fit: cover;
-        }}
+            body {{
+                font-family: 'Noto Sans JP', sans-serif;
+            }}
         </style>
     </head>
-    <body class="bg-gray-100 font-sans">
-        <div class="container mx-auto p-4 sm:p-8">
-            <header class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-gray-800 mb-2">最新の人気商品</h1>
-                <p class="text-gray-600">最新の人気商品とAIによる分析情報をチェック</p>
-            </header>
-            
-            <section class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">カテゴリから探す</h2>
-                <div class="flex flex-wrap gap-2">
+    <body class="bg-gray-100 min-h-screen flex flex-col">
+        <nav class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                <a href="index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                    <a href="privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                    <a href="disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
+                </div>
+            </div>
+        </nav>
+
+        <header class="text-center py-12 bg-white shadow-sm">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-2">最新の人気商品</h1>
+            <p class="text-gray-500 text-lg">最新の人気商品とAIによる分析情報をチェック</p>
+        </header>
+        
+        <main class="flex-grow container mx-auto p-4 sm:p-8">
+            <section class="mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">カテゴリから探す</h2>
+                <div class="flex flex-wrap gap-3 justify-center sm:justify-start">
                     {category_html}
                 </div>
             </section>
 
             <section>
-                <h2 class="text-2xl font-bold text-gray-700 mb-4">商品一覧</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">商品一覧</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {product_cards}
                 </div>
             </section>
-        </div>
+        </main>
+        
+        <footer class="bg-gray-800 text-white p-6 mt-12">
+            <div class="container mx-auto text-center">
+                <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+            </div>
+        </footer>
     </body>
     </html>
     """
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
+def _generate_static_pages():
+    """
+    プライバシーポリシー、免責事項、お問い合わせページを生成
+    """
+    contact_content = """
+    <main class="flex-grow container mx-auto p-4 sm:p-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">お問い合わせ</h1>
+            <p class="text-gray-600">ご質問やご要望がございましたら、以下のメールアドレスまでご連絡ください。</p>
+            <p class="mt-4 text-blue-600 font-semibold">メールアドレス: sokux001@gmail.com</p>
+        </div>
+    </main>
+    """
+    _write_static_page("contact.html", "お問い合わせ", contact_content)
+
+    privacy_content = """
+    <main class="flex-grow container mx-auto p-4 sm:p-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">プライバシーポリシー</h1>
+            <p class="text-gray-600">当サイトは、Googleアナリティクスを使用しています。収集される情報やその利用目的については、Googleのプライバシーポリシーをご確認ください。</p>
+            <p class="mt-4 text-gray-600">当サイトは、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。</p>
+        </div>
+    </main>
+    """
+    _write_static_page("privacy.html", "プライバシーポリシー", privacy_content)
+
+    disclaimer_content = """
+    <main class="flex-grow container mx-auto p-4 sm:p-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">免責事項</h1>
+            <p class="text-gray-600">本サイトに掲載されている情報は、正確性や完全性を保証するものではありません。</p>
+            <p class="mt-4 text-gray-600">アフィリエイトリンクを通じて購入された商品に関するトラブルについては、当サイトは一切の責任を負いません。</p>
+        </div>
+    </main>
+    """
+    _write_static_page("disclaimer.html", "免責事項", disclaimer_content)
+
+def _write_static_page(file_name, title, content):
+    html_template = f"""
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>カイドキナビ | {title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            body {{
+                font-family: 'Noto Sans JP', sans-serif;
+            }}
+        </style>
+    </head>
+    <body class="bg-gray-100 min-h-screen flex flex-col">
+        <nav class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                <a href="index.html" class="text-2xl font-bold text-gray-800">カイドキナビ</a>
+                <div class="mt-4 sm:mt-0 flex flex-wrap justify-center sm:justify-start gap-4">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">トップ</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">お問い合わせ</a>
+                    <a href="privacy.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">プライバシーポリシー</a>
+                    <a href="disclaimer.html" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium">免責事項</a>
+                </div>
+            </div>
+        </nav>
+        {content}
+        <footer class="bg-gray-800 text-white p-6 mt-12">
+            <div class="container mx-auto text-center">
+                <p class="text-sm">&copy; 2025 カイドキナビ. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </body>
+    </html>
+    """
+    with open(file_name, "w", encoding="utf-8") as f:
+        f.write(html_template)
+    print(f"{file_name} が正常に生成されました。")
+
+
 def _generate_sitemap(products):
     """
     サイトマップ（sitemap.xml）を生成
     """
     urls = []
-    base_url = "https://kaidoki-navi.github.io/kaidoki-navi" # このURLはGitHub PagesのURLに合わせて変更してください
+    base_url = "https://w41w41-beep.github.io/kaidoki-navi/" # このURLはGitHub PagesのURLに合わせて変更してください
     
     # トップページ
-    urls.append(f"<url><loc>{base_url}/index.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>")
+    urls.append(f"<url><loc>{base_url}</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>")
     
     # カテゴリページ
     for category_name in RAKUTEN_CATEGORY_IDS.keys():
-        urls.append(f"<url><loc>{base_url}/category/{category_name}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>")
+        urls.append(f"<url><loc>{base_url}category/{category_name}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>")
 
     # タグページ
     all_tags = set()
@@ -510,12 +669,17 @@ def _generate_sitemap(products):
             continue
 
     for tag in all_tags:
-        urls.append(f"<url><loc>{base_url}/tags/{tag}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>")
+        urls.append(f"<url><loc>{base_url}tags/{tag}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>")
 
     # 商品詳細ページ
     for product in products:
-        urls.append(f"<url><loc>{base_url}/pages/{product['id']}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>")
+        urls.append(f"<url><loc>{base_url}pages/{product['id']}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>")
         
+    # 静的ページ
+    static_pages = ["contact.html", "privacy.html", "disclaimer.html"]
+    for page in static_pages:
+        urls.append(f"<url><loc>{base_url}{page}</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>")
+
     sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {"".join(urls)}
@@ -541,13 +705,20 @@ def main():
     if os.path.exists("tags"):
         import shutil
         shutil.rmtree("tags")
+    if os.path.exists("sitemap.xml"):
+        os.remove("sitemap.xml")
     if os.path.exists("index.html"):
         os.remove("index.html")
+    if os.path.exists("contact.html"):
+        os.remove("contact.html")
+    if os.path.exists("privacy.html"):
+        os.remove("privacy.html")
+    if os.path.exists("disclaimer.html"):
+        os.remove("disclaimer.html")
     # products.jsonが存在する場合は削除
     if os.path.exists("products.json"):
         os.remove("products.json")
-    if os.path.exists("sitemap.xml"):
-        os.remove("sitemap.xml")
+
 
     # CSVを更新
     update_products_csv()
@@ -560,6 +731,7 @@ def main():
     _generate_index_page(products)
     _generate_product_detail_pages(products)
     _generate_category_pages(products)
+    _generate_static_pages()
     _generate_sitemap(products)
 
 if __name__ == "__main__":
