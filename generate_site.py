@@ -195,6 +195,7 @@ def fetch_rakuten_items():
         genre_ids = cat_info["ids"]
         
         for genre_id in genre_ids:
+            # 取得数を10に設定
             url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&genreId={genre_id}&format=json&sort=-reviewCount&hits=10"
             try:
                 response = requests.get(url)
@@ -243,7 +244,8 @@ def fetch_yahoo_items():
         category_ids = cat_info["ids"]
         
         for category_id in category_ids:
-            url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&category_id={category_id}&sort=-review_count&hits=5"
+            # 取得数を10に設定
+            url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&category_id={category_id}&sort=-review_count&hits=10"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -286,17 +288,21 @@ def update_products_json(new_products):
         print("products.jsonが破損しているため、新規作成します。")
         existing_products = []
 
+    # 既存の商品データをIDをキーとする辞書に変換
     updated_products = {p['id']: p for p in existing_products}
     
     # 新しい商品情報をAIで生成して追加
     for new_product in new_products:
-        ai_info = generate_ai_info(
-            item_name=new_product['name'],
-            item_description=new_product['description'],
-            item_category=new_product['category']
-        )
-        new_product['specs'] = ai_info['specs']
-        new_product['tags'] = ai_info['tags']
+        # 既存の商品IDと重複しない場合のみAI情報を生成
+        if new_product['id'] not in updated_products:
+            ai_info = generate_ai_info(
+                item_name=new_product['name'],
+                item_description=new_product['description'],
+                item_category=new_product['category']
+            )
+            new_product['specs'] = ai_info['specs']
+            new_product['tags'] = ai_info['tags']
+        # 既存の商品であっても新しい情報で更新
         updated_products[new_product['id']] = new_product
     
     final_products = list(updated_products.values())
