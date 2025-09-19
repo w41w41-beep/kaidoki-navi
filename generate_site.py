@@ -44,23 +44,67 @@ def fetch_rakuten_items():
                     "price": f"{int(item_data['itemPrice']):,}",
                     "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
                     "rakuten_url": item_data['itemUrl'],
-                    "yahoo_url": "https://shopping.yahoo.co.jp/", # Yahoo!のトップページURLを設定
-                    "amazon_url": "https://www.amazon.co.jp/", # AmazonのトップページURLを設定
+                    "yahoo_url": "https://shopping.yahoo.co.jp/", 
+                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {
                         "main": main_cat,
                         "sub": genre_name
                     },
                     "ai_analysis": "AIによる価格分析は近日公開！",
-                    "description": "商品説明は現在準備中です。", # descriptionを追加
+                    "description": "商品説明は現在準備中です。",
                     "date": date.today().isoformat(),
                     "main_ec_site": "楽天" # メインのECサイトを記録
                 })
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
 
-    # 合計20件までを返す
-    return all_products[:20]
+    return all_products
+
+def fetch_yahoo_items():
+    """Yahoo!ショッピングAPIから商品データを取得する関数"""
+    app_id = os.environ.get('YAHOO_API_KEY')
+    if not app_id:
+        print("YAHOO_API_KEYが設定されていません。")
+        return []
+
+    # 検索したいキーワードのリスト
+    keywords = ['掃除機', 'イヤホン']
+    all_products = []
+    
+    for keyword in keywords:
+        url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&query={keyword}&sort=-review_count&hits=5"
+        
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            items = data.get('hits', [])
+            
+            for item in items:
+                # Yahoo!ショッピングのデータ構造に合わせて変換
+                all_products.append({
+                    "id": item['jan_code'], # JANコードをIDとして使用
+                    "name": item['name'],
+                    "price": f"{int(item['price']):,}",
+                    "image_url": item['image']['medium'],
+                    "rakuten_url": "https://www.rakuten.co.jp/",
+                    "yahoo_url": item['url'],
+                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                    "page_url": f"pages/{item['jan_code']}.html",
+                    "category": {
+                        "main": keyword, # キーワードをメインカテゴリに
+                        "sub": item.get('category_name', '') # カテゴリ名を取得
+                    },
+                    "ai_analysis": "AIによる価格分析は近日公開！",
+                    "description": item.get('description', '商品説明は現在準備中です。'),
+                    "date": date.today().isoformat(),
+                    "main_ec_site": "Yahoo!" # メインのECサイトを記録
+                })
+        except requests.exceptions.RequestException as e:
+            print(f"Yahoo! APIへのリクエスト中にエラーが発生しました: {e}")
+            
+    return all_products
 
 def update_products_json(new_products):
     """新しい商品データを既存のproducts.jsonに統合・更新する関数"""
@@ -316,13 +360,14 @@ def generate_site(products):
         # メインECサイトの購入ボタンを生成
         purchase_button_html = ""
         main_ec_site = product.get("main_ec_site")
-        if main_ec_site == "楽天":
+        
+        if main_ec_site == "Amazon":
             purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
         elif main_ec_site == "楽天":
             purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
         elif main_ec_site == "Yahoo!":
             purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
-        
+
         # 最安値ショップのボタンを常に3つ表示
         affiliate_links_html = f"""
             <div class="lowest-price-section">
@@ -525,6 +570,11 @@ def generate_site(products):
     print("サイトのファイル生成が完了しました！")
 
 if __name__ == "__main__":
-    new_products = fetch_rakuten_items()
+    rakuten_products = fetch_rakuten_items()
+    yahoo_products = fetch_yahoo_items()
+    
+    # 2つのAPIからの結果を結合
+    new_products = rakuten_products + yahoo_products
+    
     products = update_products_json(new_products)
     generate_site(products)
