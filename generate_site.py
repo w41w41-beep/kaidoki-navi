@@ -255,7 +255,7 @@ def generate_site(products):
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{product['price']}</p>
+        <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
         <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
@@ -283,7 +283,7 @@ def generate_site(products):
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{product['price']}</p>
+        <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
         <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
@@ -311,7 +311,7 @@ def generate_site(products):
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{product['price']}</p>
+        <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
         <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
     </div>
@@ -470,7 +470,7 @@ def generate_site(products):
                 <img src="{product['image_url']}" alt="{product['name']}">
                 <div class="product-info">
                     <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-                    <p class="product-price">{product['price']}</p>
+                    <p class="product-price">{product['price']}円</p>
                     <div class="price-status-title">💡注目ポイント</div>
                     <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
                 </div>
