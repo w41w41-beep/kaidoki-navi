@@ -10,12 +10,19 @@ from datetime import date
 PRODUCTS_PER_PAGE = 24
 
 def generate_ai_analysis(product_name, product_description, main_category):
-    """Gemini APIを使用して商品分析の文章を生成する関数"""
-    api_key = os.environ.get('GEMINI_API_KEY')
+    """OpenAI APIを使用して商品分析の文章を生成する関数"""
+    api_key = os.environ.get('OPENAI_API_KEY')
     if not api_key:
-        print("GEMINI_API_KEYが設定されていません。AI分析はスキップされます。")
+        print("OPENAI_API_KEYが設定されていません。AI分析はスキップされます。")
         return "AIによる価格分析は近日公開！"
     
+    # OpenAI APIのURLとヘッダー
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
     # ユーザーへのプロンプトを日本語で作成
     system_prompt = "あなたは、大手家電量販店の店員として、お客様におすすめの商品を説明するプロフェッショナルです。専門的で信頼性の高い情報を、親しみやすく簡潔に、魅力的な言葉で伝えてください。特に、「今が買い時」であることを強調し、具体的なセールスポイントを挙げてください。語尾は「です」や「ます」調にしてください。"
 
@@ -26,21 +33,24 @@ def generate_ai_analysis(product_name, product_description, main_category):
 カテゴリ: {main_category}
 商品説明: {product_description}"""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key={api_key}"
-    
     payload = {
-        "contents": [{"parts": [{"text": user_prompt}]}],
-        "systemInstruction": {"parts": [{"text": system_prompt}]},
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        "max_tokens": 300,
+        "temperature": 0.7
     }
 
     retries = 3
     for i in range(retries):
         try:
-            response = requests.post(url, headers={'Content-Type': 'application/json'}, json=payload, timeout=30)
+            response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=30)
             response.raise_for_status()
             data = response.json()
             # 応答からテキストを抽出
-            text_result = data.get('candidates')[0].get('content').get('parts')[0].get('text')
+            text_result = data['choices'][0]['message']['content']
             
             # 箇条書きをHTMLのリスト形式に変換
             html_list = ""
