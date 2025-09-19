@@ -1,40 +1,40 @@
-name: Generate and Deploy Site
+name: Generate Website
 
 on:
   schedule:
-    # 毎日午前10時 (UTC)に実行
-    - cron: '0 1 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *' # 毎日午前0時（UTC）に実行
+  workflow_dispatch: # 手動実行を可能にする
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
-          pip install openai # <-- ここにopenaiライブラリのインストールを追加
+          pip install pandas requests openai
 
-      - name: Run Python script
-        run: python generate_site.py
-        env:
-          RAKUTEN_API_KEY: ${{ secrets.RAKUTEN_API_KEY }}
-          YAHOO_SHOPPING_API_KEY: ${{ secrets.YAHOO_SHOPPING_API_KEY }} # <-- もしYahoo!ショッピングのAPIキーを使う場合は追加
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # <-- ここでOpenAIのAPIキーを設定
-
-      - name: Commit and Push changes
+      - name: Set environment variables
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          echo "RAKUTEN_API_KEY=${{ secrets.RAKUTEN_API_KEY }}" >> $GITHUB_ENV
+          echo "YAHOO_API_KEY=${{ secrets.YAHOO_API_KEY }}" >> $GITHUB_ENV
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+
+      - name: Run site generator
+        run: python generate_site.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
           git add .
-          git commit -m "Auto-generated site update" || echo "No changes to commit"
+          git commit -m "Auto-generate website and update CSV" || echo "No changes to commit"
           git push
