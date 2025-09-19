@@ -99,7 +99,7 @@ def generate_ai_info(product_name, description, category):
         }
 
 # 楽天APIから商品情報を取得
-def fetch_rakuten_items(category_id, keyword, max_items=10):
+def fetch_rakuten_items(category_id, keyword, max_items=20): # 変更: 取得数を20に増加
     """
     楽天APIから特定カテゴリの商品を取得
     """
@@ -142,7 +142,7 @@ def fetch_rakuten_items(category_id, keyword, max_items=10):
         return []
 
 # Yahoo!ショッピングAPIから商品情報を取得
-def fetch_yahoo_items(category_id, keyword, max_items=10):
+def fetch_yahoo_items(category_id, keyword, max_items=20): # 変更: 取得数を20に増加
     """
     Yahoo!ショッピングAPIから特定カテゴリの商品を取得
     """
@@ -204,11 +204,11 @@ def update_products_csv():
     for category_name, category_id in RAKUTEN_CATEGORY_IDS.items():
         all_products.extend(fetch_yahoo_items(category_id, category_name))
 
-    # 重複を削除し、最新の20件に絞り込む
+    # 重複を削除し、最新の40件に絞り込む # 変更: 取得数を40に増加
     unique_products = {p['id']: p for p in all_products}
     
     # 新しい商品、またはAI情報がない商品に対してAIを呼び出す
-    products_to_process = list(unique_products.values())[:20] # 最新の20件に絞る
+    products_to_process = list(unique_products.values())[:40] # 変更: 最新の40件に絞る
     
     for product in products_to_process:
         product_id = product["id"]
