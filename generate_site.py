@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from openai import OpenAI
 import re
+from datetime import datetime
 
 # APIキーを環境変数から読み込み
 # GitHub Actionsで設定したSecretがここに渡されます
@@ -413,11 +414,9 @@ def _generate_index_page(products):
     category_html = ""
     for category_name in RAKUTEN_CATEGORY_IDS.keys():
         category_html += f"""
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <a href="category/{category_name}.html" class="block p-4 text-center">
-                <h2 class="text-lg font-bold text-gray-800">{category_name}</h2>
-            </a>
-        </div>
+        <a href="category/{category_name}.html" class="py-2 px-4 rounded-full border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition duration-300">
+            {category_name}
+        </a>
         """
 
     product_cards = ""
@@ -443,6 +442,22 @@ def _generate_index_page(products):
         <title>商品紹介サイト</title>
         <link rel="stylesheet" href="style.css">
         <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+        .product-card {{
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }}
+        .product-card:hover {{
+            transform: translateY(-5px);
+        }}
+        .product-card img {{
+            width: 100%;
+            height: 192px; /* h-48 */
+            object-fit: cover;
+        }}
+        </style>
     </head>
     <body class="bg-gray-100 font-sans">
         <div class="container mx-auto p-4 sm:p-8">
@@ -453,7 +468,7 @@ def _generate_index_page(products):
             
             <section class="mb-8">
                 <h2 class="text-2xl font-bold text-gray-700 mb-4">カテゴリから探す</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <div class="flex flex-wrap gap-2">
                     {category_html}
                 </div>
             </section>
@@ -470,6 +485,47 @@ def _generate_index_page(products):
     """
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
+
+def _generate_sitemap(products):
+    """
+    サイトマップ（sitemap.xml）を生成
+    """
+    urls = []
+    base_url = "https://kaidoki-navi.github.io/kaidoki-navi" # このURLはGitHub PagesのURLに合わせて変更してください
+    
+    # トップページ
+    urls.append(f"<url><loc>{base_url}/index.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>")
+    
+    # カテゴリページ
+    for category_name in RAKUTEN_CATEGORY_IDS.keys():
+        urls.append(f"<url><loc>{base_url}/category/{category_name}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>")
+
+    # タグページ
+    all_tags = set()
+    for product in products:
+        try:
+            tags = json.loads(product.get("tags", "[]"))
+            all_tags.update(tags)
+        except json.JSONDecodeError:
+            continue
+
+    for tag in all_tags:
+        urls.append(f"<url><loc>{base_url}/tags/{tag}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>")
+
+    # 商品詳細ページ
+    for product in products:
+        urls.append(f"<url><loc>{base_url}/pages/{product['id']}.html</loc><lastmod>{datetime.now().isoformat()}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>")
+        
+    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{"".join(urls)}
+</urlset>"""
+
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(sitemap_content)
+        
+    print("sitemap.xmlが正常に生成されました。")
+
 
 def main():
     """
@@ -490,6 +546,8 @@ def main():
     # products.jsonが存在する場合は削除
     if os.path.exists("products.json"):
         os.remove("products.json")
+    if os.path.exists("sitemap.xml"):
+        os.remove("sitemap.xml")
 
     # CSVを更新
     update_products_csv()
@@ -498,10 +556,11 @@ def main():
     products_df = pd.read_csv(PRODUCTS_CSV_FILE)
     products = products_df.to_dict('records')
     
-    # HTMLファイルを生成
+    # HTMLファイルとサイトマップを生成
     _generate_index_page(products)
     _generate_product_detail_pages(products)
     _generate_category_pages(products)
+    _generate_sitemap(products)
 
 if __name__ == "__main__":
     main()
