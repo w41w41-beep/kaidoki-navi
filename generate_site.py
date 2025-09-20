@@ -99,10 +99,10 @@ def generate_html_file(title, content, filepath, categories_data=None):
             sub_menu_items = "".join([f'<li><a href="/products/{sub.get("url", "#")}.html" class="block px-4 py-2 hover:bg-indigo-100">{sub["name"]}</a></li>' for sub in subcategories])
             nav_html += f"""
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg">
-                    {category} <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
+                    {category} <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </a>
-                <ul class="absolute z-10 hidden group-hover:block bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
                     {sub_menu_items}
                 </ul>
             </li>
@@ -161,6 +161,24 @@ def generate_html_file(title, content, filepath, categories_data=None):
             </div>
         </div>
     </footer>
+    <script>
+        function toggleMenu(element) {
+            const submenu = element.nextElementSibling;
+            const arrow = element.querySelector('svg');
+            
+            // すべてのドロップダウンを非表示にする
+            document.querySelectorAll('.group ul').forEach(ul => {
+                if (ul !== submenu) {
+                    ul.classList.add('hidden');
+                    ul.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                }
+            });
+
+            // クリックしたドロップダウンをトグル
+            submenu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+    </script>
     """
 
     html_content = f"""
@@ -298,7 +316,7 @@ def generate_subcategory_page(subcategory_name, products, categories_data, outpu
     """
 
     # URL用に名前を変換
-    url_name = subcategory_name.replace(' ', '_').lower()
+    url_name = next((item['url'] for category_data in categories_data.values() for item in category_data if item['name'] == subcategory_name), None)
     filepath = os.path.join(output_dir, f'products/{url_name}.html')
     generate_html_file(f'PricePilot - {subcategory_name}', content, filepath, categories_data)
     print(f"サブカテゴリーページ '{subcategory_name}' が生成されました。")
