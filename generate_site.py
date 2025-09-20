@@ -113,6 +113,7 @@ def generate_ai_analysis(product, cache):
         print("APIからの応答に必要なキーが含まれていません。")
         return "AI分析準備中", "APIからの応答が不完全です。"
         
+# generate_subcategory_with_ai 関数内
 def generate_subcategory_with_ai(product, cache):
     """
     AIを使用して商品名と説明からサブカテゴリーを生成し、キャッシュに保存する。
@@ -133,9 +134,10 @@ def generate_subcategory_with_ai(product, cache):
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
     
+# generate_subcategory_with_ai 関数内
     messages = [
-        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から最も適切なサブカテゴリーを一つだけ選んでください。回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。分類名は「おもちゃ」「家電」「日用品」「食品」「本」「ファッション」など、一般的な日本語の単語にしてください。"},
-        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を分類してください。"}
+        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、最も適切なサブカテゴリーを一つだけ選んでください。以下の候補リストの中から必ず選択してください。\n\n候補リスト: ['デスクトップPC', 'ノートPC', 'ゲーミングPC', 'モニター', 'キーボード・マウス', 'テレビ', '冷蔵庫', '洗濯機', 'エアコン', 'その他家電', '周辺機器']\n\n回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。"}
+        ,{"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を最も適切に分類してください。"}
     ]
     
     payload = {
@@ -482,24 +484,22 @@ def generate_site():
     subcategory_cache = load_cache(SUBCATEGORY_CACHE_FILE)
 
     # AI分析とサブカテゴリー生成を実行
-    for product in products_for_site:
-        product['page_url'] = f"products/{product['product_id']}.html"
-        
-        # AIでサブカテゴリーを生成
-        # product_idをキーとしてキャッシュを確認し、存在しない場合のみAIを呼び出す
-        if f"subcategory_{product['product_id']}" not in subcategory_cache:
-            product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
-        else:
-            print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みました。")
-            product['subcategory'] = subcategory_cache[f"subcategory_{product['product_id']}"]
-        
-        # AI価格分析を生成
-        headline, details = generate_ai_analysis(
-            product, 
-            ai_analysis_cache
-        )
-        product['ai_analysis_headline'] = headline
-        product['ai_analysis_details'] = details
+# generate_site 関数内（ループ部分）
+# AI分析とサブカテゴリー生成を実行
+for product in products_for_site:
+    product['page_url'] = f"products/{product['product_id']}.html"
+    
+    # AIでサブカテゴリーを生成
+    # この関数内でキャッシュ確認と新規生成の両方が処理される
+    product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
+    
+    # AI価格分析を生成
+    headline, details = generate_ai_analysis(
+        product, 
+        ai_analysis_cache
+    )
+    product['ai_analysis_headline'] = headline
+    product['ai_analysis_details'] = details
 
     # キャッシュを保存
     save_cache(ai_analysis_cache, AI_ANALYSIS_CACHE_FILE)
