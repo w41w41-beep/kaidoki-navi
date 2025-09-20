@@ -398,22 +398,18 @@ def generate_website():
 
     products_data = []
     
-    categories = {
-        "家電": ["テレビ", "冷蔵庫", "パソコン"],
-        "本": ["小説", "漫画", "技術書"],
-        "ファッション": ["トップス", "ボトムス", "アウター"],
-        "食品": ["お菓子", "飲料", "レトルト食品"]
+    # カテゴリーとサブカテゴリーの定義を修正
+    categories_data = {
+        "家電": [{"name": "テレビ", "url": "tv"}, {"name": "冷蔵庫", "url": "refrigerator"}, {"name": "パソコン", "url": "pc"}],
+        "本": [{"name": "小説", "url": "novel"}, {"name": "漫画", "url": "manga"}, {"name": "技術書", "url": "tech_books"}],
+        "ファッション": [{"name": "トップス", "url": "tops"}, {"name": "ボトムス", "url": "bottoms"}, {"name": "アウター", "url": "outerwear"}],
+        "食品": [{"name": "お菓子", "url": "snacks"}, {"name": "飲料", "url": "drinks"}, {"name": "レトルト食品", "url": "retort_foods"}]
     }
-    
+
     all_subcategories = []
-    for category, sub_list in categories.items():
+    for category, sub_list in categories_data.items():
         for sub in sub_list:
-            all_subcategories.append({'category': category, 'name': sub})
-            
-    categories_data = defaultdict(list)
-    for sub in all_subcategories:
-        url_name = sub['name'].replace(' ', '_').lower()
-        categories_data[sub['category']].append({'name': sub['name'], 'url': url_name})
+            all_subcategories.append({'category': category, 'name': sub['name'], 'url': sub['url']})
 
     for i in range(1, 101): # 100個のダミー商品
         product_name = f"商品 {i}"
@@ -470,7 +466,10 @@ def generate_website():
         products_by_subcategory[product['subcategory']].append(product)
         
     for subcategory, products in products_by_subcategory.items():
-        generate_subcategory_page(subcategory, products, categories_data, output_dir)
+        # URL名をcategories_dataから取得
+        url_name = next((item['url'] for category_data in categories_data.values() for item in category_data if item['name'] == subcategory), None)
+        if url_name:
+            generate_subcategory_page(subcategory, products, categories_data, output_dir)
         
     for product in products_data:
         generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir, categories_data)
