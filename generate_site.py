@@ -12,7 +12,7 @@ PRODUCTS_PER_PAGE = 24
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-OPENAI_API_KEY = ""
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
 
 def generate_ai_analysis(product_name, product_price, price_history):
@@ -20,6 +20,10 @@ def generate_ai_analysis(product_name, product_price, price_history):
     OpenAI APIを使用して、商品の価格分析テキストを生成する。
     応答は一言アピールと詳細分析の2つの部分から構成される。
     """
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。AI分析はスキップされます。")
+        return "AI分析準備中", "詳細なAI分析は現在準備中です。"
+    
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
@@ -52,15 +56,15 @@ def generate_ai_analysis(product_name, product_price, price_history):
                             }
                         },
                         "required": ["queries"]
+                            }
+                        }
                     }
-                }
-            }
-        ],
+                ],
         "tool_choice": "auto"
     }
 
     try:
-        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10) # タイムアウトを追加
         response.raise_for_status()
         result = response.json()
         
@@ -70,6 +74,8 @@ def generate_ai_analysis(product_name, product_price, price_history):
             analysis_data = json.loads(json_text)
             return analysis_data.get('headline', 'AI分析準備中'), analysis_data.get('analysis', '詳細なAI分析は現在準備中です。')
         
+    except requests.exceptions.Timeout:
+        print("OpenAI APIへのリクエストがタイムアウトしました。")
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
     except (IndexError, KeyError, json.JSONDecodeError) as e:
@@ -81,6 +87,10 @@ def generate_ai_summary(text):
     """
     与えられたテキストをAIに要約させる関数
     """
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。商品説明の要約はスキップされます。")
+        return "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+    
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
@@ -97,7 +107,7 @@ def generate_ai_summary(text):
     }
     
     try:
-        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10) # タイムアウトを追加
         response.raise_for_status()
         result = response.json()
         
@@ -105,6 +115,8 @@ def generate_ai_summary(text):
         if summary_text:
             return summary_text
     
+    except requests.exceptions.Timeout:
+        print("OpenAI APIへのリクエストがタイムアウトしました。")
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
     except (IndexError, KeyError) as e:
@@ -252,18 +264,23 @@ def update_products_json(new_products):
             
             # 最新の価格を履歴に追加（重複は避ける）
             current_date = date.today().isoformat()
-            current_price = int(new_product['price'].replace(',', ''))
-            
-            # 既に今日の価格が記録されていなければ追加
-            if not existing_product['price_history'] or existing_product['price_history'][-1]['date'] != current_date:
-                existing_product['price_history'].append({"date": current_date, "price": current_price})
+            try:
+                current_price = int(new_product['price'].replace(',', ''))
+                # 既に今日の価格が記録されていなければ追加
+                if not existing_product['price_history'] or existing_product['price_history'][-1]['date'] != current_date:
+                    existing_product['price_history'].append({"date": current_date, "price": current_price})
+            except ValueError:
+                print(f"価格の変換に失敗しました: {new_product['price']}")
 
             # 他の最新情報で上書き
             existing_product.update(new_product)
         else:
             # 新規商品の場合はそのまま追加
-            new_product['price_history'] = [{"date": date.today().isoformat(), "price": int(new_product['price'].replace(',', ''))}]
-            updated_products[new_product['id']] = new_product
+            try:
+                new_product['price_history'] = [{"date": date.today().isoformat(), "price": int(new_product['price'].replace(',', ''))}]
+                updated_products[new_product['id']] = new_product
+            except ValueError:
+                print(f"価格の変換に失敗したため、商品 {new_product['id']} はスキップされます。")
     
     final_products = list(updated_products.values())
     
