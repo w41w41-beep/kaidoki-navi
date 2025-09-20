@@ -312,7 +312,7 @@ def create_product_pages(products):
         </script>
         """
         # 修正: 'product_name' -> 'name'
-        final_html = base_template.replace('', html_content).replace('{{ page_title }}', product['name'])
+        final_html = base_template.replace('{{ content }}', html_content).replace('{{ page_title }}', product['name'])
         
         os.makedirs(os.path.dirname(product['page_url']), exist_ok=True)
         with open(product['page_url'], 'w', encoding='utf-8') as f:
@@ -370,7 +370,7 @@ def create_product_list_pages(all_products):
         """
         
         page_title = f"商品一覧 (ページ {page_num+1})"
-        final_html = base_template.replace('', list_content).replace('{{ page_title }}', page_title)
+        final_html = base_template.replace('{{ content }}', list_content).replace('{{ page_title }}', page_title)
         
         page_filename = f'products/page-{page_num+1}.html' if page_num > 0 else 'products/index.html'
         with open(page_filename, 'w', encoding='utf-8') as f:
@@ -408,7 +408,7 @@ def create_product_list_pages(all_products):
         """
         
         page_title = f"カテゴリー: {subcategory}"
-        final_html = base_template.replace('', list_content).replace('{{ page_title }}', page_title)
+        final_html = base_template.replace('{{ content }}', list_content).replace('{{ page_title }}', page_title)
         
         page_filename = f'products/category-{subcategory.lower().replace(" ", "-")}.html'
         with open(page_filename, 'w', encoding='utf-8') as f:
@@ -432,7 +432,7 @@ def create_static_pages():
     # トップページ
     with open('templates/index.html', 'r', encoding='utf-8') as f:
         index_content = f.read()
-    final_index = base_template.replace('', index_content).replace('{{ page_title }}', 'トップページ')
+    final_index = base_template.replace('{{ content }}', index_content).replace('{{ page_title }}', 'トップページ')
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(final_index)
 
@@ -445,7 +445,7 @@ def create_static_pages():
     for filename, title in static_pages.items():
         with open(f'templates/{filename}', 'r', encoding='utf-8') as f:
             content = f.read()
-        final_page = base_template.replace('', content).replace('{{ page_title }}', title)
+        final_page = base_template.replace('{{ content }}', content).replace('{{ page_title }}', title)
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(final_page)
     
