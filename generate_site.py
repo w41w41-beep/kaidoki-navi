@@ -60,7 +60,8 @@ def generate_ai_analysis(product, cache):
 
     # キャッシュから読み込みを試みる
     if cache_key in cache:
-        print(f"商品 '{product['product_name']}' のAI分析をキャッシュから読み込みました。")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' のAI分析をキャッシュから読み込みました。")
         return cache[cache_key]['headline'], cache[cache_key]['details']
 
     if not OPENAI_API_KEY:
@@ -78,7 +79,8 @@ def generate_ai_analysis(product, cache):
     
     messages = [
         {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「details」の2つのキーを持ちます。「headline」は15文字以内の簡潔な一言アピール、「details」は200文字以内の詳細な分析です。"},
-        {"role": "user", "content": f"商品名: {product['product_name']}\n現在価格: {product['price']}円\n{history_text}\nこの商品の現在の価格と価格履歴に基づいて、買い時かどうかを分析し、アドバイスを日本語で提供してください。"}
+        # 修正: 'product_name' -> 'name'
+        {"role": "user", "content": f"商品名: {product['name']}\n現在価格: {product['price']}円\n{history_text}\nこの商品の現在の価格と価格履歴に基づいて、買い時かどうかを分析し、アドバイスを日本語で提供してください。"}
     ]
 
     payload = {
@@ -89,7 +91,8 @@ def generate_ai_analysis(product, cache):
     }
 
     try:
-        print(f"商品 '{product['product_name']}' のAI分析を生成するため、APIを呼び出しています...")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' のAI分析を生成するため、APIを呼び出しています...")
         response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         response.raise_for_status() # HTTPエラーが発生した場合に例外を発生させる
         
@@ -122,7 +125,8 @@ def generate_subcategory_with_ai(product, cache):
     
     # 厳格なキャッシュルール: 一度キャッシュに保存されたものは再利用する
     if cache_key in cache:
-        print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みました。")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' のサブカテゴリーをキャッシュから読み込みました。")
         return cache[cache_key]
 
     if not OPENAI_API_KEY:
@@ -136,7 +140,8 @@ def generate_subcategory_with_ai(product, cache):
     
     messages = [
         {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、最も適切なサブカテゴリーを一つだけ選んでください。以下の候補リストの中から必ず選択してください。\n\n候補リスト: ['デスクトップPC', 'ノートPC', 'ゲーミングPC', 'モニター', 'キーボード・マウス', 'テレビ', '冷蔵庫', '洗濯機', 'エアコン', 'その他家電', '周辺機器']\n\n回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。"},
-        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を最も適切に分類してください。"}
+        # 修正: 'product_name' -> 'name'
+        {"role": "user", "content": f"商品名: {product['name']}\n説明: {product['description']}\n\nこの商品を最も適切に分類してください。"}
     ]
     
     payload = {
@@ -147,7 +152,8 @@ def generate_subcategory_with_ai(product, cache):
     }
 
     try:
-        print(f"商品 '{product['product_name']}' のサブカテゴリーをAIで生成しています...")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' のサブカテゴリーをAIで生成しています...")
         response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         response.raise_for_status()
         
@@ -176,7 +182,8 @@ def generate_product_highlight_with_ai(product, cache):
 
     # キャッシュから読み込みを試みる（価格は考慮しない）
     if cache_key in cache:
-        print(f"商品 '{product['product_name']}' の商品ハイライトをキャッシュから読み込みました。")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' の商品ハイライトをキャッシュから読み込みました。")
         return cache[cache_key]
 
     if not OPENAI_API_KEY:
@@ -190,7 +197,8 @@ def generate_product_highlight_with_ai(product, cache):
     
     messages = [
         {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、商品の最も重要な特徴や魅力を簡潔にまとめたハイライトを日本語で生成してください。"},
-        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品の主な特徴をまとめてください。"}
+        # 修正: 'product_name' -> 'name'
+        {"role": "user", "content": f"商品名: {product['name']}\n説明: {product['description']}\n\nこの商品の主な特徴をまとめてください。"}
     ]
 
     payload = {
@@ -200,7 +208,8 @@ def generate_product_highlight_with_ai(product, cache):
     }
 
     try:
-        print(f"商品 '{product['product_name']}' の商品ハイライトを生成するため、APIを呼び出しています...")
+        # 修正: 'product_name' -> 'name'
+        print(f"商品 '{product['name']}' の商品ハイライトを生成するため、APIを呼び出しています...")
         response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         response.raise_for_status()
 
@@ -235,11 +244,11 @@ def create_product_pages(products):
         <div class="container mx-auto p-4 md:p-8">
             <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
                 <div class="md:flex-shrink-0">
-                    <img src="{product['image_url']}" alt="{product['product_name']}" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                    <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
                 </div>
                 <div class="p-6 flex flex-col justify-between w-full">
                     <div class="mb-4">
-                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">{product['product_name']}</h1>
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">{product['name']}</h1>
                         <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">{product['price']}円</p>
                         
                         <div class="bg-gray-100 p-4 rounded-lg">
@@ -302,8 +311,8 @@ def create_product_pages(products):
             }});
         </script>
         """
-
-        final_html = base_template.replace('', html_content).replace('{{ page_title }}', product['product_name'])
+        # 修正: 'product_name' -> 'name'
+        final_html = base_template.replace('', html_content).replace('{{ page_title }}', product['name'])
         
         os.makedirs(os.path.dirname(product['page_url']), exist_ok=True)
         with open(product['page_url'], 'w', encoding='utf-8') as f:
@@ -331,9 +340,9 @@ def create_product_list_pages(all_products):
             product_cards += f"""
             <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
                 <a href="{product['page_url']}" class="block">
-                    <img src="{product['image_url']}" alt="{product['product_name']}" class="w-full h-48 object-cover object-center">
+                    <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-48 object-cover object-center">
                     <div class="p-4">
-                        <h3 class="text-lg font-bold text-gray-800 truncate">{product['product_name']}</h3>
+                        <h3 class="text-lg font-bold text-gray-800 truncate">{product['name']}</h3>
                         <p class="text-xl font-bold text-gray-700 mt-1">{product['price']}円</p>
                         <p class="text-sm text-gray-500 mt-2 truncate">{product['description']}</p>
                     </div>
@@ -375,12 +384,13 @@ def create_product_list_pages(all_products):
         subcategory_products = [p for p in all_products if p['subcategory'] == subcategory]
         product_cards = ""
         for product in subcategory_products:
+            # 修正: 'product_name' -> 'name'
             product_cards += f"""
             <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
                 <a href="{product['page_url']}" class="block">
-                    <img src="{product['image_url']}" alt="{product['product_name']}" class="w-full h-48 object-cover object-center">
+                    <img src="{product['image_url']}" alt="{product['name']}" class="w-full h-48 object-cover object-center">
                     <div class="p-4">
-                        <h3 class="text-lg font-bold text-gray-800 truncate">{product['product_name']}</h3>
+                        <h3 class="text-lg font-bold text-gray-800 truncate">{product['name']}</h3>
                         <p class="text-xl font-bold text-gray-700 mt-1">{product['price']}円</p>
                         <p class="text-sm text-gray-500 mt-2 truncate">{product['description']}</p>
                     </div>
