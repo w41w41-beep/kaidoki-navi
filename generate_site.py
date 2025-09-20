@@ -6,6 +6,7 @@ import time
 from datetime import date
 import requests
 import pandas as pd
+from urllib.parse import urlparse
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -316,7 +317,7 @@ def generate_site(products):
         sub_cat = product['category']['sub']
         if main_cat not in categories:
             categories[main_cat] = []
-        if sub_cat not in categories[main_cat]:
+        if sub_cat and sub_cat not in categories[main_cat]:
             categories[main_cat].append(sub_cat)
     sorted_main_cats = sorted(categories.keys())
 
@@ -368,7 +369,10 @@ def generate_site(products):
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
-                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+                # ファイル名として無効な文字を削除・置換
+                safe_sub_cat = sub_cat_link.replace(' ', '').replace('/', '').replace('\\', '')
+                if safe_sub_cat:  # ファイル名が空でないことを確認
+                    sub_cat_links_html += f'<a href="{safe_sub_cat}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
     <div class="sub-genre-links-container">
@@ -398,6 +402,7 @@ def generate_site(products):
             f.write(header + content_html + footer)
         print(f"{page_path} が生成されました。")
     
+    # 古いファイルを削除
     for root, dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml']:
@@ -439,7 +444,14 @@ def generate_site(products):
         print(f"category/{main_cat}/index.html が生成されました。")
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            
+            # --- ここが修正点です ---
+            safe_sub_cat = sub_cat.replace(' ', '').replace('/', '').replace('\\', '')
+            if not safe_sub_cat:  # 無効なサブカテゴリ名をスキップ
+                print(f"警告: 無効なサブカテゴリ名 '{sub_cat}' が検出されました。スキップします。")
+                continue
+
+            sub_cat_file_name = f"{safe_sub_cat}.html"
             page_path = f"category/{main_cat}/{sub_cat_file_name}"
             header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
             main_content_html = f"""
@@ -526,9 +538,18 @@ def generate_site(products):
 """
         
         affiliate_links_html = ""
-        for link in product['affiliateLinks']:
-            affiliate_links_html += f'<li><a href="{link["url"]}" target="_blank" rel="noopener noreferrer">{link["shop"]}で詳細を見る</a></li>'
-            
+        if 'affiliateLinks' in product:
+            for link in product['affiliateLinks']:
+                affiliate_links_html += f'<li><a href="{link["url"]}" target="_blank" rel="noopener noreferrer">{link["shop"]}で詳細を見る</a></li>'
+        else:
+            # 存在しない場合のために、ダミーのリンクを追加
+            affiliate_links_html = f"""
+<li><a href="{product['rakuten_url']}" target="_blank" rel="noopener noreferrer">楽天市場で詳細を見る</a></li>
+<li><a href="{product['yahoo_url']}" target="_blank" rel="noopener noreferrer">Yahoo!ショッピングで詳細を見る</a></li>
+<li><a href="{product['amazon_url']}" target="_blank" rel="noopener noreferrer">Amazonで詳細を見る</a></li>
+"""
+
+
         main_content_html = f"""
 <main class="container product-detail">
  <div class="product-detail-header">
@@ -545,7 +566,7 @@ def generate_site(products):
  <p>{product['ai_analysis']}</p>
  </div>
  <div class="product-detail-section">
- <h3>商品詳細</h3>
+ <h3>商品説明</h3>
  <p>{product['description']}</p>
  </div>
  <div class="product-detail-section">
