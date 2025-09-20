@@ -20,6 +20,12 @@
                 transform: translateY(-5px);
                 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             }
+            .group:hover .group-hover:block {
+                display: block;
+            }
+            .group:hover .group-hover\:rotate-180 {
+                transform: rotate(180deg);
+            }
         </style>
     </head>
     
@@ -35,40 +41,40 @@
         </div>
         <div class="bg-indigo-700 mt-4 rounded-lg">
             <nav class="container mx-auto">
-                <ul class="flex justify-center text-white py-2">
+                <ul class="flex justify-center text-white py-2 space-x-4">
                     
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    家電 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    家電 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/tv.html" class="block px-4 py-2 hover:bg-indigo-100">テレビ</a></li><li><a href="/products/refrigerator.html" class="block px-4 py-2 hover:bg-indigo-100">冷蔵庫</a></li><li><a href="/products/pc.html" class="block px-4 py-2 hover:bg-indigo-100">パソコン</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    本 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    本 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/novel.html" class="block px-4 py-2 hover:bg-indigo-100">小説</a></li><li><a href="/products/manga.html" class="block px-4 py-2 hover:bg-indigo-100">漫画</a></li><li><a href="/products/tech_books.html" class="block px-4 py-2 hover:bg-indigo-100">技術書</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    ファッション <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    ファッション <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/tops.html" class="block px-4 py-2 hover:bg-indigo-100">トップス</a></li><li><a href="/products/bottoms.html" class="block px-4 py-2 hover:bg-indigo-100">ボトムス</a></li><li><a href="/products/outerwear.html" class="block px-4 py-2 hover:bg-indigo-100">アウター</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    食品 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    食品 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/snacks.html" class="block px-4 py-2 hover:bg-indigo-100">お菓子</a></li><li><a href="/products/drinks.html" class="block px-4 py-2 hover:bg-indigo-100">飲料</a></li><li><a href="/products/retort_foods.html" class="block px-4 py-2 hover:bg-indigo-100">レトルト食品</a></li>
                 </ul>
             </li>
@@ -83,98 +89,98 @@
     <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">トップスの商品一覧</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         
-        <a href="/products/product_26.html" class="block card relative">
+        <a href="/products/product_9.html" class="block card relative">
             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+26" alt="商品 26" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 26</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">46944円</p>
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+9" alt="商品 9" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 9</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">72936円</p>
                 <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">価格は現在の相場で比較的高めですが、値下がりの可能性もあり。</span>
+                    <span class="font-bold text-green-600">今が買い時！商品9が最安値に近い！</span>
                 </div>
             </div>
         </a>
         
-        <a href="/products/product_32.html" class="block card relative">
+        <a href="/products/product_10.html" class="block card relative">
             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span><span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+32" alt="商品 32" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 32</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">65243円</p>
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+10" alt="商品 10" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 10</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">30023円</p>
                 <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">今は購入のチャンス！</span>
+                    <span class="font-bold text-green-600">商品10は今が買い時！</span>
                 </div>
             </div>
         </a>
         
-        <a href="/products/product_38.html" class="block card relative">
+        <a href="/products/product_19.html" class="block card relative">
             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span>
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+38" alt="商品 38" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 38</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">91691円</p>
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+19" alt="商品 19" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 19</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">33378円</p>
                 <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">購入推奨！最安値に近い価格です</span>
+                    <span class="font-bold text-green-600">今が買い時！価格が安定してきています。</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="/products/product_25.html" class="block card relative">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+25" alt="商品 25" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 25</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">25847円</p>
+                <div class="text-sm text-gray-500">
+                    <span class="font-bold text-green-600">今が買い時！商品25の価格は過去の最低水準に近い</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="/products/product_37.html" class="block card relative">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+37" alt="商品 37" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 37</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">27678円</p>
+                <div class="text-sm text-gray-500">
+                    <span class="font-bold text-green-600">今が買い時！商品37の価格は安定中</span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="/products/product_53.html" class="block card relative">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+53" alt="商品 53" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 53</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">45149円</p>
+                <div class="text-sm text-gray-500">
+                    <span class="font-bold text-green-600">今が買い時！商品53の価格が安定中</span>
                 </div>
             </div>
         </a>
         
         <a href="/products/product_55.html" class="block card relative">
             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span>
                 <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+55" alt="商品 55" class="w-48 h-48 object-contain rounded-lg mb-4">
                 <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 55</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">81464円</p>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">35327円</p>
                 <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">購入は待った方が良いです</span>
+                    <span class="font-bold text-green-600">商品 55は今が買い時！</span>
                 </div>
             </div>
         </a>
         
-        <a href="/products/product_61.html" class="block card relative">
+        <a href="/products/product_83.html" class="block card relative">
             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+61" alt="商品 61" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 61</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">52809円</p>
+                <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
+                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+83" alt="商品 83" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 83</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">72117円</p>
                 <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">商品61は今が絶好の買い時です！</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="/products/product_92.html" class="block card relative">
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span>
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+92" alt="商品 92" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 92</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">24321円</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">価格は過去最高点に近い、購入は待った方が良いかも。</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="/products/product_93.html" class="block card relative">
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span><span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+93" alt="商品 93" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 93</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">39347円</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">今が購入のチャンス！</span>
-                </div>
-            </div>
-        </a>
-        
-        <a href="/products/product_96.html" class="block card relative">
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                
-                <img src="https://placehold.co/400x400/2180A0/ffffff?text=Product+96" alt="商品 96" class="w-48 h-48 object-contain rounded-lg mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">商品 96</h2>
-                <p class="text-3xl font-bold text-indigo-600 mb-2">33985円</p>
-                <div class="text-sm text-gray-500">
-                    <span class="font-bold text-green-600">購入のタイミングは今！</span>
+                    <span class="font-bold text-green-600">価格が急騰中！今が買い時の可能性あり</span>
                 </div>
             </div>
         </a>
@@ -193,24 +199,6 @@
             </div>
         </div>
     </footer>
-    <script>
-        function toggleMenu(element) {
-            const submenu = element.nextElementSibling;
-            const arrow = element.querySelector('svg');
-            
-            // すべてのドロップダウンを非表示にする
-            document.querySelectorAll('.group ul').forEach(ul => {
-                if (ul !== submenu) {
-                    ul.classList.add('hidden');
-                    ul.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
-                }
-            });
-
-            // クリックしたドロップダウンをトグル
-            submenu.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-    </script>
     
 </body>
 </html>

@@ -20,6 +20,12 @@
                 transform: translateY(-5px);
                 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             }
+            .group:hover .group-hover:block {
+                display: block;
+            }
+            .group:hover .group-hover\:rotate-180 {
+                transform: rotate(180deg);
+            }
         </style>
     </head>
     
@@ -35,40 +41,40 @@
         </div>
         <div class="bg-indigo-700 mt-4 rounded-lg">
             <nav class="container mx-auto">
-                <ul class="flex justify-center text-white py-2">
+                <ul class="flex justify-center text-white py-2 space-x-4">
                     
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    家電 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    家電 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/tv.html" class="block px-4 py-2 hover:bg-indigo-100">テレビ</a></li><li><a href="/products/refrigerator.html" class="block px-4 py-2 hover:bg-indigo-100">冷蔵庫</a></li><li><a href="/products/pc.html" class="block px-4 py-2 hover:bg-indigo-100">パソコン</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    本 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    本 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/novel.html" class="block px-4 py-2 hover:bg-indigo-100">小説</a></li><li><a href="/products/manga.html" class="block px-4 py-2 hover:bg-indigo-100">漫画</a></li><li><a href="/products/tech_books.html" class="block px-4 py-2 hover:bg-indigo-100">技術書</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    ファッション <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    ファッション <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/tops.html" class="block px-4 py-2 hover:bg-indigo-100">トップス</a></li><li><a href="/products/bottoms.html" class="block px-4 py-2 hover:bg-indigo-100">ボトムス</a></li><li><a href="/products/outerwear.html" class="block px-4 py-2 hover:bg-indigo-100">アウター</a></li>
                 </ul>
             </li>
             
             <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    食品 <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    食品 <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     <li><a href="/products/snacks.html" class="block px-4 py-2 hover:bg-indigo-100">お菓子</a></li><li><a href="/products/drinks.html" class="block px-4 py-2 hover:bg-indigo-100">飲料</a></li><li><a href="/products/retort_foods.html" class="block px-4 py-2 hover:bg-indigo-100">レトルト食品</a></li>
                 </ul>
             </li>
@@ -86,12 +92,12 @@
         </div>
         <div class="flex-grow text-center md:text-left">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">商品 56</h1>
-            <p class="text-5xl font-extrabold text-indigo-600 mb-6">69319円</p>
+            <p class="text-5xl font-extrabold text-indigo-600 mb-6">72744円</p>
             
             <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 mb-8 rounded-lg">
                 <h3 class="text-2xl font-bold text-indigo-800 mb-2">AI価格分析</h3>
-                <p class="text-xl font-bold text-indigo-600 mb-2">「今は購入するチャンス！」</p>
-                <p class="text-gray-700 leading-relaxed">商品56の現在価格69319円は、過去の価格履歴から見ると、過去2ヶ月間の中で高い数字ではありませんが、特に下落傾向は見られません。直近で同様の価格帯は70336円（8月22日）から69442円（7月23日）であり、69319円は比較的安定した価格です。価格が上昇しやすい時期に入る可能性があるため、今のうちに購入するのが賢明です。</p>
+                <p class="text-xl font-bold text-indigo-600 mb-2">「今が買い時！商品56の価格は過去最低水準」</p>
+                <p class="text-gray-700 leading-relaxed">現在の価格72744円は、過去の価格履歴の中で最も安い水準の一つです。特に9月19日の価格は71856円で、最近のトレンドを考慮すると、今がこの商品を購入する絶好の機会です。過去数ヶ月の価格動向を見ても、72744円は中長期的に見て非常にお買い得と言えます。技術書という性質上、需要が上がる時期も予想されるため、早めの購入をお勧めします。</p>
             </div>
             
             <div class="mb-8">
@@ -99,70 +105,77 @@
                 <p class="text-gray-600">これは、商品 56に関する詳細な商品説明です。画期的な機能と優れたデザインを備えています。</p>
             </div>
 
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">タグ</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">買い時</span><span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">技術書</span><span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">価格下落</span><span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">お買い得</span><span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">過去最安値</span>
+                </div>
+            </div>
+
             <div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">価格履歴</h3>
                 <div class="bg-gray-100 rounded-lg p-4">
                     <pre class="text-gray-600 text-sm overflow-x-auto">{
-  "2025-07-22": 61387,
-  "2025-07-23": 69442,
-  "2025-07-24": 62934,
-  "2025-07-25": 63547,
-  "2025-07-26": 63141,
-  "2025-07-27": 68278,
-  "2025-07-28": 64355,
-  "2025-07-29": 66624,
-  "2025-07-30": 70480,
-  "2025-07-31": 65966,
-  "2025-08-01": 67271,
-  "2025-08-02": 61272,
-  "2025-08-03": 61904,
-  "2025-08-04": 61593,
-  "2025-08-05": 69934,
-  "2025-08-06": 64070,
-  "2025-08-07": 65523,
-  "2025-08-08": 62006,
-  "2025-08-09": 70213,
-  "2025-08-10": 65537,
-  "2025-08-11": 68488,
-  "2025-08-12": 62109,
-  "2025-08-13": 69751,
-  "2025-08-14": 66902,
-  "2025-08-15": 66678,
-  "2025-08-16": 69703,
-  "2025-08-17": 67570,
-  "2025-08-18": 66864,
-  "2025-08-19": 68601,
-  "2025-08-20": 69350,
-  "2025-08-21": 67302,
-  "2025-08-22": 70336,
-  "2025-08-23": 67515,
-  "2025-08-24": 62369,
-  "2025-08-25": 67142,
-  "2025-08-26": 67129,
-  "2025-08-27": 66090,
-  "2025-08-28": 66900,
-  "2025-08-29": 61803,
-  "2025-08-30": 67625,
-  "2025-08-31": 62896,
-  "2025-09-01": 61110,
-  "2025-09-02": 63854,
-  "2025-09-03": 66172,
-  "2025-09-04": 64148,
-  "2025-09-05": 64022,
-  "2025-09-06": 65493,
-  "2025-09-07": 67648,
-  "2025-09-08": 66286,
-  "2025-09-09": 62084,
-  "2025-09-10": 67432,
-  "2025-09-11": 64404,
-  "2025-09-12": 69947,
-  "2025-09-13": 66878,
-  "2025-09-14": 69947,
-  "2025-09-15": 61783,
-  "2025-09-16": 63573,
-  "2025-09-17": 70299,
-  "2025-09-18": 64014,
-  "2025-09-19": 69319
+  "2025-07-22": 82162,
+  "2025-07-23": 78155,
+  "2025-07-24": 81513,
+  "2025-07-25": 72741,
+  "2025-07-26": 72803,
+  "2025-07-27": 78560,
+  "2025-07-28": 74559,
+  "2025-07-29": 77595,
+  "2025-07-30": 72275,
+  "2025-07-31": 80856,
+  "2025-08-01": 77483,
+  "2025-08-02": 72976,
+  "2025-08-03": 78113,
+  "2025-08-04": 82116,
+  "2025-08-05": 75730,
+  "2025-08-06": 76441,
+  "2025-08-07": 82076,
+  "2025-08-08": 82154,
+  "2025-08-09": 79015,
+  "2025-08-10": 81683,
+  "2025-08-11": 74854,
+  "2025-08-12": 80128,
+  "2025-08-13": 77641,
+  "2025-08-14": 81505,
+  "2025-08-15": 77055,
+  "2025-08-16": 80347,
+  "2025-08-17": 74315,
+  "2025-08-18": 78152,
+  "2025-08-19": 75710,
+  "2025-08-20": 80357,
+  "2025-08-21": 74434,
+  "2025-08-22": 74361,
+  "2025-08-23": 79042,
+  "2025-08-24": 74870,
+  "2025-08-25": 72966,
+  "2025-08-26": 76988,
+  "2025-08-27": 72287,
+  "2025-08-28": 75753,
+  "2025-08-29": 80173,
+  "2025-08-30": 79557,
+  "2025-08-31": 77037,
+  "2025-09-01": 79765,
+  "2025-09-02": 73867,
+  "2025-09-03": 80848,
+  "2025-09-04": 77478,
+  "2025-09-05": 74420,
+  "2025-09-06": 73835,
+  "2025-09-07": 73215,
+  "2025-09-08": 80137,
+  "2025-09-09": 78799,
+  "2025-09-10": 73112,
+  "2025-09-11": 77843,
+  "2025-09-12": 74491,
+  "2025-09-13": 75868,
+  "2025-09-14": 78220,
+  "2025-09-15": 75567,
+  "2025-09-16": 75226,
+  "2025-09-17": 80028,
+  "2025-09-18": 74659,
+  "2025-09-19": 72744
 }</pre>
                 </div>
             </div>
@@ -187,24 +200,6 @@
             </div>
         </div>
     </footer>
-    <script>
-        function toggleMenu(element) {
-            const submenu = element.nextElementSibling;
-            const arrow = element.querySelector('svg');
-            
-            // すべてのドロップダウンを非表示にする
-            document.querySelectorAll('.group ul').forEach(ul => {
-                if (ul !== submenu) {
-                    ul.classList.add('hidden');
-                    ul.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
-                }
-            });
-
-            // クリックしたドロップダウンをトグル
-            submenu.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-    </script>
     
 </body>
 </html>
