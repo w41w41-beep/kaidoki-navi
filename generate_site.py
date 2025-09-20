@@ -98,9 +98,9 @@ def generate_html_file(title, content, filepath, categories_data=None):
         for category, subcategories in categories_data.items():
             sub_menu_items = "".join([f'<li><a href="/products/{sub.get("url", "#")}.html" class="block px-4 py-2 hover:bg-indigo-100">{sub["name"]}</a></li>' for sub in subcategories])
             nav_html += f"""
-            <li class="relative group">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg" onclick="event.preventDefault(); toggleMenu(this);">
-                    {category} <svg class="ml-2 w-4 h-4 transform rotate-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <li class="relative">
+                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    {category} <svg class="ml-2 w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </a>
                 <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
                     {sub_menu_items}
@@ -126,6 +126,9 @@ def generate_html_file(title, content, filepath, categories_data=None):
             .card:hover {{
                 transform: translateY(-5px);
                 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }}
+            .rotate-180 {{
+                transform: rotate(180deg);
             }}
         </style>
     </head>
@@ -162,22 +165,39 @@ def generate_html_file(title, content, filepath, categories_data=None):
         </div>
     </footer>
     <script>
-        function toggleMenu(element) {
-            const submenu = element.nextElementSibling;
-            const arrow = element.querySelector('svg');
-            
-            // すべてのドロップダウンを非表示にする
-            document.querySelectorAll('.group ul').forEach(ul => {
-                if (ul !== submenu) {
-                    ul.classList.add('hidden');
-                    ul.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.category-menu-toggle').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const parentLi = button.closest('li');
+                    const submenu = parentLi.querySelector('ul');
+                    const arrow = button.querySelector('svg');
+                    
+                    // 他のメニューをすべて閉じる
+                    document.querySelectorAll('.category-menu-toggle').forEach(otherButton => {
+                        const otherParentLi = otherButton.closest('li');
+                        if (otherParentLi !== parentLi) {
+                            otherParentLi.querySelector('ul').classList.add('hidden');
+                            otherButton.querySelector('svg').classList.remove('rotate-180');
+                        }
+                    });
+
+                    // 現在のメニューをトグルする
+                    submenu.classList.toggle('hidden');
+                    arrow.classList.toggle('rotate-180');
+                });
             });
 
-            // クリックしたドロップダウンをトグル
-            submenu.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
+            // どこかをクリックしたらメニューを閉じる
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('.relative')) {
+                    document.querySelectorAll('.category-menu-toggle').forEach(button => {
+                        button.closest('li').querySelector('ul').classList.add('hidden');
+                        button.querySelector('svg').classList.remove('rotate-180');
+                    });
+                }
+            });
+        });
     </script>
     """
 
