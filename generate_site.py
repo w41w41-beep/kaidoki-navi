@@ -15,23 +15,28 @@ OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = ""
 MODEL_NAME = "gpt-4o-mini"
 
-def generate_ai_analysis(product_name, product_price):
+def generate_ai_analysis(product_name, product_price, price_history):
     """
     OpenAI APIを使用して、商品の価格分析テキストを生成する。
+    応答は一言アピールと詳細分析の2つの部分から構成される。
     """
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
+
+    # 価格履歴データをプロンプトに追加
+    history_text = f"過去の価格履歴は以下の通りです:\n{price_history}" if price_history else "価格履歴はありません。"
     
     messages = [
-        {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。簡潔に、現在の価格が市場と比較してどうかの分析と、購入の推奨を日本語で1つの段落で提供してください。価格は円単位で言及してください。"},
-        {"role": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。"}
+        {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。"},
+        {"role": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。"}
     ]
     
     payload = {
         "model": MODEL_NAME,
         "messages": messages,
+        "response_format": {"type": "json_object"},
         "tools": [
             {
                 "type": "function",
@@ -59,15 +64,18 @@ def generate_ai_analysis(product_name, product_price):
         response.raise_for_status()
         result = response.json()
         
-        # 応答からテキストを抽出
-        text = result.get('choices', [{}])[0].get('message', {}).get('content', 'AIによる価格分析は現在準備中です。')
-        return text
+        # 応答からJSONテキストを抽出してパース
+        json_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
+        if json_text:
+            analysis_data = json.loads(json_text)
+            return analysis_data.get('headline', 'AI分析準備中'), analysis_data.get('analysis', '詳細なAI分析は現在準備中です。')
+        
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
-        return "AIによる価格分析は現在準備中です。"
-    except (IndexError, KeyError) as e:
+    except (IndexError, KeyError, json.JSONDecodeError) as e:
         print(f"OpenAI APIの応答形式が不正です: {e}")
-        return "AIによる価格分析は現在準備中です。"
+    
+    return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
 def fetch_rakuten_items():
     """楽天APIから複数のカテゴリで商品データを取得する関数"""
@@ -112,10 +120,12 @@ def fetch_rakuten_items():
                         "main": main_cat,
                         "sub": genre_name
                     },
-                    "ai_analysis": "AIによる価格分析は現在準備中です。", # 後ほどAI分析で上書き
+                    "ai_headline": "AI分析準備中",
+                    "ai_analysis": "詳細なAI分析は現在準備中です。",
                     "description": "商品説明は現在準備中です。",
                     "date": date.today().isoformat(),
-                    "main_ec_site": "楽天" # メインのECサイトを記録
+                    "main_ec_site": "楽天", # メインのECサイトを記録
+                    "price_history": []
                 })
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
@@ -157,10 +167,12 @@ def fetch_yahoo_items():
                         "main": keyword, # キーワードをメインカテゴリに
                         "sub": item.get('category_name', '') # カテゴリ名を取得
                     },
-                    "ai_analysis": "AIによる価格分析は現在準備中です。", # 後ほどAI分析で上書き
+                    "ai_headline": "AI分析準備中",
+                    "ai_analysis": "詳細なAI分析は現在準備中です。",
                     "description": item.get('description', '商品説明は現在準備中です。'),
                     "date": date.today().isoformat(),
-                    "main_ec_site": "Yahoo!" # メインのECサイトを記録
+                    "main_ec_site": "Yahoo!", # メインのECサイトを記録
+                    "price_history": []
                 })
         except requests.exceptions.RequestException as e:
             print(f"Yahoo! APIへのリクエスト中にエラーが発生しました: {e}")
@@ -184,7 +196,26 @@ def update_products_json(new_products):
 
     updated_products = {p['id']: p for p in existing_products}
     for new_product in new_products:
-        updated_products[new_product['id']] = new_product
+        if new_product['id'] in updated_products:
+            # 既存の商品の場合、価格履歴を更新
+            existing_product = updated_products[new_product['id']]
+            if 'price_history' not in existing_product:
+                existing_product['price_history'] = []
+            
+            # 最新の価格を履歴に追加（重複は避ける）
+            current_date = date.today().isoformat()
+            current_price = int(new_product['price'].replace(',', ''))
+            
+            # 既に今日の価格が記録されていなければ追加
+            if not existing_product['price_history'] or existing_product['price_history'][-1]['date'] != current_date:
+                existing_product['price_history'].append({"date": current_date, "price": current_price})
+
+            # 他の最新情報で上書き
+            existing_product.update(new_product)
+        else:
+            # 新規商品の場合はそのまま追加
+            new_product['price_history'] = [{"date": date.today().isoformat(), "price": int(new_product['price'].replace(',', ''))}]
+            updated_products[new_product['id']] = new_product
     
     final_products = list(updated_products.values())
     
@@ -193,15 +224,16 @@ def update_products_json(new_products):
     for i, product in enumerate(final_products):
         print(f"商品 {i+1}/{len(final_products)}: '{product['name']}' のAI分析を生成中...")
         try:
-            # カンマを取り除いて価格を整数に変換
             price_int = int(product['price'].replace(',', ''))
-            ai_analysis_text = generate_ai_analysis(product['name'], price_int)
+            price_history = product.get('price_history', [])
+            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
+            product['ai_headline'] = ai_headline
             product['ai_analysis'] = ai_analysis_text
-            # APIへの負荷を軽減するため、少し待機
             time.sleep(1)
         except ValueError:
             print(f"価格の変換に失敗しました: {product['price']}")
-            product['ai_analysis'] = "AIによる価格分析は現在準備中です。"
+            product['ai_headline'] = "AI分析準備中"
+            product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
 
     print("AIによる価格分析が完了しました。")
     
@@ -338,7 +370,7 @@ def generate_site(products):
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
     </div>
 </a>
             """
@@ -366,7 +398,7 @@ def generate_site(products):
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
     </div>
 </a>
                 """
@@ -394,7 +426,7 @@ def generate_site(products):
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
         <p class="product-price">{product['price']}円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
     </div>
 </a>
             """
@@ -476,7 +508,7 @@ def generate_site(products):
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
                     {purchase_button_html}
                 </div>
                 {ai_analysis_block_html}
@@ -553,7 +585,7 @@ def generate_site(products):
                     <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
                     <p class="product-price">{product['price']}円</p>
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_analysis']}</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
                 </div>
             </a>
             ''' for product in tag_products])}
