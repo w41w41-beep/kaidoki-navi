@@ -12,13 +12,13 @@ PRODUCTS_PER_PAGE = 24
 # 楽天APIから読み込む商品数を定義 (最大10個)
 RAKUTEN_FETCH_LIMIT = 10
 
-# APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
 AI_ANALYSIS_CACHE_FILE = "ai_analysis_cache.json"
 SUBCATEGORY_CACHE_FILE = "subcategory_cache.json"
+PRODUCT_HIGHLIGHT_CACHE_FILE = "product_highlight_cache.json"
 RAKUTEN_API_FILE = "data/rakuten_api_response.json"
 
 def load_cache(cache_file):
@@ -134,10 +134,9 @@ def generate_subcategory_with_ai(product, cache):
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
     
-# generate_subcategory_with_ai 関数内
     messages = [
-        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、最も適切なサブカテゴリーを一つだけ選んでください。以下の候補リストの中から必ず選択してください。\n\n候補リスト: ['デスクトップPC', 'ノートPC', 'ゲーミングPC', 'モニター', 'キーボード・マウス', 'テレビ', '冷蔵庫', '洗濯機', 'エアコン', 'その他家電', '周辺機器']\n\n回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。"}
-        ,{"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を最も適切に分類してください。"}
+        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、最も適切なサブカテゴリーを一つだけ選んでください。以下の候補リストの中から必ず選択してください。\n\n候補リスト: ['デスクトップPC', 'ノートPC', 'ゲーミングPC', 'モニター', 'キーボード・マウス', 'テレビ', '冷蔵庫', '洗濯機', 'エアコン', 'その他家電', '周辺機器']\n\n回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。"},
+        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を最も適切に分類してください。"}
     ]
     
     payload = {
@@ -169,6 +168,55 @@ def generate_subcategory_with_ai(product, cache):
         print("APIからの応答に必要なキーが含まれていません。")
         return "その他"
 
+def generate_product_highlight_with_ai(product, cache):
+    """
+    AIを使用して商品からハイライトを生成し、キャッシュに保存する。
+    """
+    cache_key = f"highlight_{product['product_id']}"
+
+    # キャッシュから読み込みを試みる（価格は考慮しない）
+    if cache_key in cache:
+        print(f"商品 '{product['product_name']}' の商品ハイライトをキャッシュから読み込みました。")
+        return cache[cache_key]
+
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。商品ハイライトはスキップされます。")
+        return "AIによる商品ハイライトは現在準備中です。"
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {OPENAI_API_KEY}'
+    }
+    
+    messages = [
+        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から、商品の最も重要な特徴や魅力を簡潔にまとめたハイライトを日本語で生成してください。"},
+        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品の主な特徴をまとめてください。"}
+    ]
+
+    payload = {
+        'model': MODEL_NAME,
+        'messages': messages,
+        'temperature': 0.5
+    }
+
+    try:
+        print(f"商品 '{product['product_name']}' の商品ハイライトを生成するため、APIを呼び出しています...")
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+
+        highlight = response.json()['choices'][0]['message']['content']
+
+        # 結果をキャッシュに保存
+        cache[cache_key] = highlight
+
+        return highlight
+    except requests.exceptions.RequestException as e:
+        print(f"API呼び出し中にエラーが発生しました: {e}")
+        return "AIによる商品ハイライトは現在準備中です。"
+    except (json.JSONDecodeError, KeyError) as e:
+        print(f"APIからの応答が不正です: {e}")
+        return "AIによる商品ハイライトは現在準備中です。"
+
 def create_product_pages(products):
     """
     各商品ページを生成する。
@@ -181,6 +229,7 @@ def create_product_pages(products):
         # 商品ごとにAI分析を生成
         ai_analysis_headline = product.get('ai_analysis_headline', 'AI分析準備中')
         ai_analysis_details = product.get('ai_analysis_details', '詳細なAI分析は現在準備中です。')
+        product_highlight = product.get('product_highlight', 'AIによる商品ハイライトは現在準備中です。')
 
         html_content = f"""
         <div class="container mx-auto p-4 md:p-8">
@@ -193,7 +242,6 @@ def create_product_pages(products):
                         <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">{product['product_name']}</h1>
                         <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">{product['price']}円</p>
                         
-                        <!-- AI分析セクション -->
                         <div class="bg-gray-100 p-4 rounded-lg">
                             <h3 class="text-lg font-bold text-gray-800 mb-2">AI価格分析：<span class="text-red-600">{ai_analysis_headline}</span></h3>
                             <p class="text-gray-600 text-sm">{ai_analysis_details}</p>
@@ -203,12 +251,16 @@ def create_product_pages(products):
                             <h3 class="text-lg font-bold text-gray-800 mb-2">商品概要</h3>
                             <p>{product['description']}</p>
                         </div>
+
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AIによる商品ハイライト</h3>
+                            <p>{product_highlight}</p>
+                        </div>
                     </div>
                     <a href="#" class="bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 font-bold">購入はこちら</a>
                 </div>
             </div>
             
-            <!-- 価格履歴グラフ -->
             <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
                 <h3 class="text-2xl font-bold text-gray-800 mb-4">価格履歴</h3>
                 <canvas id="priceChart" class="w-full h-64"></canvas>
@@ -251,7 +303,7 @@ def create_product_pages(products):
         </script>
         """
 
-        final_html = base_template.replace('<!-- CONTENT_BLOCK -->', html_content).replace('{{ page_title }}', product['product_name'])
+        final_html = base_template.replace('', html_content).replace('{{ page_title }}', product['product_name'])
         
         os.makedirs(os.path.dirname(product['page_url']), exist_ok=True)
         with open(product['page_url'], 'w', encoding='utf-8') as f:
@@ -309,7 +361,7 @@ def create_product_list_pages(all_products):
         """
         
         page_title = f"商品一覧 (ページ {page_num+1})"
-        final_html = base_template.replace('<!-- CONTENT_BLOCK -->', list_content).replace('{{ page_title }}', page_title)
+        final_html = base_template.replace('', list_content).replace('{{ page_title }}', page_title)
         
         page_filename = f'products/page-{page_num+1}.html' if page_num > 0 else 'products/index.html'
         with open(page_filename, 'w', encoding='utf-8') as f:
@@ -346,7 +398,7 @@ def create_product_list_pages(all_products):
         """
         
         page_title = f"カテゴリー: {subcategory}"
-        final_html = base_template.replace('<!-- CONTENT_BLOCK -->', list_content).replace('{{ page_title }}', page_title)
+        final_html = base_template.replace('', list_content).replace('{{ page_title }}', page_title)
         
         page_filename = f'products/category-{subcategory.lower().replace(" ", "-")}.html'
         with open(page_filename, 'w', encoding='utf-8') as f:
@@ -370,7 +422,7 @@ def create_static_pages():
     # トップページ
     with open('templates/index.html', 'r', encoding='utf-8') as f:
         index_content = f.read()
-    final_index = base_template.replace('<!-- CONTENT_BLOCK -->', index_content).replace('{{ page_title }}', 'トップページ')
+    final_index = base_template.replace('', index_content).replace('{{ page_title }}', 'トップページ')
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(final_index)
 
@@ -383,7 +435,7 @@ def create_static_pages():
     for filename, title in static_pages.items():
         with open(f'templates/{filename}', 'r', encoding='utf-8') as f:
             content = f.read()
-        final_page = base_template.replace('<!-- CONTENT_BLOCK -->', content).replace('{{ page_title }}', title)
+        final_page = base_template.replace('', content).replace('{{ page_title }}', title)
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(final_page)
     
@@ -479,31 +531,33 @@ def generate_site():
     # 楽天から読み込む商品を10個に制限
     products_for_site = all_products_data[:RAKUTEN_FETCH_LIMIT]
 
-    # AI分析結果とサブカテゴリーのキャッシュを読み込み
+    # AI分析結果とサブカテゴリー、商品ハイライトのキャッシュを読み込み
     ai_analysis_cache = load_cache(AI_ANALYSIS_CACHE_FILE)
     subcategory_cache = load_cache(SUBCATEGORY_CACHE_FILE)
+    product_highlight_cache = load_cache(PRODUCT_HIGHLIGHT_CACHE_FILE)
 
     # AI分析とサブカテゴリー生成を実行
-# generate_site 関数内（ループ部分）
-# AI分析とサブカテゴリー生成を実行
-for product in products_for_site:
-    product['page_url'] = f"products/{product['product_id']}.html"
-    
-    # AIでサブカテゴリーを生成
-    # この関数内でキャッシュ確認と新規生成の両方が処理される
-    product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
-    
-    # AI価格分析を生成
-    headline, details = generate_ai_analysis(
-        product, 
-        ai_analysis_cache
-    )
-    product['ai_analysis_headline'] = headline
-    product['ai_analysis_details'] = details
+    for product in products_for_site:
+        product['page_url'] = f"products/{product['product_id']}.html"
+        
+        # サブカテゴリーをAIで生成（キャッシュ確認は関数内で処理）
+        product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
+        
+        # 商品ハイライトをAIで生成（キャッシュ確認は関数内で処理）
+        product['product_highlight'] = generate_product_highlight_with_ai(product, product_highlight_cache)
+
+        # AI価格分析を生成
+        headline, details = generate_ai_analysis(
+            product, 
+            ai_analysis_cache
+        )
+        product['ai_analysis_headline'] = headline
+        product['ai_analysis_details'] = details
 
     # キャッシュを保存
     save_cache(ai_analysis_cache, AI_ANALYSIS_CACHE_FILE)
     save_cache(subcategory_cache, SUBCATEGORY_CACHE_FILE)
+    save_cache(product_highlight_cache, PRODUCT_HIGHLIGHT_CACHE_FILE)
 
     print("ウェブサイトのファイル生成を開始します。")
 
