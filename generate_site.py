@@ -9,7 +9,7 @@ import random
 import hashlib
 
 # 1ページあたりの商品数を定義
-PRODUCTS_PER_PAGE = 10
+PRODUCTS_PER_PAGE = 1
 # AI分析結果を保存するキャッシュファイル
 AI_CACHE_FILE = "ai_cache.json"
 
@@ -94,7 +94,7 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
 
 def fetch_products_from_rakuten():
     """
-    楽天APIから最新の商品情報を10個取得する
+    楽天APIから最新の商品情報を1個取得する
     """
     if not RAKUTEN_API_KEY:
         print("警告: 楽天APIキーが設定されていません。ダミー商品を使用します。")
@@ -107,7 +107,7 @@ def fetch_products_from_rakuten():
         params = {
             'applicationId': RAKUTEN_API_KEY,
             'genreId': genre_id,
-            'hits': 1, # 各カテゴリーから1個ずつ取得に修正
+            'hits': 1,
             'format': 'json',
             'formatVersion': 2,
         }
@@ -121,14 +121,11 @@ def fetch_products_from_rakuten():
             
             for item_data in items:
                 item = item_data.get('Item', {})
-                # itemCodeの代わりにitemUrlでユニークなファイル名を生成
                 item_url = item.get('itemUrl')
                 if not item_url:
                     print(f"警告: itemUrl が見つからない商品が見つかりました。この商品はスキップされます。")
                     continue
                 
-                # itemUrlのハッシュ値からユニークなファイル名を生成
-                # hashlibを使用することで、常に同じ入力から同じハッシュ値が生成される
                 unique_hash = hashlib.sha256(item_url.encode('utf-8')).hexdigest()[:16]
                 page_url = f"products/product_{unique_hash}.html"
 
@@ -143,14 +140,12 @@ def fetch_products_from_rakuten():
                 })
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
-            # エラーが発生しても処理を継続
             continue
         except (json.JSONDecodeError, KeyError) as e:
             print(f"楽天APIからの応答を解析中にエラーが発生しました: {e}")
             continue
 
-    # 取得した商品の合計数が10個になるように調整
-    return products[:10]
+    return products[:1] # 取得した商品の合計数が1個になるように調整
 
 def generate_html_file(title, content, filepath):
     """
@@ -414,28 +409,29 @@ def generate_website():
     # 楽天APIから商品を取得
     products_data = fetch_products_from_rakuten()
     
-    # APIから商品が取得できなかった場合は、ダミー商品を10個生成する
+    # APIから商品が取得できなかった場合は、ダミー商品を1個生成する
     if not products_data:
-        print("警告: 楽天APIからの商品取得に失敗したため、ダミー商品を生成します。")
-        for i in range(1, 11): # 10個のダミー商品
-            product_name = f"ダミー商品 {i}"
-            price_history = {}
-            base_price = random.randint(15000, 100000)
-            for d in range(60, 0, -1):
-                price_history[(date.today() - timedelta(days=d)).isoformat()] = max(10000, base_price + random.randint(-5000, 5000))
-            current_price = price_history.get((date.today() - timedelta(days=1)).isoformat(), base_price)
-            page_url = f"products/product_dummy_{i}.html"
-            products_data.append({
-                'name': product_name,
-                'price': current_price,
-                'price_history': price_history,
-                'description': f"これは、{product_name}に関する詳細な商品説明です。画期的な機能と優れたデザインを備えています。",
-                'url': f"https://example.com/buy/dummy/{i}",
-                'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+{i}",
-                'page_url': page_url,
-                'ai_headline': 'AI分析準備中',
-                'ai_details': '詳細なAI分析は現在準備中です。',
-            })
+        print("警告: 楽天APIからの商品取得に失敗したため、ダミー商品を1個生成します。")
+        # --- 修正箇所：ダミー生成を1個に限定 ---
+        product_name = "ダミー商品 1"
+        price_history = {}
+        base_price = random.randint(15000, 100000)
+        for d in range(60, 0, -1):
+            price_history[(date.today() - timedelta(days=d)).isoformat()] = max(10000, base_price + random.randint(-5000, 5000))
+        current_price = price_history.get((date.today() - timedelta(days=1)).isoformat(), base_price)
+        page_url = f"products/product_dummy_1.html"
+        products_data.append({
+            'name': product_name,
+            'price': current_price,
+            'price_history': price_history,
+            'description': f"これは、{product_name}に関する詳細な商品説明です。画期的な機能と優れたデザインを備えています。",
+            'url': f"https://example.com/buy/dummy/1",
+            'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+1",
+            'page_url': page_url,
+            'ai_headline': 'AI分析準備中',
+            'ai_details': '詳細なAI分析は現在準備中です。',
+        })
+        # ----------------------------------
     else:
         # AI分析を生成して商品データに追加 (楽天APIから商品が取得できた場合のみ実行)
         for product in products_data:
