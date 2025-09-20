@@ -1,7 +1,6 @@
 # generate_site.py
 
 import json
-import math
 import os
 import shutil
 import time
@@ -9,7 +8,6 @@ from datetime import date, timedelta
 import requests
 import random
 from collections import defaultdict
-import openai
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -22,6 +20,9 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # GPT-4o-miniモデルを使用
 MODEL_NAME = "gpt-4o-mini"
+
+# OpenAI APIのベースURL
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 
 def load_ai_cache():
     """AI分析のキャッシュファイルを読み込む"""
@@ -69,7 +70,7 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
 
     try:
         print(f"商品 '{product_name}' のAI分析を生成するため、APIを呼び出しています...")
-        response = requests.post(openai.api_base + "/chat/completions", headers=headers, data=json.dumps(payload))
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         analysis_data = response.json()
         content = json.loads(analysis_data['choices'][0]['message']['content'])
@@ -398,7 +399,7 @@ def generate_website():
 
     products_data = []
     
-    # カテゴリーとサブカテゴリーの定義を修正
+    # カテゴリーとサブカテゴリーの定義
     categories_data = {
         "家電": [{"name": "テレビ", "url": "tv"}, {"name": "冷蔵庫", "url": "refrigerator"}, {"name": "パソコン", "url": "pc"}],
         "本": [{"name": "小説", "url": "novel"}, {"name": "漫画", "url": "manga"}, {"name": "技術書", "url": "tech_books"}],
