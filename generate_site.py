@@ -538,6 +538,7 @@ def generate_site():
 
     # AI分析とサブカテゴリー生成を実行
     for product in products_for_site:
+        product['product_id'] = product['id'] # idキーをproduct_idとして扱う
         product['page_url'] = f"products/{product['product_id']}.html"
         
         # サブカテゴリーをAIで生成（キャッシュ確認は関数内で処理）
