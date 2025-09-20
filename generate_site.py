@@ -5,17 +5,15 @@ import shutil
 import time
 from datetime import date
 import requests
-import pandas as pd
-from urllib.parse import urlparse
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
 
+# APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")  # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
-
 
 def generate_ai_analysis(product_name, product_price, price_history):
     """
@@ -126,6 +124,41 @@ def generate_ai_summary(text):
     
     return "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
 
+def generate_ai_subcategory(product_name):
+    """
+    OpenAI APIを使用して、商品のサブカテゴリーを生成する。
+    """
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。AIサブカテゴリーはスキップされます。")
+        return "未分類"
+    
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {OPENAI_API_KEY}'
+    }
+    
+    messages = [
+        {"role": "system", "content": "あなたは商品のカテゴリー分類の専門家です。与えられた商品名から、最も適切で短いサブカテゴリー名を1つだけ日本語で答えてください。例：スマートフォンケース, ワイヤレスイヤホン, ノートパソコン, 電動歯ブラシ"},
+        {"role_user", "content": f"商品名: {product_name}"}
+    ]
+    
+    payload = {
+        "model": MODEL_NAME,
+        "messages": messages
+    }
+    
+    try:
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=5)
+        response.raise_for_status()
+        subcategory = response.json()['choices'][0]['message']['content'].strip()
+        return subcategory
+    except requests.exceptions.RequestException as e:
+        print(f"AIサブカテゴリー生成中にエラーが発生しました: {e}")
+    except (IndexError, KeyError) as e:
+        print(f"AIの応答形式が不正です: {e}")
+    
+    return "未分類"
+
 
 def fetch_rakuten_items(summary_dict):
     """楽天APIから複数のカテゴリで商品データを取得する関数"""
@@ -158,6 +191,9 @@ def fetch_rakuten_items(summary_dict):
                     description = item_data.get('itemCaption', '')
                     ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
 
+                # サブカテゴリーをAIで生成
+                ai_subcategory = generate_ai_subcategory(item_data['itemName'])
+
                 all_products.append({
                     "id": item_id,
                     "name": item_data['itemName'],
@@ -169,7 +205,7 @@ def fetch_rakuten_items(summary_dict):
                     "page_url": f"pages/{item_id}.html",
                     "category": {
                         "main": keyword,
-                        "sub": item_data.get('genreName', '')
+                        "sub": ai_subcategory
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
@@ -213,6 +249,9 @@ def fetch_yahoo_items(summary_dict):
                     # 要約がなければ新しく生成
                     description = item.get('description', '')
                     ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+                
+                # サブカテゴリーをAIで生成
+                ai_subcategory = generate_ai_subcategory(item['name'])
 
                 all_products.append({
                     "id": item_id,
@@ -225,7 +264,7 @@ def fetch_yahoo_items(summary_dict):
                     "page_url": f"pages/{item_id}.html",
                     "category": {
                         "main": keyword,
-                        "sub": item.get('category_name', '')
+                        "sub": ai_subcategory
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
@@ -446,13 +485,15 @@ def generate_site(products):
             sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
             
             # --- ここが修正点です ---
+            # サブカテゴリ名が空または不適切な場合はスキップ
             safe_sub_cat = sub_cat.replace(' ', '').replace('/', '').replace('\\', '')
-            if not safe_sub_cat:  # 無効なサブカテゴリ名をスキップ
-                print(f"警告: 無効なサブカテゴリ名 '{sub_cat}' が検出されました。スキップします。")
+            if not safe_sub_cat:
+                print(f"警告: 不正なサブカテゴリ名 '{sub_cat}' をスキップしました。")
                 continue
 
             sub_cat_file_name = f"{safe_sub_cat}.html"
             page_path = f"category/{main_cat}/{sub_cat_file_name}"
+            os.makedirs(os.path.dirname(page_path), exist_ok=True)
             header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
             main_content_html = f"""
  <main class="container">
@@ -639,7 +680,7 @@ def create_sitemap(products):
     sitemap_content += '    <changefreq>daily</changefreq>\n'
     sitemap_content += '    <priority>1.0</priority>\n'
     sitemap_content += '  </url>\n'
-    genres = ['パソコン', '家電']
+    genres = ['パソコン', '家電', '掃除機', 'イヤホン']
     for genre in genres:
         genre_url = f"{base_url}category/{genre}/"
         sitemap_content += '  <url>\n'
@@ -650,7 +691,7 @@ def create_sitemap(products):
         sitemap_content += '  </url>\n'
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(1, total_pages + 1):
-        page_url = f"page/{i}/" if i > 1 else ""
+        page_url = f"page/{i}.html" if i > 1 else ""
         sitemap_content += '  <url>\n'
         sitemap_content += f'    <loc>{base_url}{page_url}</loc>\n'
         sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
@@ -689,16 +730,15 @@ def main():
     
     # ai_summaries.jsonが存在すれば読み込む
     try:
-        with open('ai_summaries.json', 'r', encoding='utf-8') as f:
-            summary_dict = json.load(f)
-        print("既存のAI要約を読み込みました。")
-    except (FileNotFoundError, json.JSONDecodeError):
+        if os.path.exists('ai_summaries.json'):
+            with open('ai_summaries.json', 'r', encoding='utf-8') as f:
+                summary_dict = json.load(f)
+        else:
+            summary_dict = {}
+    except json.JSONDecodeError:
+        print("ai_summaries.jsonが破損しているため、新規作成します。")
         summary_dict = {}
-        # ファイルが存在しない場合は空のJSONファイルを作成
-        with open('ai_summaries.json', 'w', encoding='utf-8') as f:
-            json.dump({}, f)
-        print("ai_summaries.jsonが見つからないか破損しています。新規作成しました。")
-
+    
     # 各ECサイトから商品データを取得
     rakuten_products = fetch_rakuten_items(summary_dict)
     yahoo_products = fetch_yahoo_items(summary_dict)
