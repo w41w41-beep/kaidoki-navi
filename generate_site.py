@@ -121,13 +121,19 @@ def fetch_products_from_rakuten():
             
             for item_data in items:
                 item = item_data.get('Item', {})
+                # --- 修正箇所 ---
+                item_code = item.get('itemCode')
+                if not item_code:
+                    print(f"警告: itemCode が見つからない商品が見つかりました。この商品はスキップされます。")
+                    continue
+                # -----------------
                 products.append({
                     'name': item.get('itemName'),
                     'price': item.get('itemPrice'),
                     'url': item.get('itemUrl'),
                     'image': item.get('mediumImageUrls')[0] if item.get('mediumImageUrls') else 'https://placehold.co/400x400/cccccc/333333?text=No+Image',
                     'description': item.get('itemCaption', '商品説明はありません。'),
-                    'page_url': f"products/product_{item.get('itemCode').replace(':', '_')}.html",
+                    'page_url': f"products/product_{item_code.replace(':', '_')}.html",
                     'price_history': {},
                 })
         except requests.exceptions.RequestException as e:
