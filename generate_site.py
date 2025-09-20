@@ -56,11 +56,11 @@ def generate_ai_analysis(product, cache):
     OpenAI APIを使用して、商品の価格分析テキストを生成する。
     応答は一言アピールと詳細分析の2つの部分から構成される。
     """
-    cache_key = f"{product['product_name']}_{product['price']}"
+    cache_key = f"{product['product_id']}_{product['price']}"
 
     # キャッシュから読み込みを試みる
     if cache_key in cache:
-        print(f"商品 '{product['product_name']}' のAI分析をキャッシュから読み込みます。")
+        print(f"商品 '{product['product_name']}' のAI分析をキャッシュから読み込みました。")
         return cache[cache_key]['headline'], cache[cache_key]['details']
 
     if not OPENAI_API_KEY:
@@ -121,7 +121,7 @@ def generate_subcategory_with_ai(product, cache):
     
     # 厳格なキャッシュルール: 一度キャッシュに保存されたものは再利用する
     if cache_key in cache:
-        print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みます。")
+        print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みました。")
         return cache[cache_key]
 
     if not OPENAI_API_KEY:
@@ -356,6 +356,11 @@ def create_static_pages():
     """
     静的ページ（トップページ、プライバシーポリシー、免責事項、お問い合わせ）を生成する。
     """
+    # templatesフォルダが存在しない場合は何もしない
+    if not os.path.exists('templates'):
+        print("エラー: 'templates' フォルダが見つかりません。")
+        return
+
     base_template = ""
     with open('templates/base.html', 'r', encoding='utf-8') as f:
         base_template = f.read()
@@ -452,6 +457,8 @@ def generate_site():
     if not os.path.exists('templates'):
         print("エラー: 'templates' フォルダが見つかりません。")
         return
+    if not os.path.exists('data'):
+        os.makedirs('data')
     if not os.path.exists('data/products.json'):
         print("エラー: 'data/products.json' ファイルが見つかりません。")
         return
@@ -483,6 +490,7 @@ def generate_site():
         if f"subcategory_{product['product_id']}" not in subcategory_cache:
             product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
         else:
+            print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みました。")
             product['subcategory'] = subcategory_cache[f"subcategory_{product['product_id']}"]
         
         # AI価格分析を生成
