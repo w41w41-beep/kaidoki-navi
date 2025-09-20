@@ -8,6 +8,7 @@ import time
 from datetime import date, timedelta
 import requests
 import random
+from collections import defaultdict
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -86,10 +87,27 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
         print(f"APIからの応答を解析中にエラーが発生しました: {e}")
         return "AI分析失敗", "無効な応答形式です。"
 
-def generate_html_file(title, content, filepath):
+def generate_html_file(title, content, filepath, categories_data=None):
     """
     共通のヘッダー、フッター、スタイルを含むHTMLファイルを生成する。
     """
+    
+    # ナビゲーションバーを動的に生成
+    nav_html = ""
+    if categories_data:
+        for category, subcategories in categories_data.items():
+            sub_menu_items = "".join([f'<li><a href="/products/{sub.get("url", "#")}.html" class="block px-4 py-2 hover:bg-indigo-100">{sub["name"]}</a></li>' for sub in subcategories])
+            nav_html += f"""
+            <li class="relative group">
+                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg">
+                    {category} <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </a>
+                <ul class="absolute z-10 hidden group-hover:block bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+                    {sub_menu_items}
+                </ul>
+            </li>
+            """
+    
     head = f"""
     <head>
         <meta charset="UTF-8">
@@ -113,13 +131,20 @@ def generate_html_file(title, content, filepath):
     </head>
     """
     
-    header = """
+    header = f"""
     <header class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <a href="/index.html" class="text-2xl font-bold rounded-lg px-3 py-1 hover:bg-indigo-700 transition">PricePilot</a>
             <nav>
                 <a href="/index.html" class="mx-2 hover:underline">ホーム</a>
                 <a href="/about.html" class="mx-2 hover:underline">このサイトについて</a>
+            </nav>
+        </div>
+        <div class="bg-indigo-700 mt-4 rounded-lg">
+            <nav class="container mx-auto">
+                <ul class="flex justify-center text-white py-2">
+                    {nav_html}
+                </ul>
             </nav>
         </div>
     </header>
@@ -201,59 +226,85 @@ def generate_product_page(product, ai_headline, ai_details, output_dir):
     generate_html_file(f"PricePilot - {product['name']}", content, filepath)
     print(f"商品ページが生成されました: {filepath}")
 
-def generate_index_page(products, output_dir):
+def generate_index_page(products, categories_data, output_dir):
     """
     トップページ（商品一覧）のHTMLファイルを生成する。
     """
-    total_products = len(products)
-    total_pages = math.ceil(total_products / PRODUCTS_PER_PAGE)
-    
-    for page_num in range(1, total_pages + 1):
-        start_index = (page_num - 1) * PRODUCTS_PER_PAGE
-        end_index = start_index + PRODUCTS_PER_PAGE
-        page_products = products[start_index:end_index]
+    products_html = ""
+    for product in products:
+        badges_html = ""
+        if product.get('is_on_sale'):
+            badges_html += '<span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span>'
+        if product.get('is_new'):
+            badges_html += '<span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>'
         
-        products_html = ""
-        for product in page_products:
-            products_html += f"""
-            <a href="/{product['page_url']}" class="block card">
-                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                    <img src="{product['image']}" alt="{product['name']}" class="w-48 h-48 object-contain rounded-lg mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">{product['name']}</h2>
-                    <p class="text-3xl font-bold text-indigo-600 mb-2">{product['price']}円</p>
-                    <div class="text-sm text-gray-500">
-                        <span class="font-bold text-green-600">{product['ai_headline']}</span>
-                    </div>
+        products_html += f"""
+        <a href="/{product['page_url']}" class="block card relative">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                {badges_html}
+                <img src="{product['image']}" alt="{product['name']}" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">{product['name']}</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">{product['price']}円</p>
+                <div class="text-sm text-gray-500">
+                    <span class="font-bold text-green-600">{product['ai_headline']}</span>
                 </div>
-            </a>
-            """
-        
-        pagination_html = ""
-        if total_pages > 1:
-            pagination_html = '<div class="flex justify-center mt-8 space-x-2">'
-            for i in range(1, total_pages + 1):
-                page_file = f'index.html' if i == 1 else f'index_{i}.html'
-                is_current_page = 'bg-indigo-600 text-white' if i == page_num else 'bg-white text-indigo-600 hover:bg-gray-200'
-                pagination_html += f"""
-                <a href="/{page_file}" class="px-4 py-2 border rounded-lg {is_current_page}">{i}</a>
-                """
-            pagination_html += '</div>'
-            
-        content = f"""
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">商品一覧</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {products_html}
-        </div>
-        {pagination_html}
+            </div>
+        </a>
         """
+    
+    content = f"""
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">AIが選ぶお買い得商品</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {products_html}
+    </div>
+    """
 
-        filename = 'index.html' if page_num == 1 else f'index_{page_num}.html'
-        filepath = os.path.join(output_dir, filename)
-        generate_html_file('PricePilot - 商品一覧', content, filepath)
-        
+    filepath = os.path.join(output_dir, 'index.html')
+    generate_html_file('PricePilot - お買い得商品', content, filepath, categories_data)
+    
     print("商品一覧ページが生成されました。")
 
-def generate_static_pages(output_dir):
+def generate_subcategory_page(subcategory_name, products, categories_data, output_dir):
+    """
+    サブカテゴリー別の商品一覧ページを生成する。
+    """
+    products_html = ""
+    for product in products:
+        badges_html = ""
+        if product.get('is_on_sale'):
+            badges_html += '<span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 right-2">お買い得！</span>'
+        if product.get('is_new'):
+            badges_html += '<span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute top-2 left-2">新作</span>'
+        
+        products_html += f"""
+        <a href="/{product['page_url']}" class="block card relative">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+                {badges_html}
+                <img src="{product['image']}" alt="{product['name']}" class="w-48 h-48 object-contain rounded-lg mb-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">{product['name']}</h2>
+                <p class="text-3xl font-bold text-indigo-600 mb-2">{product['price']}円</p>
+                <div class="text-sm text-gray-500">
+                    <span class="font-bold text-green-600">{product['ai_headline']}</span>
+                </div>
+            </div>
+        </a>
+        """
+        
+    content = f"""
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">{subcategory_name.capitalize()}の商品一覧</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {products_html}
+    </div>
+    """
+
+    # URL用に名前を変換
+    url_name = subcategory_name.replace(' ', '_').lower()
+    filepath = os.path.join(output_dir, f'products/{url_name}.html')
+    generate_html_file(f'PricePilot - {subcategory_name}', content, filepath, categories_data)
+    print(f"サブカテゴリーページ '{subcategory_name}' が生成されました。")
+
+
+def generate_static_pages(output_dir, categories_data):
     """
     静的ページ（プライバシー、免責事項など）を生成する。
     """
@@ -294,7 +345,7 @@ def generate_static_pages(output_dir):
     
     for filename, page_info in pages.items():
         filepath = os.path.join(output_dir, filename)
-        generate_html_file(page_info['title'], page_info['content'], filepath)
+        generate_html_file(page_info['title'], page_info['content'], filepath, categories_data)
     
     print("静的ページが生成されました。")
 
@@ -341,22 +392,48 @@ def generate_website():
         shutil.rmtree(output_dir)
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(os.path.join(output_dir, 'products'), exist_ok=True)
-    
+
     ai_cache = load_ai_cache()
     
     print("ダミー商品データを準備中...")
 
     products_data = []
     
+    categories = {
+        "家電": ["テレビ", "冷蔵庫", "パソコン"],
+        "本": ["小説", "漫画", "技術書"],
+        "ファッション": ["トップス", "ボトムス", "アウター"],
+        "食品": ["お菓子", "飲料", "レトルト食品"]
+    }
+    
+    all_subcategories = []
+    for category, sub_list in categories.items():
+        for sub in sub_list:
+            all_subcategories.append({'category': category, 'name': sub})
+            
+    categories_data = defaultdict(list)
+    for sub in all_subcategories:
+        url_name = sub['name'].replace(' ', '_').lower()
+        categories_data[sub['category']].append({'name': sub['name'], 'url': url_name})
+
     for i in range(1, 101): # 100個のダミー商品
-        product_name = f"最新ガジェット {i}"
+        product_name = f"商品 {i}"
+        
+        # カテゴリーとサブカテゴリーをランダムに割り当て
+        random_sub = random.choice(all_subcategories)
+        category = random_sub['category']
+        subcategory = random_sub['name']
         
         # 過去の価格履歴をシミュレーション
         price_history = {}
         base_price = random.randint(15000, 100000)
         for d in range(60, 0, -1):
             price_history[(date.today() - timedelta(days=d)).isoformat()] = max(10000, base_price + random.randint(-5000, 5000))
-        current_price = price_history[(date.today() - timedelta(days=1)).isoformat()]
+        current_price = list(price_history.values())[-1]
+        
+        # お買い得と新作のフラグをランダムに設定
+        is_on_sale = random.choice([True, False])
+        is_new = random.choice([True, False])
 
         page_url = f"products/product_{i}.html"
         
@@ -371,6 +448,10 @@ def generate_website():
             'url': f"https://example.com/buy/{i}",
             'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+{i}",
             'page_url': page_url,
+            'category': category,
+            'subcategory': subcategory,
+            'is_on_sale': is_on_sale,
+            'is_new': is_new,
             'ai_headline': ai_headline,
             'ai_details': ai_detail
         })
@@ -381,9 +462,17 @@ def generate_website():
     print("ウェブサイトのファイル生成を開始します。")
     
     create_sitemap(products_data, output_dir)
-    generate_static_pages(output_dir)
-    generate_index_page(products_data, output_dir)
+    generate_static_pages(output_dir, categories_data)
+    generate_index_page(products_data, categories_data, output_dir)
     
+    # サブカテゴリーごとのページを生成
+    products_by_subcategory = defaultdict(list)
+    for product in products_data:
+        products_by_subcategory[product['subcategory']].append(product)
+        
+    for subcategory, products in products_by_subcategory.items():
+        generate_subcategory_page(subcategory, products, categories_data, output_dir)
+        
     for product in products_data:
         generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir)
     
