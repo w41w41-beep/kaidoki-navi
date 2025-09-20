@@ -1,0 +1,154 @@
+
+        <div class="container mx-auto p-4 md:p-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
+                <div class="md:flex-shrink-0">
+                    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/low-ya/cabinet/item_cart/chair/01/sirius-top01.jpg?_ex=128x128" alt="[お買い物マラソン! 9/19 20:00-9/24 1:59] オフィスチェア デスクチェア 事務椅子 椅子 チェア パソコンチェア PC ロッキング ワークチェア 学習椅子 ハイバック おしゃれ メッシュ 在宅ワーク ゲーミング 疲れにくい 学生 キャスター付き 腰 クッション" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                </div>
+                <div class="p-6 flex flex-col justify-between w-full">
+                    <div class="mb-4">
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">[お買い物マラソン! 9/19 20:00-9/24 1:59] オフィスチェア デスクチェア 事務椅子 椅子 チェア パソコンチェア PC ロッキング ワークチェア 学習椅子 ハイバック おしゃれ メッシュ 在宅ワーク ゲーミング 疲れにくい 学生 キャスター付き 腰 クッション</h1>
+                        <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">10,990円</p>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AI価格分析：<span class="text-red-600">今が買い時！</span></h3>
+                            <p class="text-gray-600 text-sm">現在の価格10,990円は、お買い物マラソン期間中の特別価格です。通常時よりも割引されている可能性が高く、特に在宅ワークやゲーミング用に需要が高まる時期であるため、購入をお勧めします。価格履歴は不明ですが、セール期間中は通常よりもお得に手に入るチャンスです。</p>
+                        </div>
+                        
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">商品概要</h3>
+                            <p>返品・キャンセルについて※ご購入前に必ずご確認ください 当店おすすめチェア！ほかのチェアを見る　≫合わせてこちらもどうぞ★ 1年中爽やかに使るメッシュ素材に加え、長時間安心して使えるいろんな機能が付いてこの価格です。 商品のご紹介 サイズ幅61x奥行63x高さ108〜116cm(座面高44〜52cm) 肘の高さ:62〜70cm 座面幅:50cm、背面の高さ:70cm 素　材PVC(合成皮革) カラーブラック、グレー、ワイン 重　量12.6kg 梱包サイズ幅79x奥行22x高さ58cm(14.5kg) 耐荷重90kg 配送について ・複数の商品を同時にご注文いただいた場合、異なる配送会社から配送が行われる場合がございます。商品ごとのお届け日に関しましては、発送通知メールをご確認ください。・離島および一部地域からご注文いただいた場合、送料の追加料金が発生する場合がございます。・商品の配送は玄関までとなります。開梱、組み立て、設置などは致しませんので、予めご了承ください。 備　考※お客様組み立て式 ※破損の原因となりますので、肘置きのみに過度な加重をかけないでください。 ※使用環境によりキャスターの潤滑具合が悪くなることがあります。ご了承下さい。 【商品コード】シリウス →チャットで調べるチャット形式でお問い合わせいただけます。商品に関するお問い合わせは商品説明上部の商品番号をお控えください。</p>
+                        </div>
+
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AIによる商品ハイライト</h3>
+                            <p>- **快適なメッシュ素材**: 通気性が良く、1年中爽やかに使用可能。
+- **多機能設計**: 長時間の使用でも疲れにくい、ロッキング機能付き。
+- **調整可能な高さ**: 座面高44〜52cm、肘の高さ62〜70cmで個々の体型に合わせやすい。
+- **スタイリッシュなデザイン**: ブラック、グレー、ワインの3色展開で、おしゃれなオフィスや学習空間に最適。
+- **耐荷重90kg**: 安定感があり、安心して使用できる。
+- **キャスター付き**: 移動がスムーズで便利。
+- **組み立て式**: 自宅で簡単に組み立て可能。</p>
+                        </div>
+                    </div>
+                    <a href="#" class="bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 font-bold">購入はこちら</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">価格履歴</h3>
+                <canvas id="priceChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const priceHistory = {"price_history": []};
+                const dates = priceHistory.price_history.map(item => item.date);
+                const prices = priceHistory.price_history.map(item => item.price);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格 (円)',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '価格履歴'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
+
+        <div class="container mx-auto p-4 md:p-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
+                <div class="md:flex-shrink-0">
+                    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/low-ya/cabinet/item_cart/chair/01/sirius-top01.jpg?_ex=128x128" alt="[お買い物マラソン! 9/19 20:00-9/24 1:59] オフィスチェア デスクチェア 事務椅子 椅子 チェア パソコンチェア PC ロッキング ワークチェア 学習椅子 ハイバック おしゃれ メッシュ 在宅ワーク ゲーミング 疲れにくい 学生 キャスター付き 腰 クッション" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                </div>
+                <div class="p-6 flex flex-col justify-between w-full">
+                    <div class="mb-4">
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">[お買い物マラソン! 9/19 20:00-9/24 1:59] オフィスチェア デスクチェア 事務椅子 椅子 チェア パソコンチェア PC ロッキング ワークチェア 学習椅子 ハイバック おしゃれ メッシュ 在宅ワーク ゲーミング 疲れにくい 学生 キャスター付き 腰 クッション</h1>
+                        <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">10,990円</p>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AI価格分析：<span class="text-red-600">今が買い時！</span></h3>
+                            <p class="text-gray-600 text-sm">現在の価格10,990円は、お買い物マラソン期間中の特別価格です。通常時よりも割引されている可能性が高く、特に在宅ワークやゲーミング用に需要が高まる時期であるため、購入をお勧めします。価格履歴は不明ですが、セール期間中は通常よりもお得に手に入るチャンスです。</p>
+                        </div>
+                        
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">商品概要</h3>
+                            <p>返品・キャンセルについて※ご購入前に必ずご確認ください 当店おすすめチェア！ほかのチェアを見る　≫合わせてこちらもどうぞ★ 1年中爽やかに使るメッシュ素材に加え、長時間安心して使えるいろんな機能が付いてこの価格です。 商品のご紹介 サイズ幅61x奥行63x高さ108〜116cm(座面高44〜52cm) 肘の高さ:62〜70cm 座面幅:50cm、背面の高さ:70cm 素　材PVC(合成皮革) カラーブラック、グレー、ワイン 重　量12.6kg 梱包サイズ幅79x奥行22x高さ58cm(14.5kg) 耐荷重90kg 配送について ・複数の商品を同時にご注文いただいた場合、異なる配送会社から配送が行われる場合がございます。商品ごとのお届け日に関しましては、発送通知メールをご確認ください。・離島および一部地域からご注文いただいた場合、送料の追加料金が発生する場合がございます。・商品の配送は玄関までとなります。開梱、組み立て、設置などは致しませんので、予めご了承ください。 備　考※お客様組み立て式 ※破損の原因となりますので、肘置きのみに過度な加重をかけないでください。 ※使用環境によりキャスターの潤滑具合が悪くなることがあります。ご了承下さい。 【商品コード】シリウス →チャットで調べるチャット形式でお問い合わせいただけます。商品に関するお問い合わせは商品説明上部の商品番号をお控えください。</p>
+                        </div>
+
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AIによる商品ハイライト</h3>
+                            <p>- **快適なメッシュ素材**: 通気性が良く、1年中爽やかに使用可能。
+- **多機能設計**: 長時間の使用でも疲れにくい、ロッキング機能付き。
+- **調整可能な高さ**: 座面高44〜52cm、肘の高さ62〜70cmで個々の体型に合わせやすい。
+- **スタイリッシュなデザイン**: ブラック、グレー、ワインの3色展開で、おしゃれなオフィスや学習空間に最適。
+- **耐荷重90kg**: 安定感があり、安心して使用できる。
+- **キャスター付き**: 移動がスムーズで便利。
+- **組み立て式**: 自宅で簡単に組み立て可能。</p>
+                        </div>
+                    </div>
+                    <a href="#" class="bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 font-bold">購入はこちら</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">価格履歴</h3>
+                <canvas id="priceChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const priceHistory = {"price_history": []};
+                const dates = priceHistory.price_history.map(item => item.date);
+                const prices = priceHistory.price_history.map(item => item.price);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格 (円)',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '価格履歴'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        

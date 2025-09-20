@@ -1,0 +1,162 @@
+
+        <div class="container mx-auto p-4 md:p-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
+                <div class="md:flex-shrink-0">
+                    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/seedcoms/cabinet/images/thum/sale/krute_1m_198.jpg?_ex=128x128" alt="【9/20開始★タイムセールで198円】濃いルテイン≪約1ヶ月分≫送料無料 ルテイン サプリ亜麻仁油 エゴマ油 ビタミンA ビタミンE ブルーライト デジタルケア マリーゴールド抽出物 PC スマホ" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                </div>
+                <div class="p-6 flex flex-col justify-between w-full">
+                    <div class="mb-4">
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">【9/20開始★タイムセールで198円】濃いルテイン≪約1ヶ月分≫送料無料 ルテイン サプリ亜麻仁油 エゴマ油 ビタミンA ビタミンE ブルーライト デジタルケア マリーゴールド抽出物 PC スマホ</h1>
+                        <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">198円</p>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AI価格分析：<span class="text-red-600">今が買い時！</span></h3>
+                            <p class="text-gray-600 text-sm">この濃いルテインは現在198円で提供されており、タイムセール中です。価格履歴はありませんが、タイムセールは通常、短期間での特別な割引です。特に健康サプリメントは、定期的に購入することが多く、在庫がなくなる前にこの機会を逃さないことをお勧めします。</p>
+                        </div>
+                        
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">商品概要</h3>
+                            <p>内容量 1粒重量410mg　×30粒　約1ヶ月分 お召し上がり方 1日1粒を目安にお飲みください。 原材料 こめ油（国内製造）、アマニ油、エゴマ油、ゼラチン、グリセリン、グリセリン脂肪酸エステル、ミツロウ、マリーゴールド色素（ルテイン含有）、ビタミンE、ビタミンA、ビタミンB12、ビタミンD3 保存方法 高温多湿や直射日光を避け、常温保存してください。 賞味期限 約2年間 広告文責 株式会社エフ琉球　seedcoms楽天市場店 電話番号 098-963-9076（代表） 製造者 株式会社エフ琉球沖縄県那覇市泊2-1-21尚平ビル1F 製造国 日本 商品区分 食品 名称 マリーゴールド色素含有加工食品 ネコポス(日時指定・代引き不可）のみ送料無料となります。※コンビニ後払いの場合、手数料一律250円別途加算されます。※スマホやPCの使いすぎに！ ▼デジタルケアのご提案▼ ▼▼オススメ商品▼▼</p>
+                        </div>
+
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AIによる商品ハイライト</h3>
+                            <p>【濃いルテインサプリのハイライト】
+
+- **お得なタイムセール**: 9/20開始で198円の特別価格。
+- **約1ヶ月分**: 30粒入りで、1日1粒の摂取で手軽に続けられます。
+- **デジタルケアに最適**: PCやスマホの使用が多い方におすすめのブルーライト対策。
+- **豊富な栄養素**: ルテイン、ビタミンA、E、B12、D3を含む、目の健康をサポート。
+- **安心の国産**: 日本製で、高品質な原材料を使用。
+- **送料無料**: ネコポスでの配送は送料無料で、手軽にお届け。
+- **保存が簡単**: 常温保存で、約2年間の賞味期限。 
+
+目の健康を気遣う方にぴったりのサプリメントです。</p>
+                        </div>
+                    </div>
+                    <a href="#" class="bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 font-bold">購入はこちら</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">価格履歴</h3>
+                <canvas id="priceChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const priceHistory = {"price_history": []};
+                const dates = priceHistory.price_history.map(item => item.date);
+                const prices = priceHistory.price_history.map(item => item.price);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格 (円)',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '価格履歴'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
+
+        <div class="container mx-auto p-4 md:p-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden md:flex">
+                <div class="md:flex-shrink-0">
+                    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/seedcoms/cabinet/images/thum/sale/krute_1m_198.jpg?_ex=128x128" alt="【9/20開始★タイムセールで198円】濃いルテイン≪約1ヶ月分≫送料無料 ルテイン サプリ亜麻仁油 エゴマ油 ビタミンA ビタミンE ブルーライト デジタルケア マリーゴールド抽出物 PC スマホ" class="w-full h-64 object-cover object-center md:w-64 lg:w-80 rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                </div>
+                <div class="p-6 flex flex-col justify-between w-full">
+                    <div class="mb-4">
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">【9/20開始★タイムセールで198円】濃いルテイン≪約1ヶ月分≫送料無料 ルテイン サプリ亜麻仁油 エゴマ油 ビタミンA ビタミンE ブルーライト デジタルケア マリーゴールド抽出物 PC スマホ</h1>
+                        <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">198円</p>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AI価格分析：<span class="text-red-600">今が買い時！</span></h3>
+                            <p class="text-gray-600 text-sm">この濃いルテインは現在198円で提供されており、タイムセール中です。価格履歴はありませんが、タイムセールは通常、短期間での特別な割引です。特に健康サプリメントは、定期的に購入することが多く、在庫がなくなる前にこの機会を逃さないことをお勧めします。</p>
+                        </div>
+                        
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">商品概要</h3>
+                            <p>内容量 1粒重量410mg　×30粒　約1ヶ月分 お召し上がり方 1日1粒を目安にお飲みください。 原材料 こめ油（国内製造）、アマニ油、エゴマ油、ゼラチン、グリセリン、グリセリン脂肪酸エステル、ミツロウ、マリーゴールド色素（ルテイン含有）、ビタミンE、ビタミンA、ビタミンB12、ビタミンD3 保存方法 高温多湿や直射日光を避け、常温保存してください。 賞味期限 約2年間 広告文責 株式会社エフ琉球　seedcoms楽天市場店 電話番号 098-963-9076（代表） 製造者 株式会社エフ琉球沖縄県那覇市泊2-1-21尚平ビル1F 製造国 日本 商品区分 食品 名称 マリーゴールド色素含有加工食品 ネコポス(日時指定・代引き不可）のみ送料無料となります。※コンビニ後払いの場合、手数料一律250円別途加算されます。※スマホやPCの使いすぎに！ ▼デジタルケアのご提案▼ ▼▼オススメ商品▼▼</p>
+                        </div>
+
+                        <div class="mt-4 text-gray-600">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">AIによる商品ハイライト</h3>
+                            <p>【濃いルテインサプリのハイライト】
+
+- **お得なタイムセール**: 9/20開始で198円の特別価格。
+- **約1ヶ月分**: 30粒入りで、1日1粒の摂取で手軽に続けられます。
+- **デジタルケアに最適**: PCやスマホの使用が多い方におすすめのブルーライト対策。
+- **豊富な栄養素**: ルテイン、ビタミンA、E、B12、D3を含む、目の健康をサポート。
+- **安心の国産**: 日本製で、高品質な原材料を使用。
+- **送料無料**: ネコポスでの配送は送料無料で、手軽にお届け。
+- **保存が簡単**: 常温保存で、約2年間の賞味期限。 
+
+目の健康を気遣う方にぴったりのサプリメントです。</p>
+                        </div>
+                    </div>
+                    <a href="#" class="bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 font-bold">購入はこちら</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">価格履歴</h3>
+                <canvas id="priceChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const priceHistory = {"price_history": []};
+                const dates = priceHistory.price_history.map(item => item.date);
+                const prices = priceHistory.price_history.map(item => item.price);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格 (円)',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '価格履歴'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
