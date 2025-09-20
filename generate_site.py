@@ -579,7 +579,7 @@ def generate_site(products):
                 {ai_analysis_block_html}
                 {affiliate_links_html}
                 <div class="item-description">
-                    <h2>商品説明</h2>
+                    <h2>AIによる商品ハイライト</h2>
                     <p>{product.get('ai_summary', '')}</p>
                 </div>
                 {specs_html}
