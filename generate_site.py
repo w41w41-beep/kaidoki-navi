@@ -66,7 +66,7 @@ def generate_ai_analysis(product_name, product_price, price_history):
 
     try:
         response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10) # タイムアウトを追加
-        response.raise_for_status()
+        response.raise_for_status() # HTTPエラーを確認
         result = response.json()
         
         # 応答からJSONテキストを抽出してパース
@@ -673,7 +673,10 @@ def main():
         print("既存のAI要約を読み込みました。")
     except (FileNotFoundError, json.JSONDecodeError):
         summary_dict = {}
-        print("ai_summaries.jsonが見つからないか破損しています。新規作成します。")
+        # ファイルが存在しない場合は空のJSONファイルを作成
+        with open('ai_summaries.json', 'w', encoding='utf-8') as f:
+            json.dump({}, f)
+        print("ai_summaries.jsonが見つからないか破損しています。新規作成しました。")
 
     # 各ECサイトから商品データを取得
     rakuten_products = fetch_rakuten_items(summary_dict)
@@ -683,7 +686,13 @@ def main():
     all_products = rakuten_products + yahoo_products
     
     # 新しく生成された要約をsummary_dictに追加
-    newly_generated_summaries = {p['id']: {'ai_summary': p['ai_summary']} for p in all_products if p['ai_summary'] not in summary_dict.get(p['id'], {}).get('ai_summary')}
+    newly_generated_summaries = {}
+    for p in all_products:
+        item_id = p.get('id')
+        ai_summary = p.get('ai_summary')
+        if ai_summary and summary_dict.get(item_id, {}).get('ai_summary') is None:
+            newly_generated_summaries[item_id] = {'ai_summary': ai_summary}
+
     summary_dict.update(newly_generated_summaries)
     
     # 更新された要約をファイルに保存
