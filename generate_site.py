@@ -2,9 +2,9 @@ import json
 import math
 import os
 import shutil
+import time
 from datetime import date
 import requests
-import time
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -77,6 +77,41 @@ def generate_ai_analysis(product_name, product_price, price_history):
     
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
+def generate_ai_summary(text):
+    """
+    与えられたテキストをAIに要約させる関数
+    """
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {OPENAI_API_KEY}'
+    }
+
+    messages = [
+        {"role": "system", "content": "あなたは、ウェブサイトのコンテンツ作成をサポートするプロのライターです。ユーザーから提供された商品説明の文章を読み、ウェブサイトに掲載するのに適した、簡潔で魅力的な要約を生成してください。キーワードを適切に含み、ユーザーの購入意欲を高めるような文章にしてください。出力は要約された文章のみにしてください。"},
+        {"role": "user", "content": f"以下の商品説明を要約してください。\n\n{text}"}
+    ]
+    
+    payload = {
+        "model": MODEL_NAME,
+        "messages": messages
+    }
+    
+    try:
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
+        response.raise_for_status()
+        result = response.json()
+        
+        summary_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
+        if summary_text:
+            return summary_text
+    
+    except requests.exceptions.RequestException as e:
+        print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
+    except (IndexError, KeyError) as e:
+        print(f"OpenAI APIの応答形式が不正です: {e}")
+    
+    return "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+
 def fetch_rakuten_items():
     """楽天APIから複数のカテゴリで商品データを取得する関数"""
     app_id = os.environ.get('RAKUTEN_API_KEY')
@@ -107,9 +142,12 @@ def fetch_rakuten_items():
                 # カテゴリを正しく設定
                 main_cat = keyword
                 
-                # 商品説明を取得し、ない場合は適切なメッセージを設定
-                description = item_data.get('itemCaption', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')
-
+                # 商品説明を取得
+                description = item_data.get('itemCaption', '')
+                
+                # 商品説明をAIで要約
+                ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+                
                 all_products.append({
                     "id": item_data['itemCode'],
                     "name": item_data['itemName'],
@@ -125,7 +163,8 @@ def fetch_rakuten_items():
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
-                    "description": description, # ここで取得した商品説明を使用
+                    "description": description, 
+                    "ai_summary": ai_summary, # AIによる要約を追加
                     "date": date.today().isoformat(),
                     "main_ec_site": "楽天", # メインのECサイトを記録
                     "price_history": []
@@ -157,9 +196,11 @@ def fetch_yahoo_items():
             
             for item in items:
                 # Yahoo!ショッピングのデータ構造に合わせて変換
-                # 商品説明を取得し、ない場合は適切なメッセージを設定
-                description = item.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')
+                description = item.get('description', '')
                 
+                # 商品説明をAIで要約
+                ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+
                 all_products.append({
                     "id": item['jan_code'], # JANコードをIDとして使用
                     "name": item['name'],
@@ -175,7 +216,8 @@ def fetch_yahoo_items():
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
-                    "description": description, # ここで取得した商品説明を使用
+                    "description": description,
+                    "ai_summary": ai_summary, # AIによる要約を追加
                     "date": date.today().isoformat(),
                     "main_ec_site": "Yahoo!", # メインのECサイトを記録
                     "price_history": []
@@ -521,7 +563,7 @@ def generate_site(products):
                 {affiliate_links_html}
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')}</p>
+                    <p>{product.get('ai_summary', '')}</p>
                 </div>
                 {specs_html}
                 <div class="product-tags">
