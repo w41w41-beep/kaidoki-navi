@@ -17,19 +17,23 @@ RAKUTEN_FETCH_LIMIT = 10
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
-CACHE_FILE = "ai_analysis_cache.json"
+AI_ANALYSIS_CACHE_FILE = "ai_analysis_cache.json"
+SUBCATEGORY_CACHE_FILE = "subcategory_cache.json"
 RAKUTEN_API_FILE = "data/rakuten_api_response.json"
 
-def load_cache():
+def load_cache(cache_file):
     """キャッシュファイルからデータを読み込む"""
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+    try:
+        if os.path.exists(cache_file):
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except json.JSONDecodeError:
+        print(f"警告: {cache_file} ファイルの読み込み中にエラーが発生しました。新しいキャッシュを作成します。")
     return {}
 
-def save_cache(cache):
+def save_cache(cache, cache_file):
     """キャッシュファイルにデータを保存する"""
-    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+    with open(cache_file, 'w', encoding='utf-8') as f:
         json.dump(cache, f, ensure_ascii=False, indent=4)
 
 def fetch_products_from_rakuten():
@@ -47,16 +51,16 @@ def fetch_products_from_rakuten():
     print("警告: 楽天APIのダミーファイルが見つかりません。")
     return []
 
-def generate_ai_analysis(product_name, product_price, price_history, cache):
+def generate_ai_analysis(product, cache):
     """
     OpenAI APIを使用して、商品の価格分析テキストを生成する。
     応答は一言アピールと詳細分析の2つの部分から構成される。
     """
-    cache_key = f"{product_name}_{product_price}"
+    cache_key = f"{product['product_name']}_{product['price']}"
 
     # キャッシュから読み込みを試みる
     if cache_key in cache:
-        print(f"商品 '{product_name}' のAI分析をキャッシュから読み込みます。")
+        print(f"商品 '{product['product_name']}' のAI分析をキャッシュから読み込みます。")
         return cache[cache_key]['headline'], cache[cache_key]['details']
 
     if not OPENAI_API_KEY:
@@ -69,11 +73,12 @@ def generate_ai_analysis(product_name, product_price, price_history, cache):
     }
 
     # 価格履歴データをプロンプトに追加
+    price_history = product.get('price_history', [])
     history_text = f"過去の価格履歴は以下の通りです:\n{price_history}" if price_history else "価格履歴はありません。"
     
     messages = [
         {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「details」の2つのキーを持ちます。「headline」は15文字以内の簡潔な一言アピール、「details」は200文字以内の詳細な分析です。"},
-        {"role": "user", "content": f"商品名: {product_name}\n現在価格: {product_price}円\n{history_text}\nこの商品の現在の価格と価格履歴に基づいて、買い時かどうかを分析し、アドバイスを日本語で提供してください。"}
+        {"role": "user", "content": f"商品名: {product['product_name']}\n現在価格: {product['price']}円\n{history_text}\nこの商品の現在の価格と価格履歴に基づいて、買い時かどうかを分析し、アドバイスを日本語で提供してください。"}
     ]
 
     payload = {
@@ -84,7 +89,7 @@ def generate_ai_analysis(product_name, product_price, price_history, cache):
     }
 
     try:
-        print(f"商品 '{product_name}' のAI分析を生成するため、APIを呼び出しています...")
+        print(f"商品 '{product['product_name']}' のAI分析を生成するため、APIを呼び出しています...")
         response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         response.raise_for_status() # HTTPエラーが発生した場合に例外を発生させる
         
@@ -107,6 +112,60 @@ def generate_ai_analysis(product_name, product_price, price_history, cache):
     except KeyError:
         print("APIからの応答に必要なキーが含まれていません。")
         return "AI分析準備中", "APIからの応答が不完全です。"
+        
+def generate_subcategory_with_ai(product, cache):
+    """
+    AIを使用して商品名と説明からサブカテゴリーを生成し、キャッシュに保存する。
+    """
+    cache_key = f"subcategory_{product['product_id']}"
+    
+    # 厳格なキャッシュルール: 一度キャッシュに保存されたものは再利用する
+    if cache_key in cache:
+        print(f"商品 '{product['product_name']}' のサブカテゴリーをキャッシュから読み込みます。")
+        return cache[cache_key]
+
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。サブカテゴリーは生成されません。")
+        return "その他"
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {OPENAI_API_KEY}'
+    }
+    
+    messages = [
+        {"role": "system", "content": "あなたはEコマースの専門家です。与えられた商品情報から最も適切なサブカテゴリーを一つだけ選んでください。回答は必ずJSON形式で、`subcategory`というキーに分類名を入れてください。分類名は「おもちゃ」「家電」「日用品」「食品」「本」「ファッション」など、一般的な日本語の単語にしてください。"},
+        {"role": "user", "content": f"商品名: {product['product_name']}\n説明: {product['description']}\n\nこの商品を分類してください。"}
+    ]
+    
+    payload = {
+        'model': MODEL_NAME,
+        'messages': messages,
+        'response_format': { "type": "json_object" },
+        'temperature': 0.7
+    }
+
+    try:
+        print(f"商品 '{product['product_name']}' のサブカテゴリーをAIで生成しています...")
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        
+        subcategory_data = response.json()['choices'][0]['message']['content']
+        subcategory = json.loads(subcategory_data).get('subcategory', 'その他')
+        
+        # 新しく生成したサブカテゴリーをキャッシュに保存
+        cache[cache_key] = subcategory
+        
+        return subcategory
+    except requests.exceptions.RequestException as e:
+        print(f"API呼び出し中にエラーが発生しました: {e}")
+        return "その他"
+    except json.JSONDecodeError:
+        print("APIからの応答が不正なJSON形式です。")
+        return "その他"
+    except KeyError:
+        print("APIからの応答に必要なキーが含まれていません。")
+        return "その他"
 
 def create_product_pages(products):
     """
@@ -411,23 +470,32 @@ def generate_site():
     # 楽天から読み込む商品を10個に制限
     products_for_site = all_products_data[:RAKUTEN_FETCH_LIMIT]
 
-    # AI分析結果をキャッシュ
-    ai_analysis_cache = load_cache()
+    # AI分析結果とサブカテゴリーのキャッシュを読み込み
+    ai_analysis_cache = load_cache(AI_ANALYSIS_CACHE_FILE)
+    subcategory_cache = load_cache(SUBCATEGORY_CACHE_FILE)
 
-    # AI分析を実行
+    # AI分析とサブカテゴリー生成を実行
     for product in products_for_site:
         product['page_url'] = f"products/{product['product_id']}.html"
+        
+        # AIでサブカテゴリーを生成
+        # product_idをキーとしてキャッシュを確認し、存在しない場合のみAIを呼び出す
+        if f"subcategory_{product['product_id']}" not in subcategory_cache:
+            product['subcategory'] = generate_subcategory_with_ai(product, subcategory_cache)
+        else:
+            product['subcategory'] = subcategory_cache[f"subcategory_{product['product_id']}"]
+        
+        # AI価格分析を生成
         headline, details = generate_ai_analysis(
-            product['product_name'], 
-            product['price'], 
-            product.get('price_history'), 
+            product, 
             ai_analysis_cache
         )
         product['ai_analysis_headline'] = headline
         product['ai_analysis_details'] = details
 
     # キャッシュを保存
-    save_cache(ai_analysis_cache)
+    save_cache(ai_analysis_cache, AI_ANALYSIS_CACHE_FILE)
+    save_cache(subcategory_cache, SUBCATEGORY_CACHE_FILE)
 
     print("ウェブサイトのファイル生成を開始します。")
 
