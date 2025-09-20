@@ -451,6 +451,18 @@ def create_static_pages():
     
     print("静的ページが生成されました。")
     
+def copy_static_files():
+    """静的ファイル (CSS, JS) を出力ディレクトリにコピーする"""
+    static_files = ['style.css', 'script.js']
+    for file_name in static_files:
+        source = os.path.join('templates', file_name)
+        destination = file_name
+        if os.path.exists(source):
+            shutil.copy(source, destination)
+            print(f"'{file_name}' をルートディレクトリにコピーしました。")
+        else:
+            print(f"警告: '{source}' が見つかりませんでした。")
+
 def create_sitemap(products, base_url="http://localhost:8000/"):
     """
     sitemap.xmlを生成する。
@@ -574,6 +586,9 @@ def generate_site():
 
     # 静的ページを生成
     create_static_pages()
+    
+    # 静的ファイルをコピー
+    copy_static_files()
 
     # 商品ページを生成
     create_product_pages(products_for_site)
