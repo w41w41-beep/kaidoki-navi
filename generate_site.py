@@ -174,7 +174,8 @@ def fetch_yahoo_items():
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
-                    "description": item.get('description', 'お手入れが簡単なコードレスタイプで、吸引力もパワフル。狭い隙間も楽々お掃除できます。'),
+                    # 商品説明が取得できなかった場合のためのメッセージをより自然なものに変更
+                    "description": item.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。'),
                     "date": date.today().isoformat(),
                     "main_ec_site": "Yahoo!", # メインのECサイトを記録
                     "price_history": []
@@ -520,7 +521,7 @@ def generate_site(products):
                 {affiliate_links_html}
                 <div class="item-description">
                     <h2>商品説明</h2>
-                    <p>{product.get('description', '商品説明は現在準備中です。')}</p>
+                    <p>{product.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')}</p>
                 </div>
                 {specs_html}
                 <div class="product-tags">
