@@ -27,39 +27,47 @@ OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 def load_ai_cache():
     """AI分析のキャッシュファイルを読み込む"""
     if os.path.exists(AI_CACHE_FILE):
-        with open(AI_CACHE_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+        try:
+            with open(AI_CACHE_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (IOError, json.JSONDecodeError):
+            print("キャッシュファイルの読み込みに失敗しました。新しいキャッシュを作成します。")
+            return {}
     return {}
 
 def save_ai_cache(cache):
     """AI分析のキャッシュをファイルに保存する"""
-    with open(AI_CACHE_FILE, 'w', encoding='utf-8') as f:
-        json.dump(cache, f, indent=2, ensure_ascii=False)
+    try:
+        with open(AI_CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+    except IOError as e:
+        print(f"キャッシュファイルの保存に失敗しました: {e}")
 
-def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
+def generate_ai_analysis(product, ai_cache):
     """
-    OpenAI APIを使用して、商品の価格分析テキストを生成する。
+    OpenAI APIを使用して、商品の価格分析テキストとタグを生成する。
     キャッシュに存在する場合は、APIを呼び出さずに再利用する。
     """
-    cache_key = f"{product_name}-{product_price}"
+    cache_key = f"{product['name']}-{product['price']}"
     if cache_key in ai_cache:
-        print(f"商品 '{product_name}' のAI分析をキャッシュから読み込みます。")
-        return ai_cache[cache_key]['headline'], ai_cache[cache_key]['details']
+        print(f"商品 '{product['name']}' のAI分析をキャッシュから読み込みます。")
+        cached_data = ai_cache[cache_key]
+        return cached_data['headline'], cached_data['details'], cached_data['tags']
 
     if not OPENAI_API_KEY:
         print("警告: OpenAI APIキーが設定されていません。AI分析はスキップされます。")
-        return "AI分析準備中", "詳細なAI分析は現在準備中です。"
+        return "AI分析準備中", "詳細なAI分析は現在準備中です。", []
 
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
 
-    history_text = f"過去の価格履歴は以下の通りです:\n{json.dumps(price_history, indent=2)}" if price_history else "価格履歴はありません。"
+    history_text = f"過去の価格履歴は以下の通りです:\n{json.dumps(product['price_history'], indent=2)}" if product['price_history'] else "価格履歴はありません。"
 
     messages = [
-        {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」（一言アピール）と「details」（詳細分析）の2つのキーを持ちます。日本語で簡潔に、しかし洞察に富んだ分析を提供してください。価格履歴に基づいて、購入を推奨するか、または待つべきかを判断します。"},
-        {"role": "user", "content": f"商品名: {product_name}\n現在の価格: {product_price}円\n{history_text}\nこの商品の現在の価格について分析し、買い時かどうかをアドバイスしてください。"}
+        {"role": "system", "content": "あなたは、価格比較の専門家として、商品の買い時をアドバイスし、関連するタグを生成します。回答は必ずJSON形式で提供してください。JSONは「headline」（一言アピール）、「details」（詳細分析）、そして「tags」（3〜5個のタグの配列）の3つのキーを持ちます。日本語で簡潔に、しかし洞察に富んだ分析を提供してください。タグは商品と価格の関連性を表すものにしてください。"},
+        {"role": "user", "content": f"商品名: {product['name']}\n現在の価格: {product['price']}円\nカテゴリ: {product['category']}\nサブカテゴリ: {product['subcategory']}\n{history_text}\nこの商品の現在の価格について分析し、買い時かどうかをアドバイスし、関連タグを生成してください。"}
     ]
 
     payload = {
@@ -69,23 +77,24 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
     }
 
     try:
-        print(f"商品 '{product_name}' のAI分析を生成するため、APIを呼び出しています...")
+        print(f"商品 '{product['name']}' のAI分析を生成するため、APIを呼び出しています...")
         response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         analysis_data = response.json()
         content = json.loads(analysis_data['choices'][0]['message']['content'])
         headline = content.get("headline", "分析結果なし")
         details = content.get("details", "詳細分析は提供されていません。")
+        tags = content.get("tags", [])
         
         # キャッシュに保存
-        ai_cache[cache_key] = {'headline': headline, 'details': details}
-        return headline, details
+        ai_cache[cache_key] = {'headline': headline, 'details': details, 'tags': tags}
+        return headline, details, tags
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
-        return "AI分析失敗", "ネットワークエラーまたはAPIの問題により分析を完了できませんでした。"
+        return "AI分析失敗", "ネットワークエラーまたはAPIの問題により分析を完了できませんでした。", []
     except (json.JSONDecodeError, KeyError) as e:
         print(f"APIからの応答を解析中にエラーが発生しました: {e}")
-        return "AI分析失敗", "無効な応答形式です。"
+        return "AI分析失敗", "無効な応答形式です。", []
 
 def generate_html_file(title, content, filepath, categories_data=None):
     """
@@ -98,11 +107,11 @@ def generate_html_file(title, content, filepath, categories_data=None):
         for category, subcategories in categories_data.items():
             sub_menu_items = "".join([f'<li><a href="/products/{sub.get("url", "#")}.html" class="block px-4 py-2 hover:bg-indigo-100">{sub["name"]}</a></li>' for sub in subcategories])
             nav_html += f"""
-            <li class="relative">
-                <a href="#" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
-                    {category} <svg class="ml-2 w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </a>
-                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2">
+            <li class="relative group">
+                <button type="button" class="inline-flex items-center px-4 py-2 hover:bg-indigo-700 transition rounded-lg category-menu-toggle">
+                    {category} <svg class="ml-2 w-4 h-4 transform transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <ul class="absolute z-10 hidden bg-white text-gray-800 shadow-lg rounded-lg w-48 py-2 mt-2 group-hover:block">
                     {sub_menu_items}
                 </ul>
             </li>
@@ -127,7 +136,10 @@ def generate_html_file(title, content, filepath, categories_data=None):
                 transform: translateY(-5px);
                 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             }}
-            .rotate-180 {{
+            .group:hover .group-hover:block {{
+                display: block;
+            }}
+            .group:hover .group-hover\:rotate-180 {{
                 transform: rotate(180deg);
             }}
         </style>
@@ -145,7 +157,7 @@ def generate_html_file(title, content, filepath, categories_data=None):
         </div>
         <div class="bg-indigo-700 mt-4 rounded-lg">
             <nav class="container mx-auto">
-                <ul class="flex justify-center text-white py-2">
+                <ul class="flex justify-center text-white py-2 space-x-4">
                     {nav_html}
                 </ul>
             </nav>
@@ -164,41 +176,6 @@ def generate_html_file(title, content, filepath, categories_data=None):
             </div>
         </div>
     </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.category-menu-toggle').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const parentLi = button.closest('li');
-                    const submenu = parentLi.querySelector('ul');
-                    const arrow = button.querySelector('svg');
-                    
-                    // 他のメニューをすべて閉じる
-                    document.querySelectorAll('.category-menu-toggle').forEach(otherButton => {
-                        const otherParentLi = otherButton.closest('li');
-                        if (otherParentLi !== parentLi) {
-                            otherParentLi.querySelector('ul').classList.add('hidden');
-                            otherButton.querySelector('svg').classList.remove('rotate-180');
-                        }
-                    });
-
-                    // 現在のメニューをトグルする
-                    submenu.classList.toggle('hidden');
-                    arrow.classList.toggle('rotate-180');
-                });
-            });
-
-            // どこかをクリックしたらメニューを閉じる
-            document.addEventListener('click', (event) => {
-                if (!event.target.closest('.relative')) {
-                    document.querySelectorAll('.category-menu-toggle').forEach(button => {
-                        button.closest('li').querySelector('ul').classList.add('hidden');
-                        button.querySelector('svg').classList.remove('rotate-180');
-                    });
-                }
-            });
-        });
-    </script>
     """
 
     html_content = f"""
@@ -217,10 +194,12 @@ def generate_html_file(title, content, filepath, categories_data=None):
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-def generate_product_page(product, ai_headline, ai_details, output_dir, categories_data):
+def generate_product_page(product, output_dir, categories_data):
     """
     個別の商品ページのHTMLファイルを生成する。
     """
+    tags_html = "".join([f'<span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">{tag}</span>' for tag in product['ai_tags']])
+
     content = f"""
     <div class="bg-white rounded-xl shadow-lg overflow-hidden p-8 flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-12">
         <div class="flex-shrink-0 w-64 h-64 flex items-center justify-center">
@@ -232,13 +211,20 @@ def generate_product_page(product, ai_headline, ai_details, output_dir, categori
             
             <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 mb-8 rounded-lg">
                 <h3 class="text-2xl font-bold text-indigo-800 mb-2">AI価格分析</h3>
-                <p class="text-xl font-bold text-indigo-600 mb-2">「{ai_headline}」</p>
-                <p class="text-gray-700 leading-relaxed">{ai_details}</p>
+                <p class="text-xl font-bold text-indigo-600 mb-2">「{product['ai_headline']}」</p>
+                <p class="text-gray-700 leading-relaxed">{product['ai_details']}</p>
             </div>
             
             <div class="mb-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">商品概要</h3>
                 <p class="text-gray-600">{product['description']}</p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">タグ</h3>
+                <div class="flex flex-wrap gap-2">
+                    {tags_html}
+                </div>
             </div>
 
             <div>
@@ -472,7 +458,15 @@ def generate_website():
         page_url = f"products/product_{i}.html"
         
         # キャッシュを利用してAI分析を生成
-        ai_headline, ai_detail = generate_ai_analysis(product_name, current_price, price_history, ai_cache)
+        # product辞書を引数として渡すように変更
+        product_data_for_ai = {
+            'name': product_name,
+            'price': current_price,
+            'price_history': price_history,
+            'category': category,
+            'subcategory': subcategory
+        }
+        ai_headline, ai_detail, ai_tags = generate_ai_analysis(product_data_for_ai, ai_cache)
         
         products_data.append({
             'name': product_name,
@@ -487,7 +481,8 @@ def generate_website():
             'is_on_sale': is_on_sale,
             'is_new': is_new,
             'ai_headline': ai_headline,
-            'ai_details': ai_detail
+            'ai_details': ai_detail,
+            'ai_tags': ai_tags
         })
 
     # AI分析キャッシュを保存
@@ -511,7 +506,7 @@ def generate_website():
             generate_subcategory_page(subcategory, products, categories_data, output_dir)
         
     for product in products_data:
-        generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir, categories_data)
+        generate_product_page(product, output_dir, categories_data)
     
     print("サイトのファイル生成が完了しました。")
 
