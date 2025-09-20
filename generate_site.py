@@ -9,6 +9,7 @@ from datetime import date, timedelta
 import requests
 import random
 from collections import defaultdict
+import openai
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -16,8 +17,6 @@ PRODUCTS_PER_PAGE = 24
 AI_CACHE_FILE = "ai_cache.json"
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
-# OpenAI APIの設定
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 # 環境変数からAPIキーを取得
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
@@ -70,7 +69,7 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
 
     try:
         print(f"商品 '{product_name}' のAI分析を生成するため、APIを呼び出しています...")
-        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
+        response = requests.post(openai.api_base + "/chat/completions", headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         analysis_data = response.json()
         content = json.loads(analysis_data['choices'][0]['message']['content'])
@@ -179,7 +178,7 @@ def generate_html_file(title, content, filepath, categories_data=None):
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-def generate_product_page(product, ai_headline, ai_details, output_dir):
+def generate_product_page(product, ai_headline, ai_details, output_dir, categories_data):
     """
     個別の商品ページのHTMLファイルを生成する。
     """
@@ -223,7 +222,7 @@ def generate_product_page(product, ai_headline, ai_details, output_dir):
     """
 
     filepath = os.path.join(output_dir, product['page_url'])
-    generate_html_file(f"PricePilot - {product['name']}", content, filepath)
+    generate_html_file(f"PricePilot - {product['name']}", content, filepath, categories_data)
     print(f"商品ページが生成されました: {filepath}")
 
 def generate_index_page(products, categories_data, output_dir):
@@ -474,7 +473,7 @@ def generate_website():
         generate_subcategory_page(subcategory, products, categories_data, output_dir)
         
     for product in products_data:
-        generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir)
+        generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir, categories_data)
     
     print("サイトのファイル生成が完了しました。")
 
