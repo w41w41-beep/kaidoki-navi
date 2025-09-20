@@ -139,7 +139,7 @@ def generate_ai_subcategory(product_name):
     
     messages = [
         {"role": "system", "content": "あなたは商品のカテゴリー分類の専門家です。与えられた商品名から、最も適切で短いサブカテゴリー名を1つだけ日本語で答えてください。例：スマートフォンケース, ワイヤレスイヤホン, ノートパソコン, 電動歯ブラシ"},
-        {"role_user", "content": f"商品名: {product_name}"}
+        {"role": "user", "content": f"商品名: {product_name}"}
     ]
     
     payload = {
@@ -434,13 +434,6 @@ def generate_site(products):
         """
         return header_html, footer_html
 
-    def generate_static_page(file_name, title, content_html):
-        page_path = file_name
-        header, footer = generate_header_footer(page_path, page_title=title)
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + content_html + footer)
-        print(f"{page_path} が生成されました。")
-    
     # 古いファイルを削除
     for root, dirs, files in os.walk('.'):
         for file in files:
@@ -662,10 +655,10 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{page_path} が生成されました。")
     
-    # 静的ページを生成
-    generate_static_page('privacy.html', 'プライバシーポリシー', '<main class="container"><div class="static-content"><h2>プライバシーポリシー</h2><p>当サイトは、ユーザーの個人情報の保護に最大限の注意を払っています。...</p></div>')
-    generate_static_page('disclaimer.html', '免責事項', '<main class="container"><div class="static-content"><h2>免責事項</h2><p>当サイトで提供される情報や価格は、掲載時点のものであり、その正確性や完全性を保証するものではありません。...</p></div>')
-    generate_static_page('contact.html', 'お問い合わせ', '<main class="container"><div class="static-content"><h2>お問い合わせ</h2><p>当サイトに関するお問い合わせは、以下のメールアドレスまでお願いいたします。...</p></div>')
+    # 静的ページを生成する関数呼び出しを削除
+    # generate_static_page('privacy.html', 'プライバシーポリシー', '<main class="container"><div class="static-content"><h2>プライバシーポリシー</h2><p>当サイトは、ユーザーの個人情報の保護に最大限の注意を払っています。...</p></div>')
+    # generate_static_page('disclaimer.html', '免責事項', '<main class="container"><div class="static-content"><h2>免責事項</h2><p>当サイトで提供される情報や価格は、掲載時点のものであり、その正確性や完全性を保証するものではありません。...</p></div>')
+    # generate_static_page('contact.html', 'お問い合わせ', '<main class="container"><div class="static-content"><h2>お問い合わせ</h2><p>当サイトに関するお問い合わせは、以下のメールアドレスまでお願いいたします。...</p></div>')
 
 def create_sitemap(products):
     """
@@ -705,14 +698,15 @@ def create_sitemap(products):
         sitemap_content += '    <changefreq>daily</changefreq>\n'
         sitemap_content += '    <priority>0.6</priority>\n'
         sitemap_content += '  </url>\n'
-    static_pages = ["privacy.html", "disclaimer.html", "contact.html"]
-    for page in static_pages:
-        sitemap_content += '  <url>\n'
-        sitemap_content += f'    <loc>{base_url}{page}</loc>\n'
-        sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
-        sitemap_content += '    <changefreq>monthly</changefreq>\n'
-        sitemap_content += '    <priority>0.5</priority>\n'
-        sitemap_content += '  </url>\n'
+    # 静的ページのsitemap生成を削除
+    # static_pages = ["privacy.html", "disclaimer.html", "contact.html"]
+    # for page in static_pages:
+    #     sitemap_content += '  <url>\n'
+    #     sitemap_content += f'    <loc>{base_url}{page}</loc>\n'
+    #     sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+    #     sitemap_content += '    <changefreq>monthly</changefreq>\n'
+    #     sitemap_content += '    <priority>0.5</priority>\n'
+    #     sitemap_content += '  </url>\n'
     sitemap_content += '</urlset>'
     with open('sitemap.xml', 'w', encoding='utf-8') as f:
         f.write(sitemap_content)
