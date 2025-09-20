@@ -6,6 +6,7 @@ import time
 from datetime import date, timedelta
 import requests
 import random
+import hashlib
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 10
@@ -22,8 +23,7 @@ RAKUTEN_API_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/2017
 RAKUTEN_API_KEY = os.environ.get("RAKUTEN_API_KEY")
 # 楽天のジャンルID
 RAKUTEN_GENRE_IDS = {
-    '家電': 100026,
-    'パソコン・周辺機器': 562637
+    '家電': 100026
 }
 
 # GPT-4o-miniモデルを使用
@@ -101,13 +101,13 @@ def fetch_products_from_rakuten():
         return []
 
     products = []
-    # 2つのカテゴリーからそれぞれ取得
+    # 1つのカテゴリーから1個だけ取得
     for category, genre_id in RAKUTEN_GENRE_IDS.items():
         # APIリクエストパラメータ
         params = {
             'applicationId': RAKUTEN_API_KEY,
             'genreId': genre_id,
-            'hits': 5, # 各カテゴリーから5個ずつ取得
+            'hits': 1, # 各カテゴリーから1個ずつ取得に修正
             'format': 'json',
             'formatVersion': 2,
         }
@@ -121,19 +121,24 @@ def fetch_products_from_rakuten():
             
             for item_data in items:
                 item = item_data.get('Item', {})
-                # --- 修正箇所 ---
-                item_code = item.get('itemCode')
-                if not item_code:
-                    print(f"警告: itemCode が見つからない商品が見つかりました。この商品はスキップされます。")
+                # itemCodeの代わりにitemUrlでユニークなファイル名を生成
+                item_url = item.get('itemUrl')
+                if not item_url:
+                    print(f"警告: itemUrl が見つからない商品が見つかりました。この商品はスキップされます。")
                     continue
-                # -----------------
+                
+                # itemUrlのハッシュ値からユニークなファイル名を生成
+                # hashlibを使用することで、常に同じ入力から同じハッシュ値が生成される
+                unique_hash = hashlib.sha256(item_url.encode('utf-8')).hexdigest()[:16]
+                page_url = f"products/product_{unique_hash}.html"
+
                 products.append({
                     'name': item.get('itemName'),
                     'price': item.get('itemPrice'),
                     'url': item.get('itemUrl'),
                     'image': item.get('mediumImageUrls')[0] if item.get('mediumImageUrls') else 'https://placehold.co/400x400/cccccc/333333?text=No+Image',
                     'description': item.get('itemCaption', '商品説明はありません。'),
-                    'page_url': f"products/product_{item_code.replace(':', '_')}.html",
+                    'page_url': page_url,
                     'price_history': {},
                 })
         except requests.exceptions.RequestException as e:
@@ -428,16 +433,19 @@ def generate_website():
                 'url': f"https://example.com/buy/dummy/{i}",
                 'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+{i}",
                 'page_url': page_url,
+                'ai_headline': 'AI分析準備中',
+                'ai_details': '詳細なAI分析は現在準備中です。',
             })
-    
-    # AI分析を生成して商品データに追加
-    for product in products_data:
-        ai_headline, ai_detail = generate_ai_analysis(product['name'], product['price'], product['price_history'], ai_cache)
-        product['ai_headline'] = ai_headline
-        product['ai_details'] = ai_detail
+    else:
+        # AI分析を生成して商品データに追加 (楽天APIから商品が取得できた場合のみ実行)
+        for product in products_data:
+            ai_headline, ai_detail = generate_ai_analysis(product['name'], product['price'], product['price_history'], ai_cache)
+            product['ai_headline'] = ai_headline
+            product['ai_details'] = ai_detail
 
-    # AI分析キャッシュを保存
-    save_ai_cache(ai_cache)
+    # AI分析キャッシュを保存 (楽天APIから商品が取得できた場合のみ実行)
+    if products_data and 'ダミー商品' not in products_data[0]['name']:
+        save_ai_cache(ai_cache)
     
     print("ウェブサイトのファイル生成を開始します。")
     
