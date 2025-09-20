@@ -9,9 +9,9 @@ import time
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
 
+# APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-# APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 OPENAI_API_KEY = ""
 MODEL_NAME = "gpt-4o-mini"
 
@@ -107,10 +107,8 @@ def fetch_rakuten_items():
                 # カテゴリを正しく設定
                 main_cat = keyword
                 
-                # サンプルデータとして、いくつかの商品に商品説明を追加
-                description = "高品質な素材を使用した多機能製品です。快適な使用感と優れた耐久性を提供します。"
-                if item_data['itemCode'] == "10000001":  # 例: 特定のIDに説明を追加
-                    description = "このモデルは、最新のプロセッサーを搭載し、高速なパフォーマンスを実現します。動画編集やゲームなど、重い作業にも対応できるパワフルな一台です。"
+                # 商品説明を取得し、ない場合は適切なメッセージを設定
+                description = item_data.get('itemCaption', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')
 
                 all_products.append({
                     "id": item_data['itemCode'],
@@ -127,7 +125,7 @@ def fetch_rakuten_items():
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
-                    "description": description,
+                    "description": description, # ここで取得した商品説明を使用
                     "date": date.today().isoformat(),
                     "main_ec_site": "楽天", # メインのECサイトを記録
                     "price_history": []
@@ -159,6 +157,9 @@ def fetch_yahoo_items():
             
             for item in items:
                 # Yahoo!ショッピングのデータ構造に合わせて変換
+                # 商品説明を取得し、ない場合は適切なメッセージを設定
+                description = item.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。')
+                
                 all_products.append({
                     "id": item['jan_code'], # JANコードをIDとして使用
                     "name": item['name'],
@@ -174,8 +175,7 @@ def fetch_yahoo_items():
                     },
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
-                    # 商品説明が取得できなかった場合のためのメッセージをより自然なものに変更
-                    "description": item.get('description', '現在、この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。'),
+                    "description": description, # ここで取得した商品説明を使用
                     "date": date.today().isoformat(),
                     "main_ec_site": "Yahoo!", # メインのECサイトを記録
                     "price_history": []
@@ -402,11 +402,11 @@ def generate_site(products):
     <img src="{product['image_url']}" alt="{product['name']}">
     <div class="product-info">
         <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{product['price']}円</p>
-        <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
-    </div>
-</a>
+                    <p class="product-price">{product['price']}円</p>
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                </div>
+            </a>
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div>" + footer)
