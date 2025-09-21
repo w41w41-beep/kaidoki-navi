@@ -1,393 +1,758 @@
-# generate_site.py
-
 import json
 import math
 import os
 import shutil
 import time
-from datetime import date, timedelta
+from datetime import date
 import requests
-import random
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
-# AI分析結果を保存するキャッシュファイル
-AI_CACHE_FILE = "ai_cache.json"
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-# 環境変数からAPIキーを取得
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-
-# GPT-4o-miniモデルを使用
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
 
-def load_ai_cache():
-    """AI分析のキャッシュファイルを読み込む"""
-    if os.path.exists(AI_CACHE_FILE):
-        with open(AI_CACHE_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {}
-
-def save_ai_cache(cache):
-    """AI分析のキャッシュをファイルに保存する"""
-    with open(AI_CACHE_FILE, 'w', encoding='utf-8') as f:
-        json.dump(cache, f, indent=2, ensure_ascii=False)
-
-def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
+def generate_ai_analysis(product_name, product_price, price_history):
     """
     OpenAI APIを使用して、商品の価格分析テキストを生成する。
-    キャッシュに存在する場合は、APIを呼び出さずに再利用する。
+    応答は一言アピールと詳細分析の2つの部分から構成される。
     """
-    cache_key = f"{product_name}-{product_price}"
-    if cache_key in ai_cache:
-        print(f"商品 '{product_name}' のAI分析をキャッシュから読み込みます。")
-        return ai_cache[cache_key]['headline'], ai_cache[cache_key]['details']
-
     if not OPENAI_API_KEY:
         print("警告: OpenAI APIキーが設定されていません。AI分析はスキップされます。")
         return "AI分析準備中", "詳細なAI分析は現在準備中です。"
-
+    
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
 
-    history_text = f"過去の価格履歴は以下の通りです:\n{json.dumps(price_history, indent=2)}" if price_history else "価格履歴はありません。"
-
+    # 価格履歴データをプロンプトに追加
+    history_text = f"過去の価格履歴は以下の通りです:\n{price_history}" if price_history else "価格履歴はありません。"
+    
     messages = [
-        {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」（一言アピール）と「details」（詳細分析）の2つのキーを持ちます。日本語で簡潔に、しかし洞察に富んだ分析を提供してください。価格履歴に基づいて、購入を推奨するか、または待つべきかを判断します。"},
-        {"role": "user", "content": f"商品名: {product_name}\n現在の価格: {product_price}円\n{history_text}\nこの商品の現在の価格について分析し、買い時かどうかをアドバイスしてください。"}
+        {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。"},
+        {"role": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。"}
     ]
-
+    
     payload = {
-        'model': MODEL_NAME,
-        'messages': messages,
-        'response_format': {"type": "json_object"}
+        "model": MODEL_NAME,
+        "messages": messages,
+        "response_format": {"type": "json_object"},
+        "tools": [
+            {
+                "type": "function",
+                "function": {
+                    "name": "google_search",
+                    "description": "Google検索を実行して、最新の価格動向や市場情報を取得します。",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "queries": {
+                                "type": "array",
+                                "items": { "type": "string" }
+                            }
+                        },
+                        "required": ["queries"]
+                            }
+                        }
+                    }
+                ],
+        "tool_choice": "auto"
     }
 
     try:
-        print(f"商品 '{product_name}' のAI分析を生成するため、APIを呼び出しています...")
-        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload))
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10) # タイムアウトを追加
         response.raise_for_status()
-        analysis_data = response.json()
-        content = json.loads(analysis_data['choices'][0]['message']['content'])
-        headline = content.get("headline", "分析結果なし")
-        details = content.get("details", "詳細分析は提供されていません。")
+        result = response.json()
         
-        # キャッシュに保存
-        ai_cache[cache_key] = {'headline': headline, 'details': details}
-        return headline, details
+        # 応答からJSONテキストを抽出してパース
+        json_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
+        if json_text:
+            analysis_data = json.loads(json_text)
+            return analysis_data.get('headline', 'AI分析準備中'), analysis_data.get('analysis', '詳細なAI分析は現在準備中です。')
+        
+    except requests.exceptions.Timeout:
+        print("OpenAI APIへのリクエストがタイムアウトしました。")
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
-        return "AI分析失敗", "ネットワークエラーまたはAPIの問題により分析を完了できませんでした。"
-    except (json.JSONDecodeError, KeyError) as e:
-        print(f"APIからの応答を解析中にエラーが発生しました: {e}")
-        return "AI分析失敗", "無効な応答形式です。"
-
-def generate_html_file(title, content, filepath):
-    """
-    共通のヘッダー、フッター、スタイルを含むHTMLファイルを生成する。
-    """
-    head = f"""
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{title}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <style>
-            body {{
-                font-family: 'Inter', sans-serif;
-                background-color: #f3f4f6;
-            }}
-            .card {{
-                transition: transform 0.2s, box-shadow 0.2s;
-            }}
-            .card:hover {{
-                transform: translateY(-5px);
-                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            }}
-        </style>
-    </head>
-    """
+    except (IndexError, KeyError, json.JSONDecodeError) as e:
+        print(f"OpenAI APIの応答形式が不正です: {e}")
     
-    header = """
-    <header class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/index.html" class="text-2xl font-bold rounded-lg px-3 py-1 hover:bg-indigo-700 transition">PricePilot</a>
-            <nav>
-                <a href="/index.html" class="mx-2 hover:underline">ホーム</a>
-                <a href="/about.html" class="mx-2 hover:underline">このサイトについて</a>
-            </nav>
-        </div>
-    </header>
+    return "AI分析準備中", "詳細なAI分析は現在準備中です。"
+
+def generate_ai_summary(text):
     """
+    与えられたテキストをAIに要約させる関数
+    """
+    if not OPENAI_API_KEY:
+        print("警告: OpenAI APIキーが設定されていません。商品説明の要約はスキップされます。")
+        return "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
     
-    footer = """
-    <footer class="bg-gray-800 text-white p-6 mt-12">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 PricePilot. All rights reserved.</p>
-            <div class="mt-4">
-                <a href="/privacy.html" class="mx-2 hover:underline">プライバシーポリシー</a> | 
-                <a href="/disclaimer.html" class="mx-2 hover:underline">免責事項</a> | 
-                <a href="/contact.html" class="mx-2 hover:underline">お問い合わせ</a>
-            </div>
-        </div>
-    </footer>
-    """
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {OPENAI_API_KEY}'
+    }
 
-    html_content = f"""
-<!DOCTYPE html>
-<html lang="ja">
-{head}
-<body class="bg-gray-100 flex flex-col min-h-screen">
-    {header}
-    <main class="container mx-auto p-4 flex-grow">
-        {content}
-    </main>
-    {footer}
-</body>
-</html>
-"""
-    with open(filepath, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    messages = [
+        {"role": "system", "content": "あなたは、ウェブサイトのコンテンツ作成をサポートするプロのライターです。ユーザーから提供された商品説明の文章を読み、ウェブサイトに掲載するのに適した、簡潔で魅力的な要約を生成してください。キーワードを適切に含み、ユーザーの購入意欲を高めるような文章にしてください。出力は要約された文章のみにしてください。"},
+        {"role": "user", "content": f"以下の商品説明を要約してください。\n\n{text}"}
+    ]
     
-def generate_product_page(product, ai_headline, ai_details, output_dir):
-    """
-    個別の商品ページのHTMLファイルを生成する。
-    """
-    content = f"""
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden p-8 flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-12">
-        <div class="flex-shrink-0 w-64 h-64 flex items-center justify-center">
-            <img src="{product['image']}" alt="{product['name']}" class="max-w-full max-h-full object-contain rounded-lg">
-        </div>
-        <div class="flex-grow text-center md:text-left">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">{product['name']}</h1>
-            <p class="text-5xl font-extrabold text-indigo-600 mb-6">{product['price']}円</p>
-            
-            <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 mb-8 rounded-lg">
-                <h3 class="text-2xl font-bold text-indigo-800 mb-2">AI価格分析</h3>
-                <p class="text-xl font-bold text-indigo-600 mb-2">「{ai_headline}」</p>
-                <p class="text-gray-700 leading-relaxed">{ai_details}</p>
-            </div>
-            
-            <div class="mb-8">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">商品概要</h3>
-                <p class="text-gray-600">{product['description']}</p>
-            </div>
-
-            <div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">価格履歴</h3>
-                <div class="bg-gray-100 rounded-lg p-4">
-                    <pre class="text-gray-600 text-sm overflow-x-auto">{json.dumps(product['price_history'], indent=2)}</pre>
-                </div>
-            </div>
-        </div>
-    </div>
-    """
-    
-    # 購入ボタンを追加
-    content += f"""
-    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg flex justify-center items-center">
-        <a href="{product['url']}" target="_blank" rel="noopener noreferrer" class="block bg-indigo-600 text-white py-3 px-8 rounded-full font-semibold shadow-lg hover:bg-indigo-700 transition transform hover:scale-105">
-            商品ページを見る
-        </a>
-    </div>
-    """
-
-    filepath = os.path.join(output_dir, product['page_url'])
-    generate_html_file(f"PricePilot - {product['name']}", content, filepath)
-    print(f"商品ページが生成されました: {filepath}")
-
-def generate_index_page(products, output_dir):
-    """
-    トップページ（商品一覧）のHTMLファイルを生成する。
-    """
-    total_products = len(products)
-    total_pages = math.ceil(total_products / PRODUCTS_PER_PAGE)
-    
-    for page_num in range(1, total_pages + 1):
-        start_index = (page_num - 1) * PRODUCTS_PER_PAGE
-        end_index = start_index + PRODUCTS_PER_PAGE
-        page_products = products[start_index:end_index]
-        
-        products_html = ""
-        for product in page_products:
-            products_html += f"""
-            <a href="/{product['page_url']}" class="block card">
-                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
-                    <img src="{product['image']}" alt="{product['name']}" class="w-48 h-48 object-contain rounded-lg mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-2 truncate w-full">{product['name']}</h2>
-                    <p class="text-3xl font-bold text-indigo-600 mb-2">{product['price']}円</p>
-                    <div class="text-sm text-gray-500">
-                        <span class="font-bold text-green-600">{product['ai_headline']}</span>
-                    </div>
-                </div>
-            </a>
-            """
-        
-        pagination_html = ""
-        if total_pages > 1:
-            pagination_html = '<div class="flex justify-center mt-8 space-x-2">'
-            for i in range(1, total_pages + 1):
-                page_file = f'index.html' if i == 1 else f'index_{i}.html'
-                is_current_page = 'bg-indigo-600 text-white' if i == page_num else 'bg-white text-indigo-600 hover:bg-gray-200'
-                pagination_html += f"""
-                <a href="/{page_file}" class="px-4 py-2 border rounded-lg {is_current_page}">{i}</a>
-                """
-            pagination_html += '</div>'
-            
-        content = f"""
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">商品一覧</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {products_html}
-        </div>
-        {pagination_html}
-        """
-
-        filename = 'index.html' if page_num == 1 else f'index_{page_num}.html'
-        filepath = os.path.join(output_dir, filename)
-        generate_html_file('PricePilot - 商品一覧', content, filepath)
-        
-    print("商品一覧ページが生成されました。")
-
-def generate_static_pages(output_dir):
-    """
-    静的ページ（プライバシー、免責事項など）を生成する。
-    """
-    pages = {
-        'about.html': {
-            'title': 'このサイトについて',
-            'content': """
-            <h1 class="text-4xl font-bold text-gray-800 mb-8">このサイトについて</h1>
-            <p class="text-gray-600">PricePilotは、最新のAI技術を活用して、様々な商品の価格動向を分析し、ユーザーにとって最適な「買い時」を提案する価格比較サイトです。私たちの目標は、消費者が情報過多の時代に正しい選択ができるよう、信頼性の高い情報を提供することです。</p>
-            <p class="text-gray-600 mt-4">当サイトは、膨大なデータをAIが解析することで、市場のトレンドや価格の変動パターンを予測します。これにより、ユーザーはより賢く、よりお得に商品を購入することができます。</p>
-            """
-        },
-        'privacy.html': {
-            'title': 'プライバシーポリシー',
-            'content': """
-            <h1 class="text-4xl font-bold text-gray-800 mb-8">プライバシーポリシー</h1>
-            <p class="text-gray-600">このサイトは、ユーザーのプライバシー保護を最優先に考えており、個人情報の収集や利用は行いません。</p>
-            <p class="text-gray-600 mt-4">当サイトは、商品の情報比較と分析のみを目的としており、外部サービスへのリンクを除き、ユーザーの追跡やデータの保存は行いません。安心してご利用ください。</p>
-            """
-        },
-        'disclaimer.html': {
-            'title': '免責事項',
-            'content': """
-            <h1 class="text-4xl font-bold text-gray-800 mb-8">免責事項</h1>
-            <p class="text-gray-600">当サイトで提供される情報は、商品の価格比較と分析を目的としたものであり、その正確性、完全性、信頼性を保証するものではありません。情報の利用は、ユーザー自身の責任において行ってください。</p>
-            <p class="text-gray-600 mt-4">当サイトの情報に基づき発生したいかなる損害についても、一切の責任を負いません。最終的な購入判断は、必ず販売元の公式サイトで詳細を確認してください。</p>
-            """
-        },
-        'contact.html': {
-            'title': 'お問い合わせ',
-            'content': """
-            <h1 class="text-4xl font-bold text-gray-800 mb-8">お問い合わせ</h1>
-            <p class="text-gray-600">このサイトに関するご意見やご質問がある場合は、以下のメールアドレスまでご連絡ください。</p>
-            <p class="text-gray-600 mt-4 font-bold">contact@pricepilot.com</p>
-            """
-        }
+    payload = {
+        "model": MODEL_NAME,
+        "messages": messages
     }
     
-    for filename, page_info in pages.items():
-        filepath = os.path.join(output_dir, filename)
-        generate_html_file(page_info['title'], page_info['content'], filepath)
+    try:
+        response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10) # タイムアウトを追加
+        response.raise_for_status()
+        result = response.json()
+        
+        summary_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
+        if summary_text:
+            return summary_text
     
-    print("静的ページが生成されました。")
+    except requests.exceptions.Timeout:
+        print("OpenAI APIへのリクエストがタイムアウトしました。")
+    except requests.exceptions.RequestException as e:
+        print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
+    except (IndexError, KeyError) as e:
+        print(f"OpenAI APIの応答形式が不正です: {e}")
+    
+    return "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
 
-def create_sitemap(products, output_dir):
-    """
-    サイトマップ（sitemap.xml）を生成する。
-    """
-    sitemap_content = """<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-"""
-    base_url = "https://your-website.com/" 
+def fetch_rakuten_items():
+    """楽天APIから複数のカテゴリで商品データを取得する関数"""
+    app_id = os.environ.get('RAKUTEN_API_KEY')
+    if not app_id:
+        print("RAKUTEN_API_KEYが設定されていません。")
+        return []
+
+    # 検索したいキーワードのリスト
+    keywords = ['パソコン', '家電']
+    all_products = []
+
+    for keyword in keywords:
+        # 各キーワードでAPIを呼び出す（それぞれ10件取得）
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=10"
+
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            items = data.get('Items', [])
+            
+            for item in items:
+                item_data = item['Item']
+                
+                # 'genreName'が存在しない場合を考慮してget()メソッドを使用
+                genre_name = item_data.get('genreName', '')
+                
+                # カテゴリを正しく設定
+                main_cat = keyword
+                
+                # 商品説明を取得
+                description = item_data.get('itemCaption', '')
+                
+                # 商品説明をAIで要約
+                ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+                
+                all_products.append({
+                    "id": item_data['itemCode'],
+                    "name": item_data['itemName'],
+                    "price": f"{int(item_data['itemPrice']):,}",
+                    "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
+                    "rakuten_url": item_data['itemUrl'],
+                    "yahoo_url": "https://shopping.yahoo.co.jp/", 
+                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                    "page_url": f"pages/{item_data['itemCode']}.html",
+                    "category": {
+                        "main": main_cat,
+                        "sub": genre_name
+                    },
+                    "ai_headline": "AI分析準備中",
+                    "ai_analysis": "詳細なAI分析は現在準備中です。",
+                    "description": description, 
+                    "ai_summary": ai_summary, # AIによる要約を追加
+                    "date": date.today().isoformat(),
+                    "main_ec_site": "楽天", # メインのECサイトを記録
+                    "price_history": []
+                })
+        except requests.exceptions.RequestException as e:
+            print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
+
+    return all_products
+
+def fetch_yahoo_items():
+    """Yahoo!ショッピングAPIから商品データを取得する関数"""
+    app_id = os.environ.get('YAHOO_API_KEY')
+    if not app_id:
+        print("YAHOO_API_KEYが設定されていません。")
+        return []
+
+    # 検索したいキーワードのリスト
+    keywords = ['掃除機', 'イヤホン']
+    all_products = []
     
-    static_pages = ["index.html", "about.html", "privacy.html", "disclaimer.html", "contact.html"]
-    for page in static_pages:
-        sitemap_content += f"""  <url>
-    <loc>{base_url}{page}</loc>
-    <lastmod>{date.today().isoformat()}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+    for keyword in keywords:
+        url = f"https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid={app_id}&query={keyword}&sort=-review_count&hits=5"
+        
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            items = data.get('hits', [])
+            
+            for item in items:
+                # Yahoo!ショッピングのデータ構造に合わせて変換
+                description = item.get('description', '')
+                
+                # 商品説明をAIで要約
+                ai_summary = generate_ai_summary(description) if description else "この商品の詳しい説明は準備中です。恐れ入りますが、しばらくしてから再度お試しください。"
+
+                all_products.append({
+                    "id": item['jan_code'], # JANコードをIDとして使用
+                    "name": item['name'],
+                    "price": f"{int(item['price']):,}",
+                    "image_url": item['image']['medium'],
+                    "rakuten_url": "https://www.rakuten.co.jp/",
+                    "yahoo_url": item['url'],
+                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                    "page_url": f"pages/{item['jan_code']}.html",
+                    "category": {
+                        "main": keyword, # キーワードをメインカテゴリに
+                        "sub": item.get('category_name', '') # カテゴリ名を取得
+                    },
+                    "ai_headline": "AI分析準備中",
+                    "ai_analysis": "詳細なAI分析は現在準備中です。",
+                    "description": description,
+                    "ai_summary": ai_summary, # AIによる要約を追加
+                    "date": date.today().isoformat(),
+                    "main_ec_site": "Yahoo!", # メインのECサイトを記録
+                    "price_history": []
+                })
+        except requests.exceptions.RequestException as e:
+            print(f"Yahoo! APIへのリクエスト中にエラーが発生しました: {e}")
+            
+    return all_products
+
+def update_products_json(new_products):
+    """
+    新しい商品データを既存のproducts.jsonに統合・更新する関数。
+    この関数内でAI分析を実行する。
+    """
+    try:
+        if os.path.exists('products.json'):
+            with open('products.json', 'r', encoding='utf-8') as f:
+                existing_products = json.load(f)
+        else:
+            existing_products = []
+    except json.JSONDecodeError:
+        print("products.jsonが破損しているため、新規作成します。")
+        existing_products = []
+
+    updated_products = {p['id']: p for p in existing_products}
+    for new_product in new_products:
+        if new_product['id'] in updated_products:
+            # 既存の商品の場合、価格履歴を更新
+            existing_product = updated_products[new_product['id']]
+            if 'price_history' not in existing_product:
+                existing_product['price_history'] = []
+            
+            # 最新の価格を履歴に追加（重複は避ける）
+            current_date = date.today().isoformat()
+            try:
+                current_price = int(new_product['price'].replace(',', ''))
+                # 既に今日の価格が記録されていなければ追加
+                if not existing_product['price_history'] or existing_product['price_history'][-1]['date'] != current_date:
+                    existing_product['price_history'].append({"date": current_date, "price": current_price})
+            except ValueError:
+                print(f"価格の変換に失敗しました: {new_product['price']}")
+
+            # 他の最新情報で上書き
+            existing_product.update(new_product)
+        else:
+            # 新規商品の場合はそのまま追加
+            try:
+                new_product['price_history'] = [{"date": date.today().isoformat(), "price": int(new_product['price'].replace(',', ''))}]
+                updated_products[new_product['id']] = new_product
+            except ValueError:
+                print(f"価格の変換に失敗したため、商品 {new_product['id']} はスキップされます。")
+    
+    final_products = list(updated_products.values())
+    
+    # ここからAI分析の処理を追加
+    print("AIによる価格分析を開始します。")
+    for i, product in enumerate(final_products):
+        print(f"商品 {i+1}/{len(final_products)}: '{product['name']}' のAI分析を生成中...")
+        try:
+            price_int = int(product['price'].replace(',', ''))
+            price_history = product.get('price_history', [])
+            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
+            product['ai_headline'] = ai_headline
+            product['ai_analysis'] = ai_analysis_text
+            time.sleep(1)
+        except ValueError:
+            print(f"価格の変換に失敗しました: {product['price']}")
+            product['ai_headline'] = "AI分析準備中"
+            product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
+
+    print("AIによる価格分析が完了しました。")
+    
+    with open('products.json', 'w', encoding='utf-8') as f:
+        json.dump(final_products, f, ensure_ascii=False, indent=4)
+    
+    print(f"products.jsonが更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
+    return final_products
+
+def generate_site(products):
+    """products.jsonを読み込み、HTMLファイルを生成する関数"""
+    today = date.today().isoformat()
+    for product in products:
+        if 'date' not in product:
+            product['date'] = today
+    products.sort(key=lambda p: p['date'], reverse=True)
+    categories = {}
+    for product in products:
+        main_cat = product['category']['main']
+        sub_cat = product['category']['sub']
+        if main_cat not in categories:
+            categories[main_cat] = []
+        if sub_cat not in categories[main_cat]:
+            categories[main_cat].append(sub_cat)
+    sorted_main_cats = sorted(categories.keys())
+
+    def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
+        if "pages" in current_path:
+            base_path = ".."
+        elif "category" in current_path:
+            base_path = "../.."
+        elif "tags" in current_path:
+            base_path = ".."
+        else:
+            base_path = "."
+        main_links_html = f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
+        for mc_link in sorted_main_cats:
+            main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
+        header_html = f"""
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カイドキ-ナビ | {page_title}</title>
+    <link rel="stylesheet" href="{base_path}/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{base_path}/index.html">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+
+    <div class="genre-links-container">
+        <div class="genre-links">
+            {main_links_html}
+        </div>
+    </div>
 """
+        sub_cat_links_html = ""
+        if sub_cat_links:
+            sub_cat_links_html += '<div class="genre-links sub-genre-links">'
+            for sub_cat_link in sorted(sub_cat_links):
+                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+            sub_cat_links_html += '</div>'
+            header_html += f"""
+    <div class="sub-genre-links-container">
+        {sub_cat_links_html}
+    </div>
+"""
+        footer_html = f"""
+    </main>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="{base_path}/privacy.html">プライバシーポリシー</a>
+            <a href="{base_path}/disclaimer.html">免責事項</a>
+            <a href="{base_path}/contact.html">お問い合わせ</a>
+        </div>
+    </footer>
+    <script src="{base_path}/script.js"></script>
+</body>
+</html>
+        """
+        return header_html, footer_html
+
+    def generate_static_page(file_name, title, content_html):
+        page_path = file_name
+        header, footer = generate_header_footer(page_path, page_title=title)
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + content_html + footer)
+        print(f"{page_path} が生成されました。")
+    
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml']:
+                os.remove(os.path.join(root, file))
+    if os.path.exists('category'):
+        shutil.rmtree('category')
+    if os.path.exists('pages'):
+        shutil.rmtree('pages')
+    if os.path.exists('tags'):
+        shutil.rmtree('tags')
+
+    for main_cat, sub_cats in categories.items():
+        main_cat_products = [p for p in products if p['category']['main'] == main_cat]
+        page_path = f"category/{main_cat}/index.html"
+        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{main_cat}の商品一覧")
+        main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{main_cat}の商品一覧</h2>
+            <div class="product-grid">
+            """
+        products_html = ""
+        for product in main_cat_products:
+            link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+            products_html += f"""
+<a href="{link_path}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
+    <div class="product-info">
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
+        <p class="product-price">{product['price']}円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+    </div>
+</a>
+            """
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + products_html + "</div>" + footer)
+        print(f"category/{main_cat}/index.html が生成されました。")
+        for sub_cat in sub_cats:
+            sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
+            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            page_path = f"category/{main_cat}/{sub_cat_file_name}"
+            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
+            main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
+            <div class="product-grid">
+            """
+            products_html = ""
+            for product in sub_cat_products:
+                link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+                products_html += f"""
+<a href="{link_path}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
+    <div class="product-info">
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
+                    <p class="product-price">{product['price']}円</p>
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                </div>
+            </a>
+                """
+            with open(page_path, 'w', encoding='utf-8') as f:
+                f.write(header + main_content_html + products_html + "</div>" + footer)
+            print(f"{page_path} が生成されました。")
+
+    total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
+    for i in range(total_pages):
+        start_index = i * PRODUCTS_PER_PAGE
+        end_index = start_index + PRODUCTS_PER_PAGE
+        paginated_products = products[start_index:end_index]
+        page_num = i + 1
+        page_path = 'index.html' if page_num == 1 else f'pages/page{page_num}.html'
+        if page_num > 1:
+            os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        header, footer = generate_header_footer(page_path)
+        products_html = ""
+        for product in paginated_products:
+            link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+            products_html += f"""
+<a href="{link_path}" class="product-card">
+    <img src="{product['image_url']}" alt="{product['name']}">
+    <div class="product-info">
+        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
+        <p class="product-price">{product['price']}円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+    </div>
+</a>
+            """
+        pagination_html = ""
+        if total_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'pages/page{page_num - 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(prev_link, os.path.dirname(page_path))}" class="prev">前へ</a>'
+            for p in range(1, total_pages + 1):
+                page_link = 'index.html' if p == 1 else f'pages/page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{os.path.relpath(page_link, os.path.dirname(page_path))}" class="{active_class}">{p}</a>'
+            if page_num < total_pages:
+                next_link = f'pages/page{page_num + 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(next_link, os.path.dirname(page_path))}" class="next">次へ</a>'
+            pagination_html += '</div>'
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
+        print(f"{page_path} が生成されました。")
 
     for product in products:
-        sitemap_content += f"""  <url>
-    <loc>{base_url}{product['page_url']}</loc>
-    <lastmod>{date.today().isoformat()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
+        page_path = product['page_url']
+        dir_name = os.path.dirname(page_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+        header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
+        ai_analysis_block_html = f"""
+            <div class="ai-analysis-block">
+                <div class="ai-analysis-text">
+                    <h2>AIによる買い時分析</h2>
+                    <p>{product['ai_analysis']}</p>
+                </div>
+            </div>
+        """
+        specs_html = ""
+        if "specs" in product:
+            specs_html = f"""
+                <div class="item-specs">
+                    <h2>製品仕様・スペック</h2>
+                    <p>{product.get('specs', '')}</p>
+                </div>
+            """
+        # メインECサイトの購入ボタンを生成
+        purchase_button_html = ""
+        main_ec_site = product.get("main_ec_site")
+        
+        if main_ec_site == "Amazon":
+            purchase_button_html = f'<a href="{product["amazon_url"]}" class="purchase-button" target="_blank">Amazonで購入する</a>'
+        elif main_ec_site == "楽天":
+            purchase_button_html = f'<a href="{product["rakuten_url"]}" class="purchase-button" target="_blank">楽天市場で購入する</a>'
+        elif main_ec_site == "Yahoo!":
+            purchase_button_html = f'<a href="{product["yahoo_url"]}" class="purchase-button" target="_blank">Yahoo!ショッピングで購入する</a>'
+
+        # 最安値ショップのボタンを常に3つ表示
+        affiliate_links_html = f"""
+            <div class="lowest-price-section">
+                <p class="lowest-price-label">最安値ショップをチェック！</p>
+                <div class="lowest-price-buttons">
+                    <a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link" target="_blank">Amazonで見る</a>
+                    <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link" target="_blank">楽天市場で見る</a>
+                    <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link" target="_blank">Yahoo!ショッピングで見る</a>
+                </div>
+            </div>
+        """
+        item_html_content = f"""
+<main class="container">
+    <div class="product-detail">
+        <div class="item-detail">
+            <div class="item-image">
+                <img src="{product['image_url']}" alt="{product['name']}" class="main-product-image">
+            </div>
+            <div class="item-info">
+                <h1 class="item-name">{product['name']}</h1>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
+                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <div class="price-section">
+                    <p class="current-price">現在の価格：<span>{product['price']}</span>円</p>
+                </div>
+                <div class="ai-recommendation-section">
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                    {purchase_button_html}
+                </div>
+                {ai_analysis_block_html}
+                {affiliate_links_html}
+                <div class="item-description">
+                    <h2>AIによる商品ハイライト</h2>
+                    <p>{product.get('ai_summary', '')}</p>
+                </div>
+                {specs_html}
+                <div class="product-tags">
+                    {"".join([f'<a href="../tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 """
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + item_html_content + footer)
+        print(f"{page_path} が生成されました。")
 
-    sitemap_content += "</urlset>"
-    with open(os.path.join(output_dir, 'sitemap.xml'), 'w', encoding='utf-8') as f:
-        f.write(sitemap_content)
+    TAGS_PER_PAGE = 50
+    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+    os.makedirs('tags', exist_ok=True)
+    for i in range(total_tag_pages):
+        start_index = i * TAGS_PER_PAGE
+        end_index = start_index + TAGS_PER_PAGE
+        paginated_tags = all_tags[start_index:end_index]
+        page_num = i + 1
+        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+        tag_list_html_content = f"""
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">タグから探す</h2>
+        <div class="product-tags all-tags-list">
+            {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in paginated_tags])}
+        </div>
+    </div>
+</main>
+"""
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+            for p in range(1, total_tag_pages + 1):
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+            pagination_html += '</div>'
+        tag_header, tag_footer = generate_header_footer(page_path, page_title="タグ一覧")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(tag_header + tag_list_html_content + pagination_html + tag_footer)
+        print(f"タグページ: {page_path} が生成されました。")
+        
+    all_tags = set(tag for product in products for tag in product.get('tags', []))
+    for tag in all_tags:
+        tag_page_path = f'tags/{tag}.html'
+        tag_products = [product for product in products if tag in product.get('tags', [])]
+        tag_page_content = f"""
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">#{tag} の商品一覧</h2>
+        <div class="product-grid">
+            {"".join([f'''
+            <a href="../{product['page_url']}" class="product-card">
+                <img src="{product['image_url']}" alt="{product['name']}">
+                <div class="product-info">
+                    <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
+                    <p class="product-price">{product['price']}円</p>
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                </div>
+            </a>
+            ''' for product in tag_products])}
+        </div>
+    </div>
+</main>
+"""
+        tag_header, tag_footer = generate_header_footer(tag_page_path, page_title=f"#{tag} の商品一覧")
+        with open(tag_page_path, 'w', encoding='utf-8') as f:
+            f.write(tag_header + tag_page_content + tag_footer)
+        print(f"タグページ: {tag_page_path} が生成されました。")
     
-    print("sitemap.xml が生成されました。")
-
-def generate_website():
+    contact_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>お問い合わせ</h1>
+            <p>ご質問やご要望がございましたら、以下のメールアドレスまでご連絡ください。</p>
+            <p>メールアドレス: sokux001@gmail.com</p>
+        </div>
+    </main>
     """
-    ウェブサイトの全ファイルを生成するメイン関数。
+    generate_static_page("contact.html", "お問い合わせ", contact_content)
+    privacy_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>プライバシーポリシー</h1>
+            <p>当サイトは、Googleアナリティクスを使用しています。収集される情報やその利用目的については、Googleのプライバシーポリシーをご確認ください。</p>
+            <p>当サイトは、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。</p>
+        </div>
+    </main>
     """
-    output_dir = "dist"
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-    os.makedirs(output_dir, exist_ok=True)
-    os.makedirs(os.path.join(output_dir, 'products'), exist_ok=True)
-    
-    ai_cache = load_ai_cache()
-    
-    print("ダミー商品データを準備中...")
+    generate_static_page("privacy.html", "プライバシーポリシー", privacy_content)
+    disclaimer_content = """
+    <main class="container">
+        <div class="static-content">
+            <h1>免責事項</h1>
+            <p>本サイトに掲載されている情報は、正確性や完全性を保証するものではありません。</p>
+            <p>アフィリエイトリンクを通じて購入された商品に関するトラブルについては、当サイトは一切の責任を負いません。</p>
+        </div>
+    </main>
+    """
+    generate_static_page("disclaimer.html", "免責事項", disclaimer_content)
 
-    products_data = []
-    
-    for i in range(1, 101): # 100個のダミー商品
-        product_name = f"最新ガジェット {i}"
-        
-        # 過去の価格履歴をシミュレーション
-        price_history = {}
-        base_price = random.randint(15000, 100000)
-        for d in range(60, 0, -1):
-            price_history[(date.today() - timedelta(days=d)).isoformat()] = max(10000, base_price + random.randint(-5000, 5000))
-        current_price = price_history[(date.today() - timedelta(days=1)).isoformat()]
-
-        page_url = f"products/product_{i}.html"
-        
-        # キャッシュを利用してAI分析を生成
-        ai_headline, ai_detail = generate_ai_analysis(product_name, current_price, price_history, ai_cache)
-        
-        products_data.append({
-            'name': product_name,
-            'price': current_price,
-            'price_history': price_history,
-            'description': f"これは、{product_name}に関する詳細な商品説明です。画期的な機能と優れたデザインを備えています。",
-            'url': f"https://example.com/buy/{i}",
-            'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+{i}",
-            'page_url': page_url,
-            'ai_headline': ai_headline,
-            'ai_details': ai_detail
-        })
-
-    # AI分析キャッシュを保存
-    save_ai_cache(ai_cache)
-    
-    print("ウェブサイトのファイル生成を開始します。")
-    
-    create_sitemap(products_data, output_dir)
-    generate_static_pages(output_dir)
-    generate_index_page(products_data, output_dir)
-    
-    for product in products_data:
-        generate_product_page(product, product['ai_headline'], product['ai_details'], output_dir)
-    
-    print("サイトのファイル生成が完了しました。")
+    def create_sitemap():
+        base_url = "https://w41w41-beep.github.io/kaidoki-navi/"
+        sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        sitemap_content += '  <url>\n'
+        sitemap_content += f'    <loc>{base_url}</loc>\n'
+        sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+        sitemap_content += '    <changefreq>daily</changefreq>\n'
+        sitemap_content += '    <priority>1.0</priority>\n'
+        sitemap_content += '  </url>\n'
+        categories = {}
+        for product in products:
+            main_cat = product['category']['main']
+            sub_cat = product['category']['sub']
+            if main_cat not in categories:
+                categories[main_cat] = set()
+            categories[main_cat].add(sub_cat)
+        for main_cat, sub_cats in categories.items():
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>daily</changefreq>\n'
+            sitemap_content += '    <priority>0.8</priority>\n'
+            sitemap_content += '  </url>\n'
+            for sub_cat in sub_cats:
+                sitemap_content += '  <url>\n'
+                sitemap_content += f'    <loc>{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+                sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+                sitemap_content += '    <changefreq>daily</changefreq>\n'
+                sitemap_content += '    <priority>0.7</priority>\n'
+                sitemap_content += '  </url>\n'
+        for product in products:
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}{product["page_url"]}</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>daily</changefreq>\n'
+            sitemap_content += '    <priority>0.6</priority>\n'
+            sitemap_content += '  </url>\n'
+        static_pages = ["privacy.html", "disclaimer.html", "contact.html"]
+        for page in static_pages:
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}{page}</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>monthly</changefreq>\n'
+            sitemap_content += '    <priority>0.5</priority>\n'
+            sitemap_content += '  </url>\n'
+        sitemap_content += '</urlset>'
+        with open('sitemap.xml', 'w', encoding='utf-8') as f:
+            f.write(sitemap_content)
+        print("sitemap.xml が生成されました。")
+    create_sitemap()
+    print("サイトのファイル生成が完了しました！")
 
 if __name__ == "__main__":
-    generate_website()
+    rakuten_products = fetch_rakuten_items()
+    yahoo_products = fetch_yahoo_items()
+    
+    # 2つのAPIからの結果を結合
+    new_products = rakuten_products + yahoo_products
+    
+    products = update_products_json(new_products)
+    generate_site(products)
