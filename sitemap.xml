@@ -1,110 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://localhost:8000/</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/index.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/index.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/category-その他家電.html</loc>
-    <lastmod>2025-09-20</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/パソコン/.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/category-テレビ.html</loc>
-    <lastmod>2025-09-20</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/index.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/category/家電/.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/category-ノートpc.html</loc>
-    <lastmod>2025-09-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>http://localhost:8000/products/secupcs:10000206.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/secupcs:10000206.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/fkikaku:10000299.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/fkikaku:10000299.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/low-ya:10008046.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/low-ya:10008046.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/tabletpckoubou:10001261.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/tabletpckoubou:10001261.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/blackviewhk:10000023.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/blackviewhk:10000023.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/fkikaku:10000287.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/fkikaku:10000287.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/seedcoms:10007129.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/seedcoms:10007129.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/mantubiz:10002537.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/mantubiz:10002537.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/oga:10126663.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/oga:10126663.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/products/low-ya:10008049.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/low-ya:10008049.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/privacy.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/mrock:10012094.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/roomy:10016350.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/importshopaqua:10002910.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/misinkoubou:10000080.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/e-kit:10042595.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/treesoyc:10000002.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/rcmd:19477869.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/hifumi-japan:10000045.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/misinkoubou:10000210.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/pages/joyplus:10000121.html</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/privacy.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/disclaimer.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/disclaimer.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:8000/contact.html</loc>
-    <lastmod>2025-09-20</lastmod>
+    <loc>https://w41w41-beep.github.io/kaidoki-navi/contact.html</loc>
+    <lastmod>2025-09-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
