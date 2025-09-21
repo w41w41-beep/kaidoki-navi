@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const productGrid = document.querySelector('.product-grid');
 
     if (!searchInput || !searchButton || !productGrid) {
+        // ページに検索関連の要素がない場合は、処理を終了します
+        console.error('必要なDOM要素が見つかりません。検索機能は動作しません。');
         return;
     }
 
+    // `generate_site.py` とのクラス名の統一
     const productCards = Array.from(productGrid.querySelectorAll('.product-card'));
 
     // 検索を実行する関数
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 入力欄でEnterキーが押された時の処理
-    searchInput.addEventListener('keypress', (e) => {
+    searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             performSearchAndHideKeyboard();
