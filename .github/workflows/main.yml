@@ -1,33 +1,25 @@
-name: Generate Website and Deploy
+name: Generate Website
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # 毎日午前0時（UTC）に実行
+  workflow_dispatch: # 手動実行を可能にする
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+      contents: write # リポジトリへの書き込み権限を付与
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- Pythonスクリプトの実行ステップ ---
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install pandas requests openai
@@ -39,19 +31,13 @@ jobs:
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run site generator
-        run: python generate_site.py
-      # -----------------------------------------------
+        run: |
+          python generate_site.py
 
-      # --- GitHub Pagesへのデプロイステップ ---
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'dist'
-          
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-      # -----------------------------------------------
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "Auto-generate website and update CSV" || echo "No changes to commit"
+          git push
