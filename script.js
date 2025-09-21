@@ -4,16 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const productGrid = document.querySelector('.product-grid');
 
     if (!searchInput || !searchButton || !productGrid) {
-        // ページに検索関連の要素がない場合は、処理を終了します
         console.error('必要なDOM要素が見つかりません。検索機能は動作しません。');
         return;
     }
 
-    // `generate_site.py` とのクラス名の統一
-    const productCards = Array.from(productGrid.querySelectorAll('.product-card'));
-
     // 検索を実行する関数
     const filterProducts = () => {
+        // 現在のページの商品カードをリアルタイムで取得
+        const productCards = Array.from(productGrid.querySelectorAll('.product-card'));
+        
         // キーワードを小文字に変換し、全角のカタカナ・英数字・スペースを半角に統一
         const query = searchInput.value.toLowerCase().trim()
             .replace(/[ァ-ヶ]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0x3000 + 0x20))
