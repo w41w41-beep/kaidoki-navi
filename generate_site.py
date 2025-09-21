@@ -21,9 +21,11 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 # 楽天APIの設定
 RAKUTEN_API_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706"
 RAKUTEN_API_KEY = os.environ.get("RAKUTEN_API_KEY")
-# 楽天のジャンルID
+# 楽天のジャンルIDを複数設定
 RAKUTEN_GENRE_IDS = {
-    '家電': 100026
+    '家電': 100026,
+    'パソコン・周辺機器': 562637,
+    'カメラ・ビデオカメラ・光学機器': 562635
 }
 
 # GPT-4o-miniモデルを使用
@@ -101,13 +103,13 @@ def fetch_products_from_rakuten():
         return []
 
     products = []
-    # 1つのカテゴリーから1個だけ取得
+    # 複数のカテゴリーから、itemUrlを持つ商品が見つかるまで検索
     for category, genre_id in RAKUTEN_GENRE_IDS.items():
         # APIリクエストパラメータ
         params = {
             'applicationId': RAKUTEN_API_KEY,
             'genreId': genre_id,
-            'hits': 1,
+            'hits': 10,  # 1つのジャンルで複数の商品を試す
             'format': 'json',
             'formatVersion': 2,
         }
@@ -122,22 +124,21 @@ def fetch_products_from_rakuten():
             for item_data in items:
                 item = item_data.get('Item', {})
                 item_url = item.get('itemUrl')
-                if not item_url:
-                    print(f"警告: itemUrl が見つからない商品が見つかりました。この商品はスキップされます。")
-                    continue
-                
-                unique_hash = hashlib.sha256(item_url.encode('utf-8')).hexdigest()[:16]
-                page_url = f"products/product_{unique_hash}.html"
+                # itemUrl があれば、その商品を products リストに追加してループを抜ける
+                if item_url:
+                    unique_hash = hashlib.sha256(item_url.encode('utf-8')).hexdigest()[:16]
+                    page_url = f"products/product_{unique_hash}.html"
 
-                products.append({
-                    'name': item.get('itemName'),
-                    'price': item.get('itemPrice'),
-                    'url': item.get('itemUrl'),
-                    'image': item.get('mediumImageUrls')[0] if item.get('mediumImageUrls') else 'https://placehold.co/400x400/cccccc/333333?text=No+Image',
-                    'description': item.get('itemCaption', '商品説明はありません。'),
-                    'page_url': page_url,
-                    'price_history': {},
-                })
+                    products.append({
+                        'name': item.get('itemName'),
+                        'price': item.get('itemPrice'),
+                        'url': item.get('itemUrl'),
+                        'image': item.get('mediumImageUrls')[0] if item.get('mediumImageUrls') else 'https://placehold.co/400x400/cccccc/333333?text=No+Image',
+                        'description': item.get('itemCaption', '商品説明はありません。'),
+                        'page_url': page_url,
+                        'price_history': {},
+                    })
+                    return products # 有効な商品が見つかったので、ここで終了
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
             continue
@@ -145,7 +146,7 @@ def fetch_products_from_rakuten():
             print(f"楽天APIからの応答を解析中にエラーが発生しました: {e}")
             continue
 
-    return products[:1] # 取得した商品の合計数が1個になるように調整
+    return [] # どのジャンルでも有効な商品が見つからなかった場合
 
 def generate_html_file(title, content, filepath):
     """
