@@ -151,12 +151,17 @@ def generate_html_file(title, content, filepath):
     """
     共通のヘッダー、フッター、スタイルを含むHTMLファイルを生成する。
     """
+    # ★★★ ここを修正します ★★★
+    # ファイルパスからディレクトリの深さを取得し、相対パスを計算
+    depth = filepath.count(os.sep)
+    relative_path_prefix = '../' * (depth - 1)
+    
     head = f"""
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
-        <link href="/output.css" rel="stylesheet">
+        <link href="{relative_path_prefix}output.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
             body {{
