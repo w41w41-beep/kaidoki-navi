@@ -98,7 +98,7 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
 
 def fetch_products_from_rakuten():
     """
-    楽天APIから最新の商品情報を1個取得する
+    楽天APIから最新の商品情報を取得する
     """
     if not RAKUTEN_API_KEY:
         print("警告: 楽天APIキーが設定されていません。ダミー商品を使用します。")
@@ -284,7 +284,7 @@ def generate_index_page(products, output_dir):
         products_html = ""
         for product in page_products:
             products_html += f"""
-            <a href="/{product['page_url']}" class="block card">
+            <a href="/{product['page_url']}" class="block product-card">
                 <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
                     <img src="{product['image']}" alt="{product['name']}" class="w-48 h-48 object-contain rounded-lg mb-4">
                     <h2 class="product-name text-xl font-semibold text-gray-800 mb-2 truncate w-full">{product['name']}</h2>
@@ -419,7 +419,7 @@ def generate_website():
     
     # APIから商品が取得できなかった場合は、ダミー商品を12個生成する
     if not products_data:
-        print("警告: 楽天APIからの商品取得に失敗したため、ダミー商品を1個生成します。")
+        print("警告: 楽天APIからの商品取得に失敗したため、ダミー商品を12個生成します。")
         for i in range(1, PRODUCTS_PER_PAGE + 1):
             product_name = f"ダミー商品 {i}"
             price_history = {}
