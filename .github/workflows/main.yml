@@ -21,19 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- Node.jsとTailwind CSSのビルドステップ ---
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Node dependencies
-        run: npm install
-
-      - name: Build CSS
-        run: npm run build
-      # -----------------------------------------------
-
       # --- Pythonスクリプトの実行ステップ ---
       - name: Set up Python
         uses: actions/setup-python@v4
