@@ -13,7 +13,6 @@ jobs:
       contents: write
       pages: write
       id-token: write
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -22,12 +21,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # --- Node.jsとTailwind CSSのビルドステップ ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Build CSS
+        run: npm run build
+      # -----------------------------------------------
+
+      # --- Pythonスクリプトの実行ステップ ---
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install pandas requests openai
@@ -39,9 +52,10 @@ jobs:
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run site generator
-        run: |
-          python generate_site.py
-          
+        run: python generate_site.py
+      # -----------------------------------------------
+
+      # --- GitHub Pagesへのデプロイステップ ---
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
@@ -53,3 +67,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      # -----------------------------------------------
