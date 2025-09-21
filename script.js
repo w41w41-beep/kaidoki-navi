@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // JSONファイルから商品データを取得する
     const fetchProducts = async () => {
         try {
-            const response = await fetch('/products.json');
+            const response = await fetch('./products.json');
             if (!response.ok) {
                 throw new Error('商品データを取得できませんでした。');
             }
@@ -16,12 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
             displayProducts(allProducts);
         } catch (error) {
             console.error('商品データの取得中にエラーが発生しました:', error);
-            productGrid.innerHTML = '<p class="text-center text-red-500">商品データの読み込みに失敗しました。</p>';
+            if (productGrid) {
+                productGrid.innerHTML = '<p class="text-center text-red-500">商品データの読み込みに失敗しました。</p>';
+            }
         }
     };
 
     // 商品をHTMLとして表示する
     const displayProducts = (productsToDisplay, page = 1) => {
+        if (!productGrid) return;
         productGrid.innerHTML = '';
         const startIndex = (page - 1) * PRODUCTS_PER_PAGE;
         const endIndex = startIndex + PRODUCTS_PER_PAGE;
@@ -29,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (paginatedProducts.length === 0) {
             productGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">該当する商品はありません。</p>';
-            paginationContainer.innerHTML = '';
+            if (paginationContainer) {
+                paginationContainer.innerHTML = '';
+            }
             return;
         }
 
@@ -47,11 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
             productGrid.innerHTML += productCard;
         });
 
-        updatePagination(productsToDisplay.length, page);
+        if (paginationContainer) {
+            updatePagination(productsToDisplay.length, page, productsToDisplay);
+        }
     };
 
     // ページネーションのUIを更新する
-    const updatePagination = (totalProducts, currentPage) => {
+    const updatePagination = (totalProducts, currentPage, productsToDisplay) => {
         paginationContainer.innerHTML = '';
         const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
@@ -64,18 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
             button.className = `px-4 py-2 border rounded-lg ${i === currentPage ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600 hover:bg-gray-200'}`;
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                displayProducts(allProducts, i);
+                displayProducts(productsToDisplay, i);
             });
             paginationContainer.appendChild(button);
         }
     };
 
-    // 検索機能を処理する
+    // 検索機能を処理する（商品名と商品説明を検索対象に追加）
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         const filteredProducts = allProducts.filter(product => {
-            const normalizedName = product.name.toLowerCase();
-            return normalizedName.includes(query);
+            // 商品名と商品説明のテキストを結合して検索対象とする
+            const searchTarget = `${product.name} ${product.description}`.toLowerCase();
+            return searchTarget.includes(query);
         });
         displayProducts(filteredProducts);
     };
