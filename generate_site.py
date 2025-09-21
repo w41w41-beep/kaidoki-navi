@@ -1,3 +1,5 @@
+# generate_site.py
+
 import json
 import math
 import os
@@ -6,10 +8,9 @@ import time
 from datetime import date, timedelta
 import requests
 import random
-import hashlib
 
 # 1ページあたりの商品数を定義
-PRODUCTS_PER_PAGE = 1
+PRODUCTS_PER_PAGE = 24
 # AI分析結果を保存するキャッシュファイル
 AI_CACHE_FILE = "ai_cache.json"
 
@@ -18,13 +19,6 @@ AI_CACHE_FILE = "ai_cache.json"
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 # 環境変数からAPIキーを取得
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-# 楽天APIの設定
-RAKUTEN_API_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706"
-RAKUTEN_API_KEY = os.environ.get("RAKUTEN_API_KEY")
-# 楽天のジャンルID
-RAKUTEN_GENRE_IDS = {
-    '家電': 100026
-}
 
 # GPT-4o-miniモデルを使用
 MODEL_NAME = "gpt-4o-mini"
@@ -92,76 +86,16 @@ def generate_ai_analysis(product_name, product_price, price_history, ai_cache):
         print(f"APIからの応答を解析中にエラーが発生しました: {e}")
         return "AI分析失敗", "無効な応答形式です。"
 
-def fetch_products_from_rakuten():
-    """
-    楽天APIから最新の商品情報を1個取得する
-    """
-    if not RAKUTEN_API_KEY:
-        print("警告: 楽天APIキーが設定されていません。ダミー商品を使用します。")
-        return []
-
-    products = []
-    # 1つのカテゴリーから1個だけ取得
-    for category, genre_id in RAKUTEN_GENRE_IDS.items():
-        # APIリクエストパラメータ
-        params = {
-            'applicationId': RAKUTEN_API_KEY,
-            'genreId': genre_id,
-            'hits': 1,
-            'format': 'json',
-            'formatVersion': 2,
-        }
-
-        try:
-            print(f"楽天APIから'{category}'の商品情報を取得しています...")
-            response = requests.get(RAKUTEN_API_URL, params=params)
-            response.raise_for_status()
-            data = response.json()
-            items = data.get('Items', [])
-            
-            for item_data in items:
-                item = item_data.get('Item', {})
-                item_url = item.get('itemUrl')
-                if not item_url:
-                    print(f"警告: itemUrl が見つからない商品が見つかりました。この商品はスキップされます。")
-                    continue
-                
-                unique_hash = hashlib.sha256(item_url.encode('utf-8')).hexdigest()[:16]
-                page_url = f"products/product_{unique_hash}.html"
-
-                products.append({
-                    'name': item.get('itemName'),
-                    'price': item.get('itemPrice'),
-                    'url': item.get('itemUrl'),
-                    'image': item.get('mediumImageUrls')[0] if item.get('mediumImageUrls') else 'https://placehold.co/400x400/cccccc/333333?text=No+Image',
-                    'description': item.get('itemCaption', '商品説明はありません。'),
-                    'page_url': page_url,
-                    'price_history': {},
-                })
-        except requests.exceptions.RequestException as e:
-            print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
-            continue
-        except (json.JSONDecodeError, KeyError) as e:
-            print(f"楽天APIからの応答を解析中にエラーが発生しました: {e}")
-            continue
-
-    return products[:1] # 取得した商品の合計数が1個になるように調整
-
 def generate_html_file(title, content, filepath):
     """
     共通のヘッダー、フッター、スタイルを含むHTMLファイルを生成する。
     """
-    # ★★★ ここを修正します ★★★
-    # ファイルパスからディレクトリの深さを取得し、相対パスを計算
-    depth = filepath.count(os.sep)
-    relative_path_prefix = '../' * (depth - 1)
-    
     head = f"""
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
-        <link href="{relative_path_prefix}output.css" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
             body {{
@@ -182,10 +116,10 @@ def generate_html_file(title, content, filepath):
     header = """
     <header class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold rounded-lg px-3 py-1 hover:bg-indigo-700 transition">PricePilot</a>
+            <a href="/index.html" class="text-2xl font-bold rounded-lg px-3 py-1 hover:bg-indigo-700 transition">PricePilot</a>
             <nav>
+                <a href="/index.html" class="mx-2 hover:underline">ホーム</a>
                 <a href="/about.html" class="mx-2 hover:underline">このサイトについて</a>
-                <a href="/contact.html" class="mx-2 hover:underline">お問い合わせ</a>
             </nav>
         </div>
     </header>
@@ -197,7 +131,8 @@ def generate_html_file(title, content, filepath):
             <p>&copy; 2024 PricePilot. All rights reserved.</p>
             <div class="mt-4">
                 <a href="/privacy.html" class="mx-2 hover:underline">プライバシーポリシー</a> | 
-                <a href="/disclaimer.html" class="mx-2 hover:underline">免責事項</a>
+                <a href="/disclaimer.html" class="mx-2 hover:underline">免責事項</a> | 
+                <a href="/contact.html" class="mx-2 hover:underline">お問い合わせ</a>
             </div>
         </div>
     </footer>
@@ -370,7 +305,7 @@ def create_sitemap(products, output_dir):
     sitemap_content = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 """
-    base_url = "https://your-website.com/"
+    base_url = "https://your-website.com/" 
     
     static_pages = ["index.html", "about.html", "privacy.html", "disclaimer.html", "contact.html"]
     for page in static_pages:
@@ -409,44 +344,39 @@ def generate_website():
     
     ai_cache = load_ai_cache()
     
-    print("商品データを準備中...")
+    print("ダミー商品データを準備中...")
+
+    products_data = []
     
-    # 楽天APIから商品を取得
-    products_data = fetch_products_from_rakuten()
-    
-    # APIから商品が取得できなかった場合は、ダミー商品を1個生成する
-    if not products_data:
-        print("警告: 楽天APIからの商品取得に失敗したため、ダミー商品を1個生成します。")
-        # --- 修正箇所：ダミー生成を1個に限定 ---
-        product_name = "ダミー商品 1"
+    for i in range(1, 101): # 100個のダミー商品
+        product_name = f"最新ガジェット {i}"
+        
+        # 過去の価格履歴をシミュレーション
         price_history = {}
         base_price = random.randint(15000, 100000)
         for d in range(60, 0, -1):
             price_history[(date.today() - timedelta(days=d)).isoformat()] = max(10000, base_price + random.randint(-5000, 5000))
-        current_price = price_history.get((date.today() - timedelta(days=1)).isoformat(), base_price)
-        page_url = f"products/product_dummy_1.html"
+        current_price = price_history[(date.today() - timedelta(days=1)).isoformat()]
+
+        page_url = f"products/product_{i}.html"
+        
+        # キャッシュを利用してAI分析を生成
+        ai_headline, ai_detail = generate_ai_analysis(product_name, current_price, price_history, ai_cache)
+        
         products_data.append({
             'name': product_name,
             'price': current_price,
             'price_history': price_history,
             'description': f"これは、{product_name}に関する詳細な商品説明です。画期的な機能と優れたデザインを備えています。",
-            'url': f"https://example.com/buy/dummy/1",
-            'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+1",
+            'url': f"https://example.com/buy/{i}",
+            'image': f"https://placehold.co/400x400/2180A0/ffffff?text=Product+{i}",
             'page_url': page_url,
-            'ai_headline': 'AI分析準備中',
-            'ai_details': '詳細なAI分析は現在準備中です。',
+            'ai_headline': ai_headline,
+            'ai_details': ai_detail
         })
-        # ----------------------------------
-    else:
-        # AI分析を生成して商品データに追加 (楽天APIから商品が取得できた場合のみ実行)
-        for product in products_data:
-            ai_headline, ai_detail = generate_ai_analysis(product['name'], product['price'], product['price_history'], ai_cache)
-            product['ai_headline'] = ai_headline
-            product['ai_details'] = ai_detail
 
-    # AI分析キャッシュを保存 (楽天APIから商品が取得できた場合のみ実行)
-    if products_data and 'ダミー商品' not in products_data[0]['name']:
-        save_ai_cache(ai_cache)
+    # AI分析キャッシュを保存
+    save_ai_cache(ai_cache)
     
     print("ウェブサイトのファイル生成を開始します。")
     
