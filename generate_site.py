@@ -23,7 +23,10 @@ RAKUTEN_API_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/2017
 RAKUTEN_API_KEY = os.environ.get("RAKUTEN_API_KEY")
 # 楽天のジャンルIDを複数設定
 RAKUTEN_GENRE_IDS = {
-    '食品': 100227
+    # 常に商品が豊富にある人気ジャンルを試す
+    '本・雑誌・コミック': 200162,
+    'DVD': 563469,
+    'CD': 562624,
 }
 
 # GPT-4o-miniモデルを使用
