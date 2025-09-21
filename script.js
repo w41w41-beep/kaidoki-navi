@@ -9,22 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const productCards = Array.from(productGrid.querySelectorAll('.product-card'));
 
-    // 検索を実行する関数
-    const filterProducts = () => {
-        // キーワードを小文字に変換し、全角のカタカナ・英数字・スペースを半角に統一
-        const query = searchInput.value.toLowerCase().trim()
+    // 正規化用の関数
+    const normalizeText = (text) => {
+        return text.toLowerCase().trim()
             .replace(/[ァ-ヶ]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0x3000 + 0x20))
             .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0xFEE0))
             .replace(/　/g, ' ');
+    };
+
+    // 検索を実行する関数
+    const filterProducts = () => {
+        const query = normalizeText(searchInput.value);
 
         productCards.forEach(card => {
-            // 商品名も同様に正規化
-            const productName = card.querySelector('.product-name').textContent.toLowerCase()
-                .replace(/[ァ-ヶ]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0x3000 + 0x20))
-                .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0xFEE0))
-                .replace(/　/g, ' ');
+            // 商品名を正規化
+            const productName = normalizeText(card.querySelector('.product-name').textContent);
 
-            if (productName.includes(query)) {
+            // タグを正規化して1つの文字列に結合
+            const tagElements = card.querySelectorAll('.tag');
+            const tagText = Array.from(tagElements).map(tag => normalizeText(tag.textContent)).join(' ');
+
+            // 商品名 or タグのいずれかに検索ワードが含まれていれば表示
+            if (productName.includes(query) || tagText.includes(query)) {
                 card.style.display = '';
             } else {
                 card.style.display = 'none';
