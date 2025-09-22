@@ -27,9 +27,9 @@
             <a href="./tags/index.html">タグから探す</a><span class="separator">|</span><a href="./category/最安値/index.html">最安値</a><span class="separator">|</span><a href="./category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
-    <div class="genre-links-container">
+    <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links">
-            <a href="./category/最安値/index.html">最安値</a><span class="separator">|</span>
+            <a href="./category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span>
         </div>
     </div>
 <main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">
@@ -39,7 +39,7 @@
         <h3 class="product-name">ボシュロム　メダリスト ワンデープラス　...</h3>
         <p class="product-price">6,077円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">今がまさに最安値！6077円で購入チャンス！</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
     </div>
 </a>
             </div></main>
@@ -54,6 +54,46 @@
     </footer>
     <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+
+                new Chart(priceChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日付'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '価格（円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
         
