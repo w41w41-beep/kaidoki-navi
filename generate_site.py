@@ -225,13 +225,17 @@ def fetch_rakuten_items():
     
     # 3. 全ての検索キーワードをまとめる
     all_searches = target_genres + concept_keywords
+    
+    # PRODUCTS_PER_PAGE の数だけ取得する
+    search_keywords = [item['keyword'] for item in all_searches]
+    # 足りない分はランダムなキーワードで埋める
+    while len(search_keywords) < PRODUCTS_PER_PAGE:
+        search_keywords.append('生活家電') # 一例として「生活家電」を追加
 
     all_products = []
 
-    # 「型落ちモデル」を優先的に取得するためのソート順
-    # レビュー件数が多い順 (-reviewCount) = 多くの人に評価された定番商品
-    # + 価格が安い順 (+itemPrice) = 型落ちなどで安くなった商品
-    sort_order = "-reviewCount,+itemPrice"
+    # ソート順を価格が安い順に固定
+    sort_order = "+itemPrice"
 
     for item in all_searches:
         keyword = item["keyword"]
@@ -280,7 +284,8 @@ def fetch_rakuten_items():
     unique_products = OrderedDict()
     for p in all_products:
         unique_products[p['id']] = p
-    return list(unique_products.values())
+    return list(unique_products.values())[:PRODUCTS_PER_PAGE]
+
 
 def update_products_csv(new_products):
     """
@@ -288,26 +293,23 @@ def update_products_csv(new_products):
     この関数内でAI分析とメタデータ生成を実行する。
     """
     cached_products = get_cached_data()
-    updated_products = {}
+    updated_products = cached_products.copy()
 
-    # 既存のキャッシュデータをupdated_productsにコピー
-    for item_id, product in cached_products.items():
-        updated_products[item_id] = product
-
+    # 新規商品の統合と既存商品の価格更新
     for product in new_products:
         item_id = product['id']
         is_new_product = item_id not in updated_products
 
         if is_new_product:
-            # 新規商品の場合は、既存の商品情報にAIデータを追加
+            # 新規商品はそのまま追加
             updated_products[item_id] = product
         else:
-            # 既存の商品の場合、価格履歴を更新
+            # 既存商品の場合、価格履歴を更新
             existing_product = updated_products[item_id]
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
             try:
-                current_price = int(product['price'].replace(',', ''))
+                current_price = int(str(product['price']).replace(',', ''))
             except (ValueError, KeyError):
                 current_price = 0
 
@@ -315,7 +317,6 @@ def update_products_csv(new_products):
                 price_history.append({"date": current_date, "price": current_price})
 
             existing_product['price_history'] = price_history
-            updated_products[item_id] = existing_product
 
     # AIメタデータと分析を更新（新規・既存問わず）
     for item_id, product in updated_products.items():
@@ -383,12 +384,14 @@ def generate_site(products):
     ]
     for cat in sorted_main_cats:
         global_nav_categories.append({'name': cat, 'link': f'category/{cat}/index.html'})
+    
+    # タグの一覧を生成
+    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
 
 
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
         if "pages" in current_path or "category" in current_path or "tags" in current_path:
             base_path = ".."
-            # category/main_cat/sub_cat.html のようなパスの場合
             if len(current_path.split('/')) > 2:
                 base_path = "../../"
         else:
@@ -397,7 +400,9 @@ def generate_site(products):
         main_links_html = ""
         for cat in global_nav_categories:
             main_links_html += f'<a href="{base_path}/{cat["link"]}">{cat["name"]}</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
         main_links_html = main_links_html.rstrip('<span class="separator">|</span>')
+
 
         header_html = f"""
 <!DOCTYPE html>
@@ -433,7 +438,6 @@ def generate_site(products):
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
-                # リンクの空白を削除
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html = sub_cat_links_html.rstrip('<span class="separator">|</span>')
             sub_cat_links_html += '</div>'
@@ -603,11 +607,10 @@ def generate_site(products):
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
 
-            # 最安値カテゴリの商品フィルタリング
             if special_cat == '最安値':
                 filtered_products = [p for p in products if p.get('category', {}).get('main', '') == '最安値' and p.get('category', {}).get('sub', '') == sub_cat]
-                filtered_products.sort(key=lambda x: int(x.get('price', 0)))  # 価格が低い順にソート
-            else:  # 期間限定セールなど
+                filtered_products.sort(key=lambda x: int(x.get('price', 0)))
+            else:
                 filtered_products = [p for p in products if p.get('category', {}).get('main', '') == '期間限定セール' and p.get('category', {}).get('sub', '') == sub_cat]
 
             header, footer = generate_header_footer(page_path, page_title=f"{special_cat} > {sub_cat}の商品一覧")
@@ -674,7 +677,6 @@ def generate_site(products):
                 pagination_html += f'<a href="{os.path.relpath(next_link, os.path.dirname(page_path))}" class="next">次へ</a>'
             pagination_html += '</div>'
         with open(page_path, 'w', encoding='utf-8') as f:
-            # ページごとに表示する見出しを変更
             page_title_text = "今が買い時！お得な注目アイテム" if page_num == 1 else f"商品一覧（{page_num}/{total_pages}ページ）"
             f.write(header + f'<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">{page_title_text}</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
@@ -701,7 +703,6 @@ def generate_site(products):
                     <p>{product.get('specs', '')}</p>
                 </div>
             """
-        # 価格履歴が空の場合、現在価格を最初のデータとして追加
         price_history_for_chart = product.get('price_history', [])
         if not price_history_for_chart:
             try:
@@ -771,8 +772,6 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
-
-    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
 
     if all_tags:
         os.makedirs('tags', exist_ok=True)
@@ -860,7 +859,6 @@ def generate_site(products):
         sitemap_content += '    <changefreq>daily</changefreq>\n'
         sitemap_content += '    <priority>1.0</priority>\n'
         sitemap_content += '  </url>\n'
-        # 独自のカテゴリを追加
         for main_cat, sub_cats in special_categories.items():
             sitemap_content += '  <url>\n'
             sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
@@ -875,7 +873,6 @@ def generate_site(products):
                 sitemap_content += '    <changefreq>daily</changefreq>\n'
                 sitemap_content += '    <priority>0.7</priority>\n'
                 sitemap_content += '  </url>\n'
-        # 一般カテゴリを追加
         for main_cat, sub_cats in categories.items():
             sitemap_content += '  <url>\n'
             sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
