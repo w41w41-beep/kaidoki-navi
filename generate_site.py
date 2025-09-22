@@ -7,6 +7,7 @@ from datetime import date
 import requests
 import csv
 import urllib.parse
+from collections import OrderedDict
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -197,17 +198,48 @@ def generate_ai_analysis(product_name, product_price, price_history):
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
 def fetch_rakuten_items():
-    """楽天APIから1件の商品データを取得する関数"""
+    """楽天APIから複数のジャンルの商品と最安値の商品を取得する関数"""
     app_id = os.environ.get('RAKUTEN_API_KEY')
     if not app_id:
         print("RAKUTEN_API_KEYが設定されていません。")
         return []
 
-    keywords = ['最安値', '割引', 'セール', 'お得な商品', '訳あり']
+    # 1. あなたが選んだジャンルとメインカテゴリーを定義
+    target_genres = [
+        {"keyword": "ロボット掃除機", "main_category": "生活家電"},
+        {"keyword": "ゲーミングモニター", "main_category": "PC・周辺機器"},
+        # {"keyword": "次のジャンル名", "main_category": "次のメインカテゴリー名"},
+    ]
+
+    # 2. サイトのコンセプトに合わせたキーワードを定義
+    concept_keywords = [
+        {"keyword": "セール", "main_category": "期間限定セール"},
+        {"keyword": "期間限定", "main_category": "期間限定セール"},
+        {"keyword": "タイムセール", "main_category": "期間限定セール"},
+        {"keyword": "スーパーセール", "main_category": "期間限定セール"},
+        {"keyword": "最安値", "main_category": "最安値"},
+        {"keyword": "特価", "main_category": "最安値"},
+        {"keyword": "訳あり", "main_category": "最安値"},
+        {"keyword": "アウトレット", "main_category": "最安値"},
+    ]
+    
+    # 3. 全ての検索キーワードをまとめる
+    all_searches = target_genres + concept_keywords
+
     all_products = []
 
-    for keyword in keywords:
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
+    # 「型落ちモデル」を優先的に取得するためのソート順
+    # レビュー件数が多い順 (-reviewCount) = 多くの人に評価された定番商品
+    # + 価格が安い順 (+itemPrice) = 型落ちなどで安くなった商品
+    sort_order = "-reviewCount,+itemPrice"
+
+    for item in all_searches:
+        keyword = item["keyword"]
+        main_category = item["main_category"]
+        
+        # 検索は hits=1 とし、各キーワードで1件ずつ取得
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort={sort_order}&hits=1"
+        
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
@@ -218,7 +250,6 @@ def fetch_rakuten_items():
                 item_data = items[0]['Item']
                 description = item_data.get('itemCaption', '')
 
-                # 新しい商品情報を構築
                 new_product = {
                     "id": item_data['itemCode'],
                     "name": item_data['itemName'],
@@ -228,7 +259,7 @@ def fetch_rakuten_items():
                     "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
                     "amazon_url": AMAZON_AFFILIATE_LINK,
                     "page_url": f"pages/{item_data['itemCode']}.html",
-                    "category": {"main": "コンタクトレンズ", "sub": ""},
+                    "category": {"main": main_category, "sub": ""},
                     "ai_headline": "",
                     "ai_analysis": "",
                     "description": description,
@@ -239,14 +270,17 @@ def fetch_rakuten_items():
                     "price_history": []
                 }
                 all_products.append(new_product)
-                break  # 1つ見つかったらループを抜ける
 
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
         except (IndexError, KeyError) as e:
             print(f"楽天APIの応答形式が不正です: {e}")
-
-    return all_products
+            
+    # 重複を削除して最終的なリストを返す
+    unique_products = OrderedDict()
+    for p in all_products:
+        unique_products[p['id']] = p
+    return list(unique_products.values())
 
 def update_products_csv(new_products):
     """
@@ -254,7 +288,6 @@ def update_products_csv(new_products):
     この関数内でAI分析とメタデータ生成を実行する。
     """
     cached_products = get_cached_data()
-
     updated_products = {}
 
     # 既存のキャッシュデータをupdated_productsにコピー
@@ -286,8 +319,8 @@ def update_products_csv(new_products):
 
     # AIメタデータと分析を更新（新規・既存問わず）
     for item_id, product in updated_products.items():
-        # ai_summaryまたはtagsが空の場合は再生成
-        if not product.get('ai_summary') or not product.get('tags'):
+        # 新規商品、またはai_summary/tagsが空の場合はフルAIメタデータ生成
+        if item_id in [p['id'] for p in new_products] or not product.get('ai_summary') or not product.get('tags'):
             print(f"商品: '{product['name']}' のAIメタデータを再生成中...")
             ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
             if ai_summary and ai_summary != "この商品の詳しい説明は準備中です。":
@@ -295,12 +328,6 @@ def update_products_csv(new_products):
             if tags:
                 product['tags'] = tags
             if sub_category and 'category' in product and isinstance(product['category'], dict):
-                product['category']['sub'] = sub_category
-        # categoryのsubが空の場合も生成
-        elif 'category' in product and isinstance(product['category'], dict) and not product['category'].get('sub'):
-            print(f"商品: '{product['name']}' のサブカテゴリーを生成中...")
-            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
-            if sub_category and sub_category != "":
                 product['category']['sub'] = sub_category
 
         # ai_headlineとai_analysisを常に最新に更新
@@ -345,9 +372,18 @@ def generate_site(products):
 
     # 独自のカテゴリを追加
     special_categories = {
-        '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('sub', '')))),
-        '期間限定セール': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags']))))
+        '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('main', '') == '最安値' and p.get('category', {}).get('sub', '')))),
+        '期間限定セール': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('main', '') == '期間限定セール' and p.get('category', {}).get('sub', ''))))
     }
+    
+    # サイトのグローバルナビゲーションに表示するカテゴリを定義
+    global_nav_categories = [
+        {'name': '最安値', 'link': 'category/最安値/index.html'},
+        {'name': '期間限定セール', 'link': 'category/期間限定セール/index.html'},
+    ]
+    for cat in sorted_main_cats:
+        global_nav_categories.append({'name': cat, 'link': f'category/{cat}/index.html'})
+
 
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
         if "pages" in current_path or "category" in current_path or "tags" in current_path:
@@ -358,13 +394,10 @@ def generate_site(products):
         else:
             base_path = "."
 
-        main_links_html = f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/最安値/index.html">最安値</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>'
-
-        sub_genre_links = ""
-        for mc_link in sorted_main_cats:
-            sub_genre_links += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
+        main_links_html = ""
+        for cat in global_nav_categories:
+            main_links_html += f'<a href="{base_path}/{cat["link"]}">{cat["name"]}</a><span class="separator">|</span>'
+        main_links_html = main_links_html.rstrip('<span class="separator">|</span>')
 
         header_html = f"""
 <!DOCTYPE html>
@@ -395,11 +428,6 @@ def generate_site(products):
             {main_links_html}
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links">
-            {sub_genre_links}
-        </div>
-    </div>
 """
         sub_cat_links_html = ""
         if sub_cat_links:
@@ -407,6 +435,7 @@ def generate_site(products):
             for sub_cat_link in sorted(sub_cat_links):
                 # リンクの空白を削除
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+            sub_cat_links_html = sub_cat_links_html.rstrip('<span class="separator">|</span>')
             sub_cat_links_html += '</div>'
             header_html += f"""
     <div class="sub-genre-links-container" style="margin-top: -10px;">
@@ -571,15 +600,15 @@ def generate_site(products):
         print(f"category/{special_cat}/index.html が生成されました。")
 
         for sub_cat in sub_cats:
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            sub_cat_file_name = f"{sub_cat.replace(" ", "")}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
 
             # 最安値カテゴリの商品フィルタリング
             if special_cat == '最安値':
-                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
+                filtered_products = [p for p in products if p.get('category', {}).get('main', '') == '最安値' and p.get('category', {}).get('sub', '') == sub_cat]
                 filtered_products.sort(key=lambda x: int(x.get('price', 0)))  # 価格が低い順にソート
             else:  # 期間限定セールなど
-                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat and any(tag in ['セール', '期間限定'] for tag in p.get('tags', []))]
+                filtered_products = [p for p in products if p.get('category', {}).get('main', '') == '期間限定セール' and p.get('category', {}).get('sub', '') == sub_cat]
 
             header, footer = generate_header_footer(page_path, page_title=f"{special_cat} > {sub_cat}の商品一覧")
             main_content_html = f"""
@@ -645,7 +674,9 @@ def generate_site(products):
                 pagination_html += f'<a href="{os.path.relpath(next_link, os.path.dirname(page_path))}" class="next">次へ</a>'
             pagination_html += '</div>'
         with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
+            # ページごとに表示する見出しを変更
+            page_title_text = "今が買い時！お得な注目アイテム" if page_num == 1 else f"商品一覧（{page_num}/{total_pages}ページ）"
+            f.write(header + f'<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">{page_title_text}</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
 
     for product in products:
