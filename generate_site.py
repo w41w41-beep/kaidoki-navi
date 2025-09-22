@@ -600,7 +600,7 @@ def generate_site(products):
         print(f"category/{special_cat}/index.html が生成されました。")
 
         for sub_cat in sub_cats:
-            sub_cat_file_name = f"{sub_cat.replace(" ", "")}.html"
+            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
 
             # 最安値カテゴリの商品フィルタリング
