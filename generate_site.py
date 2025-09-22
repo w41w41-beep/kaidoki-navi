@@ -10,7 +10,7 @@ import urllib.parse
 from collections import OrderedDict
 
 # 1ページあたりの商品数を定義
-PRODUCTS_PER_PAGE = 24
+PRODUCTS_PER_PAGE = 10
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
