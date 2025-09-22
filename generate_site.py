@@ -21,52 +21,81 @@ def get_cached_data():
     """CSVファイルからキャッシュされた商品データを読み込む"""
     cached_data = {}
     if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                # KeyErrorを避けるため、get()メソッドを使用
-                price_history_str = row.get('price_history', '[]')
-                tags_str = row.get('tags', '[]')
+        try:
+            with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                # ヘッダーに'id'が存在しない場合は処理を終了
+                if 'id' not in reader.fieldnames:
+                    print("警告: CSVファイルに'id'ヘッダーが見つかりません。")
+                    return {}
                 
-                row['price_history'] = json.loads(price_history_str.replace("'", '"'))
-                row['tags'] = json.loads(tags_str.replace("'", '"'))
-                cached_data[row['id']] = row
+                for row in reader:
+                    # 'id'が空の行はスキップ
+                    if not row.get('id'):
+                        continue
+                    
+                    product_id = row['id']
+                    
+                    # 価格履歴の読み込みとエラーハンドリング
+                    price_history_str = row.get('price_history', '[]')
+                    try:
+                        row['price_history'] = json.loads(price_history_str.replace("'", '"'))
+                    except json.JSONDecodeError:
+                        print(f"価格履歴のパースに失敗しました: ID {product_id}。データ: '{price_history_str}'")
+                        row['price_history'] = []
+                    
+                    # タグの読み込みとエラーハンドリング
+                    tags_str = row.get('tags', '[]')
+                    try:
+                        row['tags'] = json.loads(tags_str.replace("'", '"'))
+                    except json.JSONDecodeError:
+                        print(f"タグのパースに失敗しました: ID {product_id}。データ: '{tags_str}'")
+                        row['tags'] = []
+                    
+                    # categoryキーが文字列の場合に辞書に変換
+                    if isinstance(row.get('category'), str):
+                        try:
+                            row['category'] = json.loads(row['category'].replace("'", '"'))
+                        except json.JSONDecodeError:
+                            row['category'] = {"main": "不明", "sub": ""}
+                    elif 'category' not in row or not isinstance(row['category'], dict):
+                        row['category'] = {"main": "不明", "sub": ""}
+
+                    cached_data[product_id] = row
+        except csv.Error as e:
+            print(f"CSVファイルの読み込み中にエラーが発生しました: {e}")
+            return {}
     return cached_data
 
 def save_to_cache(products):
     """商品データをCSVファイルに保存する"""
     if not products:
         return
-    fieldnames = list(products[0].keys())
-    # 既存のCSVにない新しいフィールド名を追加
-    existing_fieldnames = []
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            existing_fieldnames = reader.fieldnames
     
-    # 新しいフィールド名が存在する場合、既存のフィールド名にマージ
-    for key in fieldnames:
-        if key not in existing_fieldnames:
-            existing_fieldnames.append(key)
-            
+    # 全ての商品のキーを収集してフィールド名リストを作成
+    fieldnames = set()
+    for p in products:
+        fieldnames.update(p.keys())
+    fieldnames = sorted(list(fieldnames), key=lambda x: ['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history'].index(x) if x in ['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history'] else len(['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history']))
+    
     with open(CACHE_FILE, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=existing_fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for product in products:
             # リストや辞書を文字列に変換して保存
             product_to_write = product.copy()
             product_to_write['price_history'] = json.dumps(product_to_write.get('price_history', []), ensure_ascii=False)
             product_to_write['tags'] = json.dumps(product_to_write.get('tags', []), ensure_ascii=False)
+            product_to_write['category'] = json.dumps(product_to_write.get('category', {"main": "不明", "sub": ""}), ensure_ascii=False)
             writer.writerow(product_to_write)
-
+            
 def generate_ai_metadata(product_name, product_description):
     """
     OpenAI APIを使用して、商品の要約、タグ、サブカテゴリーを生成する。
     """
     if not OPENAI_API_KEY:
         print("警告: OpenAI APIキーが設定されていません。AIメタデータ生成はスキップされます。")
-        return "", [], ""
+        return "この商品の詳しい説明は準備中です。", [], ""
     
     headers = {
         'Content-Type': 'application/json',
@@ -170,14 +199,13 @@ def fetch_rakuten_items():
         print("RAKUTEN_API_KEYが設定されていません。")
         return []
 
-    # 買い時を判断しやすいキーワードを優先的に検索
     keywords = ['最安値', '割引', 'セール', 'お得な商品', '訳あり']
     all_products = []
 
     for keyword in keywords:
         url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             data = response.json()
             items = data.get('Items', [])
@@ -191,9 +219,9 @@ def fetch_rakuten_items():
                     "id": item_data['itemCode'],
                     "name": item_data['itemName'],
                     "price": str(item_data['itemPrice']),
-                    "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
-                    "rakuten_url": item_data['itemUrl'],
-                    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=" + item_data['itemName'], # Yahoo!ショッピング検索リンクを復活
+                    "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
+                    "rakuten_url": item_data.get('itemUrl', ''),
+                    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=" + item_data['itemName'],
                     "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {"main": keyword, "sub": ""},
@@ -211,6 +239,8 @@ def fetch_rakuten_items():
                 
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
+        except (IndexError, KeyError) as e:
+            print(f"楽天APIの応答形式が不正です: {e}")
 
     return all_products
 
@@ -237,7 +267,10 @@ def update_products_csv(new_products):
             # 価格履歴を更新
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
-            current_price = int(product['price'].replace(',', ''))
+            try:
+                current_price = int(product['price'].replace(',', ''))
+            except (ValueError, KeyError):
+                current_price = 0
             
             if not price_history or price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
@@ -253,10 +286,17 @@ def update_products_csv(new_products):
             ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
             product['ai_summary'] = ai_summary
             product['tags'] = tags
-            product['category']['sub'] = sub_category
+            if 'category' in product and isinstance(product['category'], dict):
+                product['category']['sub'] = sub_category
+            else:
+                product['category'] = {"main": "不明", "sub": sub_category}
             
-            price_history = [{"date": date.today().isoformat(), "price": int(product['price'].replace(',', ''))}]
-            product['price_history'] = price_history
+            try:
+                price_int = int(product['price'].replace(',', ''))
+                price_history = [{"date": date.today().isoformat(), "price": price_int}]
+                product['price_history'] = price_history
+            except (ValueError, KeyError):
+                product['price_history'] = []
             
             updated_products[item_id] = product
     
@@ -264,12 +304,12 @@ def update_products_csv(new_products):
     for item_id, product in updated_products.items():
         try:
             price_history = product.get('price_history', [])
-            price_int = int(product['price'].replace(',', ''))
+            price_int = int(str(product['price']).replace(',', ''))
             ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
             product['ai_headline'] = ai_headline
             product['ai_analysis'] = ai_analysis_text
-        except ValueError:
-            print(f"価格の変換に失敗しました: {product['price']}")
+        except (ValueError, KeyError):
+            print(f"価格の変換に失敗しました: {product.get('price', '不明')}")
             product['ai_headline'] = "AI分析準備中"
             product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
     
@@ -285,12 +325,12 @@ def generate_site(products):
     for product in products:
         if 'date' not in product:
             product['date'] = today
-    products.sort(key=lambda p: p['date'], reverse=True)
+    products.sort(key=lambda p: p.get('date', '1970-01-01'), reverse=True)
     
     categories = {}
     for product in products:
-        main_cat = product['category']['main']
-        sub_cat = product['category']['sub']
+        main_cat = product.get('category', {}).get('main', '不明')
+        sub_cat = product.get('category', {}).get('sub', '')
         if main_cat not in categories:
             categories[main_cat] = []
         if sub_cat and sub_cat not in categories[main_cat]:
@@ -346,6 +386,7 @@ def generate_site(products):
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
+                # リンクの空白を削除
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
@@ -378,17 +419,21 @@ def generate_site(products):
     
     for root, dirs, files in os.walk('.'):
         for file in files:
-            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml']:
+            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml', 'index.html']:
                 os.remove(os.path.join(root, file))
     if os.path.exists('category'):
-        shutil.rmtree('category')
+        shutil.rmtree('category', ignore_errors=True)
     if os.path.exists('pages'):
-        shutil.rmtree('pages')
+        shutil.rmtree('pages', ignore_errors=True)
     if os.path.exists('tags'):
-        shutil.rmtree('tags')
+        shutil.rmtree('tags', ignore_errors=True)
+    
+    os.makedirs('pages', exist_ok=True)
+    os.makedirs('category', exist_ok=True)
+    os.makedirs('tags', exist_ok=True)
 
     for main_cat, sub_cats in categories.items():
-        main_cat_products = [p for p in products if p['category']['main'] == main_cat]
+        main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
         page_path = f"category/{main_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
         header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{main_cat}の商品一覧")
@@ -403,12 +448,12 @@ def generate_site(products):
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{product['image_url']}" alt="{product['name']}">
+    <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
     <div class="product-info">
-        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{int(product['price']):,}円</p>
+        <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
+        <p class="product-price">{int(product.get('price', 0)):,}円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+        <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
     </div>
 </a>
             """
@@ -416,7 +461,7 @@ def generate_site(products):
             f.write(header + main_content_html + products_html + "</div>" + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
         for sub_cat in sub_cats:
-            sub_cat_products = [p for p in products if p['category']['sub'] == sub_cat]
+            sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{main_cat}/{sub_cat_file_name}"
             header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
@@ -431,14 +476,14 @@ def generate_site(products):
                 link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
                 products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{product['image_url']}" alt="{product['name']}">
+    <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
     <div class="product-info">
-        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-                        <p class="product-price">{int(product['price']):,}円</p>
-                        <div class="price-status-title">💡注目ポイント</div>
-                        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
-                    </div>
-                </a>
+        <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
+        <p class="product-price">{int(product.get('price', 0)):,}円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
+    </div>
+</a>
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div>" + footer)
@@ -459,12 +504,12 @@ def generate_site(products):
             link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
             products_html += f"""
 <a href="{link_path}" class="product-card">
-    <img src="{product['image_url']}" alt="{product['name']}">
+    <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
     <div class="product-info">
-        <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-        <p class="product-price">{int(product['price']):,}円</p>
+        <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
+        <p class="product-price">{int(product.get('price', 0)):,}円</p>
         <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+        <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
     </div>
 </a>
             """
@@ -491,12 +536,12 @@ def generate_site(products):
         dir_name = os.path.dirname(page_path)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
-        header, footer = generate_header_footer(page_path, page_title=f"{product['name']}の買い時情報")
+        header, footer = generate_header_footer(page_path, page_title=f"{product.get('name', '商品名')}の買い時情報")
         ai_analysis_block_html = f"""
             <div class="ai-analysis-block">
                 <div class="ai-analysis-text">
                     <h2>AIによる買い時分析</h2>
-                    <p>{product['ai_analysis']}</p>
+                    <p>{product.get('ai_analysis', '詳細なAI分析は現在準備中です。')}</p>
                 </div>
             </div>
         """
@@ -508,7 +553,6 @@ def generate_site(products):
                     <p>{product.get('specs', '')}</p>
                 </div>
             """
-        # 価格履歴グラフのJavaScript
         price_history_json = json.dumps(product.get('price_history', []))
         price_chart_html = f"""
         <div class="price-chart-section">
@@ -518,7 +562,7 @@ def generate_site(products):
         """
         purchase_button_html = f"""
         <div class="purchase-buttons">
-            <a href="{product['rakuten_url']}" class="purchase-button rakuten" target="_blank">楽天市場で購入する</a>
+            <a href="{product.get('rakuten_url', '')}" class="purchase-button rakuten" target="_blank">楽天市場で購入する</a>
         </div>
         """
         
@@ -537,18 +581,18 @@ def generate_site(products):
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
-                <img src="{product['image_url']}" alt="{product['name']}" class="main-product-image">
+                <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}" class="main-product-image">
             </div>
             <div class="item-info">
-                <h1 class="item-name">{product['name']}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product['category']['main'] + '/index.html', os.path.dirname(page_path))}">{product['category']['main']}</a> &gt;
-                <a href="{os.path.relpath('category/' + product['category']['main'] + '/' + product['category']['sub'].replace(' ', '') + '.html', os.path.dirname(page_path))}">{product['category']['sub']}</a></p>
+                <h1 class="item-name">{product.get('name', '商品名')}</h1>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/index.html', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt;
+                <a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/' + product.get('category', {}).get('sub', '').replace(' ', '') + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格：<span>{int(product['price']):,}</span>円</p>
+                    <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                    <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
                 </div>
                 {purchase_button_html}
                 {ai_analysis_block_html}
@@ -556,7 +600,7 @@ def generate_site(products):
                 {affiliate_links_html}
                 <div class="item-description">
                     <h2>AIによる商品ハイライト</h2>
-                    <p>{product.get('ai_summary', '')}</p>
+                    <p>{product.get('ai_summary', 'この商品の詳しい説明は準備中です。')}</p>
                 </div>
                 {specs_html}
                 <div class="product-tags">
@@ -571,13 +615,10 @@ def generate_site(products):
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
     
-    # タグ一覧ページと個別タグページの生成
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     
     if all_tags:
         os.makedirs('tags', exist_ok=True)
-        
-        # タグ一覧ページ
         tag_list_html_content = f"""
 <main class="container">
     <div class="ai-recommendation-section">
@@ -593,7 +634,6 @@ def generate_site(products):
             f.write(tag_header + tag_list_html_content + tag_footer)
         print("タグ一覧ページ: tags/index.html が生成されました。")
         
-        # 個別タグページ
         for tag in all_tags:
             tag_page_path = f'tags/{tag}.html'
             tag_products = [product for product in products if tag in product.get('tags', [])]
@@ -603,13 +643,13 @@ def generate_site(products):
         <h2 class="ai-section-title">#{tag} の商品一覧</h2>
         <div class="product-grid">
             {"".join([f'''
-            <a href="../{product['page_url']}" class="product-card">
-                <img src="{product['image_url']}" alt="{product['name']}">
+            <a href="../{product.get('page_url', '')}" class="product-card">
+                <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
                 <div class="product-info">
-                    <h3 class="product-name">{product['name'][:20] + '...' if len(product['name']) > 20 else product['name']}</h3>
-                    <p class="product-price">{int(product['price']):,}円</p>
+                    <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
+                    <p class="product-price">{int(product.get('price', 0)):,}円</p>
                     <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product['ai_headline']}</div>
+                    <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
                 </div>
             </a>
             ''' for product in tag_products])}
@@ -665,8 +705,8 @@ def generate_site(products):
         sitemap_content += '  </url>\n'
         categories = {}
         for product in products:
-            main_cat = product['category']['main']
-            sub_cat = product['category']['sub']
+            main_cat = product.get('category', {}).get('main', '不明')
+            sub_cat = product.get('category', {}).get('sub', '')
             if main_cat not in categories:
                 categories[main_cat] = set()
             categories[main_cat].add(sub_cat)
@@ -693,7 +733,7 @@ def generate_site(products):
             sitemap_content += '  </url>\n'
         for product in products:
             sitemap_content += '  <url>\n'
-            sitemap_content += f'    <loc>{base_url}{product["page_url"]}</loc>\n'
+            sitemap_content += f'    <loc>{base_url}{product.get("page_url", "")}</loc>\n'
             sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
             sitemap_content += '    <changefreq>daily</changefreq>\n'
             sitemap_content += '    <priority>0.6</priority>\n'
