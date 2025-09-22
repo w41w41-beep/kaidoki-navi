@@ -229,8 +229,8 @@ def fetch_rakuten_items():
                     "amazon_url": AMAZON_AFFILIATE_LINK,
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {"main": "コンタクトレンズ", "sub": ""},
-                    "ai_headline": "AI分析準備中",
-                    "ai_analysis": "詳細なAI分析は現在準備中です。",
+                    "ai_headline": "",
+                    "ai_analysis": "",
                     "description": description,
                     "ai_summary": "",
                     "tags": [],
@@ -263,12 +263,14 @@ def update_products_csv(new_products):
 
     for product in new_products:
         item_id = product['id']
+        is_new_product = item_id not in updated_products
 
-        if item_id in updated_products:
+        if is_new_product:
+            # 新規商品の場合は、既存の商品情報にAIデータを追加
+            updated_products[item_id] = product
+        else:
             # 既存の商品の場合、価格履歴を更新
             existing_product = updated_products[item_id]
-
-            # 価格履歴を更新
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
             try:
@@ -279,44 +281,43 @@ def update_products_csv(new_products):
             if not price_history or price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
 
-            product['price_history'] = price_history
+            existing_product['price_history'] = price_history
+            updated_products[item_id] = existing_product
 
-            # 既存の商品情報で上書き
-            updated_products[item_id].update(product)
-
-        else:
-            # 新規商品の場合はAIでメタデータを生成
-            print(f"新規商品: '{product['name']}' のAIメタデータを生成中...")
-            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
-            product['ai_summary'] = ai_summary
-            product['tags'] = tags
-            if 'category' in product and isinstance(product['category'], dict):
-                product['category']['sub'] = sub_category
-            else:
-                product['category'] = {"main": "コンタクトレンズ", "sub": sub_category}
-
-            try:
-                price_int = int(product['price'].replace(',', ''))
-                price_history = [{"date": date.today().isoformat(), "price": price_int}]
-                product['price_history'] = price_history
-            except (ValueError, KeyError):
-                product['price_history'] = []
-
-            updated_products[item_id] = product
-
-    # 価格変動に合わせたAI分析を常に更新
+    # AIメタデータと分析を更新（新規・既存問わず）
     for item_id, product in updated_products.items():
+        # ai_summaryまたはtagsが空の場合は再生成
+        if not product.get('ai_summary') or not product.get('tags'):
+            print(f"商品: '{product['name']}' のAIメタデータを再生成中...")
+            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
+            if ai_summary and ai_summary != "この商品の詳しい説明は準備中です。":
+                product['ai_summary'] = ai_summary
+            if tags:
+                product['tags'] = tags
+            if sub_category and 'category' in product and isinstance(product['category'], dict):
+                product['category']['sub'] = sub_category
+        # categoryのsubが空の場合も生成
+        elif 'category' in product and isinstance(product['category'], dict) and not product['category'].get('sub'):
+            print(f"商品: '{product['name']}' のサブカテゴリーを生成中...")
+            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
+            if sub_category and sub_category != "":
+                product['category']['sub'] = sub_category
+
+        # ai_headlineとai_analysisを常に最新に更新
         try:
             price_history = product.get('price_history', [])
             price_int = int(str(product['price']).replace(',', ''))
             ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
-            product['ai_headline'] = ai_headline
-            product['ai_analysis'] = ai_analysis_text
+            if ai_headline and ai_headline != "AI分析準備中":
+                product['ai_headline'] = ai_headline
+            if ai_analysis_text and ai_analysis_text != "詳細なAI分析は現在準備中です。":
+                product['ai_analysis'] = ai_analysis_text
         except (ValueError, KeyError):
             print(f"価格の変換に失敗しました: {product.get('price', '不明')}")
+            # エラー時もデフォルト値を設定
             product['ai_headline'] = "AI分析準備中"
             product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
-
+    
     final_products = list(updated_products.values())
     save_to_cache(final_products)
 
@@ -729,7 +730,7 @@ def generate_site(products):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="../tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
+                    {"".join([f'<a href="{os.path.relpath("tags/" + tag + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
                 </div>
             </div>
         </div>
