@@ -24,9 +24,12 @@ def get_cached_data():
         with open(CACHE_FILE, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                # 文字列として保存されているリストや辞書を適切に変換
-                row['price_history'] = json.loads(row['price_history'].replace("'", '"')) if row['price_history'] else []
-                row['tags'] = json.loads(row['tags'].replace("'", '"')) if row['tags'] else []
+                # KeyErrorを避けるため、get()メソッドを使用
+                price_history_str = row.get('price_history', '[]')
+                tags_str = row.get('tags', '[]')
+                
+                row['price_history'] = json.loads(price_history_str.replace("'", '"'))
+                row['tags'] = json.loads(tags_str.replace("'", '"'))
                 cached_data[row['id']] = row
     return cached_data
 
@@ -34,15 +37,28 @@ def save_to_cache(products):
     """商品データをCSVファイルに保存する"""
     if not products:
         return
-    fieldnames = products[0].keys()
+    fieldnames = list(products[0].keys())
+    # 既存のCSVにない新しいフィールド名を追加
+    existing_fieldnames = []
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            existing_fieldnames = reader.fieldnames
+    
+    # 新しいフィールド名が存在する場合、既存のフィールド名にマージ
+    for key in fieldnames:
+        if key not in existing_fieldnames:
+            existing_fieldnames.append(key)
+            
     with open(CACHE_FILE, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=existing_fieldnames)
         writer.writeheader()
         for product in products:
             # リストや辞書を文字列に変換して保存
-            product['price_history'] = json.dumps(product['price_history'], ensure_ascii=False)
-            product['tags'] = json.dumps(product['tags'], ensure_ascii=False)
-            writer.writerow(product)
+            product_to_write = product.copy()
+            product_to_write['price_history'] = json.dumps(product_to_write.get('price_history', []), ensure_ascii=False)
+            product_to_write['tags'] = json.dumps(product_to_write.get('tags', []), ensure_ascii=False)
+            writer.writerow(product_to_write)
 
 def generate_ai_metadata(product_name, product_description):
     """
@@ -177,7 +193,7 @@ def fetch_rakuten_items():
                     "price": str(item_data['itemPrice']),
                     "image_url": item_data['mediumImageUrls'][0]['imageUrl'],
                     "rakuten_url": item_data['itemUrl'],
-                    "yahoo_url": "https://shopping.yahoo.co.jp/",
+                    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=" + item_data['itemName'], # Yahoo!ショッピング検索リンクを復活
                     "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {"main": keyword, "sub": ""},
@@ -206,15 +222,17 @@ def update_products_csv(new_products):
     cached_products = get_cached_data()
     
     updated_products = {}
+    
+    # 既存のキャッシュデータをupdated_productsにコピー
+    for item_id, product in cached_products.items():
+        updated_products[item_id] = product
+    
     for product in new_products:
         item_id = product['id']
         
-        if item_id in cached_products:
-            # 既存の商品の場合、キャッシュから要約、タグ、サブカテゴリーを読み込む
-            existing_product = cached_products[item_id]
-            product['ai_summary'] = existing_product.get('ai_summary', "")
-            product['tags'] = existing_product.get('tags', [])
-            product['category']['sub'] = existing_product.get('category', {}).get('sub', "")
+        if item_id in updated_products:
+            # 既存の商品の場合、価格履歴を更新
+            existing_product = updated_products[item_id]
             
             # 価格履歴を更新
             price_history = existing_product.get('price_history', [])
@@ -225,6 +243,9 @@ def update_products_csv(new_products):
                 price_history.append({"date": current_date, "price": current_price})
             
             product['price_history'] = price_history
+            
+            # 既存の商品情報で上書き
+            updated_products[item_id].update(product)
             
         else:
             # 新規商品の場合はAIでメタデータを生成
@@ -237,22 +258,26 @@ def update_products_csv(new_products):
             price_history = [{"date": date.today().isoformat(), "price": int(product['price'].replace(',', ''))}]
             product['price_history'] = price_history
             
-        # 価格変動に合わせたAI分析を常に更新
-        price_history = product['price_history']
-        price_int = int(product['price'].replace(',', ''))
-        ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
-        product['ai_headline'] = ai_headline
-        product['ai_analysis'] = ai_analysis_text
-        
-        updated_products[item_id] = product
+            updated_products[item_id] = product
     
-    # 既存のキャッシュデータをマージ
-    all_products = list(updated_products.values())
+    # 価格変動に合わせたAI分析を常に更新
+    for item_id, product in updated_products.items():
+        try:
+            price_history = product.get('price_history', [])
+            price_int = int(product['price'].replace(',', ''))
+            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
+            product['ai_headline'] = ai_headline
+            product['ai_analysis'] = ai_analysis_text
+        except ValueError:
+            print(f"価格の変換に失敗しました: {product['price']}")
+            product['ai_headline'] = "AI分析準備中"
+            product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
     
-    save_to_cache(all_products)
+    final_products = list(updated_products.values())
+    save_to_cache(final_products)
     
-    print(f"{CACHE_FILE}が更新されました。現在 {len(all_products)} 個の商品を追跡中です。")
-    return all_products
+    print(f"{CACHE_FILE}が更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
+    return final_products
 
 def generate_site(products):
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
