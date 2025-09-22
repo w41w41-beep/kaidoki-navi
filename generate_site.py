@@ -221,8 +221,9 @@ def fetch_rakuten_items():
                     "price": str(item_data['itemPrice']),
                     "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
                     "rakuten_url": item_data.get('itemUrl', ''),
-                    "yahoo_url": "https://shopping.yahoo.co.jp/search?p=" + item_data['itemName'],
-                    "amazon_url": "https://www.amazon.co.jp/ref=as_li_ss_il?ie=UTF8&linkCode=ilc&tag=soc07-22&linkId=db3c1808e6f1f516353d266e76811a7c&language=ja_JP",
+                    # 修正: Yahoo!ショッピングとAmazonのリンクを検索結果ページに
+                    "yahoo_url": f"https://shopping.yahoo.co.jp/search?p={item_data['itemName']}",
+                    "amazon_url": f"https://www.amazon.co.jp/s?k={item_data['itemName']}",
                     "page_url": f"pages/{item_data['itemCode']}.html",
                     "category": {"main": keyword, "sub": ""},
                     "ai_headline": "AI分析準備中",
@@ -337,21 +338,30 @@ def generate_site(products):
             categories[main_cat].append(sub_cat)
 
     sorted_main_cats = sorted(categories.keys())
+    
+    # 独自のカテゴリを追加
+    special_categories = {
+        '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('sub', '')))),
+        '期間限定セール': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags']))))
+    }
 
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
-        if "pages" in current_path:
+        if "pages" in current_path or "category" in current_path or "tags" in current_path:
             base_path = ".."
-        elif "category" in current_path:
-            base_path = "../.."
-        elif "tags" in current_path:
-            base_path = ".."
+            # category/main_cat/sub_cat.html のようなパスの場合
+            if len(current_path.split('/')) > 2:
+                base_path = "../../"
         else:
             base_path = "."
         
         main_links_html = f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/category/最安値/index.html">最安値</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>'
+
+        sub_genre_links = ""
         for mc_link in sorted_main_cats:
-            main_links_html += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
-            
+            sub_genre_links += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
+
         header_html = f"""
 <!DOCTYPE html>
 <html lang="ja">
@@ -381,12 +391,16 @@ def generate_site(products):
             {main_links_html}
         </div>
     </div>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            {sub_genre_links}
+        </div>
+    </div>
 """
         sub_cat_links_html = ""
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
-                # リンクの空白を削除
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
@@ -405,6 +419,7 @@ def generate_site(products):
         </div>
     </footer>
     <script src="{base_path}/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
         """
@@ -419,7 +434,7 @@ def generate_site(products):
     
     for root, dirs, files in os.walk('.'):
         for file in files:
-            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml', 'index.html']:
+            if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml', 'index.html', 'style.css', 'script.js']:
                 os.remove(os.path.join(root, file))
     if os.path.exists('category'):
         shutil.rmtree('category', ignore_errors=True)
@@ -432,6 +447,7 @@ def generate_site(products):
     os.makedirs('category', exist_ok=True)
     os.makedirs('tags', exist_ok=True)
 
+    # 一般カテゴリのページ生成
     for main_cat, sub_cats in categories.items():
         main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
         page_path = f"category/{main_cat}/index.html"
@@ -458,8 +474,9 @@ def generate_site(products):
 </a>
             """
         with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + main_content_html + products_html + "</div>" + footer)
+            f.write(header + main_content_html + products_html + "</div></div>" + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
+
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
@@ -486,9 +503,64 @@ def generate_site(products):
 </a>
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + products_html + "</div>" + footer)
+                f.write(header + main_content_html + products_html + "</div></div>" + footer)
             print(f"{page_path} が生成されました。")
     
+    # 独自のカテゴリのページ生成
+    for special_cat, sub_cats in special_categories.items():
+        page_path = f"category/{special_cat}/index.html"
+        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{special_cat}の商品一覧")
+        
+        main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{special_cat}のサブカテゴリー一覧</h2>
+            <div class="genre-links sub-genre-links">
+            {"".join([f'<a href="{sub_cat.replace(" ", "")}.html">{sub_cat}</a><span class="separator">|</span>' for sub_cat in sorted(sub_cats)])}
+            </div>
+        </div>
+    """
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + "</main>" + footer)
+        print(f"category/{special_cat}/index.html が生成されました。")
+        
+        for sub_cat in sub_cats:
+            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            page_path = f"category/{special_cat}/{sub_cat_file_name}"
+            
+            # 最安値カテゴリの商品フィルタリング
+            if special_cat == '最安値':
+                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
+                filtered_products.sort(key=lambda x: int(x.get('price', 0))) # 価格が低い順にソート
+            else: # 期間限定セールなど
+                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat and any(tag in ['セール', '期間限定'] for tag in p.get('tags', []))]
+            
+            header, footer = generate_header_footer(page_path, page_title=f"{special_cat} > {sub_cat}の商品一覧")
+            main_content_html = f"""
+    <main class="container">
+        <div class="ai-recommendation-section">
+            <h2 class="ai-section-title">{sub_cat}のお得な商品一覧</h2>
+            <div class="product-grid">
+            """
+            products_html = ""
+            for product in filtered_products:
+                link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+                products_html += f"""
+<a href="{link_path}" class="product-card">
+    <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
+    <div class="product-info">
+        <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
+        <p class="product-price">{int(product.get('price', 0)):,}円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
+    </div>
+</a>
+                """
+            with open(page_path, 'w', encoding='utf-8') as f:
+                f.write(header + main_content_html + products_html + "</div></div>" + footer)
+            print(f"{page_path} が生成されました。")
+
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(total_pages):
         start_index = i * PRODUCTS_PER_PAGE
@@ -553,7 +625,16 @@ def generate_site(products):
                     <p>{product.get('specs', '')}</p>
                 </div>
             """
-        price_history_json = json.dumps(product.get('price_history', []))
+        # 価格履歴が空の場合、現在価格を最初のデータとして追加
+        price_history_for_chart = product.get('price_history', [])
+        if not price_history_for_chart:
+            try:
+                price_int = int(str(product['price']).replace(',', ''))
+                price_history_for_chart = [{"date": date.today().isoformat(), "price": price_int}]
+            except (ValueError, KeyError):
+                price_history_for_chart = []
+        
+        price_history_json = json.dumps(price_history_for_chart)
         price_chart_html = f"""
         <div class="price-chart-section">
             <h2>価格推移グラフ</h2>
@@ -566,13 +647,17 @@ def generate_site(products):
         </div>
         """
         
+        # 修正: AmazonとYahoo!のリンクを検索結果ページに
+        amazon_search_url = f"https://www.amazon.co.jp/s?k={product.get('name', '')}"
+        yahoo_search_url = f"https://shopping.yahoo.co.jp/search?p={product.get('name', '')}"
+
         affiliate_links_html = f"""
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
                 <div class="lowest-price-buttons">
-                    <a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
+                    <a href="{amazon_search_url}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
                     <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で見る</a>
-                    <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
+                    <a href="{yahoo_search_url}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
                 </div>
             </div>
         """
@@ -703,13 +788,22 @@ def generate_site(products):
         sitemap_content += '    <changefreq>daily</changefreq>\n'
         sitemap_content += '    <priority>1.0</priority>\n'
         sitemap_content += '  </url>\n'
-        categories = {}
-        for product in products:
-            main_cat = product.get('category', {}).get('main', '不明')
-            sub_cat = product.get('category', {}).get('sub', '')
-            if main_cat not in categories:
-                categories[main_cat] = set()
-            categories[main_cat].add(sub_cat)
+        # 独自のカテゴリを追加
+        for main_cat, sub_cats in special_categories.items():
+            sitemap_content += '  <url>\n'
+            sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
+            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+            sitemap_content += '    <changefreq>daily</changefreq>\n'
+            sitemap_content += '    <priority>0.8</priority>\n'
+            sitemap_content += '  </url>\n'
+            for sub_cat in sub_cats:
+                sitemap_content += '  <url>\n'
+                sitemap_content += f'    <loc>{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+                sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+                sitemap_content += '    <changefreq>daily</changefreq>\n'
+                sitemap_content += '    <priority>0.7</priority>\n'
+                sitemap_content += '  </url>\n'
+        # 一般カテゴリを追加
         for main_cat, sub_cats in categories.items():
             sitemap_content += '  <url>\n'
             sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
