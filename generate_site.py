@@ -6,6 +6,7 @@ import time
 from datetime import date
 import requests
 import csv
+import urllib.parse
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -13,9 +14,12 @@ PRODUCTS_PER_PAGE = 24
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # 環境変数からAPIキーを取得
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")  # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
 CACHE_FILE = 'products.csv'
+# AmazonとYahoo!ショッピングのアフィリエイトリンクを定義
+AMAZON_AFFILIATE_LINK = "https://amzn.to/46zr68v"
+YAHOO_AFFILIATE_LINK_BASE = "https://shopping.yahoo.co.jp/search?p="
 
 def get_cached_data():
     """CSVファイルからキャッシュされた商品データを読み込む"""
@@ -28,14 +32,14 @@ def get_cached_data():
                 if 'id' not in reader.fieldnames:
                     print("警告: CSVファイルに'id'ヘッダーが見つかりません。")
                     return {}
-                
+
                 for row in reader:
                     # 'id'が空の行はスキップ
                     if not row.get('id'):
                         continue
-                    
+
                     product_id = row['id']
-                    
+
                     # 価格履歴の読み込みとエラーハンドリング
                     price_history_str = row.get('price_history', '[]')
                     try:
@@ -43,7 +47,7 @@ def get_cached_data():
                     except json.JSONDecodeError:
                         print(f"価格履歴のパースに失敗しました: ID {product_id}。データ: '{price_history_str}'")
                         row['price_history'] = []
-                    
+
                     # タグの読み込みとエラーハンドリング
                     tags_str = row.get('tags', '[]')
                     try:
@@ -51,7 +55,7 @@ def get_cached_data():
                     except json.JSONDecodeError:
                         print(f"タグのパースに失敗しました: ID {product_id}。データ: '{tags_str}'")
                         row['tags'] = []
-                    
+
                     # categoryキーが文字列の場合に辞書に変換
                     if isinstance(row.get('category'), str):
                         try:
@@ -71,13 +75,13 @@ def save_to_cache(products):
     """商品データをCSVファイルに保存する"""
     if not products:
         return
-    
+
     # 全ての商品のキーを収集してフィールド名リストを作成
     fieldnames = set()
     for p in products:
         fieldnames.update(p.keys())
     fieldnames = sorted(list(fieldnames), key=lambda x: ['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history'].index(x) if x in ['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history'] else len(['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history']))
-    
+
     with open(CACHE_FILE, 'w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -88,7 +92,7 @@ def save_to_cache(products):
             product_to_write['tags'] = json.dumps(product_to_write.get('tags', []), ensure_ascii=False)
             product_to_write['category'] = json.dumps(product_to_write.get('category', {"main": "不明", "sub": ""}), ensure_ascii=False)
             writer.writerow(product_to_write)
-            
+
 def generate_ai_metadata(product_name, product_description):
     """
     OpenAI APIを使用して、商品の要約、タグ、サブカテゴリーを生成する。
@@ -96,7 +100,7 @@ def generate_ai_metadata(product_name, product_description):
     if not OPENAI_API_KEY:
         print("警告: OpenAI APIキーが設定されていません。AIメタデータ生成はスキップされます。")
         return "この商品の詳しい説明は準備中です。", [], ""
-    
+
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
@@ -113,23 +117,23 @@ def generate_ai_metadata(product_name, product_description):
     タグは商品の特徴や用途を表す単語をリスト形式で生成してください。
     サブカテゴリーは、商品のジャンルを細分化した単一の単語を生成してください。
     """
-    
+
     messages = [
         {"role": "system", "content": "あなたは、ウェブサイトのコンテンツ作成をサポートするプロのAIアシスタントです。ユーザーからの指示に従い、商品情報を分析して魅力的なコンテンツを生成します。"},
         {"role": "user", "content": prompt}
     ]
-    
+
     payload = {
         "model": MODEL_NAME,
         "messages": messages,
         "response_format": {"type": "json_object"}
     }
-    
+
     try:
         response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=15)
         response.raise_for_status()
         result = response.json()
-        
+
         json_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
         if json_text:
             metadata = json.loads(json_text)
@@ -137,14 +141,14 @@ def generate_ai_metadata(product_name, product_description):
             tags = metadata.get('tags', [])
             sub_category = metadata.get('sub_category', "")
             return summary, tags, sub_category
-            
+
     except requests.exceptions.Timeout:
         print("OpenAI APIへのリクエストがタイムアウトしました。")
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
     except (IndexError, KeyError, json.JSONDecodeError) as e:
         print(f"OpenAI APIの応答形式が不正です: {e}")
-        
+
     return "この商品の詳しい説明は準備中です。", [], ""
 
 def generate_ai_analysis(product_name, product_price, price_history):
@@ -154,42 +158,42 @@ def generate_ai_analysis(product_name, product_price, price_history):
     if not OPENAI_API_KEY:
         print("警告: OpenAI APIキーが設定されていません。AI分析はスキップされます。")
         return "AI分析準備中", "詳細なAI分析は現在準備中です。"
-    
+
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
 
     history_text = f"過去の価格履歴は以下の通りです: {price_history}" if price_history else "価格履歴はありません。"
-    
+
     messages = [
         {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。"},
         {"role": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。"}
     ]
-    
+
     payload = {
         "model": MODEL_NAME,
         "messages": messages,
         "response_format": {"type": "json_object"}
     }
-    
+
     try:
         response = requests.post(OPENAI_API_URL, headers=headers, data=json.dumps(payload), timeout=10)
         response.raise_for_status()
         result = response.json()
-        
+
         json_text = result.get('choices', [{}])[0].get('message', {}).get('content', '')
         if json_text:
             analysis_data = json.loads(json_text)
             return analysis_data.get('headline', 'AI分析準備中'), analysis_data.get('analysis', '詳細なAI分析は現在準備中です。')
-            
+
     except requests.exceptions.Timeout:
         print("OpenAI APIへのリクエストがタイムアウトしました。")
     except requests.exceptions.RequestException as e:
         print(f"OpenAI APIへのリクエスト中にエラーが発生しました: {e}")
     except (IndexError, KeyError, json.JSONDecodeError) as e:
         print(f"OpenAI APIの応答形式が不正です: {e}")
-        
+
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
 def fetch_rakuten_items():
@@ -209,11 +213,11 @@ def fetch_rakuten_items():
             response.raise_for_status()
             data = response.json()
             items = data.get('Items', [])
-            
+
             if items:
                 item_data = items[0]['Item']
                 description = item_data.get('itemCaption', '')
-                
+
                 # 新しい商品情報を構築
                 new_product = {
                     "id": item_data['itemCode'],
@@ -221,11 +225,10 @@ def fetch_rakuten_items():
                     "price": str(item_data['itemPrice']),
                     "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
                     "rakuten_url": item_data.get('itemUrl', ''),
-                    # 修正: Yahoo!ショッピングとAmazonのリンクを検索結果ページに
-                    "yahoo_url": f"https://shopping.yahoo.co.jp/search?p={item_data['itemName']}",
-                    "amazon_url": f"https://www.amazon.co.jp/s?k={item_data['itemName']}",
+                    "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
+                    "amazon_url": AMAZON_AFFILIATE_LINK,
                     "page_url": f"pages/{item_data['itemCode']}.html",
-                    "category": {"main": keyword, "sub": ""},
+                    "category": {"main": "コンタクトレンズ", "sub": ""},
                     "ai_headline": "AI分析準備中",
                     "ai_analysis": "詳細なAI分析は現在準備中です。",
                     "description": description,
@@ -236,8 +239,8 @@ def fetch_rakuten_items():
                     "price_history": []
                 }
                 all_products.append(new_product)
-                break # 1つ見つかったらループを抜ける
-                
+                break  # 1つ見つかったらループを抜ける
+
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
         except (IndexError, KeyError) as e:
@@ -251,20 +254,20 @@ def update_products_csv(new_products):
     この関数内でAI分析とメタデータ生成を実行する。
     """
     cached_products = get_cached_data()
-    
+
     updated_products = {}
-    
+
     # 既存のキャッシュデータをupdated_productsにコピー
     for item_id, product in cached_products.items():
         updated_products[item_id] = product
-    
+
     for product in new_products:
         item_id = product['id']
-        
+
         if item_id in updated_products:
             # 既存の商品の場合、価格履歴を更新
             existing_product = updated_products[item_id]
-            
+
             # 価格履歴を更新
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
@@ -272,15 +275,15 @@ def update_products_csv(new_products):
                 current_price = int(product['price'].replace(',', ''))
             except (ValueError, KeyError):
                 current_price = 0
-            
+
             if not price_history or price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
-            
+
             product['price_history'] = price_history
-            
+
             # 既存の商品情報で上書き
             updated_products[item_id].update(product)
-            
+
         else:
             # 新規商品の場合はAIでメタデータを生成
             print(f"新規商品: '{product['name']}' のAIメタデータを生成中...")
@@ -290,17 +293,17 @@ def update_products_csv(new_products):
             if 'category' in product and isinstance(product['category'], dict):
                 product['category']['sub'] = sub_category
             else:
-                product['category'] = {"main": "不明", "sub": sub_category}
-            
+                product['category'] = {"main": "コンタクトレンズ", "sub": sub_category}
+
             try:
                 price_int = int(product['price'].replace(',', ''))
                 price_history = [{"date": date.today().isoformat(), "price": price_int}]
                 product['price_history'] = price_history
             except (ValueError, KeyError):
                 product['price_history'] = []
-            
+
             updated_products[item_id] = product
-    
+
     # 価格変動に合わせたAI分析を常に更新
     for item_id, product in updated_products.items():
         try:
@@ -313,10 +316,10 @@ def update_products_csv(new_products):
             print(f"価格の変換に失敗しました: {product.get('price', '不明')}")
             product['ai_headline'] = "AI分析準備中"
             product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
-    
+
     final_products = list(updated_products.values())
     save_to_cache(final_products)
-    
+
     print(f"{CACHE_FILE}が更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
     return final_products
 
@@ -327,7 +330,7 @@ def generate_site(products):
         if 'date' not in product:
             product['date'] = today
     products.sort(key=lambda p: p.get('date', '1970-01-01'), reverse=True)
-    
+
     categories = {}
     for product in products:
         main_cat = product.get('category', {}).get('main', '不明')
@@ -338,7 +341,7 @@ def generate_site(products):
             categories[main_cat].append(sub_cat)
 
     sorted_main_cats = sorted(categories.keys())
-    
+
     # 独自のカテゴリを追加
     special_categories = {
         '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('sub', '')))),
@@ -353,7 +356,7 @@ def generate_site(products):
                 base_path = "../../"
         else:
             base_path = "."
-        
+
         main_links_html = f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
         main_links_html += f'<a href="{base_path}/category/最安値/index.html">最安値</a><span class="separator">|</span>'
         main_links_html += f'<a href="{base_path}/category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>'
@@ -391,7 +394,7 @@ def generate_site(products):
             {main_links_html}
         </div>
     </div>
-    <div class="genre-links-container">
+    <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links">
             {sub_genre_links}
         </div>
@@ -401,10 +404,11 @@ def generate_site(products):
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
+                # リンクの空白を削除
                 sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
-    <div class="sub-genre-links-container">
+    <div class="sub-genre-links-container" style="margin-top: -10px;">
         {sub_cat_links_html}
     </div>
 """
@@ -420,6 +424,46 @@ def generate_site(products):
     </footer>
     <script src="{base_path}/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {{
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+
+                new Chart(priceChartCanvas, {{
+                    type: 'line',
+                    data: {{
+                        labels: dates,
+                        datasets: [{{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }}]
+                    }},
+                    options: {{
+                        responsive: true,
+                        scales: {{
+                            x: {{
+                                title: {{
+                                    display: true,
+                                    text: '日付'
+                                }}
+                            }},
+                            y: {{
+                                title: {{
+                                    display: true,
+                                    text: '価格（円）'
+                                }}
+                            }}
+                        }}
+                    }}
+                }});
+            }}
+        }});
+    </script>
 </body>
 </html>
         """
@@ -431,7 +475,7 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + content_html + footer)
         print(f"{page_path} が生成されました。")
-    
+
     for root, dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml', 'index.html', 'style.css', 'script.js']:
@@ -442,7 +486,7 @@ def generate_site(products):
         shutil.rmtree('pages', ignore_errors=True)
     if os.path.exists('tags'):
         shutil.rmtree('tags', ignore_errors=True)
-    
+
     os.makedirs('pages', exist_ok=True)
     os.makedirs('category', exist_ok=True)
     os.makedirs('tags', exist_ok=True)
@@ -505,13 +549,13 @@ def generate_site(products):
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div></div>" + footer)
             print(f"{page_path} が生成されました。")
-    
+
     # 独自のカテゴリのページ生成
     for special_cat, sub_cats in special_categories.items():
         page_path = f"category/{special_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
         header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{special_cat}の商品一覧")
-        
+
         main_content_html = f"""
     <main class="container">
         <div class="ai-recommendation-section">
@@ -524,18 +568,18 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + "</main>" + footer)
         print(f"category/{special_cat}/index.html が生成されました。")
-        
+
         for sub_cat in sub_cats:
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
-            
+
             # 最安値カテゴリの商品フィルタリング
             if special_cat == '最安値':
                 filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-                filtered_products.sort(key=lambda x: int(x.get('price', 0))) # 価格が低い順にソート
-            else: # 期間限定セールなど
+                filtered_products.sort(key=lambda x: int(x.get('price', 0)))  # 価格が低い順にソート
+            else:  # 期間限定セールなど
                 filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat and any(tag in ['セール', '期間限定'] for tag in p.get('tags', []))]
-            
+
             header, footer = generate_header_footer(page_path, page_title=f"{special_cat} > {sub_cat}の商品一覧")
             main_content_html = f"""
     <main class="container">
@@ -602,7 +646,7 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
-    
+
     for product in products:
         page_path = product['page_url']
         dir_name = os.path.dirname(page_path)
@@ -633,7 +677,7 @@ def generate_site(products):
                 price_history_for_chart = [{"date": date.today().isoformat(), "price": price_int}]
             except (ValueError, KeyError):
                 price_history_for_chart = []
-        
+
         price_history_json = json.dumps(price_history_for_chart)
         price_chart_html = f"""
         <div class="price-chart-section">
@@ -646,18 +690,14 @@ def generate_site(products):
             <a href="{product.get('rakuten_url', '')}" class="purchase-button rakuten" target="_blank">楽天市場で購入する</a>
         </div>
         """
-        
-        # 修正: AmazonとYahoo!のリンクを検索結果ページに
-        amazon_search_url = f"https://www.amazon.co.jp/s?k={product.get('name', '')}"
-        yahoo_search_url = f"https://shopping.yahoo.co.jp/search?p={product.get('name', '')}"
 
         affiliate_links_html = f"""
             <div class="lowest-price-section">
                 <p class="lowest-price-label">最安値ショップをチェック！</p>
                 <div class="lowest-price-buttons">
-                    <a href="{amazon_search_url}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
+                    <a href="{AMAZON_AFFILIATE_LINK}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
                     <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で見る</a>
-                    <a href="{yahoo_search_url}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
+                    <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
                 </div>
             </div>
         """
@@ -699,9 +739,9 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
-    
+
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-    
+
     if all_tags:
         os.makedirs('tags', exist_ok=True)
         tag_list_html_content = f"""
@@ -718,7 +758,7 @@ def generate_site(products):
         with open('tags/index.html', 'w', encoding='utf-8') as f:
             f.write(tag_header + tag_list_html_content + tag_footer)
         print("タグ一覧ページ: tags/index.html が生成されました。")
-        
+
         for tag in all_tags:
             tag_page_path = f'tags/{tag}.html'
             tag_products = [product for product in products if tag in product.get('tags', [])]
@@ -844,7 +884,7 @@ def generate_site(products):
         with open('sitemap.xml', 'w', encoding='utf-8') as f:
             f.write(sitemap_content)
         print("sitemap.xml が生成されました。")
-    
+
     create_sitemap()
     print("サイトのファイル生成が完了しました！")
 
