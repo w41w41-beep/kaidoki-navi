@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カイドキ-ナビ | タグから探す</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
+        </div>
+    </header>
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+        </div>
+    </div>
+    <div class="genre-links-container" style="margin-top: -10px;">
+        <div class="genre-links">
+            <a href="../category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="../category/パソコン/index.html">パソコン</a><span class="separator">|</span><a href="../category/家電/index.html">家電</a><span class="separator">|</span>
+        </div>
+    </div>
+
+ <main class="container">
+ <div class="ai-recommendation-section">
+ <h2 class="ai-section-title">タグから探す</h2>
+ <div class="product-tags all-tags-list">
+ <a href="秋ネイル.html" class="tag-button">#秋ネイル</a><a href="秋冬ファッション.html" class="tag-button">#秋冬ファッション</a><a href="立体マスク.html" class="tag-button">#立体マスク</a><a href="第7世代i3.html" class="tag-button">#第7世代i3</a><a href="簡単設置.html" class="tag-button">#簡単設置</a><a href="美肌.html" class="tag-button">#美肌</a><a href="耐久性.html" class="tag-button">#耐久性</a><a href="耐水.html" class="tag-button">#耐水</a><a href="耐衝撃性.html" class="tag-button">#耐衝撃性</a><a href="腸活.html" class="tag-button">#腸活</a><a href="自作用.html" class="tag-button">#自作用</a><a href="自撮り.html" class="tag-button">#自撮り</a><a href="花粉対策.html" class="tag-button">#花粉対策</a><a href="花粉症対策.html" class="tag-button">#花粉症対策</a><a href="落下防止.html" class="tag-button">#落下防止</a><a href="蒲焼き.html" class="tag-button">#蒲焼き</a><a href="視力 correction.html" class="tag-button">#視力 correction</a><a href="角度調整.html" class="tag-button">#角度調整</a><a href="訳あり.html" class="tag-button">#訳あり</a><a href="誕生日プレゼント.html" class="tag-button">#誕生日プレゼント</a><a href="調整可能.html" class="tag-button">#調整可能</a><a href="軽量.html" class="tag-button">#軽量</a><a href="辛子高菜.html" class="tag-button">#辛子高菜</a><a href="送料無料.html" class="tag-button">#送料無料</a><a href="透明.html" class="tag-button">#透明</a><a href="透明度.html" class="tag-button">#透明度</a><a href="通話機能.html" class="tag-button">#通話機能</a><a href="防カビ.html" class="tag-button">#防カビ</a><a href="防振.html" class="tag-button">#防振</a><a href="防止.html" class="tag-button">#防止</a><a href="防水.html" class="tag-button">#防水</a><a href="防音.html" class="tag-button">#防音</a><a href="電子機器.html" class="tag-button">#電子機器</a><a href="静音.html" class="tag-button">#静音</a><a href="食物繊維.html" class="tag-button">#食物繊維</a><a href="高性能.html" class="tag-button">#高性能</a><a href="高速.html" class="tag-button">#高速</a>
+ </div>
+ <div class="pagination"><a href="page4.html" class="prev">前へ</a><a href="index.html" class="">1</a><a href="page2.html" class="">2</a><a href="page3.html" class="">3</a><a href="page4.html" class="">4</a><a href="page5.html" class="active">5</a></div></main>
+    </main>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../privacy.html">プライバシーポリシー</a>
+            <a href="../disclaimer.html">免責事項</a>
+            <a href="../contact.html">お問い合わせ</a>
+        </div>
+    </footer>
+    <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+                new Chart(priceChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日付'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '価格（円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+        
