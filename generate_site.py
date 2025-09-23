@@ -270,16 +270,18 @@ def update_products_csv(new_products):
     """
     cached_products = get_cached_data()
     updated_products = {}
+    newly_added_count = 0
 
     # 既存のキャッシュデータをupdated_productsにコピー
     for item_id, product in cached_products.items():
         updated_products[item_id] = product
-
+    
+    # 新規商品を処理し、最大10個に制限
     for product in new_products:
         item_id = product['id']
         is_new_product = item_id not in updated_products
 
-        if is_new_product:
+        if is_new_product and newly_added_count < 10:
             # 新規商品の場合は、AIメタデータと分析を両方生成
             updated_products[item_id] = product
             try:
@@ -299,9 +301,13 @@ def update_products_csv(new_products):
                 product['ai_analysis'] = ai_analysis_text
             except Exception as e:
                 print(f"新規商品のAI分析生成中にエラーが発生しました: {e}")
+            
+            newly_added_count += 1
 
-        else:
-            # 既存の商品の場合、価格履歴を更新
+    # 既存の商品を更新
+    for product in new_products:
+        item_id = product['id']
+        if item_id in updated_products:
             existing_product = updated_products[item_id]
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
@@ -311,12 +317,8 @@ def update_products_csv(new_products):
             except (ValueError, KeyError):
                 current_price = 0
             
-            # 価格履歴が空の場合、現在価格を最初のデータとして追加
-            if not price_history:
-                price_history.append({"date": current_date, "price": current_price})
-            
-            # 既に今日の日付があるかチェックし、なければ追加
-            elif price_history[-1]['date'] != current_date:
+            # 価格履歴に新しい日付のデータがなければ追加
+            if not price_history or price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
 
             existing_product['price_history'] = price_history
@@ -333,10 +335,7 @@ def update_products_csv(new_products):
                     existing_product['ai_analysis'] = ai_analysis_text
             else:
                 print(f"価格変動なし: {product['name']}。AI分析は更新しません。")
-                # 既存のAI分析を維持 (この部分のロジックは既に維持されているため不要ですが、明示的に記載)
-                # existing_product['ai_headline'] = existing_product['ai_headline']
-                # existing_product['ai_analysis'] = existing_product['ai_analysis']
-            
+                
             updated_products[item_id] = existing_product
 
     # AIメタデータと分析を更新（新規・既存問わず）
@@ -357,10 +356,14 @@ def update_products_csv(new_products):
             ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
             if sub_category and sub_category != "":
                 product['category']['sub'] = sub_category
-
-        # ai_headlineとai_analysisを常に最新に更新
-        # この部分は価格変動に応じてAIを呼び出すロジックに変更済みのため、削除
         
+    # 新規商品をトップに表示するため、日付を更新
+    for item_id, product in updated_products.items():
+        if item_id in new_products: # 新規商品はすべての日付を最新にする
+            product['date'] = date.today().isoformat()
+        else: # 既存商品は、既に更新されている日付を維持
+            pass
+
     final_products = list(updated_products.values())
     save_to_cache(final_products)
 
@@ -373,7 +376,19 @@ def generate_site(products):
     for product in products:
         if 'date' not in product:
             product['date'] = today
-    products.sort(key=lambda p: p.get('date', '1970-01-01'), reverse=True)
+    
+    # 既存のキャッシュデータを取得
+    cached_products = get_cached_data()
+    
+    # 新規商品を最上位にソート
+    new_product_ids = [p['id'] for p in products if p['id'] not in cached_products]
+    
+    def product_sort_key(product):
+        is_new = product['id'] in new_product_ids
+        return (not is_new, product.get('date', '1970-01-01'), product.get('name', ''))
+        
+    products.sort(key=product_sort_key, reverse=True)
+
 
     categories = {}
     for product in products:
@@ -393,10 +408,17 @@ def generate_site(products):
     }
 
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
-        if "products" in current_path:
+        
+        # 相対パスを計算
+        base_path = ""
+        if 'products' in current_path:
             base_path = ".."
-        elif "category" in current_path or "tags" in current_path:
-            base_path = ".."
+        elif 'category' in current_path:
+            # category/main_cat.html -> ..
+            # category/special/sub_cat.html -> ../..
+            base_path = ".." if len(current_path.split('/')) == 2 else "../.."
+        elif 'tags' in current_path:
+            base_path = ".." if len(current_path.split('/')) == 2 else "../.."
         else:
             base_path = "."
 
@@ -428,7 +450,7 @@ def generate_site(products):
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" placeholder="商品名、キーワードで検索...">
+            <input type="text" placeholder="商品名、キーワードで検索..." class="search-input">
             <button class="search-button">🔍</button>
         </div>
     </div>
@@ -618,7 +640,7 @@ def generate_site(products):
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div></div>" + footer)
-            print(f"{page_path} が生成されました。")
+            print(f"category/{special_cat}/{sub_cat_file_name} が生成されました。")
 
 
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
@@ -783,7 +805,7 @@ def generate_site(products):
         <h2 class="ai-section-title">#{tag} の商品一覧</h2>
         <div class="product-grid">
             {"".join([f'''
-            <a href="../products/{product.get('id', '')}.html" class="product-card">
+            <a href="{os.path.relpath(product.get('page_url', ''), os.path.dirname(tag_page_path))}" class="product-card">
                 <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
                 <div class="product-info">
                     <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
