@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="container">
-            <h1><a href="../index.html">カイドキ-ナビ</a></h1>
+            <h1><a href="../">カイドキ-ナビ</a></h1>
             <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
@@ -24,30 +24,34 @@
     </div>
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="../tags/">タグから探す</a><span class="separator">|</span><a href="../category/最安値/">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
     <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links">
-            <a href="../category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="../category/パソコン/index.html">パソコン</a><span class="separator">|</span><a href="../category/家電/index.html">家電</a><span class="separator">|</span>
+            <a href="../category/パソコン/">パソコン</a><span class="separator">|</span><a href="../category/家電/">家電</a><span class="separator">|</span>
         </div>
     </div>
+    
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">#使い捨ての注目商品</h2>
+        <div class="product-grid">
+            
+<a href="../pages/teamo:10001200.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/teamo/cabinet/new_top/tax/clear_1day_tm_2box.jpg?_ex=128x128" alt="コンタクトレンズ ワンデー　コンタクト 【2箱4箱】 まとめ売り【最安値に挑戦！ 】 高含水 低含水 まとめ買い 1箱30枚あたり【962円～】 TeAmo 1DAY CLEAR コンタクト クリア　クリアワンデー　使い捨てコンタクトレンズ　ティアモ　ソフトコンタクト　てぃあも　tiamo">
+    <div class="product-info">
+        <h3 class="product-name">コンタクトレンズ ワンデー　コンタクト ...</h3>
+        <p class="product-price">1,986円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">最安値の1986円！今が買い時です。</div>
+    </div>
+</a>
 
- <main class="container">
- <div class="ai-recommendation-section">
- <h2 class="ai-section-title">#使い捨ての注目商品</h2>
- <div class="product-grid">
- 
- <a href="../pages/teamo:10001200.html" class="product-card">
- <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/teamo/cabinet/new_top/tax/clear_1day_tm_2box.jpg?_ex=128x128" alt="コンタクトレンズ ワンデー　コンタクト 【2箱4箱】 まとめ売り【最安値に挑戦！ 】 高含水 低含水 まとめ買い 1箱30枚あたり【962円～】 TeAmo 1DAY CLEAR コンタクト クリア　クリアワンデー　使い捨てコンタクトレンズ　ティアモ　ソフトコンタクト　てぃあも　tiamo">
- <div class="product-info">
- <h3 class="product-name">コンタクトレンズ ワンデー　コンタクト ...</h3>
- <p class="product-price">1,986円</p>
- <div class="price-status-title">💡注目ポイント</div>
- <div class="price-status-content ai-analysis">最安値の1986円！今が買い時です。</div>
- </div>
- </a>
- </div></div>
+        </div>
+    </div>
+</main>
+
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
@@ -63,41 +67,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             const priceChartCanvas = document.getElementById('priceChart');
             if (priceChartCanvas) {
-                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
-                const dates = dataHistory.map(item => item.date);
-                const prices = dataHistory.map(item => item.price);
-                new Chart(priceChartCanvas, {
-                    type: 'line',
-                    data: {
-                        labels: dates,
-                        datasets: [{
-                            label: '価格推移',
-                            data: prices,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: '日付'
-                                }
+                try {
+                    const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                    if (dataHistory && Array.isArray(dataHistory) && dataHistory.length > 0) {
+                        const dates = dataHistory.map(item => item.date);
+                        const prices = dataHistory.map(item => item.price);
+                        new Chart(priceChartCanvas, {
+                            type: 'line',
+                            data: {
+                                labels: dates,
+                                datasets: [{
+                                    label: '価格推移',
+                                    data: prices,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
                             },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: '価格（円）'
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: '日付'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: '価格（円）'
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        });
                     }
-                });
+                } catch (e) {
+                    console.error('価格グラフのレンダリングに失敗しました:', e);
+                }
             }
         });
     </script>
 </body>
 </html>
-        
