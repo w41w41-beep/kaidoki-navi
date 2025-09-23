@@ -107,13 +107,17 @@ def generate_ai_metadata(product_name, product_description):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
+    
+    # プロンプトの文字数を制限してAPIエラーを回避
+    safe_name = product_name[:100]
+    safe_description = product_description[:500]
 
     prompt = f"""
     以下の商品情報をもとに、ウェブサイトのコンテンツとして最適な、簡潔で魅力的な要約、関連するタグ（3〜5個）、そして適切なサブカテゴリー（1つ）を日本語で生成してください。
     回答は必ずJSON形式で提供してください。JSONは「summary」、「tags」、「sub_category」の3つのキーを持ちます。
 
-    商品名: {product_name}
-    商品説明: {product_description}
+    商品名: {safe_name}
+    商品説明: {safe_description}
 
     要約の文章には、SEOを意識した「格安」「最安値」「セール」「割引」などのキーワードを自然に含めてください。
     タグは商品の特徴や用途を表す単語をリスト形式で生成してください。
@@ -165,12 +169,16 @@ def generate_ai_analysis(product_name, product_price, price_history):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}'
     }
+    
+    # プロンプトの文字数を制限してAPIエラーを回避
+    safe_name = product_name[:100]
 
     history_text = f"過去の価格履歴は以下の通りです: {price_history}" if price_history else "価格履歴はありません。"
+    safe_history_text = history_text[:200]
 
     messages = [
         {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。"},
-        {"role_name": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。"}
+        {"role_name": "user", "content": f"{safe_name}という商品の現在の価格は{product_price}円です。{safe_history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。"}
     ]
 
     payload = {
@@ -215,51 +223,51 @@ def fetch_rakuten_items():
     ]
 
     all_products = []
+    # 取得件数を10個に設定
+    hits = 10
+    
+    # 複数キーワードを結合して一度の検索で取得
+    combined_query = " ".join([q['keyword'] for q in search_queries])
+    url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={combined_query}&format=json&sort=-reviewCount&hits={hits}"
 
-    for query in search_queries:
-        keyword = query['keyword']
-        sort_order = query['sort']
-        # 取得件数を10個に設定
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort={sort_order}&hits=10"
-        
-        try:
-            print(f"楽天APIから商品を取得中... (キーワード: {keyword})")
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            data = response.json()
-            items = data.get('Items', [])
+    try:
+        print(f"楽天APIから商品を取得中... (キーワード: {combined_query})")
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        items = data.get('Items', [])
 
-            if items:
-                for item in items:
-                    item_data = item['Item']
-                    description = item_data.get('itemCaption', '')
+        if items:
+            for item in items:
+                item_data = item['Item']
+                description = item_data.get('itemCaption', '')
 
-                    # 新しい商品情報を構築
-                    new_product = {
-                        "id": item_data['itemCode'],
-                        "name": item_data['itemName'],
-                        "price": str(item_data['itemPrice']),
-                        "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
-                        "rakuten_url": item_data.get('itemUrl', ''),
-                        "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
-                        "amazon_url": AMAZON_AFFILIATE_LINK,
-                        "page_url": f"products/{item_data['itemCode']}.html",
-                        "category": {"main": "不明", "sub": ""},
-                        "ai_headline": "",
-                        "ai_analysis": "",
-                        "description": description,
-                        "ai_summary": "",
-                        "tags": [],
-                        "date": date.today().isoformat(),
-                        "main_ec_site": "楽天",
-                        "price_history": []
-                    }
-                    all_products.append(new_product)
+                # 新しい商品情報を構築
+                new_product = {
+                    "id": item_data['itemCode'],
+                    "name": item_data['itemName'],
+                    "price": str(item_data['itemPrice']),
+                    "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
+                    "rakuten_url": item_data.get('itemUrl', ''),
+                    "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
+                    "amazon_url": AMAZON_AFFILIATE_LINK,
+                    "page_url": f"products/{item_data['itemCode']}.html",
+                    "category": {"main": "不明", "sub": ""},
+                    "ai_headline": "",
+                    "ai_analysis": "",
+                    "description": description,
+                    "ai_summary": "",
+                    "tags": [],
+                    "date": date.today().isoformat(),
+                    "main_ec_site": "楽天",
+                    "price_history": []
+                }
+                all_products.append(new_product)
 
-        except requests.exceptions.RequestException as e:
-            print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
-        except (IndexError, KeyError) as e:
-            print(f"楽天APIの応答形式が不正です: {e}")
+    except requests.exceptions.RequestException as e:
+        print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
+    except (IndexError, KeyError) as e:
+        print(f"楽天APIの応答形式が不正です: {e}")
 
     return all_products
 
@@ -320,7 +328,7 @@ def update_products_csv(new_products):
             # 価格履歴に新しい日付のデータがなければ追加
             if not price_history or price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
-
+            
             existing_product['price_history'] = price_history
             
             # 価格が変動したかどうかをチェック
@@ -359,7 +367,7 @@ def update_products_csv(new_products):
         
     # 新規商品をトップに表示するため、日付を更新
     for item_id, product in updated_products.items():
-        if item_id in new_products: # 新規商品はすべての日付を最新にする
+        if item_id in [p['id'] for p in new_products]: # 新規商品はすべての日付を最新にする
             product['date'] = date.today().isoformat()
         else: # 既存商品は、既に更新されている日付を維持
             pass
@@ -410,25 +418,19 @@ def generate_site(products):
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
         
         # 相対パスを計算
-        base_path = ""
-        if 'products' in current_path:
-            base_path = ".."
-        elif 'category' in current_path:
-            # category/main_cat.html -> ..
-            # category/special/sub_cat.html -> ../..
-            base_path = ".." if len(current_path.split('/')) == 2 else "../.."
-        elif 'tags' in current_path:
-            base_path = ".." if len(current_path.split('/')) == 2 else "../.."
+        base_path = os.path.relpath('.', os.path.dirname(current_path))
+        if base_path == '.':
+            base_path = ''
         else:
-            base_path = "."
+            base_path = base_path + '/'
 
-        main_links_html = f'<a href="{base_path}/tags.html">タグから探す</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/最安値.html">最安値</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/期間限定セール.html">期間限定セール</a><span class="separator">|</span>'
+        main_links_html = f'<a href="{base_path}tags.html">タグから探す</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}category/最安値.html">最安値</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}category/期間限定セール.html">期間限定セール</a><span class="separator">|</span>'
 
         sub_genre_links = ""
         for mc_link in sorted_main_cats:
-            sub_genre_links += f'<a href="{base_path}/category/{mc_link}.html">{mc_link}</a><span class="separator">|</span>'
+            sub_genre_links += f'<a href="{base_path}category/{mc_link}.html">{mc_link}</a><span class="separator">|</span>'
 
         header_html = f"""
 <!DOCTYPE html>
@@ -437,14 +439,14 @@ def generate_site(products):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カイドキ-ナビ | {page_title}</title>
-    <link rel="stylesheet" href="{base_path}/style.css">
+    <link rel="stylesheet" href="{base_path}style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><a href="{base_path}/index.html">カイドキ-ナビ</a></h1>
+            <h1><a href="{base_path}index.html">カイドキ-ナビ</a></h1>
             <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
@@ -470,7 +472,7 @@ def generate_site(products):
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
                 # リンクの空白を削除
-                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+                sub_cat_links_html += f'<a href="{base_path}category/{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
     <div class="sub-genre-links-container" style="margin-top: -10px;">
@@ -482,12 +484,12 @@ def generate_site(products):
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
         <div class="footer-links">
-            <a href="{base_path}/privacy.html">プライバシーポリシー</a>
-            <a href="{base_path}/disclaimer.html">免責事項</a>
-            <a href="{base_path}/contact.html">お問い合わせ</a>
+            <a href="{base_path}privacy.html">プライバシーポリシー</a>
+            <a href="{base_path}disclaimer.html">免責事項</a>
+            <a href="{base_path}contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="{base_path}/script.js"></script>
+    <script src="{base_path}script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {{
@@ -607,8 +609,7 @@ def generate_site(products):
 
         for sub_cat in sub_cats:
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = f"category/{special_cat}/{sub_cat_file_name}"
-            os.makedirs(os.path.dirname(page_path), exist_ok=True)
+            page_path = f"category/{sub_cat_file_name}"
             
             # 最安値カテゴリの商品フィルタリング
             if special_cat == '最安値':
@@ -640,7 +641,7 @@ def generate_site(products):
                 """
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div></div>" + footer)
-            print(f"category/{special_cat}/{sub_cat_file_name} が生成されました。")
+            print(f"category/{sub_cat_file_name} が生成されました。")
 
 
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
