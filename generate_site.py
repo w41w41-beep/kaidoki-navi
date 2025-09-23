@@ -120,7 +120,7 @@ def generate_ai_metadata(product_name, product_description):
 
     messages = [
         {"role": "system", "content": "あなたは、ウェブサイトのコンテンツ作成をサポートするプロのAIアシスタントです。ユーザーからの指示に従い、商品情報を分析して魅力的なコンテンツを生成します。"},
-        {"role": "user", "content": prompt}
+        {"role_of_user": "user", "content": prompt}
     ]
 
     payload = {
@@ -406,8 +406,9 @@ def generate_site(products):
         if sub_cat_links:
             sub_cat_links_html += '<div class="genre-links sub-genre-links">'
             for sub_cat_link in sorted(sub_cat_links):
-                # リンクの空白を削除
-                sub_cat_links_html += f'<a href="{sub_cat_link.replace(" ", "")}.html">{sub_cat_link}</a><span class="separator">|</span>'
+                # リンクの空白とスラッシュを削除
+                sanitized_sub_cat_link = sub_cat_link.replace(' ', '').replace('/', '-')
+                sub_cat_links_html += f'<a href="{sanitized_sub_cat_link}.html">{sub_cat_link}</a><span class="separator">|</span>'
             sub_cat_links_html += '</div>'
             header_html += f"""
     <div class="sub-genre-links-container" style="margin-top: -10px;">
@@ -526,7 +527,8 @@ def generate_site(products):
 
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            sanitized_sub_cat = sub_cat.replace(' ', '').replace('/', '-')
+            sub_cat_file_name = f"{sanitized_sub_cat}.html"
             page_path = f"category/{main_cat}/{sub_cat_file_name}"
             header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
             main_content_html = f"""
@@ -564,7 +566,7 @@ def generate_site(products):
         <div class="ai-recommendation-section">
             <h2 class="ai-section-title">{special_cat}のサブカテゴリー一覧</h2>
             <div class="genre-links sub-genre-links">
-            {"".join([f'<a href="{sub_cat.replace(" ", "")}.html">{sub_cat}</a><span class="separator">|</span>' for sub_cat in sorted(sub_cats)])}
+            {"".join([f'<a href="{sub_cat.replace(" ", "").replace("/", "-")}.html">{sub_cat}</a><span class="separator">|</span>' for sub_cat in sorted(sub_cats)])}
             </div>
         </div>
     """
@@ -573,7 +575,8 @@ def generate_site(products):
         print(f"category/{special_cat}/index.html が生成されました。")
 
         for sub_cat in sub_cats:
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+            sanitized_sub_cat = sub_cat.replace(' ', '').replace('/', '-')
+            sub_cat_file_name = f"{sanitized_sub_cat}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
 
             # 最安値カテゴリの商品フィルタリング
@@ -701,6 +704,7 @@ def generate_site(products):
     </div>
 </div>
 """
+        sanitized_sub_cat = product.get('category', {}).get('sub', '').replace(' ', '').replace('/', '-')
         item_html_content = f"""
 <main class="container">
     <div class="product-detail">
@@ -710,7 +714,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/index.html', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/' + product.get('category', {}).get('sub', '').replace(' ', '') + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/index.html', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/' + sanitized_sub_cat + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -759,7 +763,8 @@ def generate_site(products):
         # 各タグごとのページを生成
         for tag in all_tags:
             tag_products = [p for p in products if tag in p.get('tags', [])]
-            page_path = f"tags/{tag.replace('/', '-')}.html"
+            sanitized_tag = tag.replace('/', '-')
+            page_path = f"tags/{sanitized_tag}.html"
             header, footer = generate_header_footer(page_path, page_title=f"タグ：{tag}の商品一覧")
             products_html = ""
             for product in tag_products:
