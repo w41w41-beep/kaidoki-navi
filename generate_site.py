@@ -286,20 +286,28 @@ def update_products_csv(new_products):
 
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
-    # どの階層にいてもルートディレクトリへの相対パスを正しく計算
-    base_path = os.path.relpath('.', os.path.dirname(current_path))
-    if base_path != ".":
-        base_path += "/"
+    # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
+    # 例：`pages/product.html` -> `../`
+    #     `category/pc/index.html` -> `../../`
+    #     `index.html` -> `./`
+    # `os.path.relpath`は`index.html`が基準なので、
+    # `os.path.dirname(current_path)`が`pages`なら`..`を、`category/pc`なら`../..`を返す
+    # ルートディレクトリからのパスを生成する
+    rel_path_to_root = os.path.relpath('.', os.path.dirname(current_path))
+    if rel_path_to_root == '.':
+        base_path = './'
+    else:
+        base_path = rel_path_to_root + '/'
 
     # ハードコードされたカテゴリリンクを例示
     main_links = [
-        ("タグから探す", f"{base_path}tags/"),
-        ("最安値", f"{base_path}category/最安値/"),
-        ("期間限定セール", f"{base_path}category/期間限定セール/")
+        ("タグから探す", f"{base_path}tags/index.html"),
+        ("最安値", f"{base_path}category/最安値/index.html"),
+        ("期間限定セール", f"{base_path}category/期間限定セール/index.html")
     ]
     main_category_links = [
-        ("パソコン", f"{base_path}category/パソコン/"),
-        ("家電", f"{base_path}category/家電/")
+        ("パソコン", f"{base_path}category/パソコン/index.html"),
+        ("家電", f"{base_path}category/家電/index.html")
     ]
     
     def generate_links_html(links):
@@ -405,6 +413,7 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
 
 def generate_product_card_html(product, page_path):
     """商品カードのHTMLを生成する"""
+    # 商品カードのリンクは現在のページからの相対パスで良い
     link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
     return f"""
 <a href="{link_path}" class="product-card">
