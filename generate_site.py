@@ -310,8 +310,8 @@ def update_products_csv(new_products):
         if cached_price_history and cached_price_history[-1]['price'] != current_price:
             is_price_changed = True
         
-        # 新規商品、または価格が変動した場合に再分析
-        if is_new or is_price_changed:
+        # 新規商品、または価格が変動した場合、またはAI分析が空の場合に再分析
+        if is_new or is_price_changed or not product.get('ai_headline') or not product.get('ai_analysis'):
             try:
                 price_history = product.get('price_history', [])
                 ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], current_price, price_history)
