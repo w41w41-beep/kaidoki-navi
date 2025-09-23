@@ -9,7 +9,7 @@ import csv
 import urllib.parse
 
 # 1ページあたりの商品数を定義
-PRODUCTS_PER_PAGE = 10
+PRODUCTS_PER_PAGE = 24
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
@@ -28,12 +28,14 @@ def get_cached_data():
         try:
             with open(CACHE_FILE, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
+                
                 # ヘッダーに'id'が存在しない場合は処理を終了
                 if 'id' not in reader.fieldnames:
                     print("警告: CSVファイルに'id'ヘッダーが見つかりません。")
                     return {}
 
                 for row in reader:
+                    
                     # 'id'が空の行はスキップ
                     if not row.get('id'):
                         continue
@@ -120,7 +122,7 @@ def generate_ai_metadata(product_name, product_description):
 
     messages = [
         {"role": "system", "content": "あなたは、ウェブサイトのコンテンツ作成をサポートするプロのAIアシスタントです。ユーザーからの指示に従い、商品情報を分析して魅力的なコンテンツを生成します。"},
-        {"role": "user", "content": prompt}
+        {"role_name": "user", "content": prompt}
     ]
 
     payload = {
@@ -168,7 +170,7 @@ def generate_ai_analysis(product_name, product_price, price_history):
 
     messages = [
         {"role": "system", "content": "あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。"},
-        {"role": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。"}
+        {"role_name": "user", "content": f"{product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。"}
     ]
 
     payload = {
@@ -242,7 +244,7 @@ def fetch_rakuten_items():
                         "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
                         "amazon_url": AMAZON_AFFILIATE_LINK,
                         "page_url": f"products/{item_data['itemCode']}.html",
-                        "category": {"main": "不明", "sub": ""}, # AIで後から設定するため、ここでは仮の値を設定
+                        "category": {"main": "不明", "sub": ""},
                         "ai_headline": "",
                         "ai_analysis": "",
                         "description": description,
@@ -267,7 +269,6 @@ def update_products_csv(new_products):
     この関数内でAI分析とメタデータ生成を実行する。
     """
     cached_products = get_cached_data()
-
     updated_products = {}
 
     # 既存のキャッシュデータをupdated_productsにコピー
@@ -279,28 +280,69 @@ def update_products_csv(new_products):
         is_new_product = item_id not in updated_products
 
         if is_new_product:
-            # 新規商品の場合は、既存の商品情報にAIデータを追加
+            # 新規商品の場合は、AIメタデータと分析を両方生成
             updated_products[item_id] = product
+            try:
+                ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
+                product['ai_summary'] = ai_summary
+                product['tags'] = tags
+                if 'category' in product and isinstance(product['category'], dict):
+                    product['category']['sub'] = sub_category
+            except Exception as e:
+                print(f"新規商品のAIメタデータ生成中にエラーが発生しました: {e}")
+
+            try:
+                price_history = product.get('price_history', [])
+                price_int = int(str(product['price']).replace(',', ''))
+                ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
+                product['ai_headline'] = ai_headline
+                product['ai_analysis'] = ai_analysis_text
+            except Exception as e:
+                print(f"新規商品のAI分析生成中にエラーが発生しました: {e}")
+
         else:
             # 既存の商品の場合、価格履歴を更新
             existing_product = updated_products[item_id]
             price_history = existing_product.get('price_history', [])
             current_date = date.today().isoformat()
+            
             try:
                 current_price = int(product['price'].replace(',', ''))
             except (ValueError, KeyError):
                 current_price = 0
-
-            if not price_history or price_history[-1]['date'] != current_date:
+            
+            # 価格履歴が空の場合、現在価格を最初のデータとして追加
+            if not price_history:
+                price_history.append({"date": current_date, "price": current_price})
+            
+            # 既に今日の日付があるかチェックし、なければ追加
+            elif price_history[-1]['date'] != current_date:
                 price_history.append({"date": current_date, "price": current_price})
 
             existing_product['price_history'] = price_history
+            
+            # 価格が変動したかどうかをチェック
+            last_price = price_history[-2]['price'] if len(price_history) > 1 else None
+            
+            if last_price is not None and current_price != last_price:
+                print(f"価格変動を検知しました: {product['name']}。AI分析を更新します。")
+                ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], current_price, price_history)
+                if ai_headline and ai_headline != "AI分析準備中":
+                    existing_product['ai_headline'] = ai_headline
+                if ai_analysis_text and ai_analysis_text != "詳細なAI分析は現在準備中です。":
+                    existing_product['ai_analysis'] = ai_analysis_text
+            else:
+                print(f"価格変動なし: {product['name']}。AI分析は更新しません。")
+                # 既存のAI分析を維持 (この部分のロジックは既に維持されているため不要ですが、明示的に記載)
+                # existing_product['ai_headline'] = existing_product['ai_headline']
+                # existing_product['ai_analysis'] = existing_product['ai_analysis']
+            
             updated_products[item_id] = existing_product
 
     # AIメタデータと分析を更新（新規・既存問わず）
     for item_id, product in updated_products.items():
         # ai_summaryまたはtagsが空の場合は再生成
-        if not product.get('ai_summary') or not product.get('tags'):
+        if not product.get('ai_summary') or not product.get('tags') or not product['category'].get('sub'):
             print(f"商品: '{product['name']}' のAIメタデータを再生成中...")
             ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
             if ai_summary and ai_summary != "この商品の詳しい説明は準備中です。":
@@ -316,58 +358,9 @@ def update_products_csv(new_products):
             if sub_category and sub_category != "":
                 product['category']['sub'] = sub_category
 
-# AIメタデータと分析を更新（新規・既存問わず）
-for item_id, product in updated_products.items():
-    # 新規商品の場合は、AIメタデータと分析を両方生成
-    is_new_product = item_id not in cached_products
-
-    if is_new_product:
-        # 新規商品の場合、メタデータと分析を生成
-        ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
-        product['ai_summary'] = ai_summary
-        product['tags'] = tags
-        if 'category' in product and isinstance(product['category'], dict):
-            product['category']['sub'] = sub_category
-
-        price_history = product.get('price_history', [])
-        price_int = int(str(product['price']).replace(',', ''))
-        ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
-        product['ai_headline'] = ai_headline
-        product['ai_analysis'] = ai_analysis_text
-    
-    else:
-        # 既存商品の場合、価格が変動した場合のみAI分析を再生成
-        existing_product = cached_products[item_id]
-        current_price = int(product['price'].replace(',', ''))
+        # ai_headlineとai_analysisを常に最新に更新
+        # この部分は価格変動に応じてAIを呼び出すロジックに変更済みのため、削除
         
-        # 前日の価格を取得（価格履歴の最終日）
-        last_price_entry = existing_product.get('price_history')[-1] if existing_product.get('price_history') else None
-        last_price = last_price_entry['price'] if last_price_entry else None
-
-        # 価格が変動したかどうかをチェック
-        if last_price is None or current_price != last_price:
-            print(f"価格変動を検知しました: {product['name']}。AI分析を更新します。")
-            price_history = product.get('price_history', [])
-            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], current_price, price_history)
-            product['ai_headline'] = ai_headline
-            product['ai_analysis'] = ai_analysis_text
-        else:
-            print(f"価格変動なし: {product['name']}。AI分析は更新しません。")
-            # 既存のAI分析を維持
-            product['ai_headline'] = existing_product['ai_headline']
-            product['ai_analysis'] = existing_product['ai_analysis']
-
-        # AIメタデータ（要約、タグ、サブカテゴリー）が空の場合は初回のみ生成
-        if not product.get('ai_summary') or not product.get('tags') or not product['category'].get('sub'):
-            print(f"商品: '{product['name']}' のAIメタデータを生成中...")
-            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
-            if ai_summary and ai_summary != "この商品の詳しい説明は準備中です。":
-                product['ai_summary'] = ai_summary
-            if tags:
-                product['tags'] = tags
-            if sub_category and 'category' in product and isinstance(product['category'], dict):
-                product['category']['sub'] = sub_category
-    
     final_products = list(updated_products.values())
     save_to_cache(final_products)
 
@@ -400,21 +393,20 @@ def generate_site(products):
     }
 
     def generate_header_footer(current_path, sub_cat_links=None, page_title="お得な買い時を見つけよう！"):
-        if "pages" in current_path or "category" in current_path or "tags" in current_path:
+        if "products" in current_path:
             base_path = ".."
-            # category/main_cat/sub_cat.html のようなパスの場合
-            if len(current_path.split('/')) > 2:
-                base_path = "../../"
+        elif "category" in current_path or "tags" in current_path:
+            base_path = ".."
         else:
             base_path = "."
 
-        main_links_html = f'<a href="{base_path}/tags/index.html">タグから探す</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/最安値/index.html">最安値</a><span class="separator">|</span>'
-        main_links_html += f'<a href="{base_path}/category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>'
+        main_links_html = f'<a href="{base_path}/tags.html">タグから探す</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/category/最安値.html">最安値</a><span class="separator">|</span>'
+        main_links_html += f'<a href="{base_path}/category/期間限定セール.html">期間限定セール</a><span class="separator">|</span>'
 
         sub_genre_links = ""
         for mc_link in sorted_main_cats:
-            sub_genre_links += f'<a href="{base_path}/category/{mc_link}/index.html">{mc_link}</a><span class="separator">|</span>'
+            sub_genre_links += f'<a href="{base_path}/category/{mc_link}.html">{mc_link}</a><span class="separator">|</span>'
 
         header_html = f"""
 <!DOCTYPE html>
@@ -537,16 +529,17 @@ def generate_site(products):
         shutil.rmtree('pages', ignore_errors=True)
     if os.path.exists('tags'):
         shutil.rmtree('tags', ignore_errors=True)
+    if os.path.exists('products'):
+        shutil.rmtree('products', ignore_errors=True)
 
-    os.makedirs('pages', exist_ok=True)
+    os.makedirs('products', exist_ok=True)
     os.makedirs('category', exist_ok=True)
     os.makedirs('tags', exist_ok=True)
 
     # 一般カテゴリのページ生成
     for main_cat, sub_cats in categories.items():
         main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
-        page_path = f"category/{main_cat}/index.html"
-        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        page_path = f"category/{main_cat}.html" # URLをシンプルに
         header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{main_cat}の商品一覧")
         main_content_html = f"""
     <main class="container">
@@ -570,41 +563,11 @@ def generate_site(products):
             """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + products_html + "</div></div>" + footer)
-        print(f"category/{main_cat}/index.html が生成されました。")
-
-        for sub_cat in sub_cats:
-            sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = f"category/{main_cat}/{sub_cat_file_name}"
-            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
-            main_content_html = f"""
-    <main class="container">
-        <div class="ai-recommendation-section">
-            <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
-            <div class="product-grid">
-            """
-            products_html = ""
-            for product in sub_cat_products:
-                link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
-                products_html += f"""
-<a href="{link_path}" class="product-card">
-    <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
-    <div class="product-info">
-        <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
-        <p class="product-price">{int(product.get('price', 0)):,}円</p>
-        <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
-    </div>
-</a>
-                """
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + products_html + "</div></div>" + footer)
-            print(f"{page_path} が生成されました。")
+        print(f"category/{main_cat}.html が生成されました。")
 
     # 独自のカテゴリのページ生成
     for special_cat, sub_cats in special_categories.items():
-        page_path = f"category/{special_cat}/index.html"
-        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        page_path = f"category/{special_cat}.html"
         header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{special_cat}の商品一覧")
 
         main_content_html = f"""
@@ -618,12 +581,13 @@ def generate_site(products):
     """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + "</main>" + footer)
-        print(f"category/{special_cat}/index.html が生成されました。")
+        print(f"category/{special_cat}.html が生成されました。")
 
         for sub_cat in sub_cats:
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{special_cat}/{sub_cat_file_name}"
-
+            os.makedirs(os.path.dirname(page_path), exist_ok=True)
+            
             # 最安値カテゴリの商品フィルタリング
             if special_cat == '最安値':
                 filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
@@ -655,6 +619,7 @@ def generate_site(products):
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div></div>" + footer)
             print(f"{page_path} が生成されました。")
+
 
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(total_pages):
@@ -761,8 +726,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/index.html', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt;
-                <a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '/' + product.get('category', {}).get('sub', '').replace(' ', '') + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath('category/' + product.get('category', {}).get('main', '') + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{os.path.relpath('category/' + product.get('category', {}).get('sub', '').replace(' ', '') + '.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -819,7 +783,7 @@ def generate_site(products):
         <h2 class="ai-section-title">#{tag} の商品一覧</h2>
         <div class="product-grid">
             {"".join([f'''
-            <a href="../{product.get('page_url', '')}" class="product-card">
+            <a href="../products/{product.get('id', '')}.html" class="product-card">
                 <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
                 <div class="product-info">
                     <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
@@ -882,14 +846,14 @@ def generate_site(products):
         # 独自のカテゴリを追加
         for main_cat, sub_cats in special_categories.items():
             sitemap_content += '  <url>\n'
-            sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
+            sitemap_content += f'    <loc>{base_url}category/{main_cat}.html</loc>\n'
             sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
             sitemap_content += '    <changefreq>daily</changefreq>\n'
             sitemap_content += '    <priority>0.8</priority>\n'
             sitemap_content += '  </url>\n'
             for sub_cat in sub_cats:
                 sitemap_content += '  <url>\n'
-                sitemap_content += f'    <loc>{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+                sitemap_content += f'    <loc>{base_url}category/{sub_cat.replace(" ", "")}.html</loc>\n'
                 sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
                 sitemap_content += '    <changefreq>daily</changefreq>\n'
                 sitemap_content += '    <priority>0.7</priority>\n'
@@ -897,14 +861,14 @@ def generate_site(products):
         # 一般カテゴリを追加
         for main_cat, sub_cats in categories.items():
             sitemap_content += '  <url>\n'
-            sitemap_content += f'    <loc>{base_url}category/{main_cat}/index.html</loc>\n'
+            sitemap_content += f'    <loc>{base_url}category/{main_cat}.html</loc>\n'
             sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
             sitemap_content += '    <changefreq>daily</changefreq>\n'
             sitemap_content += '    <priority>0.8</priority>\n'
             sitemap_content += '  </url>\n'
             for sub_cat in sub_cats:
                 sitemap_content += '  <url>\n'
-                sitemap_content += f'    <loc>{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+                sitemap_content += f'    <loc>{base_url}category/{sub_cat.replace(" ", "")}.html</loc>\n'
                 sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
                 sitemap_content += '    <changefreq>daily</changefreq>\n'
                 sitemap_content += '    <priority>0.7</priority>\n'
