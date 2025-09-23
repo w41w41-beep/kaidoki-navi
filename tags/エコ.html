@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カイドキ-ナビ | タグ：エコの商品一覧</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
+        </div>
+    </header>
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+        </div>
+    </div>
+    <div class="genre-links-container" style="margin-top: -10px;">
+        <div class="genre-links">
+            <a href="../category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="../category/不明/index.html">不明</a><span class="separator">|</span>
+        </div>
+    </div>
+<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">#{tag}の関連商品</h2><div class="product-grid">
+<a href="../products/brita:10000051.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/brita/cabinet/bx/item_pot/liquelli/liquelli-2c_p10_cp.jpg?_ex=128x128" alt="【ポイント10倍＋10%OFFクーポン！9/18 15:00〜9/25 23:59まで】【レビュー特典あり】公式 浄水器のブリタ ポット型浄水器 リクエリ マクストラプロ ピュアパフォーマンスカートリッジ2個付 ろ過水容量1.15L (全容量2.2L)">
+    <div class="product-info">
+        <h3 class="product-name">【ポイント10倍＋10%OFFクーポン！...</h3>
+        <p class="product-price">4,488円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
+    </div>
+</a>
+                </div></div></main>
+    </main>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../privacy.html">プライバシーポリシー</a>
+            <a href="../disclaimer.html">免責事項</a>
+            <a href="../contact.html">お問い合わせ</a>
+        </div>
+    </div>
+    </footer>
+    <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+
+                new Chart(priceChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日付'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '価格（円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+        

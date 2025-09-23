@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カイドキ-ナビ | タグ：ズレ防止の商品一覧</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
+        </div>
+    </header>
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+        </div>
+    </div>
+    <div class="genre-links-container" style="margin-top: -10px;">
+        <div class="genre-links">
+            <a href="../category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="../category/不明/index.html">不明</a><span class="separator">|</span>
+        </div>
+    </div>
+<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">#{tag}の関連商品</h2><div class="product-grid">
+<a href="../products/next-online:10000180.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/next-online/cabinet/06938766/08787750/imgrc0126414933.jpg?_ex=128x128" alt="レビュー件数3万件超え 【10冠】 洗濯機かさ上げ台 【特許＆意匠登録出願中】 高耐久 防音 防振 正規品 かさあげ 台 高さ調整 かさ増し台 キズ凹み防止 振動防止 ドラム式 縦型 底上げ台 洗濯機用防振台 洗濯機台 洗濯機 置き台 ズレ防止 底上げ ふんばるゾウ 洗濯機下 掃除">
+    <div class="product-info">
+        <h3 class="product-name">レビュー件数3万件超え 【10冠】 洗濯...</h3>
+        <p class="product-price">1,980円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
+    </div>
+</a>
+                </div></div></main>
+    </main>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../privacy.html">プライバシーポリシー</a>
+            <a href="../disclaimer.html">免責事項</a>
+            <a href="../contact.html">お問い合わせ</a>
+        </div>
+    </div>
+    </footer>
+    <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+
+                new Chart(priceChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日付'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '価格（円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+        

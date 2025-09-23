@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カイドキ-ナビ | タグ：冷蔵庫マットの商品一覧</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../index.html">カイドキ-ナビ</a></h1>
+            <p>お得な買い時を見つけよう！</p>
+        </div>
+    </header>
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" placeholder="商品名、キーワードで検索...">
+            <button class="search-button">🔍</button>
+        </div>
+    </div>
+    <div class="genre-links-container">
+        <div class="genre-links">
+            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+        </div>
+    </div>
+    <div class="genre-links-container" style="margin-top: -10px;">
+        <div class="genre-links">
+            <a href="../category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="../category/不明/index.html">不明</a><span class="separator">|</span>
+        </div>
+    </div>
+<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">#{tag}の関連商品</h2><div class="product-grid">
+<a href="../products/e-kit:10042595.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/e-kit/cabinet/description/ek-kbmr01mcl/ek-kbmr01_1_cp.jpg?_ex=128x128" alt="【9/19-24限定100円OFFクーポン】 ＼高品質 高コスパ／ 冷蔵庫 マット 冷蔵庫マット クリア 透明 床暖房 冷蔵庫下マット キズ 凹み 防止 下敷き ポリカーボネート 洗濯機 SNSで大人気 [S/M/L] [ゼロキーパー]">
+    <div class="product-info">
+        <h3 class="product-name">【9/19-24限定100円OFFクーポ...</h3>
+        <p class="product-price">2,930円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
+    </div>
+</a>
+                
+<a href="../products/treesoyc:10000002.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_gold/treesoyc/PD/RM/mat-6.png?_ex=128x128" alt="＼マラソン限定割引＋P5倍／【楽天1位8冠！高評価★4.7 雑誌LDK掲載！選べる特典! 】冷蔵庫マット 透明 度90% キズ 凹み 防止 ボリカーボネート 下敷き 防カビ 薬剤検査済 耐荷重500Kg ポリカ 【収納・不動産のプロ監修】SNSで人気! [CREEKS] 全6size＜2年保証＞">
+    <div class="product-info">
+        <h3 class="product-name">＼マラソン限定割引＋P5倍／【楽天1位8...</h3>
+        <p class="product-price">2,950円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
+    </div>
+</a>
+                
+<a href="../products/next-online:10000197.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/next-online/cabinet/06938766/09336903/samune_250809-2-min.jpg?_ex=128x128" alt="【楽天1位6冠】PVCより10倍強い！ 冷蔵庫マット [正規品] 透明 クリア キズ 凹み 防止 防カビ加工 ポリカーボネート 冷蔵庫マット極 iHouse all 62 53 65 70 75 cm 厚さ2mm 200L 500L 600L 1年保証 あす楽 送料無料 床 保護 プラスチック パネル シート ハード">
+    <div class="product-info">
+        <h3 class="product-name">【楽天1位6冠】PVCより10倍強い！ ...</h3>
+        <p class="product-price">3,380円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">AI分析準備中</div>
+    </div>
+</a>
+                </div></div></main>
+    </main>
+    <footer>
+        <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
+        <div class="footer-links">
+            <a href="../privacy.html">プライバシーポリシー</a>
+            <a href="../disclaimer.html">免責事項</a>
+            <a href="../contact.html">お問い合わせ</a>
+        </div>
+    </div>
+    </footer>
+    <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceChartCanvas = document.getElementById('priceChart');
+            if (priceChartCanvas) {
+                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                const dates = dataHistory.map(item => item.date);
+                const prices = dataHistory.map(item => item.price);
+
+                new Chart(priceChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: '価格推移',
+                            data: prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日付'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '価格（円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+        
