@@ -197,49 +197,62 @@ def generate_ai_analysis(product_name, product_price, price_history):
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
 def fetch_rakuten_items():
-    """楽天APIから1件の商品データを取得する関数"""
+    """楽天APIから複数のジャンルの商品データを取得する関数"""
     app_id = os.environ.get('RAKUTEN_API_KEY')
     if not app_id:
         print("RAKUTEN_API_KEYが設定されていません。")
         return []
 
-    keywords = ['最安値', '割引', 'セール', 'お得な商品', '訳あり']
+    # ジャンルに特化したキーワードとソート順を定義
+    search_queries = [
+        {'keyword': 'ノートパソコン', 'sort': '-reviewCount'},
+        {'keyword': 'テレビ', 'sort': '-reviewCount'},
+        {'keyword': 'デジタルカメラ', 'sort': '-reviewCount'},
+        {'keyword': '冷蔵庫', 'sort': '-reviewCount'},
+        {'keyword': '洗濯機', 'sort': '-reviewCount'}
+    ]
+
     all_products = []
 
-    for keyword in keywords:
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
+    for query in search_queries:
+        keyword = query['keyword']
+        sort_order = query['sort']
+        # 取得件数を10個に設定
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort={sort_order}&hits=10"
+        
         try:
+            print(f"楽天APIから商品を取得中... (キーワード: {keyword})")
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             data = response.json()
             items = data.get('Items', [])
 
             if items:
-                item_data = items[0]['Item']
-                description = item_data.get('itemCaption', '')
+                for item in items:
+                    item_data = item['Item']
+                    description = item_data.get('itemCaption', '')
 
-                # 新しい商品情報を構築
-                new_product = {
-                    "id": item_data['itemCode'],
-                    "name": item_data['itemName'],
-                    "price": str(item_data['itemPrice']),
-                    "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
-                    "rakuten_url": item_data.get('itemUrl', ''),
-                    "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
-                    "amazon_url": AMAZON_AFFILIATE_LINK,
-                    "page_url": f"pages/{item_data['itemCode']}.html",
-                    "category": {"main": "コンタクトレンズ", "sub": ""},
-                    "ai_headline": "",
-                    "ai_analysis": "",
-                    "description": description,
-                    "ai_summary": "",
-                    "tags": [],
-                    "date": date.today().isoformat(),
-                    "main_ec_site": "楽天",
-                    "price_history": []
-                }
-                all_products.append(new_product)
-                break  # 1つ見つかったらループを抜ける
+                    # 新しい商品情報を構築
+                    new_product = {
+                        "id": item_data['itemCode'],
+                        "name": item_data['itemName'],
+                        "price": str(item_data['itemPrice']),
+                        "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
+                        "rakuten_url": item_data.get('itemUrl', ''),
+                        "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
+                        "amazon_url": AMAZON_AFFILIATE_LINK,
+                        "page_url": f"products/{item_data['itemCode']}.html",
+                        "category": {"main": "不明", "sub": ""}, # AIで後から設定するため、ここでは仮の値を設定
+                        "ai_headline": "",
+                        "ai_analysis": "",
+                        "description": description,
+                        "ai_summary": "",
+                        "tags": [],
+                        "date": date.today().isoformat(),
+                        "main_ec_site": "楽天",
+                        "price_history": []
+                    }
+                    all_products.append(new_product)
 
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
@@ -303,20 +316,57 @@ def update_products_csv(new_products):
             if sub_category and sub_category != "":
                 product['category']['sub'] = sub_category
 
-        # ai_headlineとai_analysisを常に最新に更新
-        try:
+# AIメタデータと分析を更新（新規・既存問わず）
+for item_id, product in updated_products.items():
+    # 新規商品の場合は、AIメタデータと分析を両方生成
+    is_new_product = item_id not in cached_products
+
+    if is_new_product:
+        # 新規商品の場合、メタデータと分析を生成
+        ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
+        product['ai_summary'] = ai_summary
+        product['tags'] = tags
+        if 'category' in product and isinstance(product['category'], dict):
+            product['category']['sub'] = sub_category
+
+        price_history = product.get('price_history', [])
+        price_int = int(str(product['price']).replace(',', ''))
+        ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
+        product['ai_headline'] = ai_headline
+        product['ai_analysis'] = ai_analysis_text
+    
+    else:
+        # 既存商品の場合、価格が変動した場合のみAI分析を再生成
+        existing_product = cached_products[item_id]
+        current_price = int(product['price'].replace(',', ''))
+        
+        # 前日の価格を取得（価格履歴の最終日）
+        last_price_entry = existing_product.get('price_history')[-1] if existing_product.get('price_history') else None
+        last_price = last_price_entry['price'] if last_price_entry else None
+
+        # 価格が変動したかどうかをチェック
+        if last_price is None or current_price != last_price:
+            print(f"価格変動を検知しました: {product['name']}。AI分析を更新します。")
             price_history = product.get('price_history', [])
-            price_int = int(str(product['price']).replace(',', ''))
-            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], price_int, price_history)
-            if ai_headline and ai_headline != "AI分析準備中":
-                product['ai_headline'] = ai_headline
-            if ai_analysis_text and ai_analysis_text != "詳細なAI分析は現在準備中です。":
-                product['ai_analysis'] = ai_analysis_text
-        except (ValueError, KeyError):
-            print(f"価格の変換に失敗しました: {product.get('price', '不明')}")
-            # エラー時もデフォルト値を設定
-            product['ai_headline'] = "AI分析準備中"
-            product['ai_analysis'] = "詳細なAI分析は現在準備中です。"
+            ai_headline, ai_analysis_text = generate_ai_analysis(product['name'], current_price, price_history)
+            product['ai_headline'] = ai_headline
+            product['ai_analysis'] = ai_analysis_text
+        else:
+            print(f"価格変動なし: {product['name']}。AI分析は更新しません。")
+            # 既存のAI分析を維持
+            product['ai_headline'] = existing_product['ai_headline']
+            product['ai_analysis'] = existing_product['ai_analysis']
+
+        # AIメタデータ（要約、タグ、サブカテゴリー）が空の場合は初回のみ生成
+        if not product.get('ai_summary') or not product.get('tags') or not product['category'].get('sub'):
+            print(f"商品: '{product['name']}' のAIメタデータを生成中...")
+            ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
+            if ai_summary and ai_summary != "この商品の詳しい説明は準備中です。":
+                product['ai_summary'] = ai_summary
+            if tags:
+                product['tags'] = tags
+            if sub_category and 'category' in product and isinstance(product['category'], dict):
+                product['category']['sub'] = sub_category
     
     final_products = list(updated_products.values())
     save_to_cache(final_products)
