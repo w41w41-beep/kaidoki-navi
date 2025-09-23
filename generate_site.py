@@ -207,7 +207,7 @@ def fetch_rakuten_items():
     all_products = []
 
     for keyword in keywords:
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=10"
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
@@ -285,8 +285,9 @@ def update_products_csv(new_products):
 
     # AIメタデータと分析を更新（新規・既存問わず）
     for item_id, product in updated_products.items():
-        # 新規商品の場合、またはai_summaryまたはtagsが空の場合は生成
         is_new = item_id not in cached_products
+        
+        # AIハイライト、タグ、サブカテゴリーの生成（新規商品のみ、またはデータが空の場合）
         if is_new or not product.get('ai_summary') or not product.get('tags'):
             print(f"商品: '{product['name']}' のAIメタデータを生成中...")
             ai_summary, tags, sub_category = generate_ai_metadata(product['name'], product['description'])
@@ -303,12 +304,16 @@ def update_products_csv(new_products):
             if sub_category and sub_category != "":
                 product['category']['sub'] = sub_category
 
-        # ai_headlineとai_analysisを更新
+        # AI分析（注目ポイントと買い時分析）の更新
         is_price_changed = False
-        current_price = int(str(product['price']).replace(',', ''))
-        cached_price_history = cached_products.get(item_id, {}).get('price_history', [])
-        if cached_price_history and cached_price_history[-1]['price'] != current_price:
-            is_price_changed = True
+        try:
+            current_price = int(str(product['price']).replace(',', ''))
+            cached_price_history = cached_products.get(item_id, {}).get('price_history', [])
+            # 価格履歴があり、かつ最新価格がキャッシュの最終価格と異なる場合に価格変動とする
+            if cached_price_history and cached_price_history[-1]['price'] != current_price:
+                is_price_changed = True
+        except (ValueError, KeyError):
+            current_price = 0
         
         # 新規商品、または価格が変動した場合、またはAI分析が空の場合に再分析
         if is_new or is_price_changed or not product.get('ai_headline') or not product.get('ai_analysis'):
