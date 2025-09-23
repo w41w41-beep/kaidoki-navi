@@ -728,7 +728,7 @@ def generate_site(products):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="{os.path.relpath("tags/" + tag + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
+                    {"".join([f'<a href="{os.path.relpath("tags/" + tag.replace("/", "-") + ".html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in product.get('tags', [])])}
                 </div>
             </div>
         </div>
@@ -746,7 +746,7 @@ def generate_site(products):
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
         <div class="product-tags all-tags-list">
-            {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in all_tags])}
+            {"".join([f'<a href="{tag.replace("/", "-")}.html" class="tag-button">#{tag}</a>' for tag in all_tags])}
         </div>
     </div>
 </main>
@@ -759,7 +759,7 @@ def generate_site(products):
         # 各タグごとのページを生成
         for tag in all_tags:
             tag_products = [p for p in products if tag in p.get('tags', [])]
-            page_path = f"tags/{tag}.html"
+            page_path = f"tags/{tag.replace('/', '-')}.html"
             header, footer = generate_header_footer(page_path, page_title=f"タグ：{tag}の商品一覧")
             products_html = ""
             for product in tag_products:
