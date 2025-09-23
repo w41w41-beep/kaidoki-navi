@@ -423,6 +423,7 @@ def generate_site(products):
             <a href="{base_path}/disclaimer.html">免責事項</a>
             <a href="{base_path}/contact.html">お問い合わせ</a>
         </div>
+    </div>
     </footer>
     <script src="{base_path}/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -471,6 +472,13 @@ def generate_site(products):
         """
         return header_html, footer_html
 
+    def generate_static_page(page_path, page_title, content_html):
+        """静的HTMLページを生成するヘルパー関数"""
+        header, footer = generate_header_footer(page_path, page_title=page_title)
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + content_html + footer)
+        print(f"{page_path} が生成されました。")
+        
     for root, dirs, files in os.walk('.'):
         for file in files:
             if file.endswith('.html') and not file in ['privacy.html', 'disclaimer.html', 'contact.html', 'sitemap.xml', 'index.html', 'style.css', 'script.js']:
