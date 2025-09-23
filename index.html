@@ -272,7 +272,7 @@
         <div class="price-status-content ai-analysis">AI分析準備中</div>
     </div>
 </a>
-            </div><div class="pagination"><a href="index.html" class="active">1</a><a href="pages/page2.html" class="">2</a><a href="pages/page2.html" class="next">次へ</a></div></main>
+            </div><div class="pagination"><a href="index.html" class="active">1</a><a href="pages/page2.html" class="">2</a><a href="pages/page3.html" class="">3</a><a href="pages/page2.html" class="next">次へ</a></div></main>
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
@@ -281,7 +281,6 @@
             <a href="./disclaimer.html">免責事項</a>
             <a href="./contact.html">お問い合わせ</a>
         </div>
-    </div>
     </footer>
     <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -292,7 +291,6 @@
                 const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
                 const dates = dataHistory.map(item => item.date);
                 const prices = dataHistory.map(item => item.price);
-
                 new Chart(priceChartCanvas, {
                     type: 'line',
                     data: {
