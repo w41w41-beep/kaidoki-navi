@@ -188,6 +188,23 @@ def generate_ai_analysis(product_name, product_price, price_history):
 
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
+def classify_category(product_name):
+    """
+    商品名に基づいてメインカテゴリーを分類する。
+    """
+    name_lower = product_name.lower()
+    pc_keywords = ['パソコン', 'pc', 'ノートpc', 'cpu', 'ssd', 'メモリ', 'ディスプレイ', 'モニター', 'キーボード', 'マウス', 'ルーター']
+    appliance_keywords = ['家電', '冷蔵庫', '洗濯機', '電子レンジ', 'テレビ', '扇風機', '掃除機', 'カメラ', 'ドライヤー', '炊飯器']
+    
+    for keyword in pc_keywords:
+        if keyword in name_lower:
+            return 'パソコン'
+    for keyword in appliance_keywords:
+        if keyword in name_lower:
+            return '家電'
+    return '不明'
+
+
 def fetch_rakuten_items():
     """楽天APIから複数の商品データを取得する関数"""
     app_id = os.environ.get('RAKUTEN_API_KEY')
@@ -195,7 +212,7 @@ def fetch_rakuten_items():
         print("RAKUTEN_API_KEYが設定されていません。")
         return []
 
-    keywords = ['最安値', '割引', 'セール', 'お得な商品', '訳あり']
+    keywords = ['ノートパソコン', 'ワイヤレスイヤホン', 'スマートウォッチ', '冷蔵庫', 'テレビ', 'デジタルカメラ', 'パソコンパーツ']
     all_products = []
 
     for keyword in keywords:
@@ -212,6 +229,10 @@ def fetch_rakuten_items():
                 for item in items:
                     item_data = item['Item']
                     description = item_data.get('itemCaption', '')
+                    main_category = classify_category(item_data['itemName'])
+                    if main_category == '不明':
+                        continue #不明なカテゴリーは追加しない
+                    
                     new_product = {
                         "id": item_data['itemCode'],
                         "name": item_data['itemName'],
@@ -220,8 +241,8 @@ def fetch_rakuten_items():
                         "rakuten_url": item_data.get('itemUrl', ''),
                         "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
                         "amazon_url": AMAZON_AFFILIATE_LINK,
-                        "page_url": f"pages/{item_data['itemCode']}.html",
-                        "category": {"main": "コンタクトレンズ", "sub": ""},
+                        "page_url": f"pages/{item_data['itemCode'].replace(':', '_')}.html",
+                        "category": {"main": main_category, "sub": ""},
                         "ai_headline": "",
                         "ai_analysis": "",
                         "description": description,
@@ -232,7 +253,6 @@ def fetch_rakuten_items():
                         "price_history": []
                     }
                     all_products.append(new_product)
-                break
         except requests.exceptions.RequestException as e:
             print(f"楽天APIへのリクエスト中にエラーが発生しました: {e}")
         except (IndexError, KeyError) as e:
@@ -350,12 +370,13 @@ def generate_site(products):
 
     categories = {}
     for product in products:
-        main_cat = product.get('category', {}).get('main', '不明')
+        main_cat = product.get('category', {}).get('main', '')
         sub_cat = product.get('category', {}).get('sub', '')
-        if main_cat not in categories:
-            categories[main_cat] = []
-        if sub_cat and sub_cat not in categories[main_cat]:
-            categories[main_cat].append(sub_cat)
+        if main_cat and main_cat != '不明':
+            if main_cat not in categories:
+                categories[main_cat] = []
+            if sub_cat and sub_cat not in categories[main_cat]:
+                categories[main_cat].append(sub_cat)
 
     sorted_main_cats = sorted(categories.keys())
 
@@ -503,7 +524,8 @@ def generate_site(products):
     os.makedirs('pages', exist_ok=True)
     os.makedirs('category', exist_ok=True)
     os.makedirs('tags', exist_ok=True)
-
+    
+    # カテゴリーごとのページ生成
     for main_cat, sub_cats in categories.items():
         main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
         page_path = f"category/{main_cat}/index.html"
@@ -561,46 +583,28 @@ def generate_site(products):
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + products_html + "</div></div>" + footer)
             print(f"{page_path} が生成されました。")
-
+    
+    # 特別カテゴリーのページ生成
     for special_cat, sub_cats in special_categories.items():
         page_path = f"category/{special_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
-        header, footer = generate_header_footer(page_path, sub_cat_links=sub_cats, page_title=f"{special_cat}の商品一覧")
+        header, footer = generate_header_footer(page_path, page_title=f"{special_cat}の商品一覧")
+        
+        if special_cat == '最安値':
+            filtered_products = sorted([p for p in products], key=lambda x: int(x.get('price', 0)))
+        else: # 期間限定セール
+            filtered_products = [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
 
         main_content_html = f"""
     <main class="container">
         <div class="ai-recommendation-section">
-            <h2 class="ai-section-title">{special_cat}のサブカテゴリー一覧</h2>
-            <div class="genre-links sub-genre-links">
-            {"".join([f'<a href="{sub_cat.replace(" ", "")}.html">{sub_cat}</a><span class="separator">|</span>' for sub_cat in sorted(sub_cats)])}
-            </div>
-        </div>
-    """
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + main_content_html + "</main>" + footer)
-        print(f"category/{special_cat}/index.html が生成されました。")
-
-        for sub_cat in sub_cats:
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = f"category/{special_cat}/{sub_cat_file_name}"
-
-            if special_cat == '最安値':
-                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-                filtered_products.sort(key=lambda x: int(x.get('price', 0)))
-            else:
-                filtered_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat and any(tag in ['セール', '期間限定'] for tag in p.get('tags', []))]
-
-            header, footer = generate_header_footer(page_path, page_title=f"{special_cat} > {sub_cat}の商品一覧")
-            main_content_html = f"""
-    <main class="container">
-        <div class="ai-recommendation-section">
-            <h2 class="ai-section-title">{sub_cat}のお得な商品一覧</h2>
+            <h2 class="ai-section-title">{special_cat}のお得な商品一覧</h2>
             <div class="product-grid">
             """
-            products_html = ""
-            for product in filtered_products:
-                link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
-                products_html += f"""
+        products_html = ""
+        for product in filtered_products:
+            link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
+            products_html += f"""
 <a href="{link_path}" class="product-card">
     <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
     <div class="product-info">
@@ -611,10 +615,11 @@ def generate_site(products):
     </div>
 </a>
                 """
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + products_html + "</div></div>" + footer)
-            print(f"{page_path} が生成されました。")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + products_html + "</div></div>" + footer)
+        print(f"category/{special_cat}/index.html が生成されました。")
 
+    # メインページの生成
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(total_pages):
         start_index = i * PRODUCTS_PER_PAGE
@@ -656,7 +661,8 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + '<main class="container"><div class="ai-recommendation-section"><h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2><div class="product-grid">' + products_html + '</div>' + pagination_html + '</main>' + footer)
         print(f"{page_path} が生成されました。")
-
+    
+    # 商品詳細ページの生成
     for product in products:
         page_path = product['page_url']
         dir_name = os.path.dirname(page_path)
@@ -746,30 +752,56 @@ def generate_site(products):
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-    if all_tags:
-        os.makedirs('tags', exist_ok=True)
+    
+    # タグ一覧ページのページネーション
+    TAGS_PER_PAGE = 50
+    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+    for i in range(total_tag_pages):
+        start_index = i * TAGS_PER_PAGE
+        end_index = start_index + TAGS_PER_PAGE
+        paginated_tags = all_tags[start_index:end_index]
+        page_num = i + 1
+        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+        
         tag_list_html_content = f"""
  <main class="container">
  <div class="ai-recommendation-section">
  <h2 class="ai-section-title">タグから探す</h2>
  <div class="product-tags all-tags-list">
- {"".join([f'<a href="{tag}.html" class="tag-button">#{tag}</a>' for tag in all_tags])}
+ {"".join([f'<a href="{os.path.relpath(f"tags/{tag}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])}
  </div>
- </div>
- </main>
  """
-        generate_static_page('tags/index.html', "タグから探す", tag_list_html_content)
-        for tag in all_tags:
-            tagged_products = [p for p in products if tag in p.get('tags', [])]
-            tag_products_html = f"""
+        # ページネーションの生成
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+            for p in range(1, total_tag_pages + 1):
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+            pagination_html += '</div>'
+        
+        tag_list_html_content += pagination_html
+        tag_list_html_content += "</main>"
+        generate_static_page(page_path, "タグから探す", tag_list_html_content)
+
+    for tag in all_tags:
+        tagged_products = [p for p in products if tag in p.get('tags', [])]
+        tag_products_html = f"""
  <main class="container">
  <div class="ai-recommendation-section">
  <h2 class="ai-section-title">#{tag}の注目商品</h2>
  <div class="product-grid">
  """
-            for product in tagged_products:
-                link_path = os.path.relpath(product['page_url'], 'tags')
-                tag_products_html += f"""
+        for product in tagged_products:
+            link_path = os.path.relpath(product['page_url'], 'tags')
+            tag_products_html += f"""
  <a href="{link_path}" class="product-card">
  <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
  <div class="product-info">
@@ -780,8 +812,8 @@ def generate_site(products):
  </div>
  </a>
  """
-            tag_products_html += "</div></div>"
-            generate_static_page(f"tags/{tag}.html", f"タグ：#{tag}", tag_products_html)
+        tag_products_html += "</div></div>"
+        generate_static_page(f"tags/{tag}.html", f"タグ：#{tag}", tag_products_html)
 
     sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
     sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -808,18 +840,18 @@ def generate_site(products):
             sitemap_content += '  </url>\n'
     for special_cat in special_categories:
         sitemap_content += '  <url>\n'
-        sitemap_content += f'    <loc>{base_url}category/{special_cat}/index.html</loc>\n'
-        sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
-        sitemap_content += '    <changefreq>daily</changefreq>\n'
-        sitemap_content += '    <priority>0.8</priority>\n'
-        sitemap_content += '  </url>\n'
-        for sub_cat in sorted(special_categories.get(special_cat, [])):
-            sitemap_content += '  <url>\n'
-            sitemap_content += f'    <loc>{base_url}category/{special_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
-            sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
-            sitemap_content += '    <changefreq>daily</changefreq>\n'
-            sitemap_content += '    <priority>0.6</priority>\n'
-            sitemap_content += '  </url>\n'
+    #     sitemap_content += f'    <loc>{base_url}category/{special_cat}/index.html</loc>\n'
+    #     sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+    #     sitemap_content += '    <changefreq>daily</changefreq>\n'
+    #     sitemap_content += '    <priority>0.8</priority>\n'
+    #     sitemap_content += '  </url>\n'
+    #     for sub_cat in sorted(special_categories.get(special_cat, [])):
+    #         sitemap_content += '  <url>\n'
+    #         sitemap_content += f'    <loc>{base_url}category/{special_cat}/{sub_cat.replace(" ", "")}.html</loc>\n'
+    #         sitemap_content += f'    <lastmod>{date.today().isoformat()}</lastmod>\n'
+    #         sitemap_content += '    <changefreq>daily</changefreq>\n'
+    #         sitemap_content += '    <priority>0.6</priority>\n'
+    #         sitemap_content += '  </url>\n'
     for tag in all_tags:
         sitemap_content += '  <url>\n'
         sitemap_content += f'    <loc>{base_url}tags/{tag}.html</loc>\n'
