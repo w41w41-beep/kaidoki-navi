@@ -166,7 +166,7 @@ def fetch_rakuten_items():
     all_products = []
 
     for keyword in keywords:
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=10"
         try:
             print(f"キーワード '{keyword}' で商品を検索中...")
             response = requests.get(url, timeout=10)
@@ -287,9 +287,6 @@ def update_products_csv(new_products):
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
     # どの階層にいてもルートディレクトリへの相対パスを正しく計算
-    # 例えば pages/product_id.html -> ../
-    #         category/main_cat/ -> ../
-    #         index.html -> .
     base_path = os.path.relpath('.', os.path.dirname(current_path))
     if base_path != ".":
         base_path += "/"
