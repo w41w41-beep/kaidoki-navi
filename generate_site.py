@@ -704,8 +704,8 @@ def generate_site(products):
                 <div class="ai-recommendation-section">
                     <div class="price-status-title">💡注目ポイント</div>
                     <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
-                    <div class="product-card-buttons">
-                        {"".join([f'<a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link amazon" target="_blank">Amazonで購入する</a>' if product.get("source") == "amazon" else f'<a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>' if product.get("source") == "rakuten" else ""])}
+                    <div class="product-card-buttons-full">
+                        <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>
                     </div>
                 </div>
                 {affiliate_links_html}
