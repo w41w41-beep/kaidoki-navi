@@ -202,6 +202,7 @@ def fetch_rakuten_items():
                         "date": date.today().isoformat(),
                         "main_ec_site": "楽天",
                         "price_history": []
+                        'source': 'rakuten'
                     }
                     all_products.append(new_product)
         except requests.exceptions.RequestException as e:
@@ -213,11 +214,14 @@ def fetch_rakuten_items():
     return all_products
 
 def update_products_csv(new_products):
-    """新しい商品データを既存のproducts.csvに統合・更新する関数"""
+    """新しい商品データを既存のproducts.jsonに統合・更新する関数"""
     cached_products = get_cached_data()
     updated_products = {}
 
     for item_id, product in cached_products.items():
+        # 既存の商品データにsourceキーを追加
+        if 'source' not in product:
+            product['source'] = 'rakuten'
         updated_products[item_id] = product
 
     for product in new_products:
@@ -231,6 +235,9 @@ def update_products_csv(new_products):
         except (ValueError, KeyError):
             print(f"価格の変換に失敗しました: {product.get('price', '不明')}")
             continue
+
+        # 新規商品にsourceキーを追加
+        product['source'] = 'rakuten'
 
         if is_new:
             # 新規商品の処理
@@ -263,15 +270,6 @@ def update_products_csv(new_products):
             existing_product['price_history'] = price_history
             existing_product['price'] = str(current_price) # 新しい価格を更新
 
-            # 価格変動があった場合、またはAIデータが欠落している場合のみ再生成
-            if is_price_changed or not existing_product.get('ai_headline') or not existing_product.get('ai_analysis'):
-                print(f"商品 '{existing_product['name']}' のAI分析を更新/生成中...")
-                ai_headline, ai_analysis_text = generate_ai_analysis(existing_product['name'], current_price, price_history)
-                existing_product['ai_headline'] = ai_headline
-                existing_product['ai_analysis'] = ai_analysis_text
-            else:
-                print(f"商品 '{existing_product['name']}' の価格に変動がないため、AI分析はスキップされました。")
-            
             # AIメタデータが欠落している場合のみ補完
             if not existing_product.get('ai_summary') or not existing_product.get('tags') or not existing_product['category'].get('sub'):
                 print(f"商品 '{existing_product['name']}' のAIメタデータを補完中...")
@@ -280,6 +278,15 @@ def update_products_csv(new_products):
                 existing_product['tags'] = tags if not existing_product.get('tags') else existing_product['tags']
                 existing_product['category']['sub'] = sub_category if not existing_product['category'].get('sub') else existing_product['category']['sub']
 
+            # 価格変動があった場合、またはAIデータが欠落している場合のみ再生成
+            if is_price_changed or not existing_product.get('ai_headline') or not existing_product.get('ai_analysis'):
+                print(f"商品 '{existing_product['name']}' のAI分析を更新/生成中...")
+                ai_headline, ai_analysis_text = generate_ai_analysis(existing_product['name'], current_price, price_history)
+                existing_product['ai_headline'] = ai_headline
+                existing_product['ai_analysis'] = ai_analysis_text
+            else:
+                print(f"商品 '{existing_product['name']}' の価格に変動がないため、AI分析はスキップされました。")
+    
     final_products = list(updated_products.values())
     save_to_cache(final_products)
     print(f"{CACHE_FILE}が更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
@@ -698,7 +705,7 @@ def generate_site(products):
                     <div class="price-status-title">💡注目ポイント</div>
                     <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
                     <div class="product-card-buttons">
-                        {"".join([f'<a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>' if product.get("source") == "rakuten" else f'<a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link amazon" target="_blank">Amazonで購入する</a>' if product.get("source") == "amazon" else f'<a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで購入する</a>'])}
+                        {"".join([f'<a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link amazon" target="_blank">Amazonで購入する</a>' if product.get("source") == "amazon" else f'<a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>' if product.get("source") == "rakuten" else ""])}
                     </div>
                 </div>
                 {affiliate_links_html}
