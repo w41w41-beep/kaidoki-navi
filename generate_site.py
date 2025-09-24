@@ -689,6 +689,13 @@ def generate_site(products):
 </div>
 """
 
+# 現在のページからルートディレクトリへの相対パスを計算
+        rel_path_to_root = os.path.relpath('.', os.path.dirname(page_path))
+        if rel_path_to_root == '.':
+            base_path = './'
+        else:
+            base_path = rel_path_to_root + '/'
+        
         item_html_content = f"""
 <main class="container">
     <div class="product-detail">
@@ -698,7 +705,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="/category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="/category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -718,7 +725,7 @@ def generate_site(products):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="/tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
+                    {"".join([f'<a href="{base_path}tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
                 </div>
             </div>
         </div>
