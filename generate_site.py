@@ -687,7 +687,7 @@ def generate_site(products):
         <a href="{YAHOO_TOP_PAGE_AD_URL}" class="btn shop-link yahoo" rel="nofollow" target="_blank">Yahoo!ショッピングで見る</a>
     </div>
 </div>
-# ルートディレクトリへの相対パスを計算
+# 現在のページからルートディレクトリへの相対パスを計算
         rel_path_to_root = os.path.relpath('.', os.path.dirname(page_path))
         if rel_path_to_root == '.':
             base_path = './'
@@ -703,12 +703,12 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ:<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
-                    <p class="current-price">現在の価格:<span>{int(product.get('price', 0)):,}</span>円</p>
+                    <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
                 <div class="ai-recommendation-section">
-                    <div class="price-status-title">注目ポイント</div>
+                    <div class="price-status-title">💡注目ポイント</div>
                     <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
                     <div class="product-card-buttons-full">
                         <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>
