@@ -202,7 +202,7 @@ def fetch_rakuten_items():
                         "date": date.today().isoformat(),
                         "main_ec_site": "楽天",
                         "price_history": []
-                        'source': 'rakuten'
+                        'source': 'rakuten', 
                     }
                     all_products.append(new_product)
         except requests.exceptions.RequestException as e:
