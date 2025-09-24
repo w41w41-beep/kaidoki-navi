@@ -693,7 +693,7 @@ def generate_site(products):
             base_path = './'
         else:
             base_path = rel_path_to_root + '/'
-        
+
         item_html_content = f"""
 <main class="container">
     <div class="product-detail">
