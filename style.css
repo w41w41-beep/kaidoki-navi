@@ -168,6 +168,17 @@ footer {
 }
 .product-price { color: #dc3545; font-size: 20px; font-weight: bold; margin-bottom: 5px; }
 .product-status { font-size: 14px; color: #28a745; font-weight: bold; }
+.product-card-buttons-full {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.product-card-buttons-full .btn {
+    flex-grow: 1;
+    font-size: 1.1em;
+    padding: 12px 20px;
+}
 .ai-recommendation-section {
     background-color: #e9f0f1;
     padding: 30px 20px;
