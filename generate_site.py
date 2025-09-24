@@ -268,6 +268,8 @@ def update_products_csv(new_products):
                 ai_headline, ai_analysis_text = generate_ai_analysis(existing_product['name'], current_price, price_history)
                 existing_product['ai_headline'] = ai_headline
                 existing_product['ai_analysis'] = ai_analysis_text
+            else:
+                print(f"商品 '{existing_product['name']}' の価格に変動がないため、AI分析はスキップされました。")
             
             # AIメタデータが欠落している場合のみ補完
             if not existing_product.get('ai_summary') or not existing_product.get('tags') or not existing_product['category'].get('sub'):
@@ -282,18 +284,22 @@ def update_products_csv(new_products):
     print(f"{CACHE_FILE}が更新されました。現在 {len(final_products)} 個の商品を追跡中です。")
     return final_products
 
-def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！", sub_category_links=None):
+def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
-    # ルートディレクトリからの相対パスを決定
-    dir_path = os.path.dirname(current_path)
-    if dir_path == '':
+    # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
+    # 例：`pages/product.html` -> `../`
+    #     `category/pc/index.html` -> `../../`
+    #     `index.html` -> `./`
+    # `os.path.relpath`は`index.html`が基準なので、
+    # `os.path.dirname(current_path)`が`pages`なら`..`を、`category/pc`なら`../..`を返す
+    # ルートディレクトリからのパスを生成する
+    rel_path_to_root = os.path.relpath('.', os.path.dirname(current_path))
+    if rel_path_to_root == '.':
         base_path = './'
     else:
-        # ディレクトリの深さに応じて相対パスを生成
-        depth = dir_path.count(os.sep)
-        base_path = '../' * depth
+        base_path = rel_path_to_root + '/'
 
-    # ナビゲーションリンク
+    # ハードコードされたカテゴリリンクを例示
     main_links = [
         ("タグから探す", f"{base_path}tags/index.html"),
         ("最安値", f"{base_path}category/最安値/index.html"),
@@ -306,16 +312,6 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
     
     def generate_links_html(links):
         return "".join([f'<a href="{url}">{text}</a><span class="separator">|</span>' for text, url in links])
-
-    sub_nav_html = ""
-    if sub_category_links:
-        sub_nav_html = f"""
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links">
-            {generate_links_html([(sub['name'], sub['url']) for sub in sub_category_links])}
-        </div>
-    </div>
-"""
 
     header_html = f"""
 <!DOCTYPE html>
@@ -337,7 +333,7 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="商品名、キーワードで検索...">
+            <input type="text" placeholder="商品名、キーワードで検索...">
             <button class="search-button">🔍</button>
         </div>
     </div>
@@ -351,7 +347,6 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             {generate_links_html(main_category_links)}
         </div>
     </div>
-    {sub_nav_html}
     """
     
     footer_html = f"""
@@ -418,9 +413,10 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
 
 def generate_product_card_html(product, page_path):
     """商品カードのHTMLを生成する"""
+    # 商品カードのリンクは現在のページからの相対パスで良い
     link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
     return f"""
-<a href="{link_path}" class="product-card" data-product-id="{product.get('id', '')}" data-tags="{','.join(product.get('tags', []))}" data-category="{product.get('category', {}).get('sub', '')}">
+<a href="{link_path}" class="product-card">
     <img src="{product.get('image_url', '')}" alt="{product.get('name', '商品画像')}">
     <div class="product-info">
         <h3 class="product-name">{product.get('name', '商品名')[:20] + '...' if len(product.get('name', '')) > 20 else product.get('name', '商品名')}</h3>
@@ -431,36 +427,8 @@ def generate_product_card_html(product, page_path):
 </a>
 """
 
-def generate_pagination_html(total_pages, current_page, current_path, base_url_prefix=''):
-    """ページネーションのHTMLを生成する"""
-    if total_pages <= 1:
-        return ""
-
-    pagination_html = '<div class="pagination">'
-    dir_path = os.path.dirname(current_path)
-
-    # 「前へ」ボタン
-    if current_page > 1:
-        prev_link = f"{base_url_prefix}index.html" if current_page == 2 else f"{base_url_prefix}page{current_page - 1}.html"
-        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, prev_link), dir_path)}" class="prev">前へ</a>'
-
-    # ページ番号
-    for p in range(1, total_pages + 1):
-        page_link = f"{base_url_prefix}index.html" if p == 1 else f"{base_url_prefix}page{p}.html"
-        active_class = 'active' if p == current_page else ''
-        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, page_link), dir_path)}" class="{active_class}">{p}</a>'
-
-    # 「次へ」ボタン
-    if current_page < total_pages:
-        next_link = f"{base_url_prefix}page{current_page + 1}.html"
-        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, next_link), dir_path)}" class="next">次へ</a>'
-    
-    pagination_html += '</div>'
-    return pagination_html
-
-
 def generate_site(products):
-    """HTMLファイルを生成する関数"""
+    """products.jsonを読み込み、HTMLファイルを生成する関数"""
     today = date.today().isoformat()
     for product in products:
         if 'date' not in product:
@@ -473,15 +441,15 @@ def generate_site(products):
         sub_cat = product.get('category', {}).get('sub', '')
         if main_cat and main_cat != '不明':
             if main_cat not in categories:
-                categories[main_cat] = set()
-            if sub_cat:
-                categories[main_cat].add(sub_cat)
+                categories[main_cat] = []
+            if sub_cat and sub_cat not in categories[main_cat]:
+                categories[main_cat].append(sub_cat)
 
     sorted_main_cats = sorted(categories.keys())
 
     special_categories = {
-        '最安値': sorted([p for p in products], key=lambda x: int(x.get('price', 0))),
-        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
+        '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('sub', '')))),
+        '期間限定セール': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags']))))
     }
 
     # 既存の生成ディレクトリをクリーンアップ
@@ -500,13 +468,27 @@ def generate_site(products):
         page_path = 'index.html' if page_num == 1 else f'pages/page{page_num}.html'
         
         products_html = "".join([generate_product_card_html(p, page_path) for p in paginated_products])
-        pagination_html = generate_pagination_html(total_pages, page_num, page_path, base_url_prefix='../' if page_path.startswith('pages/') else '')
+        
+        pagination_html = ""
+        if total_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'pages/page{page_num - 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(prev_link, os.path.dirname(page_path))}" class="prev">前へ</a>'
+            for p in range(1, total_pages + 1):
+                page_link = 'index.html' if p == 1 else f'pages/page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{os.path.relpath(page_link, os.path.dirname(page_path))}" class="{active_class}">{p}</a>'
+            if page_num < total_pages:
+                next_link = f'pages/page{page_num + 1}.html'
+                pagination_html += f'<a href="{os.path.relpath(next_link, os.path.dirname(page_path))}" class="next">次へ</a>'
+            pagination_html += '</div>'
 
         main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
-        <div class="product-grid" id="productGrid">
+        <div class="product-grid">
             {products_html}
         </div>
         {pagination_html}
@@ -521,44 +503,24 @@ def generate_site(products):
     # カテゴリーごとのページ生成
     for main_cat, sub_cats in categories.items():
         main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
-        
-        # サブカテゴリーナビゲーションリンクを生成
-        sub_category_links = []
-        for sub_cat in sorted(list(sub_cats)):
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            sub_category_links.append({"name": sub_cat, "url": f"{sub_cat_file_name}"})
-
-        # メインカテゴリーのインデックスページを生成
-        total_cat_pages = math.ceil(len(main_cat_products) / PRODUCTS_PER_PAGE)
-        for i in range(total_cat_pages):
-            start_index = i * PRODUCTS_PER_PAGE
-            end_index = start_index + PRODUCTS_PER_PAGE
-            paginated_cat_products = main_cat_products[start_index:end_index]
-            page_num = i + 1
-            
-            page_path = f"category/{main_cat}/index.html" if page_num == 1 else f"category/{main_cat}/page{page_num}.html"
-            os.makedirs(os.path.dirname(page_path), exist_ok=True)
-            
-            products_html = "".join([generate_product_card_html(p, page_path) for p in paginated_cat_products])
-            pagination_html = generate_pagination_html(total_cat_pages, page_num, page_path)
-            
-            main_content_html = f"""
+        page_path = f"category/{main_cat}/index.html"
+        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        products_html = "".join([generate_product_card_html(p, page_path) for p in main_cat_products])
+        main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">カテゴリー：{main_cat}</h2>
-        <div class="product-grid" id="productGrid">
+        <h2 class="ai-section-title">{main_cat}の商品一覧</h2>
+        <div class="product-grid">
             {products_html}
         </div>
-        {pagination_html}
     </div>
 </main>
 """
-            header, footer = generate_header_footer(page_path, page_title=f"{main_cat}の商品一覧", sub_category_links=sub_category_links)
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + footer)
-            print(f"{page_path} が生成されました。")
+        header, footer = generate_header_footer(page_path, page_title=f"{main_cat}の商品一覧")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + footer)
+        print(f"category/{main_cat}/index.html が生成されました。")
         
-        # 各サブカテゴリーのページを生成
         for sub_cat in sub_cats:
             sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
@@ -567,48 +529,43 @@ def generate_site(products):
             main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">カテゴリー：{main_cat} &gt; {sub_cat}</h2>
-        <div class="product-grid" id="productGrid">
+        <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
+        <div class="product-grid">
             {products_html}
         </div>
     </div>
 </main>
 """
-            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧", sub_category_links=sub_category_links)
+            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + footer)
             print(f"{page_path} が生成されました。")
 
     # 特別カテゴリーのページ生成
-    for special_cat, filtered_products in special_categories.items():
-        total_special_pages = math.ceil(len(filtered_products) / PRODUCTS_PER_PAGE)
-        for i in range(total_special_pages):
-            start_index = i * PRODUCTS_PER_PAGE
-            end_index = start_index + PRODUCTS_PER_PAGE
-            paginated_special_products = filtered_products[start_index:end_index]
-            page_num = i + 1
-            
-            page_path = f"category/{special_cat}/index.html" if page_num == 1 else f"category/{special_cat}/page{page_num}.html"
-            os.makedirs(os.path.dirname(page_path), exist_ok=True)
-            
-            products_html = "".join([generate_product_card_html(p, page_path) for p in paginated_special_products])
-            pagination_html = generate_pagination_html(total_special_pages, page_num, page_path)
+    for special_cat, _ in special_categories.items():
+        page_path = f"category/{special_cat}/index.html"
+        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        
+        if special_cat == '最安値':
+            filtered_products = sorted([p for p in products], key=lambda x: int(x.get('price', 0)))
+        else: # 期間限定セール
+            filtered_products = [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
 
-            main_content_html = f"""
+        products_html = "".join([generate_product_card_html(p, page_path) for p in filtered_products])
+        main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{special_cat}のお得な商品一覧</h2>
-        <div class="product-grid" id="productGrid">
+        <div class="product-grid">
             {products_html}
         </div>
-        {pagination_html}
     </div>
 </main>
 """
-            header, footer = generate_header_footer(page_path, page_title=f"{special_cat}の商品一覧")
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + footer)
-            print(f"{page_path} が生成されました。")
+        header, footer = generate_header_footer(page_path, page_title=f"{special_cat}の商品一覧")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + footer)
+        print(f"category/{special_cat}/index.html が生成されました。")
 
     # タグごとのページ生成
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
@@ -620,7 +577,7 @@ def generate_site(products):
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">#{tag}の注目商品</h2>
-        <div class="product-grid" id="productGrid">
+        <div class="product-grid">
             {products_html}
         </div>
     </div>
@@ -642,8 +599,22 @@ def generate_site(products):
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
         
         tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{tag}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])
-        pagination_html = generate_pagination_html(total_tag_pages, page_num, page_path)
-
+        
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+            for p in range(1, total_tag_pages + 1):
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+            pagination_html += '</div>'
+        
         main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
@@ -666,17 +637,6 @@ def generate_site(products):
         dir_name = os.path.dirname(page_path)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
-        
-        main_cat = product.get('category', {}).get('main', '')
-        sub_cat = product.get('category', {}).get('sub', '')
-        
-        breadcrumb_html = f"""
-<div class="breadcrumb">
-    <a href="{os.path.relpath('index.html', os.path.dirname(page_path))}">トップ</a> &gt; 
-    <a href="{os.path.relpath(f'category/{main_cat}/index.html', os.path.dirname(page_path))}">カテゴリー：{main_cat}</a> &gt;
-    <a href="{os.path.relpath(f'category/{main_cat}/{sub_cat.replace(" ", "")}.html', os.path.dirname(page_path))}">サブカテゴリー：{sub_cat}</a>
-</div>
-"""
         
         header, footer = generate_header_footer(page_path, page_title=f"{product.get('name', '商品名')}の買い時情報")
         
@@ -708,21 +668,20 @@ def generate_site(products):
     <p>{product.get('specs', '')}</p>
 </div>
 """ if "specs" in product else ""
-        
+
         affiliate_links_html = f"""
 <div class="lowest-price-section">
     <p class="lowest-price-label">最安値ショップをチェック！</p>
     <div class="lowest-price-buttons">
-        <a href="{product.get('rakuten_url', '')}" class="btn shop-link rakuten" target="_blank">楽天で購入する</a>
-        <a href="{product.get('amazon_url', '')}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
-        <a href="{product.get('yahoo_url', '')}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
+        <a href="{AMAZON_AFFILIATE_LINK}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
+        <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で見る</a>
+        <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
     </div>
 </div>
 """
         
         item_html_content = f"""
 <main class="container">
-    {breadcrumb_html}
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
@@ -730,6 +689,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
+                <p class="item-category">カテゴリ：<a href="{os.path.relpath(f'category/{product.get("category", {}).get("main", "")}/', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{os.path.relpath(f'category/{product.get("category", {}).get("main", "")}/{product.get("category", {}).get("sub", "").replace(" ", "")}.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -757,56 +717,12 @@ def generate_site(products):
             f.write(header + item_html_content + footer)
         print(f"{page_path} が生成されました。")
 
-    # 固定ページの生成
-    def generate_static_page(filename, title, content):
-        page_path = f"{filename}.html"
-        header, footer = generate_header_footer(page_path, page_title=title)
-        
-        main_content_html = f"""
-<main class="container">
-    <h2>{title}</h2>
-    {content}
-</main>
-"""
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + main_content_html + footer)
-        print(f"{page_path} が生成されました。")
-    
-    # プライバシーポリシー
-    privacy_content = """
-<p>カイドキ-ナビ（以下「当サイト」）は、お客様の個人情報の重要性を認識し、その保護に最大限の注意を払います。</p>
-<h3>個人情報の取得</h3>
-<p>当サイトでは、お問い合わせフォームからご連絡いただく際に、お名前、メールアドレス等の個人情報をご提供いただく場合があります。これらの情報は、ご質問への回答やご連絡の目的以外には利用いたしません。</p>
-<h3>アクセス解析ツールについて</h3>
-<p>当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。このGoogleアナリティクスはトラフィックデータの収集のためにCookieを使用しています。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。この機能はCookieを無効にすることで収集を拒否することができますので、お使いのブラウザの設定をご確認ください。</p>
-<h3>広告の配信について</h3>
-<p>当サイトは、Amazon、楽天市場、Yahoo!ショッピング等のアフィリエイトプログラムを利用しています。これらのアフィリエイトリンクを通じて商品をご購入いただくことで、当サイトは紹介料を得ることがあります。</p>
-<p>これらのアフィリエイトプログラムは、ユーザーの興味に応じた商品やサービスの広告を表示するため、Cookieを使用することがあります。Cookieを無効にする方法については、各社のプライバシーポリシーをご確認ください。</p>
-"""
-    generate_static_page('privacy', 'プライバシーポリシー', privacy_content)
-
-    # 免責事項
-    disclaimer_content = """
-<p>当サイトの情報は、掲載時点での正確性を期しておりますが、その内容の完全性、正確性、有用性について保証するものではありません。</p>
-<p>当サイトでご紹介している商品の価格、在庫状況、アフィリエイトリンクの内容は、常に変動する可能性があります。商品のご購入にあたっては、必ずリンク先の各ECサイトにて詳細をご確認ください。当サイトのご利用により生じたいかなる損害についても、当サイトは一切の責任を負いませんので、あらかじめご了承ください。</p>
-"""
-    generate_static_page('disclaimer', '免責事項', disclaimer_content)
-
-    # お問い合わせ
-    contact_content = """
-<p>当サイトに関するご意見、ご要望、ご質問等がございましたら、下記メールアドレスまでお気軽にご連絡ください。</p>
-<p>メールアドレス：your-email-address@example.com</p>
-<p>※メールアドレスはご自身で変更してください。</p>
-"""
-    generate_static_page('contact', 'お問い合わせ', contact_content)
-
     # sitemap.xmlの生成
     sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
     sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     base_url = "https://your-website.com/"
-    
     sitemap_urls = [
-        (f'{base_url}', 'daily', '1.0'),
+        (base_url, 'daily', '1.0'),
         (f'{base_url}privacy.html', 'monthly', '0.5'),
         (f'{base_url}disclaimer.html', 'monthly', '0.5'),
         (f'{base_url}contact.html', 'monthly', '0.5')
@@ -816,33 +732,21 @@ def generate_site(products):
         sitemap_urls.append((f'{base_url}{product.get("page_url", "")}', 'daily', '0.6'))
     
     # ページネーションページを追加
-    total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(2, total_pages + 1):
         sitemap_urls.append((f'{base_url}pages/page{i}.html', 'daily', '0.8'))
 
     # カテゴリーページを追加
     for main_cat in sorted_main_cats:
-        total_cat_pages = math.ceil(len([p for p in products if p.get('category', {}).get('main', '') == main_cat]) / PRODUCTS_PER_PAGE)
-        for i in range(1, total_cat_pages + 1):
-            page_path = 'index.html' if i == 1 else f'page{i}.html'
-            sitemap_urls.append((f'{base_url}category/{main_cat}/{page_path}', 'daily', '0.8' if i == 1 else '0.7'))
-        for sub_cat in sorted(list(categories.get(main_cat, []))):
+        sitemap_urls.append((f'{base_url}category/{main_cat}/', 'daily', '0.8'))
+        for sub_cat in sorted(categories.get(main_cat, [])):
             sitemap_urls.append((f'{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html', 'daily', '0.7'))
     
-    # 特別カテゴリーページを追加
-    for special_cat, special_products in special_categories.items():
-        total_special_pages = math.ceil(len(special_products) / PRODUCTS_PER_PAGE)
-        for i in range(1, total_special_pages + 1):
-            page_path = 'index.html' if i == 1 else f'page{i}.html'
-            sitemap_urls.append((f'{base_url}category/{special_cat}/{page_path}', 'daily', '0.8' if i == 1 else '0.7'))
+    for special_cat in special_categories:
+        sitemap_urls.append((f'{base_url}category/{special_cat}/', 'daily', '0.8'))
 
     # タグページを追加
-    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
         sitemap_urls.append((f'{base_url}tags/{tag}.html', 'daily', '0.6'))
-    
-    TAGS_PER_PAGE = 50
-    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
     for i in range(2, total_tag_pages + 1):
         sitemap_urls.append((f'{base_url}tags/page{i}.html', 'daily', '0.6'))
 
