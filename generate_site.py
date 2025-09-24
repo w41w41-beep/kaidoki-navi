@@ -166,7 +166,7 @@ def fetch_rakuten_items():
     all_products = []
 
     for keyword in keywords:
-        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=10"
+        url = f"https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?applicationId={app_id}&keyword={keyword}&format=json&sort=-reviewCount&hits=1"
         try:
             print(f"キーワード '{keyword}' で商品を検索中...")
             response = requests.get(url, timeout=10)
@@ -284,14 +284,15 @@ def update_products_csv(new_products):
 
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！", sub_category_links=None):
     """ヘッダーとフッターのHTMLを生成する"""
-    # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
-    # os.path.relpathは`current_path`から`index.html`への相対パスを生成
-    base_path = os.path.relpath(os.path.dirname('index.html'), os.path.dirname(current_path))
-    if base_path == '.':
+    # ルートディレクトリからの相対パスを決定
+    dir_path = os.path.dirname(current_path)
+    if dir_path == '':
         base_path = './'
     else:
-        base_path += '/'
-    
+        # ディレクトリの深さに応じて相対パスを生成
+        depth = dir_path.count(os.sep)
+        base_path = '../' * depth
+
     # ナビゲーションリンク
     main_links = [
         ("タグから探す", f"{base_path}tags/index.html"),
@@ -430,7 +431,7 @@ def generate_product_card_html(product, page_path):
 </a>
 """
 
-def generate_pagination_html(total_pages, current_page, current_path):
+def generate_pagination_html(total_pages, current_page, current_path, base_url_prefix=''):
     """ページネーションのHTMLを生成する"""
     if total_pages <= 1:
         return ""
@@ -440,25 +441,19 @@ def generate_pagination_html(total_pages, current_page, current_path):
 
     # 「前へ」ボタン
     if current_page > 1:
-        prev_link = 'index.html' if current_page == 2 and dir_path == '' else f'page{current_page - 1}.html'
-        if dir_path:
-            prev_link = os.path.relpath(os.path.join(dir_path, prev_link), dir_path)
-        pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+        prev_link = f"{base_url_prefix}index.html" if current_page == 2 else f"{base_url_prefix}page{current_page - 1}.html"
+        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, prev_link), dir_path)}" class="prev">前へ</a>'
 
     # ページ番号
     for p in range(1, total_pages + 1):
-        page_link = 'index.html' if p == 1 and dir_path == '' else f'page{p}.html'
-        if dir_path:
-            page_link = os.path.relpath(os.path.join(dir_path, page_link), dir_path)
+        page_link = f"{base_url_prefix}index.html" if p == 1 else f"{base_url_prefix}page{p}.html"
         active_class = 'active' if p == current_page else ''
-        pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, page_link), dir_path)}" class="{active_class}">{p}</a>'
 
     # 「次へ」ボタン
     if current_page < total_pages:
-        next_link = f'page{current_page + 1}.html'
-        if dir_path:
-            next_link = os.path.relpath(os.path.join(dir_path, next_link), dir_path)
-        pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+        next_link = f"{base_url_prefix}page{current_page + 1}.html"
+        pagination_html += f'<a href="{os.path.relpath(os.path.join(dir_path, next_link), dir_path)}" class="next">次へ</a>'
     
     pagination_html += '</div>'
     return pagination_html
@@ -505,7 +500,7 @@ def generate_site(products):
         page_path = 'index.html' if page_num == 1 else f'pages/page{page_num}.html'
         
         products_html = "".join([generate_product_card_html(p, page_path) for p in paginated_products])
-        pagination_html = generate_pagination_html(total_pages, page_num, page_path)
+        pagination_html = generate_pagination_html(total_pages, page_num, page_path, base_url_prefix='../' if page_path.startswith('pages/') else '')
 
         main_content_html = f"""
 <main class="container">
@@ -672,14 +667,14 @@ def generate_site(products):
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
         
-        main_cat_url = f'category/{product.get("category", {}).get("main", "")}/index.html'
-        sub_cat_url = f'category/{product.get("category", {}).get("main", "")}/{product.get("category", {}).get("sub", "").replace(" ", "")}.html'
+        main_cat = product.get('category', {}).get('main', '')
+        sub_cat = product.get('category', {}).get('sub', '')
         
         breadcrumb_html = f"""
 <div class="breadcrumb">
     <a href="{os.path.relpath('index.html', os.path.dirname(page_path))}">トップ</a> &gt; 
-    <a href="{os.path.relpath(main_cat_url, os.path.dirname(page_path))}">カテゴリー：{product.get('category', {}).get('main', '')}</a> &gt;
-    <a href="{os.path.relpath(sub_cat_url, os.path.dirname(page_path))}">サブカテゴリー：{product.get('category', {}).get('sub', '')}</a>
+    <a href="{os.path.relpath(f'category/{main_cat}/index.html', os.path.dirname(page_path))}">カテゴリー：{main_cat}</a> &gt;
+    <a href="{os.path.relpath(f'category/{main_cat}/{sub_cat.replace(" ", "")}.html', os.path.dirname(page_path))}">サブカテゴリー：{sub_cat}</a>
 </div>
 """
         
@@ -735,7 +730,6 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{os.path.relpath(f'category/{product.get("category", {}).get("main", "")}/', os.path.dirname(page_path))}">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{os.path.relpath(f'category/{product.get("category", {}).get("main", "")}/{product.get("category", {}).get("sub", "").replace(" ", "")}.html', os.path.dirname(page_path))}">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
