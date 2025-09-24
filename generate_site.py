@@ -687,6 +687,7 @@ def generate_site(products):
         <a href="{YAHOO_TOP_PAGE_AD_URL}" class="btn shop-link yahoo" rel="nofollow" target="_blank">Yahoo!ショッピングで見る</a>
     </div>
 </div>
+"""
 # 現在のページからルートディレクトリへの相対パスを計算
         rel_path_to_root = os.path.relpath('.', os.path.dirname(page_path))
         if rel_path_to_root == '.':
