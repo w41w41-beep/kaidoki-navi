@@ -688,7 +688,8 @@ def generate_site(products):
     </div>
 </div>
 """
-item_html_content = f"""
+
+        item_html_content = f"""
 <main class="container">
     <div class="product-detail">
         <div class="item-detail">
