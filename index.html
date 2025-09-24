@@ -18,7 +18,7 @@
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" placeholder="商品名、キーワードで検索...">
+            <input type="text" id="searchInput" placeholder="商品名、キーワードで検索...">
             <button class="search-button">🔍</button>
         </div>
     </div>
@@ -33,12 +33,13 @@
         </div>
     </div>
     
+    
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
-        <div class="product-grid">
+        <div class="product-grid" id="productGrid">
             
-<a href="products/mantubiz:10002537.html" class="product-card">
+<a href="products/mantubiz:10002537.html" class="product-card" data-product-id="mantubiz:10002537" data-tags="格安,中古ノートパソコン,高性能,SSD512GB,Windows10" data-category="ノートパソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/mantubiz/cabinet/2023pc/10002103-logo-n6.jpg?_ex=128x128" alt="1万円OFFクーポン Webカメラ&テンキー付き ノートパソコン 中古 パソコン メモリ 16GB 最大32GB 新品 SSD 512GB 高性能 第6世代 Core i5搭載 中古ノートパソコン Windows10 Windows11 店長オススメ 超高速SSD おまかせ 15.6型 無線LAN DVD office付き 2025 福袋 ギフト">
     <div class="product-info">
         <h3 class="product-name">1万円OFFクーポン Webカメラ&テン...</h3>
@@ -48,7 +49,7 @@
     </div>
 </a>
 
-<a href="products/pckujira:10217770.html" class="product-card">
+<a href="products/pckujira:10217770.html" class="product-card" data-product-id="pckujira:10217770" data-tags="中古パソコン,Windows11,Corei5,SSD,WPS Office" data-category="ノートパソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/pckujira/cabinet/ad7/2002-740-250410.jpg?_ex=128x128" alt="【祝日がお得!】 楽天年間1位 中古 パソコン Win11 正式対応 日本人サポート 中古ノートパソコン おすすめ 新品SSD テンキー付 第8世代 NEC Corei5 8GB Office付 初期設定不要 整備済み Windows11 ノートパソコン パソコン ノートPC 中古ノート 中古pc pc">
     <div class="product-info">
         <h3 class="product-name">【祝日がお得!】 楽天年間1位 中古 パ...</h3>
@@ -58,7 +59,7 @@
     </div>
 </a>
 
-<a href="products/mantubiz:10006722.html" class="product-card">
+<a href="products/mantubiz:10006722.html" class="product-card" data-product-id="mantubiz:10006722" data-tags="中古ノートパソコン,高性能,SSD,Windows10,DVDドライブ" data-category="ノートPC">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/mantubiz/cabinet/05873262/2103201910/10002105-logo-7i3.jpg?_ex=128x128" alt="高性能 第7世代 i3 CPUにアップグレード中! 中古ノートパソコン Windows10 ssd 新品128GB 中古パソコン ノート Windows10 おまかせパソコン 無線LAN DVDドライブ Office付き Windows10 ノートパソコン 中古 パソコン ノートPC">
     <div class="product-info">
         <h3 class="product-name">高性能 第7世代 i3 CPUにアップグ...</h3>
@@ -68,7 +69,7 @@
     </div>
 </a>
 
-<a href="products/dotline:10000195.html" class="product-card">
+<a href="products/dotline:10000195.html" class="product-card" data-product-id="dotline:10000195" data-tags="ノートパソコン,スタンド,姿勢改善,折りたたみ式,テレワーク" data-category="PCスタンド">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/dotline/cabinet/pc/s-laptop7dan/2507laptop/2507laptop-3.jpg?_ex=128x128" alt="【まとめ買いクーポン配布中】 ノートパソコンスタンド パソコンスタンド 折りたたみ式 Z型 アルミ製 軽量 角度調整 高さ調整 7段階 7+9段階 放熱 冷却 滑り止め テレワーク 在宅勤務 肩こり対策 姿勢改善 ノートPC台 タブレットスタンド 17インチ対応 iPad 持ち運び">
     <div class="product-info">
         <h3 class="product-name">【まとめ買いクーポン配布中】 ノートパソ...</h3>
@@ -78,7 +79,7 @@
     </div>
 </a>
 
-<a href="products/selectshopcrea:10000069.html" class="product-card">
+<a href="products/selectshopcrea:10000069.html" class="product-card" data-product-id="selectshopcrea:10000069" data-tags="ノートパソコンスタンド,姿勢改善,折りたたみ,アルミ合金,在宅勤務" data-category="PCアクセサリー">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/selectshopcrea/cabinet/11115181/12473448/7.jpg?_ex=128x128" alt="【レビュー3400件突破！】雑誌掲載 BoYata ノートパソコンスタンド N-19 PCスタンド 高さ 角度調整可能 姿勢改善 猫背解消 折りたたみ ノートPCスタンド 滑り止め アルミ合金製 カーボン ホルダータブレット">
     <div class="product-info">
         <h3 class="product-name">【レビュー3400件突破！】雑誌掲載 B...</h3>
@@ -88,7 +89,7 @@
     </div>
 </a>
 
-<a href="products/upc1114:10002905.html" class="product-card">
+<a href="products/upc1114:10002905.html" class="product-card" data-product-id="upc1114:10002905" data-tags="格安,中古ノートパソコン,Microsoft Office 2024,セール,高性能" data-category="中古PC">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/upc1114/cabinet/10717283/10717549/29800_2024-180hosyo.jpg?_ex=128x128" alt="2024H&B｜楽天1位｜本日超得！｜今なら3,000円OFF｜中古 パソコン ノートパソコン Microsoft Office 2024 H&B 搭載｜Windows11 Office付き｜店長厳選｜Core i5 第7世代 メモリ 16GB SSD 512GB｜中古ノートパソコン オフィス付き 中古PC ノートPC｜テンキー｜豪華特典付き">
     <div class="product-info">
         <h3 class="product-name">2024H&B｜楽天1位｜本日超得！｜今...</h3>
@@ -98,7 +99,7 @@
     </div>
 </a>
 
-<a href="products/pckujira:10228983.html" class="product-card">
+<a href="products/pckujira:10228983.html" class="product-card" data-product-id="pckujira:10228983" data-tags="中古パソコン,Lenovo,Windows11,SSD,Office付き" data-category="ノートパソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/pckujira/cabinet/dir86/tt041001-1.jpg?_ex=128x128" alt="【祝日がお得!】 買い替えならコレ! 当店No.2! 新品＆高品質SSD 中古パソコン おすすめ 中古 ノートパソコン 整備済み Office付き 安心 快適性能 テンキー 8世代 Windows11 Pro Lenovo ThinkPad L580/L590 Corei5 16GB 15.6型 中古 パソコン ノートパソコン">
     <div class="product-info">
         <h3 class="product-name">【祝日がお得!】 買い替えならコレ! 当...</h3>
@@ -108,7 +109,7 @@
     </div>
 </a>
 
-<a href="products/upc1114:10002882.html" class="product-card">
+<a href="products/upc1114:10002882.html" class="product-card" data-product-id="upc1114:10002882" data-tags="中古ノートパソコン,Windows11,Microsoft Office,セール,コスパ最強" data-category="ノートパソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/upc1114/cabinet/10717283/10717315/12077111/000.jpg?_ex=128x128" alt="本日超得！｜最大180日保証｜今なら！10％OFF｜楽天1位！三冠獲得｜中古ノートパソコン｜最新OS Windows11 搭載 最新 Microsoft Office 2024 H&B 付き｜人気！店長厳選 機種おまかせ｜中古パソコン オフィス付き｜ノートPC 中古PC Win11 ｜Word Excel PowerPoint">
     <div class="product-info">
         <h3 class="product-name">本日超得！｜最大180日保証｜今なら！1...</h3>
@@ -118,7 +119,7 @@
     </div>
 </a>
 
-<a href="products/pc-smile:10000182.html" class="product-card">
+<a href="products/pc-smile:10000182.html" class="product-card" data-product-id="pc-smile:10000182" data-tags="中古ノートパソコン,Core i5,Microsoft Office付き,SSD搭載,Windows11" data-category="ノートパソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/pc-smile/cabinet/imgrc0147235463.jpg?_ex=128x128" alt="超得クーポンあり【最大180日保証!】【Corei5第8世代】【豪華特典あり!!】楽天1位 ノートパソコン ノートパソコンoffice付き 中古ノートパソコン第8世代 ノートパソコン Windows11Microsoft Office付き ノートパソコン 中古 office付き 中古パソコン Windows11 中古PC">
     <div class="product-info">
         <h3 class="product-name">超得クーポンあり【最大180日保証!】【...</h3>
@@ -128,7 +129,7 @@
     </div>
 </a>
 
-<a href="products/premiumgift:10000010.html" class="product-card">
+<a href="products/premiumgift:10000010.html" class="product-card" data-product-id="premiumgift:10000010" data-tags="ノートパソコン,Windows11,初心者向け,学生向け,格安" data-category="パソコン">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/premiumgift/cabinet/08670126/14q8l-1-9.jpg?_ex=128x128" alt="【Office搭載】【楽天1位！】ノートパソコン 新品第13世代CPU搭載ノートPC Office付きノートパソコン 初心者向け Windows11 初期設定済 Webカメラ zoom 日本語キーボード 14.1型 Intel Celeron メモリ8GB SSD1TB(最大) 大容量バッテリービジネス 大学生 プレゼント 学生向け">
     <div class="product-info">
         <h3 class="product-name">【Office搭載】【楽天1位！】ノート...</h3>
@@ -138,7 +139,7 @@
     </div>
 </a>
 
-<a href="products/cicib:10003315.html" class="product-card">
+<a href="products/cicib:10003315.html" class="product-card" data-product-id="cicib:10003315" data-tags="ハンディファン,冷却,小型扇風機,充電式,強風" data-category="扇風機">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/cicib/cabinet/0304ss/day2/e2-2_2490.jpg?_ex=128x128" alt="【公式】楽天総合1位＼24h限定2,490円〜／テレビ紹介☆ハンディファン 冷却プレート 扇風機 ハンディ 扇風機 小型 ハンディファン 強風 冷却 充電式 扇風機 卓上 小型扇風機 シシベラ ハンディファン 2025 扇風機 携帯扇風機 冷却モード cicibella 手持ち扇風機">
     <div class="product-info">
         <h3 class="product-name">【公式】楽天総合1位＼24h限定2,49...</h3>
@@ -148,7 +149,7 @@
     </div>
 </a>
 
-<a href="products/azusa:10000130.html" class="product-card">
+<a href="products/azusa:10000130.html" class="product-card" data-product-id="azusa:10000130" data-tags="ハンディファン,冷却プレート,静音,USB充電式,携帯扇風機" data-category="扇風機">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/azusa/cabinet/supersale/timesale/h8u16_1780-m.jpg?_ex=128x128" alt="クーポンで1,780円～【楽天1位★テレビ紹介】 ハンディファン 冷却プレート 携帯扇風機 5000mAh 3200mAh クーラー 冷却プレート 強風 冷却モード 扇風機 卓上 小型扇風機 ハンディ扇風機 手持ち扇風機 腰掛け扇風機 usb充電式 扇風機 usb ネッククーラー">
     <div class="product-info">
         <h3 class="product-name">クーポンで1,780円～【楽天1位★テレ...</h3>
@@ -158,7 +159,7 @@
     </div>
 </a>
 
-<a href="products/kouragumi:10000216.html" class="product-card">
+<a href="products/kouragumi:10000216.html" class="product-card" data-product-id="kouragumi:10000216" data-tags="うなぎ,蒲焼き,敬老の日,セール,送料無料" data-category="グルメ">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/kouragumi/cabinet/10531638/imgrc0114997852.jpg?_ex=128x128" alt="9/24/1:59までP3倍★送料無料2,999円〜更に2個で600円OFF！3個で1,200円OFF！4個で2,000円OFF！敬老の日 ギフト 楽天グルメ大賞受賞！楽天1位 国産 うなぎ蒲焼き ウナギ 還暦 敬老の日お届け〆切9/14/14時まで即日出荷！">
     <div class="product-info">
         <h3 class="product-name">9/24/1:59までP3倍★送料無料2...</h3>
@@ -168,7 +169,7 @@
     </div>
 </a>
 
-<a href="products/rack-kan:10008115.html" class="product-card">
+<a href="products/rack-kan:10008115.html" class="product-card" data-product-id="rack-kan:10008115" data-tags="収納,カラーボックス,3段,アイリスオーヤマ,おしゃれ" data-category="収納棚">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/rack-kan/cabinet/08800146/882921_rka.jpg?_ex=128x128" alt="【2個セット】カラーボックス 3段 収納 アイリスオーヤマ スリム 本棚 収納棚 棚 収納 漫画 コミック 横置き 三段 収納ボックス 収納ケース コミックラック おしゃれ かわいい 木目調 セット 耐荷重80kg CX-3 北欧 一人暮らし">
     <div class="product-info">
         <h3 class="product-name">【2個セット】カラーボックス 3段 収納...</h3>
@@ -178,7 +179,7 @@
     </div>
 </a>
 
-<a href="products/tanebo:10000008.html" class="product-card">
+<a href="products/tanebo:10000008.html" class="product-card" data-product-id="tanebo:10000008" data-tags="ぬか床,無添加,発酵食品,漬け床,有機栽培" data-category="調味料">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/tanebo/cabinet/imgrc0284572629.gif?_ex=128x128" alt="50年物熟成ぬか床 専門店の生きている ぬか床 レビュー数1万件 グルメ大賞2年連続受賞 送料無料 ぬか ぬかどこ ぬか床無添加 ぬか床冷蔵庫ぬか床 容器 ぬか床づくり 漬け床 簡単 セット ぬか漬け ぬか漬けセット 糠床 発酵食品 【ぬか床】【ぬか床セット】ぬか床">
     <div class="product-info">
         <h3 class="product-name">50年物熟成ぬか床 専門店の生きている ...</h3>
@@ -188,7 +189,7 @@
     </div>
 </a>
 
-<a href="products/jajauma:10000288.html" class="product-card">
+<a href="products/jajauma:10000288.html" class="product-card" data-product-id="jajauma:10000288" data-tags="辛子高菜,国産,激辛,漬物,ご飯のお供" data-category="漬物">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/jajauma/cabinet/takana/takana250521.jpg?_ex=128x128" alt="高菜 国産 辛子高菜 激辛 福岡 250g x2袋（バリ辛、ごま高菜は200g）高菜漬け 高菜油炒め ご飯のお供 取り寄せ 常温 樽味屋 お試しセット 送料無料 楽天 漬物 高菜明太子 調味料 豚骨ラーメンや高菜チャーハン 漬け物 明太高菜 業務用 ポイント消化 メール 便 プチギフト">
     <div class="product-info">
         <h3 class="product-name">高菜 国産 辛子高菜 激辛 福岡 250...</h3>
@@ -198,7 +199,7 @@
     </div>
 </a>
 
-<a href="products/honest-online:10000774.html" class="product-card">
+<a href="products/honest-online:10000774.html" class="product-card" data-product-id="honest-online:10000774" data-tags="スマホスタンド,タブレットスタンド,折りたたみ,角度調整,軽量" data-category="スタンド">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/honest-online/cabinet/08451362/10212611/main.jpg?_ex=128x128" alt="【P2倍】【レビュー数9000件突破！楽天1位・1年保証】 スマホスタンド タブレットスタンド スマホ スタンド 折りたたみ 360°回転 スマートフォンスタンド 携帯スタンド スマホホルダー iPhone iPad スタンド 卓上 角度 高さ 調整 軽量 1000円ポッキリ 送料無料">
     <div class="product-info">
         <h3 class="product-name">【P2倍】【レビュー数9000件突破！楽...</h3>
@@ -208,7 +209,7 @@
     </div>
 </a>
 
-<a href="products/you2han:10001336.html" class="product-card">
+<a href="products/you2han:10001336.html" class="product-card" data-product-id="you2han:10001336" data-tags="入浴剤,福袋,ギフト,送料無料,日本製" data-category="入浴剤">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/you2han/cabinet/nyzai/nyu100-20161.jpg?_ex=128x128" alt="YouTube再生回数1400万回越え！★テレビランキング番組1位獲得！新バージョン完成★入浴剤 福袋 100個セット/ 安心の日本製！ 入浴剤福袋/温泉/送料込み/送料無料/敬老の日/プレゼント/お歳暮 ギフト/詰め合わせ【沖縄・離島は別途送料】">
     <div class="product-info">
         <h3 class="product-name">YouTube再生回数1400万回越え！...</h3>
@@ -218,7 +219,7 @@
     </div>
 </a>
 
-<a href="products/low-ya:10008049.html" class="product-card">
+<a href="products/low-ya:10008049.html" class="product-card" data-product-id="low-ya:10008049" data-tags="テレビ台,伸縮,おしゃれ,収納,格安" data-category="テレビボード">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/low-ya/cabinet/item_cart/tvboard/02/vg-bruce_01.jpg?_ex=128x128" alt="[お買い物マラソン! 9/19 20:00-9/24 1:59] ＼楽天ランキング1位／テレビ台 おしゃれ コーナー ローボード 白 伸縮 収納 棚 テレビボード テレビラック TV台 コーナー パソコン台 テレビラック 42インチ 32インチ TVボード ロータイプ l字">
     <div class="product-info">
         <h3 class="product-name">[お買い物マラソン! 9/19 20:0...</h3>
@@ -228,7 +229,7 @@
     </div>
 </a>
 
-<a href="products/isa:10001664.html" class="product-card">
+<a href="products/isa:10001664.html" class="product-card" data-product-id="isa:10001664" data-tags="万能だし,昆布,グルメ,贈答,調味料" data-category="調味料">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/isa/cabinet/umaimono/nekobudashi/2505nekobudashi_r_m.jpg?_ex=128x128" alt="【公式】美味いもの市 ねこぶだし 450ml 2本・6本・12本 お歳暮 お中元 ギフト 贈答 年末年始 誕生日 内祝い 梅沢富美男 漬物 おでん うどん テレビショッピング 濃縮 根昆布だし お味噌汁 ギフト ご贈答用 リピーター続出 万能だし 万能調味料">
     <div class="product-info">
         <h3 class="product-name">【公式】美味いもの市 ねこぶだし 450...</h3>
@@ -238,7 +239,7 @@
     </div>
 </a>
 
-<a href="products/photolink:10000003.html" class="product-card">
+<a href="products/photolink:10000003.html" class="product-card" data-product-id="photolink:10000003" data-tags="三脚,軽量,コンパクト,撮影,アウトドア" data-category="三脚・一脚">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/photolink/cabinet/fotopro/4906238810830_nnv11.jpg?_ex=128x128" alt="【全国送料無料】Fotopro［フォトプロ］三脚 DIGI-204 アルミ 4段120cm ブラック,単品-スマートフォンホルダーセット（デジカメ コンデジ ミラーレス スマホ 写真 動画 アウトドア 運動会 学芸会 ビデオカメラ 撮影 配信 軽量 コンパクト シンプル）">
     <div class="product-info">
         <h3 class="product-name">【全国送料無料】Fotopro［フォトプ...</h3>
@@ -248,7 +249,7 @@
     </div>
 </a>
 
-<a href="products/keitai:10167402.html" class="product-card">
+<a href="products/keitai:10167402.html" class="product-card" data-product-id="keitai:10167402" data-tags="ネックストラップ,落下防止,スマホリング,着脱式,おしゃれ" data-category="スマホアクセサリー">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/keitai/cabinet/item/41_3/41-soundneck.jpg?_ex=128x128" alt="Hand Linker 着脱 モバイル 携帯 ネックストラップ 【 モバイルネックストラップ ストラップ リングストラップ 落下防止 着脱式 ハンドリンカー シルバー ブラック シンプル おしゃれ かわいい ブランド 定期券 icカード idカードホルダー スマホリング デジカメ Hamee 】">
     <div class="product-info">
         <h3 class="product-name">Hand Linker 着脱 モバイル ...</h3>
@@ -258,7 +259,7 @@
     </div>
 </a>
 
-<a href="products/ahanashop:10003726.html" class="product-card">
+<a href="products/ahanashop:10003726.html" class="product-card" data-product-id="ahanashop:10003726" data-tags="子供用カメラ,親子撮影,トイカメラ,デジタルカメラ,自撮り" data-category="カメラ">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/ahanashop/cabinet/camera03sps-1.jpg?_ex=128x128" alt="＼ポイント 10倍／＼レビュー3200件突破★人気No.1／＼ゲームなし〜ほかにない”親子撮影”新機能追加！ ／2600万画素 16Gカード付き トイカメラ 子供用 カメラ キッズカメラ デジタルカメラ 自撮り 動画撮り USB充電　日本語操作画面 入園 入学 祝い 新学期">
     <div class="product-info">
         <h3 class="product-name">＼ポイント 10倍／＼レビュー3200件...</h3>
@@ -268,7 +269,7 @@
     </div>
 </a>
 
-<a href="products/iloiloislandimport:10268339.html" class="product-card">
+<a href="products/iloiloislandimport:10268339.html" class="product-card" data-product-id="iloiloislandimport:10268339" data-tags="キッズカメラ,トイカメラ,デジタルカメラ,プレゼント,格安セール" data-category="おもちゃ">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/iloiloislandimport/cabinet/item_lp/ftc0405/tmb_ftc0405_emb.jpg?_ex=128x128" alt="【2024 おもちゃ 1位受賞】新ピントキッズ キッズカメラ WITHyou ＆ クローバー カバー付き トイカメラ 首掛け 子供用 カメラ デジタルカメラ 女の子 男の子 レビューで半年保証">
     <div class="product-info">
         <h3 class="product-name">【2024 おもちゃ 1位受賞】新ピント...</h3>
@@ -279,7 +280,7 @@
 </a>
 
         </div>
-        <div class="pagination"><a href="index.html" class="active">1</a><a href="pages/page2.html" class="">2</a><a href="pages/page3.html" class="">3</a><a href="pages/page2.html" class="next">次へ</a></div>
+        <div class="pagination"><a href="index.html" class="active">1</a><a href="page2.html" class="">2</a><a href="page3.html" class="">3</a><a href="page2.html" class="next">次へ</a></div>
     </div>
 </main>
 

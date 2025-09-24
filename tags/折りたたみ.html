@@ -5,40 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カイドキ-ナビ | タグ：#折りたたみ</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="google-site-verification" content="OmUuOjcxi7HXBKe47sd0WPbzCfbCOFbPj_iueHBk2qo" />
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><a href="../">カイドキ-ナビ</a></h1>
+            <h1><a href="">カイドキ-ナビ</a></h1>
             <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" placeholder="商品名、キーワードで検索...">
+            <input type="text" id="searchInput" placeholder="商品名、キーワードで検索...">
             <button class="search-button">🔍</button>
         </div>
     </div>
     <div class="genre-links-container">
         <div class="genre-links">
-            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="tags/index.html">タグから探す</a><span class="separator">|</span><a href="category/最安値/index.html">最安値</a><span class="separator">|</span><a href="category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
     <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links">
-            <a href="../category/パソコン/index.html">パソコン</a><span class="separator">|</span><a href="../category/家電/index.html">家電</a><span class="separator">|</span>
+            <a href="category/パソコン/index.html">パソコン</a><span class="separator">|</span><a href="category/家電/index.html">家電</a><span class="separator">|</span>
         </div>
     </div>
+    
     
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">#折りたたみの注目商品</h2>
-        <div class="product-grid">
+        <div class="product-grid" id="productGrid">
             
-<a href="../products/selectshopcrea:10000069.html" class="product-card">
+<a href="../products/selectshopcrea:10000069.html" class="product-card" data-product-id="selectshopcrea:10000069" data-tags="ノートパソコンスタンド,姿勢改善,折りたたみ,アルミ合金,在宅勤務" data-category="PCアクセサリー">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/selectshopcrea/cabinet/11115181/12473448/7.jpg?_ex=128x128" alt="【レビュー3400件突破！】雑誌掲載 BoYata ノートパソコンスタンド N-19 PCスタンド 高さ 角度調整可能 姿勢改善 猫背解消 折りたたみ ノートPCスタンド 滑り止め アルミ合金製 カーボン ホルダータブレット">
     <div class="product-info">
         <h3 class="product-name">【レビュー3400件突破！】雑誌掲載 B...</h3>
@@ -48,7 +49,7 @@
     </div>
 </a>
 
-<a href="../products/honest-online:10000774.html" class="product-card">
+<a href="../products/honest-online:10000774.html" class="product-card" data-product-id="honest-online:10000774" data-tags="スマホスタンド,タブレットスタンド,折りたたみ,角度調整,軽量" data-category="スタンド">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/honest-online/cabinet/08451362/10212611/main.jpg?_ex=128x128" alt="【P2倍】【レビュー数9000件突破！楽天1位・1年保証】 スマホスタンド タブレットスタンド スマホ スタンド 折りたたみ 360°回転 スマートフォンスタンド 携帯スタンド スマホホルダー iPhone iPad スタンド 卓上 角度 高さ 調整 軽量 1000円ポッキリ 送料無料">
     <div class="product-info">
         <h3 class="product-name">【P2倍】【レビュー数9000件突破！楽...</h3>
@@ -58,7 +59,7 @@
     </div>
 </a>
 
-<a href="../products/boushiya-looandc:10000006.html" class="product-card">
+<a href="../products/boushiya-looandc:10000006.html" class="product-card" data-product-id="boushiya-looandc:10000006" data-tags="UVカット,日よけ,レディース帽子,折りたたみ,夏用" data-category="帽子">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/boushiya-looandc/cabinet/07914487/2025ss/25ss_002_01_1.jpg?_ex=128x128" alt="【クーポンで48％OFF】帽子 レディース 大きいサイズ 完全遮光 遮光100% UVカット つば広 折りたたみ 自転車でもあご紐で飛ばない 日よけ かぶーる日傘 夏 涼しい 母の日 洗濯機OK【UVシャルマンハット】 gim">
     <div class="product-info">
         <h3 class="product-name">【クーポンで48％OFF】帽子 レディー...</h3>
@@ -76,12 +77,12 @@
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
         <div class="footer-links">
-            <a href="../privacy.html">プライバシーポリシー</a>
-            <a href="../disclaimer.html">免責事項</a>
-            <a href="../contact.html">お問い合わせ</a>
+            <a href="privacy.html">プライバシーポリシー</a>
+            <a href="disclaimer.html">免責事項</a>
+            <a href="contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="../script.js"></script>
+    <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -12,13 +12,13 @@
 <body>
     <header>
         <div class="container">
-            <h1><a href="./index.html">カイドキ-ナビ</a></h1>
+            <h1><a href="./">カイドキ-ナビ</a></h1>
             <p>お得な買い時を見つけよう！</p>
         </div>
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" placeholder="商品名、キーワードで検索...">
+            <input type="text" id="searchInput" placeholder="商品名、キーワードで検索...">
             <button class="search-button">🔍</button>
         </div>
     </div>
@@ -29,10 +29,20 @@
     </div>
     <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links">
-            <a href="./category/コンタクトレンズ/index.html">コンタクトレンズ</a><span class="separator">|</span><a href="./category/不明/index.html">不明</a><span class="separator">|</span>
+            <a href="./category/パソコン/index.html">パソコン</a><span class="separator">|</span><a href="./category/家電/index.html">家電</a><span class="separator">|</span>
         </div>
     </div>
-<main class='container'><h2>お問い合わせ</h2><p>お問い合わせに関する文章をここに記載します。</p></main>
+    
+    
+<main class="container">
+    <h2>お問い合わせ</h2>
+    
+<p>当サイトに関するご意見、ご要望、ご質問等がございましたら、下記メールアドレスまでお気軽にご連絡ください。</p>
+<p>メールアドレス：your-email-address@example.com</p>
+<p>※メールアドレスはご自身で変更してください。</p>
+
+</main>
+
     </main>
     <footer>
         <p>&copy; 2025 カイドキ-ナビ. All Rights Reserved.</p>
@@ -41,7 +51,6 @@
             <a href="./disclaimer.html">免責事項</a>
             <a href="./contact.html">お問い合わせ</a>
         </div>
-    </div>
     </footer>
     <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -49,42 +58,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             const priceChartCanvas = document.getElementById('priceChart');
             if (priceChartCanvas) {
-                const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
-                const dates = dataHistory.map(item => item.date);
-                const prices = dataHistory.map(item => item.price);
-
-                new Chart(priceChartCanvas, {
-                    type: 'line',
-                    data: {
-                        labels: dates,
-                        datasets: [{
-                            label: '価格推移',
-                            data: prices,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: '日付'
-                                }
+                try {
+                    const dataHistory = JSON.parse(priceChartCanvas.getAttribute('data-history'));
+                    if (dataHistory && Array.isArray(dataHistory) && dataHistory.length > 0) {
+                        const dates = dataHistory.map(item => item.date);
+                        const prices = dataHistory.map(item => item.price);
+                        new Chart(priceChartCanvas, {
+                            type: 'line',
+                            data: {
+                                labels: dates,
+                                datasets: [{
+                                    label: '価格推移',
+                                    data: prices,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
                             },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: '価格（円）'
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: '日付'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: '価格（円）'
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        });
                     }
-                });
+                } catch (e) {
+                    console.error('価格グラフのレンダリングに失敗しました:', e);
+                }
             }
         });
     </script>
 </body>
 </html>
-        
