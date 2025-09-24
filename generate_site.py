@@ -694,13 +694,13 @@ def generate_site(products):
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
-                <div class="ai-recommendation-section">
-                    <div class="price-status-title">💡注目ポイント</div>
-                    <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
-                    <div class="product-card-buttons">
-                        <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>
-                    </div>
-                </div>
+                <div class="ai-recommendation-section">
+                    <div class="price-status-title">💡注目ポイント</div>
+                    <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
+                    <div class="product-card-buttons">
+                        {"".join([f'<a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で購入する</a>' if product.get("source") == "rakuten" else f'<a href="{product.get("amazon_url", "https://www.amazon.co.jp/")}" class="btn shop-link amazon" target="_blank">Amazonで購入する</a>' if product.get("source") == "amazon" else f'<a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで購入する</a>'])}
+                    </div>
+                </div>
                 {affiliate_links_html}
                 {ai_analysis_block_html}
                 {price_chart_html}
