@@ -20,6 +20,7 @@ CACHE_FILE = 'products.csv'
 # AmazonとYahoo!ショッピングのアフィリエイトリンクを定義
 AMAZON_AFFILIATE_LINK = "https://amzn.to/46zr68v"
 YAHOO_AFFILIATE_LINK_BASE = "https://shopping.yahoo.co.jp/search?p="
+YAHOO_TOP_PAGE_AD_URL = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155&vc_url=https%3A%2F%2Fshopping.yahoo.co.jp%2F"
 
 def get_cached_data():
     """CSVファイルからキャッシュされた商品データを読み込む"""
@@ -675,7 +676,7 @@ def generate_site(products):
     <div class="lowest-price-buttons">
         <a href="{AMAZON_AFFILIATE_LINK}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
         <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で見る</a>
-        <a href="{product.get("yahoo_url", "https://shopping.yahoo.co.jp/")}" class="btn shop-link yahoo" target="_blank">Yahoo!ショッピングで見る</a>
+        <a href="{YAHOO_TOP_PAGE_AD_URL}" class="btn shop-link yahoo" rel="nofollow" target="_blank">Yahoo!ショッピングで見る</a>
     </div>
 </div>
 """
