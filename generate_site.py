@@ -8,7 +8,6 @@ from datetime import date
 import requests
 import csv
 import urllib.parse
-from jinja2 import Environment, FileSystemLoader
 
 # カテゴリーとサブカテゴリーを定義するリスト
 PRODUCT_CATEGORIES = {
