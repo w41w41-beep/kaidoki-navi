@@ -331,13 +331,12 @@ def update_products_csv(new_products):
     print(f"{CACHE_FILE}が更新されました。現在 {len(final_products_to_save)} 個の商品を追跡中です。")
     return final_products_to_save
 
-
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
     # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
     # 例：`pages/product.html` -> `../`
-    #     `category/pc/index.html` -> `../../`
-    #     `index.html` -> `./`
+    #    `category/pc/index.html` -> `../../`
+    #    `index.html` -> `./`
     # `os.path.relpath`は`index.html`が基準なので、
     # `os.path.dirname(current_path)`が`pages`なら`..`を、`category/pc`なら`../..`を返す
     # ルートディレクトリからのパスを生成する
@@ -470,8 +469,7 @@ def generate_product_card_html(product, page_path):
         <div class="price-status-title">💡注目ポイント</div>
         <div class="price-status-content ai-analysis">{product.get('ai_headline', 'AI分析準備中')}</div>
     </div>
-</a>
-"""
+</a>"""
 
 def generate_site(products):
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
@@ -814,10 +812,60 @@ def generate_site(products):
         f.write(sitemap_content)
     print("sitemap.xmlが生成されました。")
 
+# 新規追加: 検索用JSONを生成する関数
+def generate_search_index(products):
+    """JavaScriptが検索に使用するためのJSONデータファイルを生成する"""
+    try:
+        search_data = []
+        for p in products:
+            # 検索対象となる情報をひとつの文字列にまとめる
+            search_text = f"{p['name']} {p.get('description', '')} {' '.join(p.get('tags', []))} {p.get('category', {}).get('main', '')} {p.get('category', {}).get('sub', '')}"
+            
+            search_data.append({
+                "id": p['id'],
+                "name": p['name'],
+                "page_url": p['page_url'],
+                "image_url": p['image_url'],
+                "price": p['price'],
+                "ai_headline": p.get('ai_headline', ''),
+                "searchable_text": search_text.lower() # 検索を効率化するため、小文字で保存
+            })
+            
+        with open('search_index.json', 'w', encoding='utf-8') as f:
+            json.dump(search_data, f, ensure_ascii=False, indent=2)
+        print("search_index.json が生成されました。")
+    except Exception as e:
+        print(f"検索インデックスの生成中にエラーが発生しました: {e}")
+
+# 新規追加: 検索結果ページを生成する関数
+def generate_search_results_page():
+    """検索結果ページを生成する関数"""
+    page_path = "search_results.html"
+    header, footer = generate_header_footer(page_path, page_title="検索結果")
+
+    # 検索結果はJavaScriptで動的に表示するため、空のコンテナを用意
+    main_content_html = """
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">検索結果</h2>
+        <div id="search-results-container" class="product-grid">
+            <p id="loading-message">検索中です...</p>
+            </div>
+    </div>
+</main>
+"""
+    with open(page_path, 'w', encoding='utf-8') as f:
+        f.write(header + main_content_html + footer)
+    print(f"{page_path} が生成されました。")
 
 def main():
     new_products = fetch_rakuten_items()
     final_products = update_products_csv(new_products)
+    
+    # ここから修正・追加
+    generate_search_index(final_products)
+    generate_search_results_page()
+    
     generate_site(final_products)
 
 if __name__ == '__main__':
