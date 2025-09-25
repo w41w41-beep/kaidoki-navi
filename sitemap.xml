@@ -25,19 +25,19 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://your-website.com/products/mantubiz:10002537.html</loc>
+    <loc>https://your-website.com/pages/mantubiz_10002537.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/products/e-kit:10042595.html</loc>
+    <loc>https://your-website.com/pages/e-kit_10042595.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/products/photolink:10000003.html</loc>
+    <loc>https://your-website.com/pages/photolink_10000003.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -211,13 +211,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/16GBメモリ.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/SSD512GB.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/Windows10.html</loc>
+    <loc>https://your-website.com/tags/Webカメラ.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -235,6 +241,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/スマートフォンホルダー.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/三脚.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
@@ -247,25 +259,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/傷防止.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://your-website.com/tags/冷蔵庫マット.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/撮影.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/格安.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -277,13 +271,19 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/耐衝撃性.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/軽量.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/透明.html</loc>
+    <loc>https://your-website.com/tags/透明マット.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
