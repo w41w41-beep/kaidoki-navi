@@ -334,20 +334,12 @@ def update_products_csv(new_products):
 
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
-    # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
-    # 例：`pages/product.html` -> `../`
-    #     `category/pc/index.html` -> `../../`
-    #     `index.html` -> `./`
-    # `os.path.relpath`は`index.html`が基準なので、
-    # `os.path.dirname(current_path)`が`pages`なら`..`を、`category/pc`なら`../..`を返す
-    # ルートディレクトリからのパスを生成する
     rel_path_to_root = os.path.relpath('.', os.path.dirname(current_path))
     if rel_path_to_root == '.':
         base_path = './'
     else:
         base_path = rel_path_to_root + '/'
 
-    # ハードコードされたカテゴリリンクを例示
     main_links = [
         ("タグから探す", f"{base_path}tags/index.html"),
         ("最安値", f"{base_path}category/最安値/index.html"),
@@ -380,9 +372,9 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
     </header>
     <div class="search-bar">
         <div class="search-container">
-            <input type="text" placeholder="商品名、キーワードで検索...">
-            <button class="search-button">🔍</button>
+            <input type="text" id="searchInput" placeholder="商品名、キーワードで検索...">
         </div>
+        <div id="searchResults" class="search-results-dropdown"></div>
     </div>
     <div class="genre-links-container">
         <div class="genre-links">
@@ -454,12 +446,12 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
         }});
     </script>
 </body>
-</html>"""
+</html>
+"""
     return header_html, footer_html
 
 def generate_product_card_html(product, page_path):
     """商品カードのHTMLを生成する"""
-    # 商品カードのリンクは現在のページからの相対パスで良い
     link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
     return f"""
 <a href="{link_path}" class="product-card">
@@ -481,14 +473,31 @@ def generate_site(products):
             product['date'] = today
     products.sort(key=lambda p: p.get('date', '1970-01-01'), reverse=True)
 
-    # カテゴリーを事前に定義したリストから取得
     categories = PRODUCT_CATEGORIES
 
-    # 既存の生成ディレクトリをクリーンアップ
     for dir_name in ['pages', 'category', 'tags']:
         if os.path.exists(dir_name):
             shutil.rmtree(dir_name, ignore_errors=True)
         os.makedirs(dir_name, exist_ok=True)
+    
+    # 検索用JSONファイルの生成
+    search_data = []
+    for product in products:
+        search_item = {
+            "id": product.get("id", ""),
+            "name": product.get("name", ""),
+            "category": {
+                "main": product.get("category", {}).get("main", ""),
+                "sub": product.get("category", {}).get("sub", "")
+            },
+            "tags": product.get("tags", []),
+            "url": product.get("page_url", "")
+        }
+        search_data.append(search_item)
+    
+    with open('search_index.json', 'w', encoding='utf-8') as f:
+        json.dump(search_data, f, ensure_ascii=False, indent=2)
+    print("search_index.json が生成されました。")
     
     # メインページの生成
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
@@ -553,15 +562,15 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
         
-    for sub_cat in sub_cats:
-        sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-        
-        # 商品が1件以上ある場合のみページを生成する
-        if sub_cat_products:
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = f"category/{main_cat}/{sub_cat_file_name}"
-            products_html = "".join([generate_product_card_html(p, page_path) for p in sub_cat_products])
-            main_content_html = f"""
+        for sub_cat in sub_cats:
+            sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
+            
+            # 商品が1件以上ある場合のみページを生成する
+            if sub_cat_products:
+                sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+                page_path = f"category/{main_cat}/{sub_cat_file_name}"
+                products_html = "".join([generate_product_card_html(p, page_path) for p in sub_cat_products])
+                main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
@@ -571,12 +580,12 @@ def generate_site(products):
     </div>
 </main>
 """
-            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + footer)
-            print(f"{page_path} が生成されました。")
-        else:
-            print(f"警告: サブカテゴリー '{sub_cat}' に該当する商品がないため、ページ生成をスキップしました。")
+                header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
+                with open(page_path, 'w', encoding='utf-8') as f:
+                    f.write(header + main_content_html + footer)
+                print(f"{page_path} が生成されました。")
+            else:
+                print(f"警告: サブカテゴリー '{sub_cat}' に該当する商品がないため、ページ生成をスキップしました。")
 
     # 特別カテゴリーのページ生成
     special_categories = {
@@ -655,7 +664,7 @@ def generate_site(products):
                 next_link = f'page{page_num + 1}.html'
                 pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
             pagination_html += '</div>'
-        
+            
         main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
@@ -721,7 +730,6 @@ def generate_site(products):
 </div>
 """
 
-        # 現在のページからルートディレクトリへの相対パスを計算
         rel_path_to_root = os.path.relpath('.', os.path.dirname(page_path))
         if rel_path_to_root == '.':
             base_path = './'
