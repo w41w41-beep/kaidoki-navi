@@ -642,7 +642,7 @@ def generate_site(products):
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
         
         # ここでも安全なタグ名を使用
-        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace("\\", "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>' for t in paginated_tags])
+        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace(chr(92), "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>' for t in paginated_tags])
         
         pagination_html = ""
         if total_tag_pages > 1:
