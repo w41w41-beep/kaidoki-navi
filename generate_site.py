@@ -553,8 +553,11 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
         
-        for sub_cat in sub_cats:
-            sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
+    for sub_cat in sub_cats:
+        sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
+        
+        # 商品が1件以上ある場合のみページを生成する
+        if sub_cat_products:
             sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
             page_path = f"category/{main_cat}/{sub_cat_file_name}"
             products_html = "".join([generate_product_card_html(p, page_path) for p in sub_cat_products])
@@ -572,6 +575,8 @@ def generate_site(products):
             with open(page_path, 'w', encoding='utf-8') as f:
                 f.write(header + main_content_html + footer)
             print(f"{page_path} が生成されました。")
+        else:
+            print(f"警告: サブカテゴリー '{sub_cat}' に該当する商品がないため、ページ生成をスキップしました。")
 
     # 特別カテゴリーのページ生成
     special_categories = {
