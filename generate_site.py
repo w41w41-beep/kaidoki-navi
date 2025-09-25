@@ -606,11 +606,15 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{special_cat}/index.html が生成されました。")
 
-    # タグごとのページ生成
+# タグごとのページ生成
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
+        # タグ名に含まれる特殊文字を安全な文字に置き換える
+        safe_tag_name = tag.replace('/', '_').replace('\\', '_')
+        
         tagged_products = [p for p in products if tag in p.get('tags', [])]
-        tag_path = f"tags/{tag}.html"
+        tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
+        
         products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
         main_content_html = f"""
 <main class="container">
@@ -637,7 +641,8 @@ def generate_site(products):
         page_num = i + 1
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
         
-        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{tag}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])
+        # ここでも安全なタグ名を使用
+        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace("\\", "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>' for t in paginated_tags])
         
         pagination_html = ""
         if total_tag_pages > 1:
