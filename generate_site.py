@@ -386,6 +386,7 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             {generate_links_html(main_category_links)}
         </div>
     </div>
+    <main class="container">
     """
     
     footer_html = f"""
@@ -526,7 +527,6 @@ def generate_site(products):
             pagination_html += '</div>'
 
         main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
         <div class="product-grid">
@@ -534,7 +534,6 @@ def generate_site(products):
         </div>
         {pagination_html}
     </div>
-</main>
 """
         header, footer = generate_header_footer(page_path)
         with open(page_path, 'w', encoding='utf-8') as f:
@@ -548,14 +547,12 @@ def generate_site(products):
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
         products_html = "".join([generate_product_card_html(p, page_path) for p in main_cat_products])
         main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{main_cat}の商品一覧</h2>
         <div class="product-grid">
             {products_html}
         </div>
     </div>
-</main>
 """
         header, footer = generate_header_footer(page_path, page_title=f"{main_cat}の商品一覧")
         with open(page_path, 'w', encoding='utf-8') as f:
@@ -571,14 +568,12 @@ def generate_site(products):
                 page_path = f"category/{main_cat}/{sub_cat_file_name}"
                 products_html = "".join([generate_product_card_html(p, page_path) for p in sub_cat_products])
                 main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
         <div class="product-grid">
             {products_html}
         </div>
     </div>
-</main>
 """
                 header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
                 with open(page_path, 'w', encoding='utf-8') as f:
@@ -603,14 +598,12 @@ def generate_site(products):
 
         products_html = "".join([generate_product_card_html(p, page_path) for p in filtered_products])
         main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{special_cat}のお得な商品一覧</h2>
         <div class="product-grid">
             {products_html}
         </div>
     </div>
-</main>
 """
         header, footer = generate_header_footer(page_path, page_title=f"{special_cat}の商品一覧")
         with open(page_path, 'w', encoding='utf-8') as f:
@@ -624,14 +617,12 @@ def generate_site(products):
         tag_path = f"tags/{tag}.html"
         products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
         main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">#{tag}の注目商品</h2>
         <div class="product-grid">
             {products_html}
         </div>
     </div>
-</main>
 """
         header, footer = generate_header_footer(tag_path, page_title=f"タグ：#{tag}")
         with open(tag_path, 'w', encoding='utf-8') as f:
@@ -666,7 +657,6 @@ def generate_site(products):
             pagination_html += '</div>'
             
         main_content_html = f"""
-<main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
         <div class="product-tags all-tags-list">
@@ -674,7 +664,6 @@ def generate_site(products):
         </div>
         {pagination_html}
     </div>
-</main>
 """
         header, footer = generate_header_footer(page_path, page_title="タグから探す")
         with open(page_path, 'w', encoding='utf-8') as f:
@@ -737,7 +726,6 @@ def generate_site(products):
             base_path = rel_path_to_root + '/'
 
         item_html_content = f"""
-<main class="container">
     <div class="product-detail">
         <div class="item-detail">
             <div class="item-image">
@@ -770,7 +758,6 @@ def generate_site(products):
             </div>
         </div>
     </div>
-</main>
 """
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + item_html_content + footer)
@@ -822,11 +809,418 @@ def generate_site(products):
         f.write(sitemap_content)
     print("sitemap.xmlが生成されました。")
 
+def generate_static_files():
+    """CSSとJavaScriptファイルを生成・更新する関数"""
+    print("style.css を生成・更新します。")
+    css_content = """
+body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+header p {
+    margin: 5px 0 0;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 2px solid #007bff;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 5px 15px;
+}
+
+#searchInput {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px 40px 10px 10px;
+    font-size: 16px;
+    background: transparent;
+}
+
+.search-container::after {
+    content: '\\f002';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 20px;
+    color: #007bff;
+    font-size: 18px;
+}
+
+.search-results-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.search-result-item {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5;
+}
+
+.genre-links-container {
+    background-color: #e9ecef;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.genre-links a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+.genre-links .separator {
+    color: #6c757d;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.product-card {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
+}
+
+.product-info {
+    margin-top: 10px;
+}
+
+.product-name {
+    font-size: 1.1em;
+    margin: 0 0 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.product-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #dc3545;
+    margin: 0;
+}
+
+.price-status-title {
+    font-size: 0.9em;
+    color: #28a745;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.price-status-content {
+    font-size: 0.8em;
+    color: #555;
+}
+
+.pagination {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 8px 16px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.product-detail {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.item-image {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.main-product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item-info {
+    flex: 2;
+    min-width: 300px;
+}
+
+.item-name {
+    font-size: 2em;
+    margin-top: 0;
+}
+
+.item-category a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.price-section .current-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #dc3545;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: background-color 0.3s;
+}
+
+.shop-link.rakuten {
+    background-color: #bf0000;
+}
+
+.shop-link.amazon {
+    background-color: #ff9900;
+}
+
+.shop-link.yahoo {
+    background-color: #7b0099;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.lowest-price-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.ai-analysis-block {
+    margin-top: 20px;
+    background-color: #e7f3ff;
+    border-left: 5px solid #007bff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.price-chart-section {
+    margin-top: 30px;
+}
+
+.item-description {
+    margin-top: 30px;
+}
+
+.product-tags {
+    margin-top: 20px;
+}
+
+.tag-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin: 2px;
+}
+
+.all-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.product-card-buttons-full {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.product-card-buttons-full .btn {
+    width: 100%;
+}
+    """
+    with open('style.css', 'w', encoding='utf-8') as f:
+        f.write(css_content)
+
+    print("script.js を生成・更新します。")
+    js_content = """
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let searchData = [];
+
+    // 現在のページからルートディレクトリまでの相対パスを動的に計算する関数
+    function getBasePath() {
+        const path = window.location.pathname;
+        const parts = path.split('/').filter(p => p.length > 0);
+        const depth = parts.length - 1;
+        return '../'.repeat(depth);
+    }
+
+    // JSONデータを非同期で読み込む
+    fetch(getBasePath() + 'search_index.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('検索データの読み込みに失敗しました。');
+            }
+            return response.json();
+        })
+        .then(data => {
+            searchData = data;
+        })
+        .catch(error => console.error('検索データの読み込みに失敗しました:', error));
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        searchResults.innerHTML = '';
+        
+        if (query.length < 2) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const filteredResults = searchData.filter(item => {
+            const nameMatch = item.name.toLowerCase().includes(query);
+            const categoryMatch = item.category.main.toLowerCase().includes(query) || item.category.sub.toLowerCase().includes(query);
+            const tagsMatch = item.tags.some(tag => tag.toLowerCase().includes(query));
+            
+            return nameMatch || categoryMatch || tagsMatch;
+        });
+
+        if (filteredResults.length > 0) {
+            filteredResults.slice(0, 10).forEach(item => {
+                const resultItem = document.createElement('a');
+                const url = getBasePath() + item.url;
+                
+                resultItem.href = url;
+                resultItem.classList.add('search-result-item');
+                resultItem.textContent = `${item.name} (${item.category.sub})`;
+                searchResults.appendChild(resultItem);
+            });
+            searchResults.style.display = 'block';
+        } else {
+            searchResults.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!searchResults.contains(e.target) && e.target !== searchInput) {
+            searchResults.style.display = 'none';
+        }
+    });
+});
+    """
+    with open('script.js', 'w', encoding='utf-8') as f:
+        f.write(js_content)
+
 
 def main():
     new_products = fetch_rakuten_items()
     final_products = update_products_csv(new_products)
     generate_site(final_products)
+    generate_static_files() # 静的ファイルも更新する処理を追加
 
 if __name__ == '__main__':
     main()
