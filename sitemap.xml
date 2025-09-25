@@ -259,25 +259,31 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/2WAY.html</loc>
+    <loc>https://your-website.com/tags/2way.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/Corei5.html</loc>
+    <loc>https://your-website.com/tags/NEC.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/SSD512GB.html</loc>
+    <loc>https://your-website.com/tags/Officeソフト付き.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/Windows10.html</loc>
+    <loc>https://your-website.com/tags/WPS Office.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/Webカメラ.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -301,13 +307,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/オフィスソフト付.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/カール.html</loc>
+    <loc>https://your-website.com/tags/カールアイロン.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -319,13 +319,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/コスパ最強.html</loc>
+    <loc>https://your-website.com/tags/ギフト.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/コンパクト.html</loc>
+    <loc>https://your-website.com/tags/サロニア.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -343,6 +343,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/スマートフォンホルダー.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/セール.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
@@ -355,13 +361,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/プレゼント.html</loc>
+    <loc>https://your-website.com/tags/ヘアアイロン.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/ヘアアイロン.html</loc>
+    <loc>https://your-website.com/tags/ポリカーボネート.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -397,19 +403,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/光美容.html</loc>
+    <loc>https://your-website.com/tags/光美容器.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/冷蔵庫マット.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/初期設定不要.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -433,13 +433,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/毛穴ケア.html</loc>
+    <loc>https://your-website.com/tags/毛髪ケア.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/滑り止め.html</loc>
+    <loc>https://your-website.com/tags/美容家電.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -451,13 +451,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/耐久性.html</loc>
-    <lastmod>2025-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/耐衝撃性.html</loc>
+    <loc>https://your-website.com/tags/耐熱.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -481,19 +475,19 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/送料無料.html</loc>
+    <loc>https://your-website.com/tags/透明シート.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/透明.html</loc>
+    <loc>https://your-website.com/tags/防振マット.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/防カビ.html</loc>
+    <loc>https://your-website.com/tags/高周波.html</loc>
     <lastmod>2025-09-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
