@@ -8,6 +8,7 @@ from datetime import date
 import requests
 import csv
 import urllib.parse
+import re
 
 # カテゴリーとサブカテゴリーを定義するリスト
 PRODUCT_CATEGORIES = {
@@ -541,6 +542,10 @@ document.addEventListener('DOMContentLoaded', function() {{
         f.write(js_content)
     print("script.jsが更新されました。")
 
+def sanitize_tag(tag):
+    """ファイル名として安全なようにタグ名をサニタイズする"""
+    # / と : を - に置き換える
+    return re.sub(r'[/:]', '-', tag)
 
 def generate_site(products):
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
@@ -675,7 +680,8 @@ def generate_site(products):
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
         tagged_products = [p for p in products if tag in p.get('tags', [])]
-        tag_path = f"tags/{tag}.html"
+        sanitized_tag = sanitize_tag(tag)
+        tag_path = f"tags/{sanitized_tag}.html"
         products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
         main_content_html = f"""
 <main class="container">
@@ -702,7 +708,7 @@ def generate_site(products):
         page_num = i + 1
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
         
-        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{tag}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])
+        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{sanitize_tag(tag)}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])
         
         pagination_html = ""
         if total_tag_pages > 1:
@@ -819,7 +825,7 @@ def generate_site(products):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="{base_path}tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
+                    {"".join([f'<a href="{base_path}tags/{sanitize_tag(tag)}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
                 </div>
             </div>
         </div>
@@ -860,7 +866,7 @@ def generate_site(products):
     # タグページを追加
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
-        sitemap_urls.append((f'{base_url}tags/{tag}.html', 'daily', '0.6'))
+        sitemap_urls.append((f'{base_url}tags/{sanitize_tag(tag)}.html', 'daily', '0.6'))
     for i in range(2, total_tag_pages + 1):
         sitemap_urls.append((f'{base_url}tags/page{i}.html', 'daily', '0.6'))
 
