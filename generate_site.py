@@ -37,7 +37,7 @@ CACHE_FILE = 'products.csv'
 # AmazonとYahoo!ショッピングのアフィリエイトリンクを定義
 AMAZON_AFFILIATE_LINK = "https://amzn.to/46zr68v"
 YAHOO_AFFILIATE_LINK_BASE = "https://shopping.yahoo.co.jp/search?p="
-YAHOO_TOP_PAGE_AD_URL = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155&vc_url=https%3A%2F%2Fshopping.yahoo.yahoo.co.jp%2F"
+YAHOO_TOP_PAGE_AD_URL = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155&vc_url=https%3A%2F%2Fshopping.yahoo.co.jp%2F"
 
 def get_cached_data():
     """CSVファイルからキャッシュされた商品データを読み込む"""
@@ -374,21 +374,21 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <nav class="genre-links-container">
-        <div class="genre-links">
-            <div class="main-links">
-                {"".join([f'<a href="{url}">{text}</a><span class="separator">|</span>' for text, url in main_links])}
-            </div>
-            <div class="main-categories">
-                {"".join([f'''<div class="dropdown">
-                    <button class="dropbtn">{main_cat}</button>
-                    <div class="dropdown-content">
-                        {"".join([f'<a href="{base_path}category/{main_cat}/{sub_cat.replace(" ", "")}.html">{sub_cat}</a>' for sub_cat in sub_cats])}
-                    </div>
-                </div>''' for main_cat, sub_cats in PRODUCT_CATEGORIES.items()])}
-            </div>
+    <div class="genre-links-container">
+        <div class="genre-links main-nav-links">
+            {"".join([f'<a href="{url}">{text}</a><span class="separator">|</span>' for text, url in main_links])}
         </div>
-    </nav>
+    </div>
+    <div class="genre-links-container">
+        <div class="genre-links main-nav-links">
+            {"".join([f'''<div class="dropdown">
+                <button class="dropbtn" data-category="{main_cat}">{main_cat}</button>
+                <div id="dropdown-{main_cat.replace(' ', '-').replace('・', '-')}" class="dropdown-content">
+                    {"".join([f'<a href="{base_path}category/{main_cat}/{sub_cat.replace(" ", "")}.html">{sub_cat}</a>' for sub_cat in sub_cats])}
+                </div>
+            </div>''' for main_cat, sub_cats in PRODUCT_CATEGORIES.items()])}
+        </div>
+    </div>
     <main class="container">
     """
     
@@ -447,6 +447,24 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
                     console.error('価格グラフのレンダリングに失敗しました:', e);
                 }}
             }}
+
+            // ドロップダウンメニューのクリックイベント
+            document.querySelectorAll('.dropdown').forEach(dropdown => {{
+                dropdown.querySelector('.dropbtn').addEventListener('click', function(event) {{
+                    const content = this.nextElementSibling;
+                    content.style.display = content.style.display === "block" ? "none" : "block";
+                    event.stopPropagation(); // クリックイベントが親要素に伝播するのを防ぐ
+                }});
+            }});
+
+            // ページ上のどこかをクリックしたらドロップダウンを閉じる
+            window.addEventListener('click', function(event) {{
+                document.querySelectorAll('.dropdown-content').forEach(content => {{
+                    if (content.style.display === "block") {{
+                        content.style.display = "none";
+                    }}
+                }});
+            }});
         }});
     </script>
 </body>
@@ -457,7 +475,6 @@ def generate_product_card_html(product, page_path):
     """商品カードのHTMLを生成する"""
     link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
     
-    # ポイント特価タグの追加
     point_tag = ""
     if product.get('rakuten_point_rate', 1) >= 5: # 5%以上のポイント還元を「ポイント特価」とする
         point_tag = '<span class="point-special-tag">ポイント特価</span>'
@@ -487,7 +504,6 @@ document.addEventListener('DOMContentLoaded', function() {{
         searchInput.addEventListener('input', function() {{
             const searchTerm = this.value.toLowerCase().trim();
             const filteredProducts = allProducts.filter(product => {{
-                // 商品名、AI分析テキスト、タグをすべて検索対象にする
                 const nameMatch = product.name.toLowerCase().includes(searchTerm);
                 const aiAnalysisMatch = product.ai_analysis.toLowerCase().includes(searchTerm);
                 const aiHeadlineMatch = product.ai_headline.toLowerCase().includes(searchTerm);
@@ -496,7 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {{
                 return nameMatch || aiAnalysisMatch || aiHeadlineMatch || tagsMatch;
             }});
             
-            // フィルタリングされた商品を再描画
             renderProducts(filteredProducts);
         }});
     }}
@@ -511,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                     <img src="${{product.image_url}}" alt="${{product.name}}">
                     <div class="product-info">
                         <h3 class="product-name">${{product.name.slice(0, 20)}}...${{product.name.length > 20 ? '...' : ''}}</h3>
-                        <p class="product-price">${{product.price.toLocaleString()}}円</p>
+                        <p class="product-price">${{Number(product.price).toLocaleString()}}円</p>
                         <div class="price-status-title">💡注目ポイント ${{pointTag}}</div>
                         <div class="price-status-content ai-analysis">${{product.ai_headline}}</div>
                     </div>
@@ -784,7 +799,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -843,6 +858,7 @@ def generate_site(products):
         sitemap_urls.append((f'{base_url}category/{special_cat}/', 'daily', '0.8'))
 
     # タグページを追加
+    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
         sitemap_urls.append((f'{base_url}tags/{tag}.html', 'daily', '0.6'))
     for i in range(2, total_tag_pages + 1):
