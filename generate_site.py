@@ -607,16 +607,16 @@ def generate_site(products):
         print(f"category/{special_cat}/index.html が生成されました。")
 
 # タグごとのページ生成
-    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-    for tag in all_tags:
-        # タグ名に含まれる特殊文字を安全な文字に置き換える
-        safe_tag_name = tag.replace('/', '_').replace('\\', '_')
-        
-        tagged_products = [p for p in products if tag in p.get('tags', [])]
-        tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
-        
-        products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
-        main_content_html = f"""
+all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+for tag in all_tags:
+    # タグ名に含まれる特殊文字を安全な文字に置き換える
+    safe_tag_name = tag.replace('/', '_').replace('\\', '_')
+    
+    tagged_products = [p for p in products if tag in p.get('tags', [])]
+    tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
+    
+    products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
+    main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">#{tag}の注目商品</h2>
@@ -626,10 +626,10 @@ def generate_site(products):
     </div>
 </main>
 """
-        header, footer = generate_header_footer(tag_path, page_title=f"タグ：#{tag}")
-        with open(tag_path, 'w', encoding='utf-8') as f:
-            f.write(header + main_content_html + footer)
-        print(f"{tag_path} が生成されました。")
+    header, footer = generate_header_footer(tag_path, page_title=f"タグ：#{tag}")
+    with open(tag_path, 'w', encoding='utf-8') as f:
+        f.write(header + main_content_html + footer)
+    print(f"{tag_path} が生成されました。")
 
 # タグ一覧ページのページネーション
 TAGS_PER_PAGE = 50
@@ -643,7 +643,7 @@ for i in range(total_tag_pages):
 
     # 確実にエラーが起きないよう、文字列の結合方法を変更しました
     tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace(chr(92), "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>' for t in paginated_tags])
-
+    
     pagination_html = ""
     if total_tag_pages > 1:
         pagination_html += '<div class="pagination">'
