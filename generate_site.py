@@ -657,20 +657,21 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{tag_path} が生成されました。")
 
-    # タグ一覧ページのページネーション
-    TAGS_PER_PAGE = 50
-    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
-    for i in range(total_tag_pages):
-        start_index = i * TAGS_PER_PAGE
-        end_index = start_index + TAGS_PER_PAGE
-        paginated_tags = all_tags[start_index:end_index]
-        page_num = i + 1
-        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+# タグ一覧ページのページネーション
+TAGS_PER_PAGE = 50
+total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
 
-        tag_links_html = "".join([
-            f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace(chr(92), "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
-            for t in paginated_tags
-        ])
+for i in range(total_tag_pages):
+    start_index = i * TAGS_PER_PAGE
+    end_index = start_index + TAGS_PER_PAGE
+    paginated_tags = all_tags[start_index:end_index]
+    page_num = i + 1
+    page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+
+    tag_links_html = "".join([
+        f'<a href="/tags/{t.replace("/", "_").replace("\\", "_")}.html" class="tag-button">#{t}</a>'
+        for t in paginated_tags
+    ])
 
         pagination_html = ""
         if total_tag_pages > 1:
