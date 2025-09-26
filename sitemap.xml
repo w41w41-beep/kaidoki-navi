@@ -25,6 +25,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://your-website.com/search_results.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/pages/mantubiz_10002537.html</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
@@ -38,6 +44,12 @@
   </url>
   <url>
     <loc>https://your-website.com/pages/photolink_10000003.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/pages/seunnsironeko_10004397.html</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -199,6 +211,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://your-website.com/category/その他/</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/category/その他/その他.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/category/最安値/</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
@@ -211,7 +235,25 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/Core i5.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/EVA素材.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/Nintendo Switch.html</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -223,7 +265,19 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://your-website.com/tags/かわいい.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/tags/アウトドア.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/ゲームカード.html</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -272,6 +326,12 @@
   </url>
   <url>
     <loc>https://your-website.com/tags/冷蔵庫マット.html</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/収納ケース.html</loc>
     <lastmod>2025-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
