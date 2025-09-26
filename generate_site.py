@@ -657,6 +657,9 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{tag_path} が生成されました。")
 
+# すべての商品からタグを収集
+all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+
 # タグ一覧ページのページネーション
 TAGS_PER_PAGE = 50
 total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
@@ -674,17 +677,25 @@ for i in range(total_tag_pages):
         safe_tag = t.replace("/", "_").replace("\\", "_")
         tag_links_html += f'<a href="/tags/{safe_tag}.html" class="tag-button">#{t}</a>'
 
-    # ページネーションを生成（タグループの外で作る）
+    # ページネーションを生成（便利な形式）
     pagination_html = ""
     if total_tag_pages > 1:
         pagination_html += '<div class="pagination">'
+        # 前へリンク
         if page_num > 1:
             prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
             pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+
+        # 表示するページ番号（前後2ページ + 先頭・末尾）
         for p in range(1, total_tag_pages + 1):
-            page_link = 'index.html' if p == 1 else f'page{p}.html'
-            active_class = 'active' if p == page_num else ''
-            pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            if p == 1 or p == total_tag_pages or abs(p - page_num) <= 2:
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            elif abs(p - page_num) == 3:
+                pagination_html += '<span class="dots">…</span>'
+
+        # 次へリンク
         if page_num < total_tag_pages:
             next_link = f'page{page_num + 1}.html'
             pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
