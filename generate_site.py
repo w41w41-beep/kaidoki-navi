@@ -668,9 +668,10 @@ for i in range(total_tag_pages):
     page_num = i + 1
     page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
 
-    tag_links_html = "".join([
-        f'<a href="/tags/{t.replace("/", "_").replace("\\", "_")}.html" class="tag-button">#{t}</a>'
-        for t in paginated_tags
+    tag_links_html = ""
+    for t in paginated_tags:
+        safe_tag = t.replace("/", "_").replace("\\", "_")
+        tag_links_html += f'<a href="/tags/{safe_tag}.html" class="tag-button">#{t}</a>'
     ])
 
         pagination_html = ""
