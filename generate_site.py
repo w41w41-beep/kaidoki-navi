@@ -672,7 +672,6 @@ for i in range(total_tag_pages):
     for t in paginated_tags:
         safe_tag = t.replace("/", "_").replace("\\", "_")
         tag_links_html += f'<a href="/tags/{safe_tag}.html" class="tag-button">#{t}</a>'
-    ])
 
         pagination_html = ""
         if total_tag_pages > 1:
