@@ -628,34 +628,38 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{tag_path} が生成されました。")
 
-    # タグ一覧ページのページネーション
-    TAGS_PER_PAGE = 50
-    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
-    for i in range(total_tag_pages):
-        start_index = i * TAGS_PER_PAGE
-        end_index = start_index + TAGS_PER_PAGE
-        paginated_tags = all_tags[start_index:end_index]
-        page_num = i + 1
-        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
-        
-        tag_links_html = "".join([f'<a href="{os.path.relpath(f"tags/{sanitize_tag(tag)}.html", os.path.dirname(page_path))}" class="tag-button">#{tag}</a>' for tag in paginated_tags])
-        
-        pagination_html = ""
-        if total_tag_pages > 1:
-            pagination_html += '<div class="pagination">'
-            if page_num > 1:
-                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
-                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
-            for p in range(1, total_tag_pages + 1):
-                page_link = 'index.html' if p == 1 else f'page{p}.html'
-                active_class = 'active' if p == page_num else ''
-                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
-            if page_num < total_tag_pages:
-                next_link = f'page{page_num + 1}.html'
-                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
-            pagination_html += '</div>'
-        
-        main_content_html = f"""
+# タグ一覧ページのページネーション
+TAGS_PER_PAGE = 50
+total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+for i in range(total_tag_pages):
+    start_index = i * TAGS_PER_PAGE
+    end_index = start_index + TAGS_PER_PAGE
+    paginated_tags = all_tags[start_index:end_index]
+    page_num = i + 1
+    page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+
+    # タグ名に特殊文字が含まれていても安全なファイルパスを生成
+    tag_links_html = "".join([
+        f'<a href="{os.path.relpath("tags/" + t.replace("/", "_").replace(chr(92), "_") + ".html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
+        for t in paginated_tags
+    ])
+
+    pagination_html = ""
+    if total_tag_pages > 1:
+        pagination_html += '<div class="pagination">'
+        if page_num > 1:
+            prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+            pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+        for p in range(1, total_tag_pages + 1):
+            page_link = 'index.html' if p == 1 else f'page{p}.html'
+            active_class = 'active' if p == page_num else ''
+            pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+        if page_num < total_tag_pages:
+            next_link = f'page{page_num + 1}.html'
+            pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+        pagination_html += '</div>'
+
+    main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
@@ -666,10 +670,10 @@ def generate_site(products):
     </div>
 </main>
 """
-        header, footer = generate_header_footer(page_path, page_title="タグから探す")
-        with open(page_path, 'w', encoding='utf-8') as f:
-            f.write(header + main_content_html + footer)
-        print(f"{page_path} が生成されました。")
+    header, footer = generate_header_footer(page_path, page_title="タグから探す")
+    with open(page_path, 'w', encoding='utf-8') as f:
+        f.write(header + main_content_html + footer)
+    print(f"{page_path} が生成されました。")
 
     # 商品詳細ページの生成
     for product in products:
