@@ -383,10 +383,12 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
     </div>
     <div class="genre-links-container" style="margin-top: -10px;">
         <div class="genre-links" id="main-category-nav">
-            </div>
+            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+        </div>
     </div>
     <div id="subcategory-container" class="subcategory-container">
-        </div>
+        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
+    </div>
     <script id="nav-data" type="application/json">{nav_data}</script>
     <script src="{base_path}nav.js"></script>
 """
@@ -657,52 +659,38 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{tag_path} が生成されました。")
 
-# すべての商品からタグを収集
-all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    # タグ一覧ページのページネーション
+    TAGS_PER_PAGE = 50
+    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+    for i in range(total_tag_pages):
+        start_index = i * TAGS_PER_PAGE
+        end_index = start_index + TAGS_PER_PAGE
+        paginated_tags = all_tags[start_index:end_index]
+        page_num = i + 1
+        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
 
-# タグ一覧ページのページネーション
-TAGS_PER_PAGE = 50
-total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+        # 修正: 文字列連結で安全にパスを生成
+        tag_links_html = "".join([
+            f'<a href="{os.path.relpath("tags/" + t.replace("/", "_").replace(chr(92), "_") + ".html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
+            for t in paginated_tags
+        ])
 
-for i in range(total_tag_pages):
-    start_index = i * TAGS_PER_PAGE
-    end_index = start_index + TAGS_PER_PAGE
-    paginated_tags = all_tags[start_index:end_index]
-    page_num = i + 1
-    page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
-
-    # タグリンクを生成
-    tag_links_html = ""
-    for t in paginated_tags:
-        safe_tag = t.replace("/", "_").replace("\\", "_")
-        tag_links_html += f'<a href="/tags/{safe_tag}.html" class="tag-button">#{t}</a>'
-
-    # ページネーションを生成（便利な形式）
-    pagination_html = ""
-    if total_tag_pages > 1:
-        pagination_html += '<div class="pagination">'
-        # 前へリンク
-        if page_num > 1:
-            prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
-            pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
-
-        # 表示するページ番号（前後2ページ + 先頭・末尾）
-        for p in range(1, total_tag_pages + 1):
-            if p == 1 or p == total_tag_pages or abs(p - page_num) <= 2:
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+            for p in range(1, total_tag_pages + 1):
                 page_link = 'index.html' if p == 1 else f'page{p}.html'
                 active_class = 'active' if p == page_num else ''
                 pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
-            elif abs(p - page_num) == 3:
-                pagination_html += '<span class="dots">…</span>'
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+            pagination_html += '</div>'
 
-        # 次へリンク
-        if page_num < total_tag_pages:
-            next_link = f'page{page_num + 1}.html'
-            pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
-        pagination_html += '</div>'
-
-    # ページ本体のHTML
-    main_content_html = f"""
+        main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
@@ -713,13 +701,10 @@ for i in range(total_tag_pages):
     </div>
 </main>
 """
-
-    # ヘッダー・フッターを合成して出力
-    header, footer = generate_header_footer(page_path, page_title="タグから探す")
-    with open(page_path, 'w', encoding='utf-8') as f:
-        f.write(header + main_content_html + footer)
-
-    print(f"{page_path} が生成されました。")
+        header, footer = generate_header_footer(page_path, page_title="タグから探す")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + footer)
+        print(f"{page_path} が生成されました。")
 
     # 商品詳細ページの生成
     for product in products:
