@@ -8,6 +8,7 @@ from datetime import date
 import requests
 import csv
 import urllib.parse
+from urllib.parse import urlparse
 
 # カテゴリーとサブカテゴリーを定義するリスト
 PRODUCT_CATEGORIES = {
@@ -27,6 +28,8 @@ PRODUCT_CATEGORIES = {
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
+# トップページに表示するサブカテゴリーの数
+SUB_CATEGORIES_TO_SHOW = 15
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
@@ -34,10 +37,18 @@ OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")  # 環境変数からAPIキーを取得
 MODEL_NAME = "gpt-4o-mini"
 CACHE_FILE = 'products.csv'
+
 # AmazonとYahoo!ショッピングのアフィリエイトリンクを定義
 AMAZON_AFFILIATE_LINK = "https://amzn.to/46zr68v"
-YAHOO_AFFILIATE_LINK_BASE = "https://shopping.yahoo.co.jp/search?p="
-YAHOO_TOP_PAGE_AD_URL = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155&vc_url=https%3A%2F%2Fshopping.yahoo.co.jp%2F"
+# 修正後のYahoo!ショッピングのアフィリエイトリンク
+YAHOO_AFFILIATE_LINK = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155"
+
+# CSVファイルのフィールド名を固定
+CSV_FIELDNAMES = [
+    'id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url',
+    'page_url', 'category', 'ai_headline', 'ai_analysis', 'description',
+    'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history', 'source'
+]
 
 def get_cached_data():
     """CSVファイルからキャッシュされた商品データを読み込む"""
@@ -54,19 +65,20 @@ def get_cached_data():
                     if not row.get('id'):
                         continue
                     product_id = row['id']
-
+                    
                     # JSON文字列として保存されているデータを正しくパース
                     for key in ['price_history', 'tags', 'category']:
                         if key in row and isinstance(row[key], str):
                             try:
-                                row[key] = json.loads(row[key].replace("'", '"'))
+                                row[key] = json.loads(row[key])
                             except (json.JSONDecodeError, TypeError):
                                 print(f"警告: ID {product_id} の {key} パースに失敗しました。")
                                 row[key] = [] if key in ['price_history', 'tags'] else {"main": "不明", "sub": ""}
                     
+                    # categoryが辞書形式でない場合に補完
                     if 'category' in row and not isinstance(row['category'], dict):
                         row['category'] = {"main": "不明", "sub": ""}
-
+                    
                     cached_data[product_id] = row
         except csv.Error as e:
             print(f"CSVファイルの読み込み中にエラーが発生しました: {e}")
@@ -80,16 +92,8 @@ def save_to_cache(products):
             os.remove(CACHE_FILE)
         return
 
-    fieldnames = set()
-    for p in products:
-        fieldnames.update(p.keys())
-    
-    # フィールド名を特定の順序でソート
-    preferred_order = ['id', 'name', 'price', 'image_url', 'rakuten_url', 'yahoo_url', 'amazon_url', 'page_url', 'category', 'ai_headline', 'ai_analysis', 'description', 'ai_summary', 'tags', 'date', 'main_ec_site', 'price_history', 'source']
-    fieldnames = sorted(list(fieldnames), key=lambda x: preferred_order.index(x) if x in preferred_order else len(preferred_order))
-
     with open(CACHE_FILE, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=CSV_FIELDNAMES)
         writer.writeheader()
         for product in products:
             product_to_write = product.copy()
@@ -142,15 +146,13 @@ def map_to_defined_category(sub_category, product_name):
         if any(sc in product_name.lower() for sc in sub_cats):
             return main_cat, sub_category
 
-    # 定義済みリストに一致するサブカテゴリーがない場合
-    for main_cat in PRODUCT_CATEGORIES.keys():
-        if main_cat.replace('・', '').replace(' ', '') in product_name.lower().replace('・', '').replace(' ', ''):
-            # メインカテゴリーが商品名に含まれていれば、そのカテゴリーに分類
-            return main_cat, sub_category
+    # 定義済みリストに一致するサブカテゴリーがない場合、商品名からメインカテゴリーを推測
+    for main_cat, sub_cats in PRODUCT_CATEGORIES.items():
+        if any(term in product_name.lower() for term in [main_cat, sub_category]):
+            return main_cat, "その他" # サブカテゴリーは「その他」に分類
             
     # いずれにも当てはまらない場合、対象外とする
-    return 'その他', '不明'
-
+    return 'その他', 'その他'
 
 def generate_ai_metadata(product_name, product_description):
     """商品の要約、タグ、サブカテゴリーを生成する"""
@@ -187,7 +189,6 @@ def generate_ai_analysis(product_name, product_price, price_history):
         return analysis_data.get('headline', 'AI分析準備中'), analysis_data.get('analysis', '詳細なAI分析は現在準備中です。')
     return "AI分析準備中", "詳細なAI分析は現在準備中です。"
 
-
 def fetch_rakuten_items():
     """楽天APIから複数の商品データを取得する関数"""
     app_id = os.environ.get('RAKUTEN_API_KEY')
@@ -220,7 +221,8 @@ def fetch_rakuten_items():
                         "price": str(item_data['itemPrice']),
                         "image_url": item_data.get('mediumImageUrls', [{}])[0].get('imageUrl', ''),
                         "rakuten_url": item_data.get('itemUrl', ''),
-                        "yahoo_url": YAHOO_AFFILIATE_LINK_BASE + urllib.parse.quote(item_data['itemName']),
+                        # 修正後のYahoo!アフィリエイトリンクを割り当て
+                        "yahoo_url": YAHOO_AFFILIATE_LINK,
                         "amazon_url": AMAZON_AFFILIATE_LINK,
                         "page_url": f"pages/{item_data['itemCode'].replace(':', '_')}.html",
                         "category": {"main": "", "sub": ""},
@@ -243,9 +245,8 @@ def fetch_rakuten_items():
     print(f"合計 {len(all_products)} 件の商品を取得しました。")
     return all_products
 
-
 def update_products_csv(new_products):
-    """新しい商品データを既存のproducts.jsonに統合・更新する関数"""
+    """新しい商品データを既存のproducts.csvに統合・更新する関数"""
     cached_products = get_cached_data()
     updated_products = {}
 
@@ -274,11 +275,10 @@ def update_products_csv(new_products):
             print(f"新規商品 '{product['name']}' を追加します。AIデータを生成します。")
             ai_summary, tags, main_cat, sub_cat = generate_ai_metadata(product['name'], product['description'])
             
-            # 定義済みカテゴリーにない場合はスキップ
+            # 定義済みカテゴリーにない場合は「その他」として追加
             if main_cat == 'その他':
-                print(f"商品 '{product['name']}' は定義済みカテゴリーに属さないためスキップします。")
-                continue
-                
+                print(f"商品 '{product['name']}' は定義済みカテゴリーに属さないため、カテゴリーを「その他」に設定します。")
+            
             product['ai_summary'] = ai_summary
             product['tags'] = tags
             product['category']['main'] = main_cat
@@ -309,8 +309,7 @@ def update_products_csv(new_products):
                 ai_summary, tags, main_cat, sub_cat = generate_ai_metadata(existing_product['name'], existing_product['description'])
                 
                 if main_cat == 'その他':
-                    print(f"商品 '{existing_product['name']}' は定義済みカテゴリーに属さないためスキップします。")
-                    continue
+                    print(f"商品 '{existing_product['name']}' は定義済みカテゴリーに属さないため、カテゴリーを「その他」に設定します。")
                 
                 existing_product['ai_summary'] = ai_summary if not existing_product.get('ai_summary') else existing_product['ai_summary']
                 existing_product['tags'] = tags if not existing_product.get('tags') else existing_product['tags']
@@ -333,13 +332,7 @@ def update_products_csv(new_products):
 
 def generate_header_footer(current_path, page_title="お得な買い時を見つけよう！"):
     """ヘッダーとフッターのHTMLを生成する"""
-    # どの階層にいてもサイトのルートディレクトリへの相対パスを正しく計算する
-    # 例：`pages/product.html` -> `../`
-    #    `category/pc/index.html` -> `../../`
-    #    `index.html` -> `./`
-    # `os.path.relpath`は`index.html`が基準なので、
-    # `os.path.dirname(current_path)`が`pages`なら`..`を、`category/pc`なら`../..`を返す
-    # ルートディレクトリからのパスを生成する
+    # 現在のHTMLファイルからのルートディレクトリへの相対パスを計算
     rel_path_to_root = os.path.relpath('.', os.path.dirname(current_path))
     if rel_path_to_root == '.':
         base_path = './'
@@ -352,12 +345,12 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
         ("最安値", f"{base_path}category/最安値/index.html"),
         ("期間限定セール", f"{base_path}category/期間限定セール/index.html")
     ]
-    main_category_links = [
-        (cat, f"{base_path}category/{cat}/index.html") for cat in PRODUCT_CATEGORIES.keys()
-    ]
     
     def generate_links_html(links):
         return "".join([f'<a href="{url}">{text}</a><span class="separator">|</span>' for text, url in links])
+        
+    # ナビゲーション用のJSONデータを生成
+    nav_data = json.dumps(PRODUCT_CATEGORIES, ensure_ascii=False)
 
     header_html = f"""
 <!DOCTYPE html>
@@ -389,11 +382,14 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
         </div>
     </div>
     <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links">
-            {generate_links_html(main_category_links)}
-        </div>
+        <div class="genre-links" id="main-category-nav">
+            </div>
     </div>
-    """
+    <div id="subcategory-container" class="subcategory-container">
+        </div>
+    <script id="nav-data" type="application/json">{nav_data}</script>
+    <script src="{base_path}nav.js"></script>
+"""
     
     footer_html = f"""
     </main>
@@ -458,7 +454,7 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
 
 def generate_product_card_html(product, page_path):
     """商品カードのHTMLを生成する"""
-    # 商品カードのリンクは現在のページからの相対パスで良い
+    # 商品カードのリンクは現在のページからの相対パス
     link_path = os.path.relpath(product['page_url'], os.path.dirname(page_path))
     return f"""
 <a href="{link_path}" class="product-card">
@@ -481,6 +477,19 @@ def generate_site(products):
 
     # カテゴリーを事前に定義したリストから取得
     categories = PRODUCT_CATEGORIES
+    
+    # カテゴリーごとの商品リストを準備
+    category_products = {cat: [] for cat in categories.keys()}
+    category_products['その他'] = []
+    
+    all_tags = set()
+    for product in products:
+        main_cat = product.get('category', {}).get('main', 'その他')
+        if main_cat in category_products:
+            category_products[main_cat].append(product)
+        else:
+            category_products['その他'].append(product)
+        all_tags.update(product.get('tags', []))
 
     # 既存の生成ディレクトリをクリーンアップ
     for dir_name in ['pages', 'category', 'tags']:
@@ -531,8 +540,13 @@ def generate_site(products):
         print(f"{page_path} が生成されました。")
     
     # カテゴリーごとのページ生成
-    for main_cat, sub_cats in categories.items():
-        main_cat_products = [p for p in products if p.get('category', {}).get('main', '') == main_cat]
+    all_categories = list(categories.keys()) + ['その他']
+    for main_cat in all_categories:
+        main_cat_products = category_products.get(main_cat, [])
+        if not main_cat_products:
+            print(f"警告: メインカテゴリー '{main_cat}' に該当する商品がないため、ページ生成をスキップしました。")
+            continue
+            
         page_path = f"category/{main_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
         products_html = "".join([generate_product_card_html(p, page_path) for p in main_cat_products])
@@ -550,46 +564,59 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
-        
-    for sub_cat in sub_cats:
-        sub_cat_products = [p for p in products if p.get('category', {}).get('sub', '') == sub_cat]
-        
-        # 商品が1件以上ある場合のみページを生成する
-        if sub_cat_products:
-            sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-            page_path = f"category/{main_cat}/{sub_cat_file_name}"
-            products_html = "".join([generate_product_card_html(p, page_path) for p in sub_cat_products])
-            main_content_html = f"""
+
+        # サブカテゴリーのページ生成
+        if main_cat in categories:
+            for sub_cat in categories[main_cat]:
+                sub_cat_products = [p for p in main_cat_products if p.get('category', {}).get('sub', '') == sub_cat]
+                if sub_cat_products:
+                    sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
+                    page_path_sub = f"category/{main_cat}/{sub_cat_file_name}"
+                    products_html_sub = "".join([generate_product_card_html(p, page_path_sub) for p in sub_cat_products])
+                    main_content_html_sub = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
         <div class="product-grid">
-            {products_html}
+            {products_html_sub}
         </div>
     </div>
 </main>
 """
-            header, footer = generate_header_footer(page_path, page_title=f"{sub_cat}の商品一覧")
-            with open(page_path, 'w', encoding='utf-8') as f:
-                f.write(header + main_content_html + footer)
-            print(f"{page_path} が生成されました。")
-        else:
-            print(f"警告: サブカテゴリー '{sub_cat}' に該当する商品がないため、ページ生成をスキップしました。")
-
+                    header_sub, footer_sub = generate_header_footer(page_path_sub, page_title=f"{sub_cat}の商品一覧")
+                    with open(page_path_sub, 'w', encoding='utf-8') as f:
+                        f.write(header_sub + main_content_html_sub + footer_sub)
+                    print(f"{page_path_sub} が生成されました。")
+        else: # 'その他'カテゴリー
+            sub_cat_products = [p for p in category_products['その他'] if p.get('category', {}).get('sub') == 'その他']
+            if sub_cat_products:
+                sub_cat_file_name = "その他.html"
+                page_path_sub = f"category/その他/{sub_cat_file_name}"
+                os.makedirs(os.path.dirname(page_path_sub), exist_ok=True)
+                products_html_sub = "".join([generate_product_card_html(p, page_path_sub) for p in sub_cat_products])
+                main_content_html_sub = f"""
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">その他の商品一覧</h2>
+        <div class="product-grid">
+            {products_html_sub}
+        </div>
+    </div>
+</main>
+"""
+                header_sub, footer_sub = generate_header_footer(page_path_sub, page_title="その他の商品一覧")
+                with open(page_path_sub, 'w', encoding='utf-8') as f:
+                    f.write(header_sub + main_content_html_sub + footer_sub)
+                print(f"{page_path_sub} が生成されました。")
+    
     # 特別カテゴリーのページ生成
     special_categories = {
-        '最安値': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('category', {}).get('sub', '')))),
-        '期間限定セール': sorted(list(set(p.get('category', {}).get('sub', '') for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags']))))
+        '最安値': sorted([p for p in products], key=lambda x: int(x.get('price', 0))),
+        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
     }
-    for special_cat, _ in special_categories.items():
+    for special_cat, filtered_products in special_categories.items():
         page_path = f"category/{special_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
-        
-        if special_cat == '最安値':
-            filtered_products = sorted([p for p in products], key=lambda x: int(x.get('price', 0)))
-        else: # 期間限定セール
-            filtered_products = [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
-
         products_html = "".join([generate_product_card_html(p, page_path) for p in filtered_products])
         main_content_html = f"""
 <main class="container">
@@ -609,11 +636,10 @@ def generate_site(products):
     # タグごとのページ生成
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
     for tag in all_tags:
-        # タグ名に含まれる特殊文字を安全な文字に置き換える
         safe_tag_name = tag.replace('/', '_').replace('\\', '_')
         
         tagged_products = [p for p in products if tag in p.get('tags', [])]
-        tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
+        tag_path = f"tags/{safe_tag_name}.html"
         
         products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
         main_content_html = f"""
@@ -641,9 +667,8 @@ def generate_site(products):
         page_num = i + 1
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
 
-        # タグ名に特殊文字が含まれていても安全なファイルパスを生成
         tag_links_html = "".join([
-            f'<a href="{os.path.relpath("tags/" + t.replace("/", "_").replace(chr(92), "_") + ".html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
+            f'<a href="{os.path.relpath(f"tags/{t.replace("/", "_").replace(chr(92), "_")}.html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
             for t in paginated_tags
         ])
 
@@ -716,13 +741,18 @@ def generate_site(products):
 </div>
 """ if "specs" in product else ""
 
+        # Yahoo!ショッピングのリンクを修正
+        yahoo_affiliate_link = YAHOO_AFFILIATE_LINK
+        parsed_url = urlparse(product.get("rakuten_url", ""))
+        is_rakuten_url = parsed_url.netloc == "item.rakuten.co.jp" or parsed_url.netloc.endswith(".rakuten.co.jp")
+
         affiliate_links_html = f"""
 <div class="lowest-price-section">
     <p class="lowest-price-label">最安値ショップをチェック！</p>
     <div class="lowest-price-buttons">
         <a href="{AMAZON_AFFILIATE_LINK}" class="btn shop-link amazon" target="_blank">Amazonで見る</a>
         <a href="{product.get("rakuten_url", "https://www.rakuten.co.jp/")}" class="btn shop-link rakuten" target="_blank">楽天市場で見る</a>
-        <a href="{YAHOO_TOP_PAGE_AD_URL}" class="btn shop-link yahoo" rel="nofollow" target="_blank">Yahoo!ショッピングで見る</a>
+        <a href="{yahoo_affiliate_link}" class="btn shop-link yahoo" rel="nofollow" target="_blank">Yahoo!ショッピングで見る</a>
     </div>
 </div>
 """
@@ -743,7 +773,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('sub', '')}</a></p>
+                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -782,21 +812,25 @@ def generate_site(products):
         (base_url, 'daily', '1.0'),
         (f'{base_url}privacy.html', 'monthly', '0.5'),
         (f'{base_url}disclaimer.html', 'monthly', '0.5'),
-        (f'{base_url}contact.html', 'monthly', '0.5')
+        (f'{base_url}contact.html', 'monthly', '0.5'),
+        (f'{base_url}search_results.html', 'daily', '0.5')
     ]
 
     for product in products:
         sitemap_urls.append((f'{base_url}{product.get("page_url", "")}', 'daily', '0.6'))
     
-    # ページネーションページを追加
     total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(2, total_pages + 1):
         sitemap_urls.append((f'{base_url}pages/page{i}.html', 'daily', '0.8'))
 
     # カテゴリーページを追加
-    for main_cat in PRODUCT_CATEGORIES.keys():
+    all_categories_sitemap = list(PRODUCT_CATEGORIES.keys()) + ['その他']
+    for main_cat in all_categories_sitemap:
         sitemap_urls.append((f'{base_url}category/{main_cat}/', 'daily', '0.8'))
-        for sub_cat in PRODUCT_CATEGORIES.get(main_cat, []):
+        sub_cats_to_add = PRODUCT_CATEGORIES.get(main_cat, [])
+        if main_cat == 'その他':
+            sub_cats_to_add = ['その他']
+        for sub_cat in sub_cats_to_add:
             sitemap_urls.append((f'{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html', 'daily', '0.7'))
     
     for special_cat in ['最安値', '期間限定セール']:
@@ -804,11 +838,11 @@ def generate_site(products):
 
     # タグページを追加
     all_tags_sitemap = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    sitemap_urls.append((f'{base_url}tags/', 'weekly', '0.7')) # タグ一覧ページ
     for tag in all_tags_sitemap:
         safe_tag_name = tag.replace("/", "_").replace("\\", "_")
         sitemap_urls.append((f'{base_url}tags/{safe_tag_name}.html', 'daily', '0.6'))
     
-    # タグ一覧ページを追加
     total_tag_pages_sitemap = math.ceil(len(all_tags_sitemap) / TAGS_PER_PAGE)
     for i in range(2, total_tag_pages_sitemap + 1):
         sitemap_urls.append((f'{base_url}tags/page{i}.html', 'daily', '0.6'))
@@ -876,7 +910,6 @@ def main():
     new_products = fetch_rakuten_items()
     final_products = update_products_csv(new_products)
     
-    # ここから修正・追加
     generate_search_index(final_products)
     generate_search_results_page()
     
