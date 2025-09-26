@@ -606,17 +606,17 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{special_cat}/index.html が生成されました。")
 
-# タグごとのページ生成
-all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-for tag in all_tags:
-    # タグ名に含まれる特殊文字を安全な文字に置き換える
-    safe_tag_name = tag.replace('/', '_').replace('\\', '_')
-    
-    tagged_products = [p for p in products if tag in p.get('tags', [])]
-    tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
-    
-    products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
-    main_content_html = f"""
+    # タグごとのページ生成
+    all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    for tag in all_tags:
+        # タグ名に含まれる特殊文字を安全な文字に置き換える
+        safe_tag_name = tag.replace('/', '_').replace('\\', '_')
+        
+        tagged_products = [p for p in products if tag in p.get('tags', [])]
+        tag_path = f"tags/{safe_tag_name}.html"  # 安全なタグ名を使用
+        
+        products_html = "".join([generate_product_card_html(p, tag_path) for p in tagged_products])
+        main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">#{tag}の注目商品</h2>
@@ -626,43 +626,43 @@ for tag in all_tags:
     </div>
 </main>
 """
-    header, footer = generate_header_footer(tag_path, page_title=f"タグ：#{tag}")
-    with open(tag_path, 'w', encoding='utf-8') as f:
-        f.write(header + main_content_html + footer)
-    print(f"{tag_path} が生成されました。")
+        header, footer = generate_header_footer(tag_path, page_title=f"タグ：#{tag}")
+        with open(tag_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + footer)
+        print(f"{tag_path} が生成されました。")
 
-# タグ一覧ページのページネーション
-TAGS_PER_PAGE = 50
-total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
-for i in range(total_tag_pages):
-    start_index = i * TAGS_PER_PAGE
-    end_index = start_index + TAGS_PER_PAGE
-    paginated_tags = all_tags[start_index:end_index]
-    page_num = i + 1
-    page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
+    # タグ一覧ページのページネーション
+    TAGS_PER_PAGE = 50
+    total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
+    for i in range(total_tag_pages):
+        start_index = i * TAGS_PER_PAGE
+        end_index = start_index + TAGS_PER_PAGE
+        paginated_tags = all_tags[start_index:end_index]
+        page_num = i + 1
+        page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
 
-    # タグ名に特殊文字が含まれていても安全なファイルパスを生成
-    tag_links_html = "".join([
-        f'<a href="{os.path.relpath("tags/" + t.replace("/", "_").replace(chr(92), "_") + ".html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
-        for t in paginated_tags
-    ])
+        # タグ名に特殊文字が含まれていても安全なファイルパスを生成
+        tag_links_html = "".join([
+            f'<a href="{os.path.relpath("tags/" + t.replace("/", "_").replace(chr(92), "_") + ".html", os.path.dirname(page_path))}" class="tag-button">#{t}</a>'
+            for t in paginated_tags
+        ])
 
-    pagination_html = ""
-    if total_tag_pages > 1:
-        pagination_html += '<div class="pagination">'
-        if page_num > 1:
-            prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
-            pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
-        for p in range(1, total_tag_pages + 1):
-            page_link = 'index.html' if p == 1 else f'page{p}.html'
-            active_class = 'active' if p == page_num else ''
-            pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
-        if page_num < total_tag_pages:
-            next_link = f'page{page_num + 1}.html'
-            pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
-        pagination_html += '</div>'
+        pagination_html = ""
+        if total_tag_pages > 1:
+            pagination_html += '<div class="pagination">'
+            if page_num > 1:
+                prev_link = 'index.html' if page_num == 2 else f'page{page_num - 1}.html'
+                pagination_html += f'<a href="{prev_link}" class="prev">前へ</a>'
+            for p in range(1, total_tag_pages + 1):
+                page_link = 'index.html' if p == 1 else f'page{p}.html'
+                active_class = 'active' if p == page_num else ''
+                pagination_html += f'<a href="{page_link}" class="{active_class}">{p}</a>'
+            if page_num < total_tag_pages:
+                next_link = f'page{page_num + 1}.html'
+                pagination_html += f'<a href="{next_link}" class="next">次へ</a>'
+            pagination_html += '</div>'
 
-    main_content_html = f"""
+        main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
@@ -673,10 +673,10 @@ for i in range(total_tag_pages):
     </div>
 </main>
 """
-    header, footer = generate_header_footer(page_path, page_title="タグから探す")
-    with open(page_path, 'w', encoding='utf-8') as f:
-        f.write(header + main_content_html + footer)
-    print(f"{page_path} が生成されました。")
+        header, footer = generate_header_footer(page_path, page_title="タグから探す")
+        with open(page_path, 'w', encoding='utf-8') as f:
+            f.write(header + main_content_html + footer)
+        print(f"{page_path} が生成されました。")
 
     # 商品詳細ページの生成
     for product in products:
@@ -763,7 +763,7 @@ for i in range(total_tag_pages):
                 </div>
                 {specs_html}
                 <div class="product-tags">
-                    {"".join([f'<a href="{base_path}tags/{tag}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
+                    {"".join([f'<a href="{base_path}tags/{tag.replace("/", "_").replace(chr(92), "_")}.html" class="tag-button">#{tag}</a>' for tag in product.get("tags", [])])}
                 </div>
             </div>
         </div>
@@ -789,6 +789,7 @@ for i in range(total_tag_pages):
         sitemap_urls.append((f'{base_url}{product.get("page_url", "")}', 'daily', '0.6'))
     
     # ページネーションページを追加
+    total_pages = math.ceil(len(products) / PRODUCTS_PER_PAGE)
     for i in range(2, total_pages + 1):
         sitemap_urls.append((f'{base_url}pages/page{i}.html', 'daily', '0.8'))
 
@@ -802,9 +803,14 @@ for i in range(total_tag_pages):
         sitemap_urls.append((f'{base_url}category/{special_cat}/', 'daily', '0.8'))
 
     # タグページを追加
-    for tag in all_tags:
-        sitemap_urls.append((f'{base_url}tags/{tag}.html', 'daily', '0.6'))
-    for i in range(2, total_tag_pages + 1):
+    all_tags_sitemap = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
+    for tag in all_tags_sitemap:
+        safe_tag_name = tag.replace("/", "_").replace("\\", "_")
+        sitemap_urls.append((f'{base_url}tags/{safe_tag_name}.html', 'daily', '0.6'))
+    
+    # タグ一覧ページを追加
+    total_tag_pages_sitemap = math.ceil(len(all_tags_sitemap) / TAGS_PER_PAGE)
+    for i in range(2, total_tag_pages_sitemap + 1):
         sitemap_urls.append((f'{base_url}tags/page{i}.html', 'daily', '0.6'))
 
     for url, changefreq, priority in sitemap_urls:
