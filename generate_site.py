@@ -17,37 +17,36 @@ PRODUCT_CATEGORIES = {
         "モニター", "プリンター", "ルーター", "ゲーミングPC"
     ],
     "家電": [
-        "カメラ", "オーディオ", "キッチン家電", "美容家電",
-        "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機"
+        "カメラ", "オーディオ", "キッチン家電",
+        "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機" 
     ],
-    "ゲーム・おもちゃ": [
-        "ゲーム機", "ゲームソフト", "フィギュア", "ドローン",
-        "知育玩具", "ボードゲーム"
+    "美容・健康": [ 
+        "美容家電", "ダイエットサプリ", "プロテイン", "フィットネス機器",
+        "マッサージ機", "ヘアケア", "スキンケア", "睡眠サポート"
     ]
 }
-# 新しいユーティリティカテゴリーとパスを定義
+
+# ユーティリティ/特集カテゴリとパスを定義 (動的なお得情報)
 UTILITY_CATEGORIES = {
     "AIで探す": "ai_search.html",
     "タグで探す": "tags/index.html",
+    # ポイント特化と期間限定セールは「動的なお得情報」としてUTILITYに配置
     "ポイント特化": "category/ポイント特化/index.html",
     "期間限定セール": "category/期間限定セール/index.html"
 }
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
-# トップページに表示するサブカテゴリーの数
-SUB_CATEGORIES_TO_SHOW = 15
 
 # APIキーは実行環境が自動的に供給するため、ここでは空の文字列とします。
 # OpenAI APIの設定
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")  # 環境変数からAPIキーを取得
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 MODEL_NAME = "gpt-4o-mini"
 CACHE_FILE = 'products.csv'
 
 # AmazonとYahoo!ショッピングのアフィリエイトリンクを定義
 AMAZON_AFFILIATE_LINK = "https://amzn.to/46zr68v"
-# 修正後のYahoo!ショッピングのアフィリエイトリンク
 YAHOO_AFFILIATE_LINK = "//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3754088&pid=892109155"
 
 # CSVファイルのフィールド名を固定
@@ -171,7 +170,7 @@ def generate_ai_metadata(product_name, product_description):
     商品説明: {product_description}
 
     要約の文章には、SEOを意識した「格安」「最安値」「セール」「割引」などのキーワードを自然に含めてください。
-    タグは商品の特徴や用途を表す単語をリスト形式で生成してください。
+    タグは商品の特徴や用途を表す単語をリスト形式で生成してください。**セール中やポイント還元率が高い場合は「セール」や「ポイント高還元」といったタグを必ず含めてください。**
     サブカテゴリーは、商品のジャンルを細分化した単一の単語を生成してください。
     """
     metadata = _call_openai_api(prompt, "json_object")
@@ -190,6 +189,7 @@ def generate_ai_analysis(product_name, product_price, price_history):
     prompt = f"""
     あなたは、価格比較の専門家として、消費者に商品の買い時をアドバイスします。回答は必ずJSON形式で提供してください。JSONは「headline」と「analysis」の2つのキーを持ちます。「headline」は商品の買い時を伝える簡潔な一言で、可能であれば具体的な割引率や数字を使って表現してください。「analysis」はなぜ買い時なのかを説明する詳細な文章です。日本語で回答してください。
     {product_name}という商品の現在の価格は{product_price}円です。{history_text}。この商品の価格について、市場の動向を踏まえた分析と買い時に関するアドバイスを日本語で提供してください。特に価格が前回と比べて下がっている場合は、**「最安値」**や**「セール」**といったキーワードを使って買い時を強調してください。
+    **ポイント還元率が高い場合、その情報を「headline」に含めて強調してください。**
     """
     analysis_data = _call_openai_api(prompt, "json_object")
     if analysis_data:
@@ -204,7 +204,7 @@ def fetch_rakuten_items():
         return []
 
     # 事前定義したカテゴリーに合わせてキーワードを調整
-    keywords = ['ノートパソコン', '冷蔵庫', 'デジタルカメラ', 'ゲームソフト']
+    keywords = ['ノートパソコン', '冷蔵庫', 'ダイエットサプリ', 'マッサージ機'] # キーワードを更新
     all_products = []
 
     for keyword in keywords:
@@ -391,7 +391,7 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <!-- 1. ユーティリティリンク (AI, タグ, セールなど) -->
+    <!-- 1. ユーティリティリンク (AI、タグ、セールなど) -->
     <div class="genre-links-container utility-nav">
         <div class="genre-links">
             {generate_links_html(utility_links)}
@@ -482,7 +482,6 @@ def generate_product_card_html(product, page_path):
     </div>
 </a>"""
 
-# nav.jsを生成する関数は削除/無効化
 
 def generate_site(products):
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
@@ -509,7 +508,6 @@ def generate_site(products):
         all_tags.update(product.get('tags', []))
 
     # 既存の生成ディレクトリをクリーンアップ
-    # サブカテゴリーファイルは生成を中止
     for dir_name in ['pages', 'category', 'tags']:
         if os.path.exists(dir_name):
             shutil.rmtree(dir_name, ignore_errors=True)
@@ -586,32 +584,48 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
 
-        # 旧サブカテゴリーファイルは生成しない
-
-    # 特別カテゴリーのページ生成
+    # --- 特別カテゴリー（動的お得情報）のページ生成ロジック ---
+    # ここがご要望の「ポイント特化」と「期間限定セール」の静的ページを生成する部分です。
+    
     special_categories = {
         '最安値': sorted([p for p in products], key=lambda x: int(x.get('price', 0))),
-        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])],
-        'ポイント特化': sorted([p for p in products], key=lambda x: int(x.get('price', 0)), reverse=True) # 仮のロジック
+        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定', 'タイムセール', '特価'] for tag in p['tags'])],
+        'ポイント特化': [p for p in products if any(keyword in p.get('ai_headline', '') or keyword in p.get('ai_analysis', '') for keyword in ['ポイント', '還元率', 'お得', 'UP'])],
     }
+
     for special_cat, filtered_products in special_categories.items():
         page_path = f"category/{special_cat}/index.html"
-        os.makedirs(os.path.dirname(page_path), exist_ok=True)
+        os.makedirs(os.path.dirname(page_path) or '.', exist_ok=True)
         products_html = "".join([generate_product_card_html(p, page_path) for p in filtered_products])
+        
+        if special_cat == 'ポイント特化':
+            title = "✨AIが選んだポイント高還元商品"
+            description = "AIが価格分析の結果、「ポイント還元率が高い」「ポイントがお得」と判断した商品をピックアップしています。買い時を見逃さないでください！"
+        elif special_cat == '期間限定セール':
+            title = "🔥限定価格！今すぐ買いたいセール商品"
+            description = "AIがタグや価格変動を分析し、現在セール中・タイムセール中の商品をリアルタイムでリストアップしています。"
+        else:
+            title = f"{special_cat}のお得な商品一覧"
+            description = f"{special_cat}の商品を一覧で表示しています。"
+            
         main_content_html = f"""
 <main class="container">
     <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">{special_cat}のお得な商品一覧</h2>
+        <h2 class="ai-section-title">{title}</h2>
+        <p class="section-description">{description}</p>
         <div class="product-grid">
             {products_html}
         </div>
     </div>
 </main>
 """
-        header, footer = generate_header_footer(page_path, page_title=f"{special_cat}の商品一覧")
+        header, footer = generate_header_footer(page_path, page_title=title)
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + footer)
         print(f"category/{special_cat}/index.html が生成されました。")
+
+    # --- 特別カテゴリー（動的お得情報）のページ生成ロジック 終 ---
+
 
     # タグごとのページ生成
     all_tags = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
@@ -642,7 +656,7 @@ def generate_site(products):
     total_tag_pages = math.ceil(len(all_tags) / TAGS_PER_PAGE)
     for i in range(total_tag_pages):
         start_index = i * TAGS_PER_PAGE
-        end_index = start_index + TAGS_PER_PAGE
+        end_index = start_index + PRODUCTS_PER_PAGE
         paginated_tags = all_tags[start_index:end_index]
         page_num = i + 1
         page_path = 'tags/index.html' if page_num == 1 else f'tags/page{page_num}.html'
@@ -809,6 +823,7 @@ def generate_site(products):
         # メインカテゴリーのindex.htmlのみ追加
         sitemap_urls.append((f'{base_url}category/{main_cat}/index.html', 'daily', '0.8'))
     
+    # 特別カテゴリー（動的お得情報）も追加
     for special_cat in ['最安値', '期間限定セール', 'ポイント特化']:
         sitemap_urls.append((f'{base_url}category/{special_cat}/index.html', 'daily', '0.8'))
 
@@ -886,14 +901,13 @@ def main():
     new_products = fetch_rakuten_items()
     final_products = update_products_csv(new_products)
 
-    # nav.js は不要になったため、この関数は削除/スキップ
-
     generate_search_index(final_products)
     generate_search_results_page()
 
     # AIで探す、ポイント特化のプレースホルダーページを生成
     generate_placeholder_page("ai_search.html", "AIで探す", "AIがおすすめする商品を見つけよう！")
-    generate_placeholder_page("category/ポイント特化/index.html", "ポイント特化", "ポイント還元率の高い商品を集めました！")
+    # ポイント特化と期間限定セールは、generate_site 関数内で動的コンテンツとして生成されるが、
+    # 処理フローのためにここでプレースホルダーも生成しておく
 
     generate_site(final_products)
 
