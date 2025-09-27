@@ -87,7 +87,7 @@ header h1 a {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 0; /* ここを10pxから0に変更しました */
+    gap: 10px;
 }
 .genre-links a {
     color: #007bff;
@@ -531,12 +531,12 @@ footer {
     line-height: 1.6;
 }
 .ai-analysis {
-    font-weight: bold;
-    color: #dc3545; /* 赤色 */
-    background-color: #f8f9fa; /* 薄いグレー */
-    padding: 5px;
-    border-radius: 5px;
-    display: inline-block;
+  font-weight: bold;
+  color: #dc3545; /* 赤色 */
+  background-color: #f8f9fa; /* 薄いグレー */
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
 }
 /* --- タグボタンのスタイル --- */
 .product-tags {
