@@ -25,6 +25,13 @@ PRODUCT_CATEGORIES = {
         "知育玩具", "ボードゲーム"
     ]
 }
+# 新しいユーティリティカテゴリーとパスを定義
+UTILITY_CATEGORIES = {
+    "AIで探す": "ai_search.html",
+    "タグで探す": "tags/index.html",
+    "ポイント特化": "category/ポイント特化/index.html",
+    "期間限定セール": "category/期間限定セール/index.html"
+}
 
 # 1ページあたりの商品数を定義
 PRODUCTS_PER_PAGE = 24
@@ -337,20 +344,28 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
     if rel_path_to_root == '.':
         base_path = './'
     else:
-        base_path = rel_path_to_root + '/'
+        # ディレクトリ名が空でない場合、末尾にスラッシュを追加
+        if rel_path_to_root:
+            base_path = rel_path_to_root + '/'
+        else:
+            base_path = './'
 
-    # ハードコードされたカテゴリリンクを例示
-    main_links = [
-        ("タグから探す", f"{base_path}tags/index.html"),
-        ("最安値", f"{base_path}category/最安値/index.html"),
-        ("期間限定セール", f"{base_path}category/期間限定セール/index.html")
-    ]
-    
     def generate_links_html(links):
         return "".join([f'<a href="{url}">{text}</a><span class="separator">|</span>' for text, url in links])
         
-    # ナビゲーション用のJSONデータを生成
-    nav_data = json.dumps(PRODUCT_CATEGORIES, ensure_ascii=False)
+    # ユーティリティリンクの生成
+    utility_links = []
+    for text, path in UTILITY_CATEGORIES.items():
+        utility_links.append((text, f"{base_path}{path}"))
+
+    # メインカテゴリーの生成 (フラットリスト)
+    main_category_links = []
+    all_categories = list(PRODUCT_CATEGORIES.keys()) + ['その他']
+    for cat in all_categories:
+        # カテゴリートップページへのリンクのみを生成
+        link_path = f"{base_path}category/{cat}/index.html"
+        main_category_links.append((cat, link_path))
+
 
     header_html = f"""
 <!DOCTYPE html>
@@ -376,21 +391,20 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <div class="genre-links-container">
+    <!-- 1. ユーティリティリンク (AI, タグ, セールなど) -->
+    <div class="genre-links-container utility-nav">
         <div class="genre-links">
-            {generate_links_html(main_links)}
+            {generate_links_html(utility_links)}
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links" id="main-category-nav">
-            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+    <!-- 2. メインカテゴリー (フラットリスト) -->
+    <div class="genre-links-container main-category-nav-flat">
+        <div class="genre-links">
+            {generate_links_html(main_category_links)}
         </div>
     </div>
-    <div id="subcategory-container" class="subcategory-container">
-        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
-    </div>
-    <script id="nav-data" type="application/json">{nav_data}</script>
-    <script src="{base_path}nav.js"></script>
+    <!-- 以前の動的サブカテゴリーのコンテナは削除 -->
+    <script src="{base_path}script.js"></script>
 """
     
     footer_html = f"""
@@ -403,7 +417,6 @@ def generate_header_footer(current_path, page_title="お得な買い時を見つ
             <a href="{base_path}contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="{base_path}script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {{
@@ -469,13 +482,7 @@ def generate_product_card_html(product, page_path):
     </div>
 </a>"""
 
-# nav.jsを生成する関数
-def generate_nav_js(js_content):
-    """nav.jsファイルを生成する"""
-    with open('nav.js', 'w', encoding='utf-8') as f:
-        f.write(js_content)
-    print("nav.js が生成されました。")
-
+# nav.jsを生成する関数は削除/無効化
 
 def generate_site(products):
     """products.jsonを読み込み、HTMLファイルを生成する関数"""
@@ -502,6 +509,7 @@ def generate_site(products):
         all_tags.update(product.get('tags', []))
 
     # 既存の生成ディレクトリをクリーンアップ
+    # サブカテゴリーファイルは生成を中止
     for dir_name in ['pages', 'category', 'tags']:
         if os.path.exists(dir_name):
             shutil.rmtree(dir_name, ignore_errors=True)
@@ -549,7 +557,7 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"{page_path} が生成されました。")
     
-    # カテゴリーごとのページ生成
+    # カテゴリーごとのページ生成（メインカテゴリーのみ）
     all_categories = list(categories.keys()) + ['その他']
     for main_cat in all_categories:
         main_cat_products = category_products.get(main_cat, [])
@@ -557,6 +565,7 @@ def generate_site(products):
             print(f"警告: メインカテゴリー '{main_cat}' に該当する商品がないため、ページ生成をスキップしました。")
             continue
             
+        # カテゴリートップページのみを生成
         page_path = f"category/{main_cat}/index.html"
         os.makedirs(os.path.dirname(page_path), exist_ok=True)
         products_html = "".join([generate_product_card_html(p, page_path) for p in main_cat_products])
@@ -564,6 +573,8 @@ def generate_site(products):
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">{main_cat}の商品一覧</h2>
+        <!-- タグがサブカテゴリーの役割を果たすことを示す -->
+        <p class="section-description">詳細な絞り込みは、ページ下部のタグをご利用ください。</p>
         <div class="product-grid">
             {products_html}
         </div>
@@ -575,54 +586,13 @@ def generate_site(products):
             f.write(header + main_content_html + footer)
         print(f"category/{main_cat}/index.html が生成されました。")
 
-        # サブカテゴリーのページ生成
-        if main_cat in categories:
-            for sub_cat in categories[main_cat]:
-                sub_cat_products = [p for p in main_cat_products if p.get('category', {}).get('sub', '') == sub_cat]
-                if sub_cat_products:
-                    sub_cat_file_name = f"{sub_cat.replace(' ', '')}.html"
-                    page_path_sub = f"category/{main_cat}/{sub_cat_file_name}"
-                    products_html_sub = "".join([generate_product_card_html(p, page_path_sub) for p in sub_cat_products])
-                    main_content_html_sub = f"""
-<main class="container">
-    <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">{sub_cat}の商品一覧</h2>
-        <div class="product-grid">
-            {products_html_sub}
-        </div>
-    </div>
-</main>
-"""
-                    header_sub, footer_sub = generate_header_footer(page_path_sub, page_title=f"{sub_cat}の商品一覧")
-                    with open(page_path_sub, 'w', encoding='utf-8') as f:
-                        f.write(header_sub + main_content_html_sub + footer_sub)
-                    print(f"{page_path_sub} が生成されました。")
-        else: # 'その他'カテゴリー
-            sub_cat_products = [p for p in category_products['その他'] if p.get('category', {}).get('sub') == 'その他']
-            if sub_cat_products:
-                sub_cat_file_name = "その他.html"
-                page_path_sub = f"category/その他/{sub_cat_file_name}"
-                os.makedirs(os.path.dirname(page_path_sub), exist_ok=True)
-                products_html_sub = "".join([generate_product_card_html(p, page_path_sub) for p in sub_cat_products])
-                main_content_html_sub = f"""
-<main class="container">
-    <div class="ai-recommendation-section">
-        <h2 class="ai-section-title">その他の商品一覧</h2>
-        <div class="product-grid">
-            {products_html_sub}
-        </div>
-    </div>
-</main>
-"""
-                header_sub, footer_sub = generate_header_footer(page_path_sub, page_title="その他の商品一覧")
-                with open(page_path_sub, 'w', encoding='utf-8') as f:
-                    f.write(header_sub + main_content_html_sub + footer_sub)
-                print(f"{page_path_sub} が生成されました。")
-    
+        # 旧サブカテゴリーファイルは生成しない
+
     # 特別カテゴリーのページ生成
     special_categories = {
         '最安値': sorted([p for p in products], key=lambda x: int(x.get('price', 0))),
-        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])]
+        '期間限定セール': [p for p in products if p.get('tags', []) and any(tag in ['セール', '期間限定'] for tag in p['tags'])],
+        'ポイント特化': sorted([p for p in products], key=lambda x: int(x.get('price', 0)), reverse=True) # 仮のロジック
     }
     for special_cat, filtered_products in special_categories.items():
         page_path = f"category/{special_cat}/index.html"
@@ -713,7 +683,7 @@ def generate_site(products):
         with open(page_path, 'w', encoding='utf-8') as f:
             f.write(header + main_content_html + footer)
         print(f"{page_path} が生成されました。")
-
+        
     # 商品詳細ページの生成
     for product in products:
         page_path = product['page_url']
@@ -754,8 +724,6 @@ def generate_site(products):
 
         # Yahoo!ショッピングのリンクを修正
         yahoo_affiliate_link = YAHOO_AFFILIATE_LINK
-        parsed_url = urlparse(product.get("rakuten_url", ""))
-        is_rakuten_url = parsed_url.netloc == "item.rakuten.co.jp" or parsed_url.netloc.endswith(".rakuten.co.jp")
 
         affiliate_links_html = f"""
 <div class="lowest-price-section">
@@ -767,7 +735,7 @@ def generate_site(products):
     </div>
 </div>
 """
-
+        
         # 現在のページからルートディレクトリへの相対パスを計算
         rel_path_to_root = os.path.relpath('.', os.path.dirname(page_path))
         if rel_path_to_root == '.':
@@ -784,7 +752,7 @@ def generate_site(products):
             </div>
             <div class="item-info">
                 <h1 class="item-name">{product.get('name', '商品名')}</h1>
-                <p class="item-category">カテゴリ：<a href="{base_path}category/{product.get('category', {}).get('main', '')}/index.html">{product.get('category', {}).get('main', '')}</a> &gt; <a href="{base_path}category/{product.get('category', {}).get('main', '')}/{product.get('category', {}).get('sub', '').replace(' ', '')}.html">{product.get('category', {}).get('sub', '')}</a></p>
+                <!-- パンくずリストを削除 -->
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>{int(product.get('price', 0)):,}</span>円</p>
                 </div>
@@ -824,7 +792,8 @@ def generate_site(products):
         (f'{base_url}privacy.html', 'monthly', '0.5'),
         (f'{base_url}disclaimer.html', 'monthly', '0.5'),
         (f'{base_url}contact.html', 'monthly', '0.5'),
-        (f'{base_url}search_results.html', 'daily', '0.5')
+        (f'{base_url}search_results.html', 'daily', '0.5'),
+        (f'{base_url}ai_search.html', 'weekly', '0.7') # AIで探すのページを追加
     ]
 
     for product in products:
@@ -834,22 +803,18 @@ def generate_site(products):
     for i in range(2, total_pages + 1):
         sitemap_urls.append((f'{base_url}pages/page{i}.html', 'daily', '0.8'))
 
-    # カテゴリーページを追加
+    # カテゴリーページを追加 (サブカテゴリーは削除)
     all_categories_sitemap = list(PRODUCT_CATEGORIES.keys()) + ['その他']
     for main_cat in all_categories_sitemap:
-        sitemap_urls.append((f'{base_url}category/{main_cat}/', 'daily', '0.8'))
-        sub_cats_to_add = PRODUCT_CATEGORIES.get(main_cat, [])
-        if main_cat == 'その他':
-            sub_cats_to_add = ['その他']
-        for sub_cat in sub_cats_to_add:
-            sitemap_urls.append((f'{base_url}category/{main_cat}/{sub_cat.replace(" ", "")}.html', 'daily', '0.7'))
+        # メインカテゴリーのindex.htmlのみ追加
+        sitemap_urls.append((f'{base_url}category/{main_cat}/index.html', 'daily', '0.8'))
     
-    for special_cat in ['最安値', '期間限定セール']:
-        sitemap_urls.append((f'{base_url}category/{special_cat}/', 'daily', '0.8'))
+    for special_cat in ['最安値', '期間限定セール', 'ポイント特化']:
+        sitemap_urls.append((f'{base_url}category/{special_cat}/index.html', 'daily', '0.8'))
 
     # タグページを追加
     all_tags_sitemap = sorted(list(set(tag for product in products for tag in product.get('tags', []))))
-    sitemap_urls.append((f'{base_url}tags/', 'weekly', '0.7')) # タグ一覧ページ
+    sitemap_urls.append((f'{base_url}tags/index.html', 'weekly', '0.7')) # タグ一覧ページ
     for tag in all_tags_sitemap:
         safe_tag_name = tag.replace("/", "_").replace("\\", "_")
         sitemap_urls.append((f'{base_url}tags/{safe_tag_name}.html', 'daily', '0.6'))
@@ -921,183 +886,34 @@ def main():
     new_products = fetch_rakuten_items()
     final_products = update_products_csv(new_products)
 
-    # nav.jsのコンテンツを読み込み
-    try:
-        with open('nav.js', 'r', encoding='utf-8') as f:
-            nav_js_content = f.read()
-            generate_nav_js(nav_js_content)
-    except FileNotFoundError:
-        print("エラー: nav.jsファイルが見つかりません。")
-        # nav.jsがない場合、生成コードを含んだファイルを生成する
-        # このJSコードはPythonのマルチライン文字列として安全に定義されています
-        nav_js_code = """
-// ナビゲーションデータと要素を定義
-const navDataElement = document.getElementById('nav-data');
-const mainCategoryNav = document.getElementById('main-category-nav');
-const subcategoryContainer = document.getElementById('subcategory-container');
-
-let PRODUCT_CATEGORIES = {};
-
-try {
-    // HTMLに埋め込まれたJSONデータを解析
-    if (navDataElement && navDataElement.textContent) {
-        PRODUCT_CATEGORIES = JSON.parse(navDataElement.textContent);
-    }
-} catch (error) {
-    console.error("Failed to parse navigation data:", error);
-}
-
-// 現在のページのベースパス（ルートディレクトリへの相対パス）を計算
-function getBasePath() {
-    // 例: pages/product.html -> ../
-    // 例: index.html -> ./
-    const currentPath = window.location.pathname;
-    // ページ名を除去
-    const pathSegments = currentPath.split('/').filter(segment => segment.length > 0);
-    // 最後のセグメント（ファイル名）を除去
-    pathSegments.pop(); 
-
-    // 現在のディレクトリからルートへの相対パスを計算
-    let depth = pathSegments.length;
-    if (depth === 0) return './'; 
-    return '../'.repeat(depth); 
-}
-
-// サブカテゴリーのリンク先のファイル名を安全にエンコードする
-function safeEncodeFileName(name) {
-    return name.replace(/ /g, '').replace(/\\/g, '_').replace(/\\/g, '_');
-}
-
-// 1. メインカテゴリーリンクの生成
-function renderMainCategories(basePath) {
-    mainCategoryNav.innerHTML = '';
-    const categories = Object.keys(PRODUCT_CATEGORIES);
-
-    // 常に「その他」カテゴリーを最後に追加
-    if (categories.indexOf('その他') === -1) {
-        categories.push('その他');
-    }
-
-    categories.forEach(category => {
-        const categoryPath = `${basePath}category/${category}/index.html`;
-        const link = document.createElement('a');
-        link.href = categoryPath;
-        link.textContent = category;
-        link.classList.add('main-category-link');
-        
-        // ホバー/クリックイベントを追加
-        link.addEventListener('mouseenter', () => renderSubCategories(category, basePath));
-        link.addEventListener('click', (e) => {
-            // モバイルでのクリック時にサブメニューを表示
-            if (window.innerWidth < 768) {
-                e.preventDefault();
-                renderSubCategories(category, basePath);
-            }
-        });
-        
-        mainCategoryNav.appendChild(link);
-        mainCategoryNav.appendChild(createSeparator());
-    });
-}
-
-function createSeparator() {
-    const span = document.createElement('span');
-    span.classList.add('separator');
-    span.textContent = '|';
-    return span;
-}
-
-// 2. サブカテゴリーリンクの生成と表示
-function renderSubCategories(mainCategory, basePath) {
-    subcategoryContainer.innerHTML = '';
-    
-    // サブカテゴリーヘッダー
-    const header = document.createElement('div');
-    header.className = 'subcategory-header';
-    header.innerHTML = `<a href="${basePath}category/${mainCategory}/index.html" class="main-cat-title">${mainCategory}</a> のカテゴリー`;
-    subcategoryContainer.appendChild(header);
-
-    const subcategoryLinks = document.createElement('div');
-    subcategoryLinks.className = 'subcategory-links';
-
-    let subCategories = [];
-    if (mainCategory === 'その他') {
-        // その他カテゴリーの場合は固定の「その他」サブカテゴリー
-        subCategories = ['その他'];
-    } else {
-        // 定義済みカテゴリーの場合はリストを使用
-        subCategories = PRODUCT_CATEGORIES[mainCategory] || [];
-    }
-
-    // 特別カテゴリーのリンクをサブカテゴリーに追加
-    if (mainCategory === '特別') {
-        subCategories = ['最安値', '期間限定セール'];
-    }
-
-    subCategories.forEach(subCategory => {
-        const safeSubCatName = safeEncodeFileName(subCategory);
-        let linkPath;
-
-        if (subCategory === '最安値' || subCategory === '期間限定セール') {
-             // 特別カテゴリーのパスは 'category/最安値/index.html' の形式
-             linkPath = `${basePath}category/${subCategory}/index.html`;
-        } else if (mainCategory === 'その他' && subCategory === 'その他') {
-             // その他カテゴリーのその他サブカテゴリー
-             linkPath = `${basePath}category/${mainCategory}/${safeSubCatName}.html`;
-        } else {
-            // 標準のサブカテゴリーパス
-            linkPath = `${basePath}category/${mainCategory}/${safeSubCatName}.html`;
-        }
-
-        const link = document.createElement('a');
-        link.href = linkPath;
-        link.textContent = subCategory;
-        link.classList.add('sub-category-link');
-        subcategoryLinks.appendChild(link);
-    });
-
-    subcategoryContainer.appendChild(subcategoryLinks);
-
-    // サブカテゴリーコンテナを表示
-    subcategoryContainer.style.display = 'flex';
-}
-
-// 3. 初期化とイベント設定
-document.addEventListener('DOMContentLoaded', () => {
-    const basePath = getBasePath();
-
-    // メインカテゴリーをレンダリング
-    renderMainCategories(basePath);
-
-    // サブカテゴリーコンテナからマウスが離れたら非表示
-    subcategoryContainer.addEventListener('mouseleave', () => {
-        // モバイルでは閉じないようにする
-        if (window.innerWidth >= 768) {
-            subcategoryContainer.style.display = 'none';
-        }
-    });
-
-    // メインナビゲーションエリアからマウスが離れたらサブカテゴリーも非表示
-    mainCategoryNav.addEventListener('mouseleave', (event) => {
-        // マウスがサブカテゴリコンテナに入った場合は閉じない
-        if (!subcategoryContainer.contains(event.relatedTarget) && window.innerWidth >= 768) {
-             // 短い遅延を設けることで、メインカテゴリとサブカテゴリの間を移動する際にちらつきを防ぐ
-             setTimeout(() => {
-                if (!subcategoryContainer.matches(':hover')) {
-                     subcategoryContainer.style.display = 'none';
-                }
-             }, 100);
-        }
-    });
-});
-"""
-        generate_nav_js(nav_js_code)
-
+    # nav.js は不要になったため、この関数は削除/スキップ
 
     generate_search_index(final_products)
     generate_search_results_page()
-    
+
+    # AIで探す、ポイント特化のプレースホルダーページを生成
+    generate_placeholder_page("ai_search.html", "AIで探す", "AIがおすすめする商品を見つけよう！")
+    generate_placeholder_page("category/ポイント特化/index.html", "ポイント特化", "ポイント還元率の高い商品を集めました！")
+
     generate_site(final_products)
+
+def generate_placeholder_page(page_path, title, description):
+    """シンプルなプレースホルダーページを生成する"""
+    os.makedirs(os.path.dirname(page_path) or '.', exist_ok=True)
+    header, footer = generate_header_footer(page_path, page_title=title)
+    main_content_html = f"""
+<main class="container">
+    <div class="ai-recommendation-section">
+        <h2 class="ai-section-title">{title}</h2>
+        <p class="section-description">{description}</p>
+        <p style="text-align: center; margin-top: 50px;">このページは現在準備中です。他のカテゴリーやタグをご利用ください。</p>
+    </div>
+</main>
+"""
+    with open(page_path, 'w', encoding='utf-8') as f:
+        f.write(header + main_content_html + footer)
+    print(f"{page_path} (プレースホルダー) が生成されました。")
+
 
 if __name__ == '__main__':
     main()
