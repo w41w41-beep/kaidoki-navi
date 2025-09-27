@@ -22,27 +22,26 @@
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <div class="genre-links-container">
+    <!-- 1. ユーティリティリンク (AI、タグ、セールなど) -->
+    <div class="genre-links-container utility-nav">
         <div class="genre-links">
-            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="../ai_search.html">AIで探す</a><span class="separator">|</span><a href="../tags/index.html">タグで探す</a><span class="separator">|</span><a href="../category/ポイント特化/index.html">ポイント特化</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links" id="main-category-nav">
-            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+    <!-- 2. メインカテゴリー (フラットリスト) -->
+    <div class="genre-links-container main-category-nav-flat">
+        <div class="genre-links">
+            <a href="../category/パソコン・周辺機器/index.html">パソコン・周辺機器</a><span class="separator">|</span><a href="../category/家電/index.html">家電</a><span class="separator">|</span><a href="../category/美容・健康/index.html">美容・健康</a><span class="separator">|</span><a href="../category/その他/index.html">その他</a><span class="separator">|</span>
         </div>
     </div>
-    <div id="subcategory-container" class="subcategory-container">
-        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
-    </div>
-    <script id="nav-data" type="application/json">{"パソコン・周辺機器": ["ノートパソコン", "デスクトップPC", "キーボード", "マウス", "モニター", "プリンター", "ルーター", "ゲーミングPC"], "家電": ["カメラ", "オーディオ", "キッチン家電", "美容家電", "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機"], "ゲーム・おもちゃ": ["ゲーム機", "ゲームソフト", "フィギュア", "ドローン", "知育玩具", "ボードゲーム"]}</script>
-    <script src="../nav.js"></script>
+    <!-- 以前の動的サブカテゴリーのコンテナは削除 -->
+    <script src="../script.js"></script>
 
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">タグから探す</h2>
         <div class="product-tags all-tags-list">
-            <a href="Core i5.html" class="tag-button">#Core i5</a><a href="EVA素材.html" class="tag-button">#EVA素材</a><a href="Nintendo Switch.html" class="tag-button">#Nintendo Switch</a><a href="SSD512GB.html" class="tag-button">#SSD512GB</a><a href="かわいい.html" class="tag-button">#かわいい</a><a href="アウトドア.html" class="tag-button">#アウトドア</a><a href="ゲームカード.html" class="tag-button">#ゲームカード</a><a href="コンパクト.html" class="tag-button">#コンパクト</a><a href="スマートフォンホルダー.html" class="tag-button">#スマートフォンホルダー</a><a href="ノートパソコン.html" class="tag-button">#ノートパソコン</a><a href="ポリカーボネート.html" class="tag-button">#ポリカーボネート</a><a href="三脚.html" class="tag-button">#三脚</a><a href="中古.html" class="tag-button">#中古</a><a href="傷防止.html" class="tag-button">#傷防止</a><a href="冷蔵庫マット.html" class="tag-button">#冷蔵庫マット</a><a href="収納ケース.html" class="tag-button">#収納ケース</a><a href="格安.html" class="tag-button">#格安</a><a href="軽量.html" class="tag-button">#軽量</a><a href="防カビ.html" class="tag-button">#防カビ</a><a href="防振.html" class="tag-button">#防振</a>
+            <a href="Core i5.html" class="tag-button">#Core i5</a><a href="SSD512GB.html" class="tag-button">#SSD512GB</a><a href="サプリメント.html" class="tag-button">#サプリメント</a><a href="セール.html" class="tag-button">#セール</a><a href="ダイエット.html" class="tag-button">#ダイエット</a><a href="ネックケア.html" class="tag-button">#ネックケア</a><a href="ノートパソコン.html" class="tag-button">#ノートパソコン</a><a href="ポイント高還元.html" class="tag-button">#ポイント高還元</a><a href="ポリカーボネート.html" class="tag-button">#ポリカーボネート</a><a href="中古.html" class="tag-button">#中古</a><a href="低周波治療器.html" class="tag-button">#低周波治療器</a><a href="健康食品.html" class="tag-button">#健康食品</a><a href="傷防止.html" class="tag-button">#傷防止</a><a href="冷蔵庫マット.html" class="tag-button">#冷蔵庫マット</a><a href="格安.html" class="tag-button">#格安</a><a href="肩こり.html" class="tag-button">#肩こり</a><a href="防カビ.html" class="tag-button">#防カビ</a><a href="防振.html" class="tag-button">#防振</a>
         </div>
         
     </div>
@@ -57,7 +56,6 @@
             <a href="../contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="../script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

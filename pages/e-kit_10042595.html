@@ -22,21 +22,20 @@
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <div class="genre-links-container">
+    <!-- 1. ユーティリティリンク (AI、タグ、セールなど) -->
+    <div class="genre-links-container utility-nav">
         <div class="genre-links">
-            <a href="../tags/index.html">タグから探す</a><span class="separator">|</span><a href="../category/最安値/index.html">最安値</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="../ai_search.html">AIで探す</a><span class="separator">|</span><a href="../tags/index.html">タグで探す</a><span class="separator">|</span><a href="../category/ポイント特化/index.html">ポイント特化</a><span class="separator">|</span><a href="../category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links" id="main-category-nav">
-            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+    <!-- 2. メインカテゴリー (フラットリスト) -->
+    <div class="genre-links-container main-category-nav-flat">
+        <div class="genre-links">
+            <a href="../category/パソコン・周辺機器/index.html">パソコン・周辺機器</a><span class="separator">|</span><a href="../category/家電/index.html">家電</a><span class="separator">|</span><a href="../category/美容・健康/index.html">美容・健康</a><span class="separator">|</span><a href="../category/その他/index.html">その他</a><span class="separator">|</span>
         </div>
     </div>
-    <div id="subcategory-container" class="subcategory-container">
-        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
-    </div>
-    <script id="nav-data" type="application/json">{"パソコン・周辺機器": ["ノートパソコン", "デスクトップPC", "キーボード", "マウス", "モニター", "プリンター", "ルーター", "ゲーミングPC"], "家電": ["カメラ", "オーディオ", "キッチン家電", "美容家電", "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機"], "ゲーム・おもちゃ": ["ゲーム機", "ゲームソフト", "フィギュア", "ドローン", "知育玩具", "ボードゲーム"]}</script>
-    <script src="../nav.js"></script>
+    <!-- 以前の動的サブカテゴリーのコンテナは削除 -->
+    <script src="../script.js"></script>
 
 <main class="container">
     <div class="product-detail">
@@ -46,7 +45,7 @@
             </div>
             <div class="item-info">
                 <h1 class="item-name">＼高品質 高コスパ／ 冷蔵庫 マット 冷蔵庫マット クリア 透明 床暖房 冷蔵庫下マット キズ 凹み 防止 下敷き ポリカーボネート 洗濯機 SNSで大人気 [S/M/L] [ゼロキーパー]</h1>
-                <p class="item-category">カテゴリ：<a href="../category/家電/index.html">家電</a> &gt; <a href="../category/家電/冷蔵庫アクセサリー.html">冷蔵庫アクセサリー</a></p>
+                <!-- パンくずリストを削除 -->
                 <div class="price-section">
                     <p class="current-price">現在の価格：<span>2,930</span>円</p>
                 </div>
@@ -78,7 +77,7 @@
                 
 <div class="price-chart-section">
     <h2>価格推移グラフ</h2>
-    <canvas id="priceChart" data-history='[{"date": "2025-09-26", "price": 2930}]'></canvas>
+    <canvas id="priceChart" data-history='[{"date": "2025-09-26", "price": 2930}, {"date": "2025-09-27", "price": 2930}]'></canvas>
 </div>
 
                 <div class="item-description">
@@ -103,7 +102,6 @@
             <a href="../contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="../script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

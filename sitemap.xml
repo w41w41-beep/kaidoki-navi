@@ -2,361 +2,217 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://your-website.com/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://your-website.com/privacy.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://your-website.com/disclaimer.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://your-website.com/contact.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://your-website.com/search_results.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://your-website.com/ai_search.html</loc>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/pages/e-sts_10001625.html</loc>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/pages/leapgrow_10000349.html</loc>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://your-website.com/pages/mantubiz_10002537.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/pages/e-kit_10042595.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/pages/photolink_10000003.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/pages/seunnsironeko_10004397.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/パソコン・周辺機器/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/ノートパソコン.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/デスクトップPC.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/キーボード.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/マウス.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/モニター.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/プリンター.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/ルーター.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/パソコン・周辺機器/ゲーミングPC.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/家電/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/category/家電/カメラ.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/オーディオ.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/キッチン家電.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/美容家電.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/照明.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/掃除機.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/テレビ.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/冷蔵庫.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/家電/洗濯機.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/美容・健康/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/ゲーム機.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/ゲームソフト.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/フィギュア.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/ドローン.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/知育玩具.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/ゲーム・おもちゃ/ボードゲーム.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/その他/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/その他/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/category/その他/その他.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/category/最安値/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/最安値/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/category/期間限定セール/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/期間限定セール/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/category/ポイント特化/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/index.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/Core i5.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/EVA素材.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/Nintendo Switch.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/SSD512GB.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/かわいい.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/tags/サプリメント.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/アウトドア.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/tags/セール.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/ゲームカード.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/tags/ダイエット.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/コンパクト.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/スマートフォンホルダー.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/tags/ネックケア.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/ノートパソコン.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/ポイント高還元.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/ポリカーボネート.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/三脚.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/中古.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/低周波治療器.html</loc>
+    <lastmod>2025-09-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://your-website.com/tags/健康食品.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/傷防止.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/冷蔵庫マット.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://your-website.com/tags/収納ケース.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/格安.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-website.com/tags/軽量.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <loc>https://your-website.com/tags/肩こり.html</loc>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/防カビ.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://your-website.com/tags/防振.html</loc>
-    <lastmod>2025-09-26</lastmod>
+    <lastmod>2025-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

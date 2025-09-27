@@ -22,21 +22,20 @@
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <div class="genre-links-container">
+    <!-- 1. ユーティリティリンク (AI、タグ、セールなど) -->
+    <div class="genre-links-container utility-nav">
         <div class="genre-links">
-            <a href="./tags/index.html">タグから探す</a><span class="separator">|</span><a href="./category/最安値/index.html">最安値</a><span class="separator">|</span><a href="./category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="./ai_search.html">AIで探す</a><span class="separator">|</span><a href="./tags/index.html">タグで探す</a><span class="separator">|</span><a href="./category/ポイント特化/index.html">ポイント特化</a><span class="separator">|</span><a href="./category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links" id="main-category-nav">
-            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+    <!-- 2. メインカテゴリー (フラットリスト) -->
+    <div class="genre-links-container main-category-nav-flat">
+        <div class="genre-links">
+            <a href="./category/パソコン・周辺機器/index.html">パソコン・周辺機器</a><span class="separator">|</span><a href="./category/家電/index.html">家電</a><span class="separator">|</span><a href="./category/美容・健康/index.html">美容・健康</a><span class="separator">|</span><a href="./category/その他/index.html">その他</a><span class="separator">|</span>
         </div>
     </div>
-    <div id="subcategory-container" class="subcategory-container">
-        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
-    </div>
-    <script id="nav-data" type="application/json">{"パソコン・周辺機器": ["ノートパソコン", "デスクトップPC", "キーボード", "マウス", "モニター", "プリンター", "ルーター", "ゲーミングPC"], "家電": ["カメラ", "オーディオ", "キッチン家電", "美容家電", "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機"], "ゲーム・おもちゃ": ["ゲーム機", "ゲームソフト", "フィギュア", "ドローン", "知育玩具", "ボードゲーム"]}</script>
-    <script src="./nav.js"></script>
+    <!-- 以前の動的サブカテゴリーのコンテナは削除 -->
+    <script src="./script.js"></script>
 
 <main class="container">
     <div class="ai-recommendation-section">
@@ -56,7 +55,6 @@
             <a href="./contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

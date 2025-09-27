@@ -22,27 +22,44 @@
             <button class="search-button">🔍</button>
         </div>
     </div>
-    <div class="genre-links-container">
+    <!-- 1. ユーティリティリンク (AI、タグ、セールなど) -->
+    <div class="genre-links-container utility-nav">
         <div class="genre-links">
-            <a href="./tags/index.html">タグから探す</a><span class="separator">|</span><a href="./category/最安値/index.html">最安値</a><span class="separator">|</span><a href="./category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
+            <a href="./ai_search.html">AIで探す</a><span class="separator">|</span><a href="./tags/index.html">タグで探す</a><span class="separator">|</span><a href="./category/ポイント特化/index.html">ポイント特化</a><span class="separator">|</span><a href="./category/期間限定セール/index.html">期間限定セール</a><span class="separator">|</span>
         </div>
     </div>
-    <div class="genre-links-container" style="margin-top: -10px;">
-        <div class="genre-links" id="main-category-nav">
-            <!-- メインカテゴリーのリンクをJavaScriptで動的に生成 -->
+    <!-- 2. メインカテゴリー (フラットリスト) -->
+    <div class="genre-links-container main-category-nav-flat">
+        <div class="genre-links">
+            <a href="./category/パソコン・周辺機器/index.html">パソコン・周辺機器</a><span class="separator">|</span><a href="./category/家電/index.html">家電</a><span class="separator">|</span><a href="./category/美容・健康/index.html">美容・健康</a><span class="separator">|</span><a href="./category/その他/index.html">その他</a><span class="separator">|</span>
         </div>
     </div>
-    <div id="subcategory-container" class="subcategory-container">
-        <!-- サブカテゴリーのリンクをJavaScriptで動的に生成 -->
-    </div>
-    <script id="nav-data" type="application/json">{"パソコン・周辺機器": ["ノートパソコン", "デスクトップPC", "キーボード", "マウス", "モニター", "プリンター", "ルーター", "ゲーミングPC"], "家電": ["カメラ", "オーディオ", "キッチン家電", "美容家電", "照明", "掃除機", "テレビ", "冷蔵庫", "洗濯機"], "ゲーム・おもちゃ": ["ゲーム機", "ゲームソフト", "フィギュア", "ドローン", "知育玩具", "ボードゲーム"]}</script>
-    <script src="./nav.js"></script>
+    <!-- 以前の動的サブカテゴリーのコンテナは削除 -->
+    <script src="./script.js"></script>
 
 <main class="container">
     <div class="ai-recommendation-section">
         <h2 class="ai-section-title">今が買い時！お得な注目アイテム</h2>
         <div class="product-grid">
             
+<a href="pages/e-sts_10001625.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/e-sts/cabinet/200200/tn1_forslim.jpg?_ex=128x128" alt="フォルスリム バイオブースター【感動レビュー15,000件突破】（1位 ダイエット サプリ コレウスフォルスコリ フォースコリー フォースリーン/Lカルニチン L-カルニチン ダイエットサプリメント フォルスコリ 効果 あり 強力 ヘルシーライフ)pu">
+    <div class="product-info">
+        <h3 class="product-name">フォルスリム バイオブースター【感動レビ...</h3>
+        <p class="product-price">2,000円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">最安値の2000円！今が買い時！</div>
+    </div>
+</a>
+<a href="pages/leapgrow_10000349.html" class="product-card">
+    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/leapgrow/cabinet/mytrex/p5/p05_ehn_01.jpg?_ex=128x128" alt="【土日限定 8％OFFクーポン＋P10倍！】肩こり 首 ネックマッサージ器【MYTREX公式】EMS HEAT NECK 首まわり360°ケア※でコリ改善!医療認証済 38週連続楽天1位! リニューアル 低周波治療器 温熱 首こり ネックマッサージャー 温感ながらケア">
+    <div class="product-info">
+        <h3 class="product-name">【土日限定 8％OFFクーポン＋P10倍...</h3>
+        <p class="product-price">11,660円</p>
+        <div class="price-status-title">💡注目ポイント</div>
+        <div class="price-status-content ai-analysis">土日限定 8％OFFクーポン＋ポイント10倍で最適な買い時！</div>
+    </div>
+</a>
 <a href="pages/mantubiz_10002537.html" class="product-card">
     <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/mantubiz/cabinet/05873262/2103201910/10002103-logo-250925.jpg?_ex=128x128" alt="1万円OFFクーポン Webカメラ&テンキー付き ノートパソコン 中古 パソコン メモリ 16GB 最大32GB 新品 SSD 512GB 高性能 第6世代 Core i5搭載 中古ノートパソコン Windows10 Windows11 店長オススメ 超高速SSD おまかせ 15.6型 無線LAN DVD office付き 2025 福袋 ギフト">
     <div class="product-info">
@@ -61,24 +78,6 @@
         <div class="price-status-content ai-analysis">今が買い時！最安値2930円で提供中！</div>
     </div>
 </a>
-<a href="pages/photolink_10000003.html" class="product-card">
-    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/photolink/cabinet/fotopro/4906238810830_nnv11.jpg?_ex=128x128" alt="【全国送料無料】Fotopro［フォトプロ］三脚 DIGI-204 アルミ 4段120cm ブラック,単品-スマートフォンホルダーセット（デジカメ コンデジ ミラーレス スマホ 写真 動画 アウトドア 運動会 学芸会 ビデオカメラ 撮影 配信 軽量 コンパクト シンプル）">
-    <div class="product-info">
-        <h3 class="product-name">【全国送料無料】Fotopro［フォトプ...</h3>
-        <p class="product-price">2,970円</p>
-        <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">現在の価格は2970円、過去の価格と変わらず最安値のため購入をおすすめ！</div>
-    </div>
-</a>
-<a href="pages/seunnsironeko_10004397.html" class="product-card">
-    <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/seunnsironeko/cabinet/11600653/imgrc0108097371.jpg?_ex=128x128" alt="BEBONCOOL Switch2 有機el ケース Nintendo Switch ケース switch2 ケース ニンテンドー スイッチ ケース 収納バッグ キャリング ケース 任天堂スイッチ ケース おしゃれ キャラクター Switch 収納ケース 防汚 EVA素材 耐衝撃 かわいい 大容量 ゲームカード10枚 プレゼント">
-    <div class="product-info">
-        <h3 class="product-name">BEBONCOOL Switch2 有機...</h3>
-        <p class="product-price">2,780円</p>
-        <div class="price-status-title">💡注目ポイント</div>
-        <div class="price-status-content ai-analysis">現在の価格2780円は最安値です！</div>
-    </div>
-</a>
         </div>
         
     </div>
@@ -93,7 +92,6 @@
             <a href="./contact.html">お問い合わせ</a>
         </div>
     </footer>
-    <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
